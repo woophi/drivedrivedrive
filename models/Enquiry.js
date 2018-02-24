@@ -60,7 +60,8 @@ Enquiry.schema.methods.sendNotificationEmail = function (callback) {
 		}).send({
 			to: admins,
 			from: {
-				email: 'attendentofsky@gmail.com',
+				name: 'Mailgun zaebal',
+				email: 'postmaster@sandboxdae723c3f3084598b74d3512385ba33b.mailgun.org',
 			},
 			subject: 'New Enquiry for My Site',
 			enquiry: enquiry,
