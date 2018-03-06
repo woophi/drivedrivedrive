@@ -2,8 +2,7 @@ extends ../../layouts/default
 
 block content
 	.container: .jumbotron
-		h1 Место для регистрации
-		p разные поля
+		h1 Регистрация нового водителя
 
 		- var wtf = false
 		form(method='post', action='/join', autocomplete='off', novalidate).auth-form
@@ -25,15 +24,18 @@ block content
 					.form-groups
 						.form-group(class=!wtf ? checkFormError('firstname') : null)
 							label(for='firstname').sr-only First name
-							input(type='text', name='firstname', placeholder='First name', value=!wtf ? form.firstname : null).form-control.form-control--first
+							input(type='text', name='firstname', placeholder='Имя', value=!wtf ? form.firstname : null).form-control.form-control--first
 						.form-group(class=!wtf ? checkFormError('lastname') : null)
 							label(for='lastname').sr-only Last name
-							input(type='text', name='lastname', placeholder='Last name', value=!wtf ? form.lastname : null).form-control
+							input(type='text', name='lastname', placeholder='Фамилия', value=!wtf ? form.lastname : null).form-control
+						.form-group(class=!wtf ? checkFormError('phone') : null)
+							label(for='phone').sr-only Last name
+							input(type='text', name='phone', placeholder='Номер моб. телефона', value=!wtf ? form.phone : null).form-control
 						.form-group(class=!wtf ? checkFormError('email') : null)
 							label(for='email').sr-only Email
 							input(type='email', name='email', placeholder='Email', value=!wtf ? form.email : null).form-control
 						.form-group(class=!wtf ? checkFormError('password') : null)
 							label(for='password').sr-only Password
-							input(type='password', name='password', placeholder='Password', value=!wtf ? form.password : null).form-control
+							input(type='password', name='password', placeholder='Пароль', value=!wtf ? form.password : null).form-control
 
-					button(type='submit').btn.btn-block.btn-primary.btn-submit Join
+					button(type='submit').btn.btn-block.btn-primary.btn-submit Зарегистрироваться

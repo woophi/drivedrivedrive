@@ -19,8 +19,8 @@ exports = module.exports = function(req, res) {
 
 			function(cb) {
 
-				if (!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.password) {
-					req.flash('error', 'Please enter a name, email and password.');
+				if (!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.password || !req.body.phone) {
+					req.flash('error', 'Все поля обязательны к заполнению');
 					return cb(true);
 				}
 
@@ -33,7 +33,7 @@ exports = module.exports = function(req, res) {
 				keystone.list('User').model.findOne({ email: req.body.email }, function(err, user) {
 
 					if (err || user) {
-						req.flash('error', 'User already exists with that email address.');
+						req.flash('error', 'Пользователь с таким email уже существует');
 						return cb(true);
 					}
 
@@ -51,7 +51,8 @@ exports = module.exports = function(req, res) {
 						last: req.body.lastname,
 					},
 					email: req.body.email,
-					password: req.body.password
+					password: req.body.password,
+					phone: req.body.phone
 				};
 
 				var User = keystone.list('User').model,
