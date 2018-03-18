@@ -11,10 +11,15 @@ User.add({
 	name: { type: Types.Name, required: true, index: true },
 	email: { type: Types.Email, initial: true, required: true, unique: true, index: true },
 	password: { type: Types.Password, initial: true, required: true },
-	phone: { type: String, initial: true, required: true, index: true},
-	image: { type: Types.CloudinaryImage }
+	phone: { type: String, initial: true, required: true, index: true}
+}, 'Profile', {
+	photoFront: { type: Types.CloudinaryImage },
+	photoSide: { type: Types.CloudinaryImage },
+	photoInside: { type: Types.CloudinaryImage },
+	bio: { type: Types.Markdown }
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
+	isActive: { type: Boolean, default: false, label: 'VODYATEL is active???' },
 });
 
 // Provide access to Keystone

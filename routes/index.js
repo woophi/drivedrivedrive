@@ -43,6 +43,10 @@ exports = module.exports = function (app) {
 	// Session
 	app.all('/join', routes.views.session.join);
 
+	// User
+	app.all('/me*', middleware.requireUser);
+	app.all('/me', routes.views.me);
+
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
 

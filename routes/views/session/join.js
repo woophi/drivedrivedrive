@@ -75,7 +75,7 @@ exports = module.exports = function(req, res) {
 				// } else {
 				// 	res.redirect('/me');
 				// }
-				res.redirect(req.body.target)
+				res.redirect('/me');
 			}
 
 			var onFail = function(e) {
@@ -83,9 +83,7 @@ exports = module.exports = function(req, res) {
 				return next();
 			}
 
-			//TODO: release it in future
-			// keystone.session.signin({ email: req.body.email, password: req.body.password }, req, res, onSuccess, onFail);
-			onSuccess();
+			keystone.session.signin({ email: req.body.email, password: req.body.password }, req, res, onSuccess, onFail);
 
 		});
 
