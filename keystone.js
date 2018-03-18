@@ -39,6 +39,10 @@ keystone.set('locals', {
 	env: keystone.get('env'),
 	utils: keystone.utils,
 	editable: keystone.content.editable,
+	host: (function() {
+		if (keystone.get('env') === 'production') return 'https://drivedrivedrive.herokuapp.com';
+		return 'http://localhost:' + (keystone.get('port') || '3000');
+	})()
 });
 
 // Load your project's Routes

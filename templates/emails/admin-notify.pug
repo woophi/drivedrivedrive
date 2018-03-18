@@ -3,4 +3,4 @@ extends layouts/base
 block content
 	p Hi %recipient.firstName%,
 	p new driver has submited a form and has uploaded car photos
-	p: a(href='#{host}/admin/users/#{user._id}') Link to user profile
+	p: a(href=host + '/admin/users/' + user._id) Link to #{user.name.first} #{user.name.last} profile
