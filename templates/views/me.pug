@@ -5,21 +5,14 @@ block intro
 //- block flash-messages
 
 block content
-	.container-sm
-		.page-intro
-			p.lead Hi #{user.name.first}, these are your settings and
-				a(href=user.url) profile details
-			//- if nextMeetup
-				.alert.alert-info
-					span.entypo.entypo-calendar
-					|  The next meetup has been announced -
-					a(href=nextMeetup.url).alert-link= nextMeetup._.startDate.format('dddd D MMM YYYY')
+	.container: .jumbotron
+		p.lead Привет #{user.name.first} это ваш профиль
 		.page-content.tile.ph-2.pv-2.mb-2
 			form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).form-horizontal
 				input(type='hidden', name='action', value='profile.details')
-				h3 Private Info
+				h3 Контактная информация
 				.form-group
-					label.col-sm-2.control-label Name
+					label.col-sm-2.control-label Имя
 					.col-sm-10: .form-row
 						.col-xs-6: input(type='text', name='name.first' value=user.name.first).form-control
 						.col-xs-6: input(type='text', name='name.last' value=user.name.last).form-control
@@ -27,7 +20,7 @@ block content
 					label.col-sm-2.control-label Email
 					.col-sm-10: input(type='email', name='email' value=user.email).form-control
 				.form-group
-					label.col-sm-2.control-label Phone
+					label.col-sm-2.control-label Моб. телефон
 					.col-sm-10: input(type='phone', name='phone' value=user.phone).form-control
 
 				//- Unconfigured Services
@@ -36,9 +29,9 @@ block content
 				//- Public Info
 
 				hr.mv-2
-				h3 Public Info
+				h3 Фото машины
 				.form-group
-					label.col-sm-2.control-label Photo
+					label.col-sm-2.control-label Спереди
 					.col-sm-10
 						if user.photoFront.exists
 							.row
@@ -46,6 +39,7 @@ block content
 								.col-sm-9: input(type='file', name='photoFront_upload')
 						else
 							input(type='file', name='photoFront_upload', multiple)
+					label.col-sm-2.control-label Сбоку
 					.col-sm-10
 						if user.photoSide.exists
 							.row
@@ -53,6 +47,7 @@ block content
 								.col-sm-9: input(type='file', name='photoSide_upload')
 						else
 							input(type='file', name='photoSide_upload', multiple)
+					label.col-sm-2.control-label Внутри
 					.col-sm-10
 						if user.photoInside.exists
 							.row
@@ -62,23 +57,23 @@ block content
 							input(type='file', name='photoInside_upload', multiple)
 
 				hr.mv-2
-				button(type='submit', data-loading-text="Saving...").btn.btn-primary Save profile
+				button(type='submit', data-loading-text="Saving...").btn.btn-primary Сохранить
 
 		.ui-reveal
-			.ui-reveal__initial
+			//- .ui-reveal__initial
 				button(type='button').btn.btn-link.ui-reveal__trigger Change Password
 			.ui-reveal__hidden
 				form(method='post', autocomplete='off')
 					input(type='hidden', name='action', value='profile.password')
-					h3 Change password
+					h3 Изменить пароль
 					.form-group
-						label(for='change-passwordNew').sr-only New Password
-						input(type='password', name='password', placeholder='New Password', id='change-passwordNew').form-control
+						label(for='change-passwordNew').sr-only Новый пароль
+						input(type='password', name='password', placeholder='Новый пароль', id='change-passwordNew').form-control
 					.form-group
-						label(for='change-passwordConfirm').sr-only Confirm Password
-						input(type='password', name='password_confirm', placeholder='Confirm Password', id='signin-passwordConfirm').form-control
+						label(for='change-passwordConfirm').sr-only Подтвердить пароль
+						input(type='password', name='password_confirm', placeholder='Подтвердить пароль', id='signin-passwordConfirm').form-control
 					.form-group
-						button(type='submit', data-loading-text="Changing...").btn.btn-primary Change
+						button(type='submit', data-loading-text="Changing...").btn.btn-primary Изменить
 
 block js
 	script(src='/js/views/me.js')

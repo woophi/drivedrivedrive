@@ -26,6 +26,7 @@ exports = module.exports = function(req, res) {
 			var allPhotos = (!!req.user.photoFront.public_id
 				&& !!req.user.photoSide.public_id
 				&& !!req.user.photoInside.public_id
+				&& !req.user.isActive
 			);
 
 			if (allPhotos) {
@@ -42,7 +43,8 @@ exports = module.exports = function(req, res) {
 							email: 'postmaster@sandboxdae723c3f3084598b74d3512385ba33b.mailgun.org',
 						},
 						subject: 'New driver',
-						user: req.user
+						user: req.user,
+						host: req.headers.origin
 					}, callback);
 				});
 			}

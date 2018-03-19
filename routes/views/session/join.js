@@ -3,9 +3,9 @@ var keystone = require('keystone'),
 
 exports = module.exports = function(req, res) {
 
-	// if (req.user) {
-	// 	return res.redirect(req.cookies.target || '/me');
-	// }
+	if (req.user) {
+		return res.redirect(req.cookies.target || '/me');
+	}
 
 	var view = new keystone.View(req, res),
 		locals = res.locals;
