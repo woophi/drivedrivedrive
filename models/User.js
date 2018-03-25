@@ -16,7 +16,17 @@ User.add({
 	photoFront: { type: Types.CloudinaryImage },
 	photoSide: { type: Types.CloudinaryImage },
 	photoInside: { type: Types.CloudinaryImage },
-	bio: { type: Types.Markdown }
+	driverPhoto: { type: Types.CloudinaryImage },
+	car: {
+		kind: { type: String },
+		year: { type: Number },
+		model: { type: String }
+	}
+}, 'Notifications', {
+	notifications: {
+		email: { type: Boolean, default: true },
+		sms: { type: Boolean, default: false }
+	}
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
 	isActive: { type: Boolean, default: false, label: 'VODYATEL is active???' },
@@ -32,6 +42,7 @@ User.schema.virtual('canAccessKeystone').get(function () {
  * Relationships
  */
 User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
+// TODO: relation with guests requests
 
 
 /**

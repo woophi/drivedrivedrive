@@ -16,21 +16,26 @@ exports = module.exports = function(req, res) {
 
 	view.on('post', { action: 'profile.details' }, function(next) {
 
-
-		req.user.getUpdateHandler(req).process(req.body, {
-			fields: 'name, email,' +
-			'bio, photoFront, photoSide, photoInside',
+		const notificationsEmail = !!req.body['notifications.email'];
+		const redefinedBody = {
+			'notifications.email': notificationsEmail,
+			...req.body
+		};
+		req.user.getUpdateHandler(req).process(redefinedBody, {
+			fields: 'name, email, phone,' +
+			'photoFront, photoSide, photoInside, driverPhoto, car.kind,' +
+			'car.model, car.year, notifications.email',
 			flashErrors: true
 		}, function(err) {
 
-			var allPhotos = (!!req.user.photoFront.public_id
+			const requiredUser = (!!req.user.photoFront.public_id
 				&& !!req.user.photoSide.public_id
-				&& !!req.user.photoInside.public_id
-				&& !req.user.isActive
+				&& !!req.user.photoInside.public_id && !!req.user.driverPhoto.public_id
+				&& !req.user.isActive && !!req.user.notifications.email
+				&& !!req.user.car.model && !!req.user.car.year && !!req.user.car.kind
 			);
 
-			if (allPhotos) {
-				console.warn('sent email');
+			if (requiredUser) {
 				keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
 					if (err) return callback(err);
 					new keystone.Email({
