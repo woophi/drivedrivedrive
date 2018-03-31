@@ -34,7 +34,7 @@ var routes = {
 // Setup Route Bindings
 exports = module.exports = function (app) {
 	// Views
-	app.get('/', routes.views.index);
+	app.all('/', routes.views.index);
 	app.get('/blog/:category?', routes.views.blog);
 	app.get('/blog/post/:post', routes.views.post);
 	app.get('/gallery', routes.views.gallery);
@@ -46,6 +46,9 @@ exports = module.exports = function (app) {
 	// User
 	app.all('/me*', middleware.requireUser);
 	app.all('/me', routes.views.me);
+
+	// Request
+	app.all('/request/:id', routes.views.request)
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);

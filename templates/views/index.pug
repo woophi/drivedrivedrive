@@ -6,3 +6,46 @@ block content
 		//- if !user
 		a(href='/join').btn.btn-lg.btn-primary Зарегистрироваться
 
+	block content
+		.container: .jumbotron
+			h1 Узнать цену
+			if form.error
+				.flash-messages
+					.alert.alert-danger
+						div!= form.error.message || form.error
+
+						//- Field Errors
+						if form.error.errors && !_.isEmpty(form.error.errors)
+							ul
+								each error, key in form.error.errors
+									li!= error.msg
+
+			form(method='post', enctype='multipart/form-data').auth-form
+				input(type='hidden', name='action', value='guest.send.request')
+				.form-groups
+					.form-group
+						label(for='guestName') Имя
+						input(type='text', name='guestName',  required).form-control.form-control--first
+					.form-group
+						label(for='guestEmail') Email
+						input(type='email', name='guestEmail', required).form-control
+					.form-group
+						label(for='guestCount') Количество пассажиров
+						input(type='number', name='guestCount', required).form-control
+					.form-group
+						label(for='guestFrom') Отправление из
+						input(type='text', name='guestFrom', required).form-control
+					.form-group
+						label(for='guestTo') Прибытие в
+						input(type='text', name='guestTo', required).form-control
+					.form-group
+						label(for='guestDate') Дата трансфера
+						input(type='date', name='guestDate', required).form-control
+					.form-group
+						label(for='guestTime') Время трансфера
+						input(type='time', name='guestTime',  required).form-control
+					.form-group
+						label(for='guestComment') Ваш комментарий
+						input(type='text', name='guestComment', placeholder='Ваши пожелания, телефон или номер рейса').form-control
+				button(type='submit').btn.btn-block.btn-primary.btn-submit Отправить
+

@@ -1,0 +1,33 @@
+var keystone = require('keystone');
+var Types = keystone.Field.Types;
+
+/**
+ * Request Model
+ * ==========
+ */
+var Request = new keystone.List('Request', {
+	map: {name: 'guest.name'}
+});
+
+Request.add({
+	guest: {
+		name: { type: String, index: true },
+		email: { type: Types.Email, index: true },
+		count: { type: Number, },
+		from: { type: String, },
+		to: { type: String, },
+		date: { type: Date, },
+		time: { type: String, },
+		comment: { type: String }
+	},
+	created: { type: Types.Datetime },
+	accepted: { type: Types.Datetime },
+	assignedBy: { type: Types.Relationship, ref: 'User', many: true },
+		// price: { type: Types.Relationship, ref: 'Price', many: true }
+});
+
+/**
+ * Registration
+ */
+Request.defaultColumns = 'guest.name, guest.email, guest.date';
+Request.register();
