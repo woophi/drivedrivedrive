@@ -22,7 +22,7 @@ Request.add({
 	},
 	created: { type: Types.Datetime },
 	accepted: { type: Types.Datetime },
-	assignedBy: { type: Types.Relationship, ref: 'User', many: true },
+	assignedBy: { type: Types.Relationship, ref: 'User', many: true, index: true },
 		// price: { type: Types.Relationship, ref: 'Price', many: true }
 });
 

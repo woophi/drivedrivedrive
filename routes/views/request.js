@@ -42,15 +42,13 @@ exports = module.exports = function (req, res) {
 
 
 
-		const checkIsSubmitedRequest = function() {
+		(function() {
 			queryRequest.exec(function (err, result) {
 				if (result.accepted) {
 					window.location.reload();
-				} else {
-					return true;
 				}
 			});
-		}
+		})();
 
 		async.series([
 
@@ -64,29 +62,19 @@ exports = module.exports = function (req, res) {
 			},
 
 			function(cb) {
-				RequestModel.findOne()
-				.where('assignedBy', req.user._id).exec(function (err, result) {
+				queryRequest.exec(function (err, result) {
 					const answerData = {
 						// 'assigned.price': req.body.requestPrice,
-						// 'assignedBy': [...result.assignedBy, authUser._id]
-						'assignedBy': [authUser._id]
+						'assignedBy': [...result.assignedBy, authUser._id]
+						// 'assignedBy': [authUser._id]
 					};
-					console.warn(answerData);
-					if (checkIsSubmitedRequest()) {
-						if (!result) {
 
-						} else {
-							new RequestModel().getUpdateHandler(req).process(answerData, {
-								fields: 'assignedBy,',
-								flashErrors: true
-							}, function(err) {
-								return cb(err);
-							});
-						}
-
-					} else {
-						return cb(true);
-					}
+					result.getUpdateHandler(req).process(answerData, {
+						fields: 'assignedBy,',
+						flashErrors: true
+					}, function(err) {
+						return cb(err);
+					});
 				});
 			}
 
