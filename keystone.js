@@ -39,10 +39,7 @@ keystone.set('locals', {
 	env: keystone.get('env'),
 	utils: keystone.utils,
 	editable: keystone.content.editable,
-	host: (function() {
-		if (keystone.get('env') === 'production') return 'https://drivedrivedrive.herokuapp.com';
-		return 'http://localhost:' + (keystone.get('port') || '3000');
-	})()
+	moment: require('moment')
 });
 
 // Load your project's Routes
@@ -55,6 +52,7 @@ keystone.set('nav', {
 	galleries: 'galleries',
 	enquiries: 'enquiries',
 	users: 'users',
+	requests: ['requests', 'prices']
 });
 
 // Start Keystone to connect to your database and initialise the web server
