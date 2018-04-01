@@ -44,6 +44,7 @@ User.schema.virtual('canAccessKeystone').get(function () {
 User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
 User.relationship({ ref: 'Request', path: 'requests', refPath: 'assignedBy' });
 User.relationship({ ref: 'Price', path: 'prices', refPath: 'submitedBy' });
+User.relationship({ ref: 'Request', path: 'requests', refPath: 'submitedOn' });
 // TODO: relation with guests requests
 
 
