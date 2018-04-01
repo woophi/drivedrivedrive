@@ -20,6 +20,7 @@ exports = module.exports = function (req, res) {
 		requestId: req.params.id,
 	};
 	locals.alreadyAssigned = false;
+	locals.alreadySubmited = false;
 
 	const authUser = req.user;
 	const RequestModel = keystone.list('Request').model;
@@ -30,6 +31,22 @@ exports = module.exports = function (req, res) {
 			console.error('There was an error sending the notification email:', err);
 		}
 	};
+
+	// Load the current request
+	view.on('init', function (next) {
+
+		RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
+			// todo: if result null
+			if (!!result && result.accepted) {
+				locals.alreadySubmited = true;
+				next(err);
+			} else {
+				locals.request = result;
+				next(err);
+			}
+		});
+
+	});
 
 	view.on('init', function (next) {
 
@@ -43,20 +60,6 @@ exports = module.exports = function (req, res) {
 		});
 
 	});
-	// Load the current request
-	view.on('init', function (next) {
-
-		RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
-			// todo: if result null
-			if (!!result && result.accepted) {
-				window.location.reload();
-				next(err);
-			}
-			locals.request = result;
-			next(err);
-		});
-
-	});
 
 	view.on('post', { action: 'driver.answer.request' }, function(next) {
 
@@ -66,8 +69,8 @@ exports = module.exports = function (req, res) {
 
 		(function() {
 			RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
-				if (result.accepted) {
-					window.location.reload();
+				if (!!result && result.accepted) {
+					locals.alreadySubmited = true;
 					return next();
 				}
 			});
@@ -76,7 +79,11 @@ exports = module.exports = function (req, res) {
 		async.series([
 
 			function(cb) {
-				const	newPrice = new PriceModel({value: req.body.requestPrice, submitedBy: authUser});
+				const	newPrice = new PriceModel({
+					value: req.body.requestPrice,
+					submitedBy: authUser,
+					assignedRequest: locals.filters.requestId
+				});
 
 				newPrice.save(function(err) {
 					return cb(err);
@@ -86,20 +93,23 @@ exports = module.exports = function (req, res) {
 
 			function(cb) {
 				RequestModel.findById(locals.filters.requestId).exec(function (err, resultRequest) {
-					PriceModel.findOne().populate('submitedBy').exec(function (err, resultPrice) {
+					PriceModel.findOne()
+						.where('submitedBy', authUser._id)
+						.where('assignedRequest', resultRequest._id)
+						.exec(function (err, resultPrice) {
 
-						const answerData = {
-							'assignedBy': [...resultRequest.assignedBy, authUser._id],
-							'assignedPrices': [...resultRequest.assignedPrices, resultPrice._id]
-						};
+							const assignedData = {
+								'assignedBy': [...resultRequest.assignedBy, authUser._id],
+								'assignedPrices': [...resultRequest.assignedPrices, resultPrice._id]
+							};
 
-						resultRequest.getUpdateHandler(req).process(answerData, {
-							fields: 'assignedBy, assignedPrices,',
-							flashErrors: true
-						}, function(err) {
-							locals.alreadyAssigned = true;
-							return cb(err);
-						});
+							resultRequest.getUpdateHandler(req).process(assignedData, {
+								fields: 'assignedBy, assignedPrices,',
+								flashErrors: true
+							}, function(err) {
+								locals.alreadyAssigned = true;
+								return cb(err);
+							});
 					});
 				});
 			},
@@ -111,7 +121,8 @@ exports = module.exports = function (req, res) {
 					photoInside: authUser._.photoInside.thumbnail(100, 100),
 					driverPhoto: authUser._.driverPhoto.thumbnail(100, 100),
 					name: authUser.name,
-					car: authUser.car
+					car: authUser.car,
+					id: authUser._id
 				};
 				RequestModel.findById(locals.filters.requestId).exec(function(err, result) {
 						new keystone.Email({

@@ -8,4 +8,4 @@ block content
 	img(src=driverData.photoFront).img-responsive
 	img(src=driverData.photoSide).img-responsive
 	img(src=driverData.photoInside).img-responsive
-	a(href=host + '/request/accept/' + requestId): button Выбрать водителя
+	a(href=host + '/request/' + requestId + '/accept/' + driverData.id): button Выбрать водителя
