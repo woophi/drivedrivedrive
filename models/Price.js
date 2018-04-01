@@ -13,7 +13,7 @@ Price.add({
 	submitedBy: { type: Types.Relationship, ref: 'User' }
 });
 
-// Price.relationship({ ref: 'Request', path: 'requests', refPath: 'assigned.price' });
+Price.relationship({ ref: 'Request', path: 'requests', refPath: 'assignedPrices' });
 
 Price.defaultColumns = 'value';
 Price.register();

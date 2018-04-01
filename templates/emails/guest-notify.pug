@@ -1,0 +1,11 @@
+extends layouts/base
+block content
+	p Hi %recipient.name%,
+	p Добрый день, для Вас поступило новое ценовое предложение от водителя #{driverData.name.first} #{driverData.name.last}
+	img(src=driverData.driverPhoto).img-responsive
+	p Новое ценовое предложение #{price}
+	p Машина: #{driverData.car.kind} #{driverData.car.model}
+	img(src=driverData.photoFront).img-responsive
+	img(src=driverData.photoSide).img-responsive
+	img(src=driverData.photoInside).img-responsive
+	a(href=host + '/request/accept/' + requestId): button Выбрать водителя

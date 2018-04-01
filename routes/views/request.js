@@ -19,18 +19,38 @@ exports = module.exports = function (req, res) {
 	locals.filters = {
 		requestId: req.params.id,
 	};
+	locals.alreadyAssigned = false;
 
 	const authUser = req.user;
 	const RequestModel = keystone.list('Request').model;
 	const PriceModel = keystone.list('Price').model;
-	const queryRequest = RequestModel.findById(locals.filters.requestId);
+
+	function callback (err) {
+		if (err) {
+			console.error('There was an error sending the notification email:', err);
+		}
+	};
+
+	view.on('init', function (next) {
+
+		RequestModel.findById(locals.filters.requestId).where('assignedBy', authUser._id).exec(function (err, resultPrice) {
+			if (!resultPrice) {
+				next(err);
+			} else {
+				locals.alreadyAssigned = true;
+				next(err);
+			}
+		});
+
+	});
 	// Load the current request
 	view.on('init', function (next) {
 
-		queryRequest.exec(function (err, result) {
+		RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
 			// todo: if result null
-			if (result.accepted) {
+			if (!!result && result.accepted) {
 				window.location.reload();
+				next(err);
 			}
 			locals.request = result;
 			next(err);
@@ -40,12 +60,15 @@ exports = module.exports = function (req, res) {
 
 	view.on('post', { action: 'driver.answer.request' }, function(next) {
 
-
+		if(locals.alreadyAssigned) {
+			return next();
+		}
 
 		(function() {
-			queryRequest.exec(function (err, result) {
+			RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
 				if (result.accepted) {
 					window.location.reload();
+					return next();
 				}
 			});
 		})();
@@ -62,21 +85,54 @@ exports = module.exports = function (req, res) {
 			},
 
 			function(cb) {
-				queryRequest.exec(function (err, result) {
-					const answerData = {
-						// 'assigned.price': req.body.requestPrice,
-						'assignedBy': [...result.assignedBy, authUser._id]
-						// 'assignedBy': [authUser._id]
-					};
+				RequestModel.findById(locals.filters.requestId).exec(function (err, resultRequest) {
+					PriceModel.findOne().populate('submitedBy').exec(function (err, resultPrice) {
 
-					result.getUpdateHandler(req).process(answerData, {
-						fields: 'assignedBy,',
-						flashErrors: true
-					}, function(err) {
-						return cb(err);
+						const answerData = {
+							'assignedBy': [...resultRequest.assignedBy, authUser._id],
+							'assignedPrices': [...resultRequest.assignedPrices, resultPrice._id]
+						};
+
+						resultRequest.getUpdateHandler(req).process(answerData, {
+							fields: 'assignedBy, assignedPrices,',
+							flashErrors: true
+						}, function(err) {
+							locals.alreadyAssigned = true;
+							return cb(err);
+						});
 					});
 				});
-			}
+			},
+
+			function(cb) {
+				const driverForEmail = {
+					photoFront: authUser._.photoFront.thumbnail(100, 100),
+					photoSide: authUser._.photoSide.thumbnail(100, 100),
+					photoInside: authUser._.photoInside.thumbnail(100, 100),
+					driverPhoto: authUser._.driverPhoto.thumbnail(100, 100),
+					name: authUser.name,
+					car: authUser.car
+				};
+				RequestModel.findById(locals.filters.requestId).exec(function(err, result) {
+						new keystone.Email({
+							templateName: 'guest-notify',
+							transport: 'mailgun',
+						}).send({
+							to: result.guest,
+							from: {
+								name: 'DRIVE SUKA DRIVE',
+								email: 'postmaster@sandboxdae723c3f3084598b74d3512385ba33b.mailgun.org',
+							},
+							subject: `Трансфер ${result.guest.from} - ${result.guest.to}`,
+							driverData: driverForEmail,
+							host: req.headers.origin,
+							price: req.body.requestPrice,
+							requestId: locals.filters.requestId
+						}, callback);
+						return cb();
+				});
+
+			},
 
 		], function(err){
 
