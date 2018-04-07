@@ -25,9 +25,13 @@ exports.initLocals = function (req, res, next) {
 		{ label: 'Contact', key: 'contact', href: '/contact' },
 	];
 	res.locals.user = req.user;
+
+	res.locals.page = {
+		path: req.url.split("?")[0] // strip the query - handy for redirecting back to the page
+	};
+
 	next();
 };
-
 
 /**
 	Fetches and clears the flashMessages before a view is rendered

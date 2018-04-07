@@ -5,6 +5,15 @@ block content
 		h1 Добро пожаловать
 		//- if !user
 		a(href='/join').btn.btn-lg.btn-primary Зарегистрироваться
+		div.btn-group.btn-group-lg
+				if user
+					button.btn.btn-secondary: a(href='/me')
+							img(src=(user.driverPhoto.exists ? user._.driverPhoto.thumbnail(15,15) : user.avatarUrl || '/images/avatar.png'), width=15).img-circle
+							=user.name.first
+					button.btn.btn-secondary: a(href='/signout')
+						span.hidden-md Sign out
+				else
+					li: a(href='/signin', data-from=page.path, data-initial='signin').js-auth-trigger Sign in
 
 	block content
 		.container: .jumbotron
