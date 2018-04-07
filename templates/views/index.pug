@@ -10,6 +10,7 @@ block content
 						=user.name.first
 				a(href='/signout').btn.btn-secondary
 					span.hidden-md Sign out
+					i.fas.fa-sign-out-alt.pl-1
 			else
 				a(href='/signin', data-from=page.path, data-initial='signin').btn.btn-secondary Sign in
 				a(href='/join').btn.btn-secondary Зарегистрироваться

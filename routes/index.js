@@ -42,6 +42,7 @@ exports = module.exports = function (app) {
 
 	// Session
 	app.all('/join', routes.views.session.join);
+	app.get('/signout', routes.views.session.signout);
 
 	// User
 	app.all('/me*', middleware.requireUser);
