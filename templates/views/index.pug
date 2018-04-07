@@ -3,17 +3,16 @@ extends ../layouts/default
 block content
 	.container: .jumbotron
 		h1 Добро пожаловать
-		//- if !user
-		a(href='/join').btn.btn-lg.btn-primary Зарегистрироваться
 		div.btn-group.btn-group-lg
-				if user
-					button.btn.btn-secondary: a(href='/me')
-							img(src=(user.driverPhoto.exists ? user._.driverPhoto.thumbnail(15,15) : user.avatarUrl || '/images/avatar.png'), width=15).img-circle
-							=user.name.first
-					button.btn.btn-secondary: a(href='/signout')
-						span.hidden-md Sign out
-				else
-					li: a(href='/signin', data-from=page.path, data-initial='signin').js-auth-trigger Sign in
+			if user
+				a(href='/me').btn.btn-secondary
+						img(src=(user.driverPhoto.exists ? user._.driverPhoto.thumbnail(27,27) : user.avatarUrl || '/images/avatar.png'), width=27).img-circle
+						=user.name.first
+				a(href='/signout').btn.btn-secondary
+					span.hidden-md Sign out
+			else
+				a(href='/signin', data-from=page.path, data-initial='signin').btn.btn-secondary Sign in
+				a(href='/join').btn.btn-secondary Зарегистрироваться
 
 	block content
 		.container: .jumbotron
