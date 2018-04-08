@@ -5,6 +5,8 @@ block intro
 
 block content
 	.container: .jumbotron
+		a(href='/').btn.btn-primary
+			span.hidden-md На главную
 		p.lead Привет #{user.name.first}, это ваш профиль!
 		a(href='/signout').btn.btn-secondary
 			span.hidden-md Выйти

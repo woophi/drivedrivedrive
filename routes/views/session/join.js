@@ -69,12 +69,6 @@ exports = module.exports = function(req, res) {
 			if (err) return next();
 
 			var onSuccess = function() {
-				// if (req.body.target && !/join|signin/.test(req.body.target)) {
-				// 	console.log('[join] - Set target as [' + req.body.target + '].');
-				// 	res.redirect(req.body.target);
-				// } else {
-				// 	res.redirect('/me');
-				// }
 				res.redirect('/me');
 			}
 
