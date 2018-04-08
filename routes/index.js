@@ -42,6 +42,7 @@ exports = module.exports = function (app) {
 
 	// Session
 	app.all('/join', routes.views.session.join);
+	app.all('/signin', routes.views.session.signin);
 	app.get('/signout', routes.views.session.signout);
 
 	// User
