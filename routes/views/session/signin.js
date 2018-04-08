@@ -10,6 +10,8 @@ exports = module.exports = function(req, res) {
 	var view = new keystone.View(req, res),
 		locals = res.locals;
 
+	const	User = keystone.list('User');
+
 	locals.section = 'session';
 	locals.form = req.body;
 
@@ -19,23 +21,43 @@ exports = module.exports = function(req, res) {
 			req.flash('error', 'Please enter your username and password.');
 			return next();
 		}
+		async.series([
 
-		var onSuccess = function() {
-			if (req.body.target && !/join|signin/.test(req.body.target)) {
-				console.log('[signin] - Set target as [' + req.body.target + '].');
-				res.redirect(req.body.target);
-			} else {
-				res.redirect('/me');
+			function(cb) {
+
+				User.model.findOne().where('email', req.body.email).exec(function(err, user) {
+					if (err) return cb(err);
+					if (!user) {
+						req.flash('error', "Sorry, that reset password key isn't valid.");
+						return cb();
+					} else {
+						let result = user;
+						result.resetPasswordKey = '';
+						result.save(function(err) {
+							if (err) return cb(err);
+							return cb();
+						});
+					}
+				});
 			}
-		}
+		], function(err) {
 
-		var onFail = function() {
-			req.flash('error', 'Your username or password were incorrect, please try again.');
-			return next();
-		}
+			var onSuccess = function() {
+				if (req.body.target && !/join|signin/.test(req.body.target)) {
+					console.log('[signin] - Set target as [' + req.body.target + '].');
+					res.redirect(req.body.target);
+				} else {
+					res.redirect('/me');
+				}
+			}
 
-		keystone.session.signin({ email: req.body.email, password: req.body.password }, req, res, onSuccess, onFail);
+			var onFail = function() {
+				req.flash('error', 'Your username or password were incorrect, please try again.');
+				return next();
+			}
 
+			keystone.session.signin({ email: req.body.email, password: req.body.password }, req, res, onSuccess, onFail);
+		});
 	});
 
 	view.render('session/signin');
