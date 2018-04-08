@@ -76,6 +76,11 @@ exports = module.exports = function (req, res) {
 			});
 		})();
 
+		if (!req.body.requestPrice) {
+			req.flash('error', "Please enter your price.");
+			return next();
+		}
+
 		async.series([
 
 			function(cb) {
