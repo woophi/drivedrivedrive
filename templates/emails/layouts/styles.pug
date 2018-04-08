@@ -3,7 +3,7 @@
 - var emailGutter = '30';
 
 style(type='text/css').
-	
+
 	/* Client-specific Styles */
 	#outlook a { padding: 0; } /* Force Outlook to provide a "view in browser" button. */
 	body { width: 100% !important; } .ReadMsgBody { width: 100%; } .ExternalClass { width: 100%; } /* Force Hotmail to display emails at full width */
@@ -17,7 +17,7 @@ style(type='text/css').
 
 	/* Common Page Elements */
 	body, #background { background-color: #f7f7f7; }
-	h1, .h1 { color: #1a1a1a; display: block; font-family: Helvetica, Arial, sans-serif; font-size: 24px; font-weight: bold; line-height: 20px; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; text-align: left; }
+	h1, .h1 { color: #1a1a1a; display: block; font-family: Helvetica, Arial, sans-serif; font-size: 2rem; font-weight: bold; line-height: 80px; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; }
 	h2, .h2 { color: #333; display: block; font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: bold; line-height: 20px; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; text-align: left; }
 	h3, .h3 { color: #333; display: block; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; line-height: 18px; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; text-align: left; }
 	h4, .h4 { color: #333; display: block; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: bold; line-height: 18px; margin-top: 0; margin-right: 0; margin-bottom: 10px; margin-left: 0; text-align: left; }
@@ -27,39 +27,83 @@ style(type='text/css').
 		POPULATE
 	===============
 	**/
-	#populate { color: #333; font-family: Helvetica, Arial, sans-serif; line-height: 130%; text-align: left; }
+	#populate { color: #333; font-family: Helvetica, Arial, sans-serif; line-height: 130%; text-align: center; }
 	#populate a, #populate a:link, .preheaderContent a:visited, #populate a .yshortcuts { color: #{linkColor}; font-weight: inherit; text-decoration: underline; }
 	#populate img { display: inline; height: auto; }
 
 	#body h1 a, #body .h1 a, #body h2 a, #body .h2 a, #body h3 a, #body .h3 a, #body h4 a, #body .h4 a { color: #333; text-decoration: none; }
 	#body h1 a:hover, #body .h1 a:hover, #body h2 a:hover, #body .h2 a:hover, #body h3 a:hover, #body .h3 a:hover, #body h4 a:hover, #body .h4 a:hover { text-decoration: underline; }
 	#body h3 { margin-top: 30px; }
-	
+
 	/* helper classes */
 	#populate .img-fix { display: block; }
 	#populate hr, #populate .hr { border: 0 none; border-top: 1px solid #{dividerColor}; margin: #{emailGutter}px 0; }
 	#populate hr.spacer, #populate .hr.spacer { border-color: transparent; margin: 5px 0; }
 
-	
+
 	/* HEADER */
-	
+
 	#header { line-height: 0; text-align: center; }
 
-	
+
 	/* BODY */
-	
+
 	#body { background-color: #ffffff; border: 1px solid #e5e5e5; }
 	#body .intro-text p { font-size: 16px; margin-bottom: 0; }
 	#body .sections td { vertical-align: middle; }
 	#body .sections p { margin-bottom: 0; }
-	
+
 	#content { padding-bottom: 30px; padding-top: 30px; }
+
+	#imgCar {
+		margin-bottom: 2rem;
+		width: 300px;
+		height: auto;
+	}
+
+	#imgDriver {
+		border-radius: 50%;
+		width: 175px;
+		height: 175px;
+		float: left;
+	}
+
+	#bodyCard {
+		background-color: #ffffff;
+		border: 1px solid green;
+		border-radius: 1rem;
+	}
+
+	#submitCardBtn {
+		width: 100%;
+		height: auto;
+		border-radius: 0 0 1rem 1rem;
+		box-sizing: border-box;
+		background: green;
+		border: 1px solid green;
+		cursor: pointer;
+	}
+
+	#section {
+		border-bottom: 1px solid green;
+		text-align: center;
+		padding: 1rem;
+	}
+
+	#cardP {
+		color: #000;
+	}
+
+	#cardPBtn {
+		color: #fff;
+		font-size: 1rem
+	}
 
 	/* FOOTER */
 	#footer { color: #999999; font-size: 12px; text-align: center; }
 	#footer a { color: #999999; }
 
-	
+
 	/**
 	===============
 		Utilities
@@ -72,7 +116,7 @@ style(type='text/css').
 	.text-right { text-align: right; }
 	.text-center { text-align: center; }
 
-	
+
 	/**
 	===============
 		Components
@@ -104,9 +148,9 @@ style(type='text/css').
 		margin-bottom: 20px;
 	}
 	.highlight .table { margin-bottom: 0; }
-	
-	
-	
+
+
+
 	/**
 	===============
 		RESPONSIVE
@@ -130,7 +174,7 @@ style(type='text/css').
 		padding-left: #{emailGutter}px;
 		padding-right: #{emailGutter}px;
 	}
-	
+
 	/* small screens */
 	@media only screen and (max-width: 680px) {
 		body, #background { background-color: white !important; }
@@ -163,4 +207,4 @@ style(type='text/css').
 		}
 		#content { border-top: 1px solid #{dividerColor}; }
 	}
-	
+

@@ -6,7 +6,7 @@ var keystone = require('keystone'),
 exports = module.exports = function (req, res) {
 
 	if (!req.user) {
-		return res.redirect('/admin/signin');
+		return res.redirect('/signin');
 	}
 
 	var view = new keystone.View(req, res);
@@ -120,16 +120,16 @@ exports = module.exports = function (req, res) {
 			},
 
 			function(cb) {
-				const driverForEmail = {
-					photoFront: authUser._.photoFront.thumbnail(100, 100),
-					photoSide: authUser._.photoSide.thumbnail(100, 100),
-					photoInside: authUser._.photoInside.thumbnail(100, 100),
-					driverPhoto: authUser._.driverPhoto.thumbnail(100, 100),
-					name: authUser.name,
-					car: authUser.car,
-					id: authUser._id
-				};
 				RequestModel.findById(locals.filters.requestId).exec(function(err, result) {
+					const driverForEmail = {
+						specialPhoto: authUser._.specialPhoto.src(),
+						driverPhoto: authUser._.driverPhoto.thumbnail(175, 175),
+						name: authUser.name,
+						car: authUser.car,
+						id: authUser._id,
+						from: result.guest.from,
+						to: result.guest.to
+					};
 						new keystone.Email({
 							templateName: 'guest-notify',
 							transport: 'mailgun',

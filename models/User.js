@@ -22,7 +22,8 @@ User.add({
 		kind: { type: String },
 		year: { type: Number },
 		model: { type: String }
-	}
+	},
+	specialPhoto: { type: Types.CloudinaryImage }
 }, 'Notifications', {
 	notifications: {
 		email: { type: Boolean, default: true },
@@ -30,7 +31,7 @@ User.add({
 	}
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true },
-	isActive: { type: Boolean, default: false, label: 'VODYATEL is active???' },
+	isActive: { type: Boolean, default: false, label: 'Активный водитель?' },
 });
 
 // Provide access to Keystone

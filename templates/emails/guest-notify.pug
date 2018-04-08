@@ -1,11 +1,16 @@
-extends layouts/base
+extends layouts/baseCard
 block content
-	p Hi %recipient.name%,
-	p Добрый день, для Вас поступило новое ценовое предложение от водителя #{driverData.name.first} #{driverData.name.last}
-	img(src=driverData.driverPhoto).img-responsive
-	p Новое ценовое предложение #{price}
-	p Машина: #{driverData.car.kind} #{driverData.car.model}
-	img(src=driverData.photoFront).img-responsive
-	img(src=driverData.photoSide).img-responsive
-	img(src=driverData.photoInside).img-responsive
-	a(href=host + '/request/' + requestId + '/accept/' + driverData.id): button Выбрать водителя
+	div#section: h1 Новое ценовое предложение
+	div#section
+		p#cardP #{driverData.car.kind} #{driverData.car.model}, #{driverData.car.year}
+		img(src=driverData.specialPhoto)#imgCar
+	div#section
+		img(src=driverData.driverPhoto)#imgDriver
+		p#cardP 5
+		p#cardP #{driverData.name.first}
+		p#cardP Добрый день, готов предложить Вам услуги трансфера из #{driverData.from} в #{driverData.to}
+		p#cardP Стоимость составит #{price} €(евро) за авто
+	a(href=host + '/request/' + requestId + '/accept/' + driverData.id)
+		button#submitCardBtn
+			p#cardPBtn Поехали!
+			p#cardPBtn Нажмите для выбора данного ценового предложения
