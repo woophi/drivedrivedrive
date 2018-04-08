@@ -1,12 +1,14 @@
 extends ../layouts/default
 
 block intro
-
-//- block flash-messages
+	+flash-messages(messages)
 
 block content
 	.container: .jumbotron
 		p.lead Привет #{user.name.first}, это ваш профиль!
+		a(href='/signout').btn.btn-secondary
+			span.hidden-md Выйти
+			i.fas.fa-sign-out-alt.pl-1
 		if !user.isActive
 			p.lead Ваш профиль до сих пор не активен. Необходимо заполнить все поля и фото, получить разрешение от администратора, выбрать способ рассылки уведомлений.
 		else

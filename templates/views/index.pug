@@ -9,10 +9,10 @@ block content
 						img(src=(user.driverPhoto.exists ? user._.driverPhoto.thumbnail(27,27) : user.avatarUrl || '/images/avatar.png'), width=27).img-circle
 						=user.name.first
 				a(href='/signout').btn.btn-secondary
-					span.hidden-md Sign out
+					span.hidden-md Выйти
 					i.fas.fa-sign-out-alt.pl-1
 			else
-				a(href='/signin', data-from=page.path, data-initial='signin').btn.btn-secondary Sign in
+				a(href='/signin', data-from=page.path, data-initial='signin').btn.btn-secondary Войти
 				a(href='/join').btn.btn-secondary Зарегистрироваться
 
 	block content

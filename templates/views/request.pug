@@ -1,5 +1,8 @@
 extends ../layouts/default
 
+block intro
+	+flash-messages(messages)
+
 block content
 	if !alreadySubmited
 		.container: .jumbotron
