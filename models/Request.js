@@ -18,7 +18,8 @@ Request.add({
 		to: { type: String, },
 		date: { type: Date, },
 		time: { type: String, },
-		comment: { type: String }
+		comment: { type: String },
+		phone: { type: String }
 	},
 	created: { type: Types.Datetime },
 	accepted: { type: Types.Datetime },

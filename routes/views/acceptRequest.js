@@ -1,4 +1,5 @@
-var keystone = require('keystone');
+var keystone = require('keystone'),
+		moment = require('moment');
 
 exports = module.exports = function (req, res) {
 
@@ -21,7 +22,7 @@ exports = module.exports = function (req, res) {
 		}
 	};
 
-	function sentMail (params) {
+	function sentMail(price) {
 		UserModel.findOne().where('isAdmin', true).exec(function(err, resultUser) {
 			RequestModel.findById(locals.filters.requestId)
 				.populate('submitedOn')
@@ -40,13 +41,29 @@ exports = module.exports = function (req, res) {
 							email: 'postmaster@sandboxdae723c3f3084598b74d3512385ba33b.mailgun.org',
 						},
 						subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`,
-						guestData: resultRequest
+						guestData: resultRequest,
+						moment,
+						price
 					}, callback);
 				});
 		});
 	};
 
 	view.on('init', function(next) {
+		RequestModel.findById(locals.filters.requestId)
+			.exec(function (err, result) {
+				if (!result.accepted) {
+					locals.stateOfRequest = 'process';
+				} else if (result.accepted) {
+					locals.stateOfRequest = 'invalid';
+				} else {
+					locals.stateOfRequest = 'failed';
+				}
+			})
+			.then(() => next());
+	});
+
+	view.on('post', { action: 'submit.request.by.user' }, function (next) {
 
 		RequestModel.findById(locals.filters.requestId)
 			.where('assignedBy', locals.filters.driverId)
@@ -61,28 +78,28 @@ exports = module.exports = function (req, res) {
 								'submitedOn': locals.filters.driverId,
 								'submitedPrice': resultPrice._id,
 								'assignedBy': [],
-								'accepted': Date.now()
+								'accepted': Date.now(),
+								'guest.phone': req.body.guestPhone
 							};
 
 							result.getUpdateHandler(req).process(submitedData, {
-								fields: 'submitedOn, submitedPrice, assignedBy, accepted,',
+								fields: 'submitedOn, submitedPrice, assignedBy, accepted, guest.phone,',
 								flashErrors: true
 							}, function(err) {
 								locals.stateOfRequest = 'success';
-								sentMail();
+								sentMail(resultPrice.value);
 								return next(err);
 							});
 
 					});
 			} else if (result && result.accepted) {
-				locals.stateOfRequest = 'url is not valid';
+				locals.stateOfRequest = 'invalid';
 				return next(err);
 			} else {
 				locals.stateOfRequest = 'failed';
 				return next(err);
 			}
 		});
-
 	});
 
 	view.render('acceptRequest');
