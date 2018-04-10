@@ -26,18 +26,10 @@ exports = module.exports = function (req, res) {
 	const RequestModel = keystone.list('Request').model;
 	const PriceModel = keystone.list('Price').model;
 
-	function callback (err) {
-		if (err) {
-			console.error('There was an error sending the notification email:', err);
-		}
-	};
-
 	// Load the current request
 	view.on('init', function (next) {
-
 		RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
-			// todo: if result null
-			if (!!result && result.accepted) {
+			if (result.submitedOn) {
 				locals.alreadySubmited = true;
 				next(err);
 			} else {
@@ -49,8 +41,8 @@ exports = module.exports = function (req, res) {
 	});
 
 	view.on('init', function (next) {
-
 		RequestModel.findById(locals.filters.requestId).where('assignedBy', authUser._id).exec(function (err, resultPrice) {
+
 			if (!resultPrice) {
 				next(err);
 			} else {
@@ -63,18 +55,11 @@ exports = module.exports = function (req, res) {
 
 	view.on('post', { action: 'driver.answer.request' }, function(next) {
 
-		if(locals.alreadyAssigned) {
+		if (locals.alreadySubmited) {
+			return next();
+		} else if (locals.alreadyAssigned) {
 			return next();
 		}
-
-		(function() {
-			RequestModel.findById(locals.filters.requestId).exec(function (err, result) {
-				if (!!result && result.accepted) {
-					locals.alreadySubmited = true;
-					return next();
-				}
-			});
-		})();
 
 		if (!req.body.requestPrice) {
 			req.flash('error', "Please enter your price.");
@@ -119,7 +104,7 @@ exports = module.exports = function (req, res) {
 				});
 			},
 
-			function(cb) {
+			function (cb) {
 				RequestModel.findById(locals.filters.requestId).exec(function(err, result) {
 					const driverForEmail = {
 						specialPhoto: authUser._.specialPhoto.src(),
@@ -144,26 +129,25 @@ exports = module.exports = function (req, res) {
 							host: req.headers.origin,
 							price: req.body.requestPrice,
 							requestId: locals.filters.requestId
-						}, callback);
+						}, (e) => e && console.warn('not done', e));
 						return cb();
 				});
-
-			},
+			}
 
 		], function(err){
 
-			var onSuccess = function() {
+			var onSuccess = function(err) {
 				req.flash('success', 'Ваше ценовое предложение отправлено');
-				return next();
+				return next(err)
 			}
 
-			var onFail = function(e) {
+			var onFail = function(erre) {
 				req.flash('error', 'Что-то пошло не так... попробуйте еще раз');
-				return next();
+				return next(err);
 			}
-			if (err) return onFail(err);
+			if (err) onFail(err);
 
-			onSuccess();
+			onSuccess(err);
 
 		});
 
