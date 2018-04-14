@@ -7,7 +7,7 @@ block content
 	.container: .jumbotron
 		a(href='/').btn.btn-primary.mr-1
 			span.hidden-md На главную
-		if user.isAdmin
+		if user.isAdmin || user.isSuperAdmin
 			a(href='/admin').btn.btn-primary
 				span.hidden-md Админ кабинет
 		p.lead Привет #{user.name.first}, это ваш профиль!
