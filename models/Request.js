@@ -26,7 +26,10 @@ Request.add({
 	assignedBy: { type: Types.Relationship, ref: 'User', many: true, index: true },
 	assignedPrices: { type: Types.Relationship, ref: 'Price', many: true, index: true },
 	submitedOn: { type: Types.Relationship, ref: 'User', index: true },
-	submitedPrice: { type: Types.Relationship, ref: 'Price', index: true }
+	submitedPrice: { type: Types.Relationship, ref: 'Price', index: true },
+	wasAssignedOn: { type: Types.Relationship, ref: 'User', many: true, index: true },
+	wasConfirmed: { type: Boolean, default: false },
+	wasConfirmedTime: { type: Types.Datetime }
 });
 
 Request.relationship({ ref: 'Price', path: 'prices', refPath: 'assignedRequest' });
