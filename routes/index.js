@@ -55,6 +55,7 @@ exports = module.exports = function (app) {
 	app.all('/request/:id', routes.views.request);
 	app.all('/request/:id/accept/:driverId', routes.views.acceptRequest);
 	app.all('/request/:id/confirm', routes.views.confirmRequest);
+	app.all('/request/:id/rate', routes.views.rateRequest);
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);

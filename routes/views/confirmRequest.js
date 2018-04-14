@@ -44,6 +44,10 @@ exports = module.exports = async function (req, res) {
 			.populate('submitedPrice')
 			.exec(function (err, result) {
 				if (!result.wasConfirmed) {
+					if (err) {
+						locals.stateOfRequest = 'failed';
+						next(err);
+					}
 
 					llocals.stateOfRequest = 'success';
 
