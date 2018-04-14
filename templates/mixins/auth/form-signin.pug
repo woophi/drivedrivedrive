@@ -1,6 +1,5 @@
 mixin form-signin(args)
 	.auth-box.modal-pane-signin
-		h2 #{JSON.stringify(form)}
 		div
 			form(method='post', action='/signin', role='signin', novalidate).auth-form
 				input(type='hidden', name='action', value='signin')
