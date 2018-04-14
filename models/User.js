@@ -37,6 +37,11 @@ User.add({
 	isAdmin: { type: Boolean, label: 'Администратор', index: true },
 	isSuperAdmin: { type: Boolean, default: false, label: 'Супер админ' },
 	isActive: { type: Boolean, default: false, label: 'Активный водитель' },
+}, 'Rating', {
+	rating: {
+		averageValue: { type: Number, label: 'Рейтинг водителя', default: 5, dependsOn: deps.driver },
+		count: { type: Number, hidden: true }
+	}
 });
 
 // Provide access to Keystone
