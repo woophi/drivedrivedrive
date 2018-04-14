@@ -7,6 +7,10 @@ var Types = keystone.Field.Types;
  */
 var User = new keystone.List('User');
 
+const deps = {
+	driver: { 'isActive': true },
+};
+
 User.add({
 	name: { type: Types.Name, required: true, index: true },
 	email: { type: Types.Email, initial: true, required: true, unique: true, index: true },
@@ -32,7 +36,7 @@ User.add({
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Администратор', index: true },
 	isSuperAdmin: { type: Boolean, default: false, label: 'Супер админ' },
-	isActive: { type: Boolean, default: false, label: 'Активный водитель?' },
+	isActive: { type: Boolean, default: false, label: 'Активный водитель' },
 });
 
 // Provide access to Keystone
@@ -46,9 +50,9 @@ User.schema.virtual('canAccessKeystone').get(function () {
  */
 User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
 User.relationship({ ref: 'Price', path: 'prices', refPath: 'submitedBy' });
-User.relationship({ ref: 'Request', path: 'requests', refPath: 'assignedBy' });
-User.relationship({ ref: 'Request', path: 'requests', refPath: 'submitedOn' });
-User.relationship({ ref: 'Request', path: 'requests', refPath: 'wasAssignedOn' });
+User.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedBy' });
+User.relationship({ ref: 'Request', path: 'submited', refPath: 'submitedOn' });
+User.relationship({ ref: 'Request', path: 'was assigned', refPath: 'wasAssignedOn' });
 // TODO: relation with guests requests
 
 User.schema.methods.resetPassword = function(req, res, next) {
@@ -76,5 +80,5 @@ User.schema.methods.resetPassword = function(req, res, next) {
 /**
  * Registration
  */
-User.defaultColumns = 'name, email, isAdmin';
+User.defaultColumns = 'name, email, isActive';
 User.register();

@@ -6,10 +6,12 @@ var Types = keystone.Field.Types;
  * ==================
  */
 
-var Price = new keystone.List('Price');
+var Price = new keystone.List('Price', {
+	map: {name: 'value'}
+});
 
 Price.add({
-	value: { type: Number },
+	value: { type: Number, index: true  },
 	submitedBy: { type: Types.Relationship, ref: 'User' },
 	assignedRequest: { type: Types.Relationship, ref: 'Request', index: true }
 });
@@ -17,5 +19,5 @@ Price.add({
 Price.relationship({ ref: 'Request', path: 'requests', refPath: 'assignedPrices' });
 Price.relationship({ ref: 'Request', path: 'requests', refPath: 'submitedPrice' });
 
-Price.defaultColumns = 'value';
+Price.defaultColumns = 'value, submitedBy, assignedRequest';
 Price.register();
