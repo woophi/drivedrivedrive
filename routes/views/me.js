@@ -33,6 +33,7 @@ exports = module.exports = function(req, res) {
 				&& !!req.user.photoInside.public_id && !!req.user.driverPhoto.public_id
 				&& !req.user.isActive && !!req.user.notifications.email
 				&& !!req.user.car.model && !!req.user.car.year && !!req.user.car.kind
+				&& (!req.user.isAdmin || !req.user.isSuperAdmin)
 			);
 
 			if (requiredUser) {
