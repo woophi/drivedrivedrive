@@ -7,21 +7,12 @@
 	* accepts "signin"  | "password"
 	* from - specify a page
 
-//- include form-join
 include form-password
-//- include form-reset
 include form-signin
 
 mixin auth-forms(args)
-	if args.modal
+	if args.initial == 'signin'
 		+form-signin(args)
-		+form-password(args)
-
 	else
-		if args.initial == 'password'
-			+form-password(args)
-		//- else if args.initial == 'reset'
-		//- 	+form-reset(args)
-		else
-			+form-signin(args)
+		+form-password(args)
 

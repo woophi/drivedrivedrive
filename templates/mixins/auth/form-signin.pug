@@ -1,10 +1,7 @@
 mixin form-signin(args)
-	.auth-box.modal-pane-signin(class=args.modal && args.initial != 'signin' ? 'hidden' : null)
-		if args.modal
-			.modal-header
-				button(type="button", class="close", data-dismiss="modal", aria-hidden="true") &times;
-				h4.modal-title Вход в личный кабинет
-		div(class=args.modal ? 'modal-body' : null)
+	.auth-box.modal-pane-signin
+		h2 #{JSON.stringify(form)}
+		div
 			form(method='post', action='/signin', role='signin', novalidate).auth-form
 				input(type='hidden', name='action', value='signin')
 				input(type='hidden', name='target', value=!args.modal ? form.target : page.path)
@@ -20,6 +17,6 @@ mixin form-signin(args)
 			.row.text-muted.mt-3
 				.col-sm-8
 					span.pr-1 Новый водитель?
-					a(href=args.modal ? js : '/join', rel=args.modal ? 'modal-pane' : null, data-modal-pane=args.modal ? 'join' : null) Зарегистрироваться
+					a(href='/join') Зарегистрироваться
 				.col-sm-4.text-right
-					a(href=args.modal ? js : '/forgot-password', rel=args.modal ? 'modal-pane' : null, data-modal-pane=args.modal ? 'password' : null) Забыли пароль?
+					a(href='/forgot-password') Забыли пароль?

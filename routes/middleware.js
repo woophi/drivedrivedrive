@@ -30,6 +30,8 @@ exports.initLocals = function (req, res, next) {
 		path: req.url.split("?")[0] // strip the query - handy for redirecting back to the page
 	};
 
+	if (req.cookies.target && req.cookies.target == locals.page.path) res.clearCookie('target');
+
 	next();
 };
 

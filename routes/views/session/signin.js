@@ -15,6 +15,8 @@ exports = module.exports = function(req, res) {
 	locals.section = 'session';
 	locals.form = req.body;
 
+	const redirectSave = req.session.redirectTo;
+
 	view.on('post', { action: 'signin' }, function(next) {
 
 		if (!req.body.email || !req.body.password) {
@@ -43,9 +45,8 @@ exports = module.exports = function(req, res) {
 		], function(err) {
 
 			var onSuccess = function() {
-				if (req.body.target && !/join|signin/.test(req.body.target)) {
-					console.log('[signin] - Set target as [' + req.body.target + '].');
-					res.redirect(req.body.target);
+				if (redirectSave, redirectSave && !/join|signin/.test(redirectSave)) {
+					res.redirect(`${redirectSave}`);
 				} else {
 					res.redirect('/me');
 				}

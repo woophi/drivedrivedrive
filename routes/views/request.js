@@ -6,6 +6,7 @@ var keystone = require('keystone'),
 exports = module.exports = function (req, res) {
 
 	if (!req.user) {
+		req.session.redirectTo = req.url.split("?")[0];
 		return res.redirect('/signin');
 	}
 
