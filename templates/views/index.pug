@@ -14,6 +14,8 @@ block content
 			else
 				a(href='/signin', data-from=page.path, data-initial='signin').btn.btn-secondary Войти
 				a(href='/join').btn.btn-secondary Зарегистрироваться
+		div
+			input(data-max='5', data-min='1', data-step='0.5' data-clearable='отмена', type='number').rating
 
 	block content
 		.container: .jumbotron
