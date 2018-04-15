@@ -11,7 +11,7 @@ exports = module.exports = async function (req, res) {
 	locals.filters = {
 		requestId: req.params.id
 	};
-	locals.stateOfRequest = 'process';
+	locals.stateOfRequest = 'success';
 
 	function callback (err) {
 		if (err) {
@@ -49,7 +49,7 @@ exports = module.exports = async function (req, res) {
 						next(err);
 					}
 
-					llocals.stateOfRequest = 'success';
+					locals.stateOfRequest = 'success';
 
 					const confirmedData = {
 						'wasConfirmed': true,
