@@ -15,8 +15,11 @@ exports = module.exports = function (req, res) {
 	};
 	locals.stateOfRequest = 'open';
 
+	locals.initRatingValue = 0;
+
 	const RequestModel = keystone.list('Request').model;
 	const RatingModel = keystone.list('Rating').model;
+	const UserModel = keystone.list('User').model;
 
 	function callback (err) {
 		if (err) {
@@ -64,15 +67,20 @@ exports = module.exports = function (req, res) {
 	view.on('post', { action: 'guest.rate.request' }, function(next) {
 
 		if (locals.stateOfRequest === 'invalid') {
-			req.flash('warning', 'Заявка была оценена');
+			req.flash('warning', 'Ссылка на рейтинг не активна');
 			return next();
 		} else if (locals.stateOfRequest === 'failed') {
 			req.flash('warning', 'Что-то пошло не так...');
 			return next();
 		}
 
-		if (!req.body.ratingValue) {
+		if (parseInt(req.body.ratingValue) === 0) {
 			req.flash('error', "Пожалуйста, оцените водителя.");
+			return next();
+		}
+		if (parseInt(req.body.ratingValue) <= 3 && !req.body.ratingComment) {
+			locals.initRatingValue = req.body.ratingValue;
+			req.flash('warning', 'Пожалуйста, оставьте свой комментарий.');
 			return next();
 		}
 
@@ -104,6 +112,7 @@ exports = module.exports = function (req, res) {
 				RequestModel
 					.findById(locals.filters.requestId)
 					.populate('assignedRating')
+					.populate('submitedOn')
 					.exec(function(err, result) {
 						if (err) return cb(err);
 
@@ -125,6 +134,7 @@ exports = module.exports = function (req, res) {
 
 			var onSuccess = function(err) {
 				req.flash('success', 'Спасибо за вашу оценку');
+				locals.stateOfRequest = 'done';
 				return next(err)
 			}
 

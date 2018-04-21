@@ -5,6 +5,18 @@ block content
 		+flash-messages(messages)
 		if stateOfRequest === 'open'
 			h1 Оцените водителя!
+			form(method='post', enctype='multipart/form-data').auth-form
+				input(type='hidden', name='action', value='guest.rate.request')
+				.form-groups
+					.form-group
+						label(for='ratingValue') Рейтинг
+						input(data-max='5', data-min='1', type='number', name='ratingValue', value=initRatingValue).rating
+					.form-group
+						label(for='ratingComment') Комментарий
+						textarea(type='textarea', name='ratingComment', rows='5').form-control
+				button(type='submit').btn.btn-block.btn-primary.btn-submit Оценить
+		else if stateOfRequest === 'done'
+			p Спасибо за Вашу оценку
 		else if stateOfRequest === 'invalid'
 			p ссылка не действительна
 		else
