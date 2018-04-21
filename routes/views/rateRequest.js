@@ -50,7 +50,7 @@ exports = module.exports = function (req, res) {
 		RequestModel.findById(locals.filters.requestId)
 			.populate('assignedRating')
 			.exec(function (err, result) {
-				if (!result.assignedRating) {
+				if (result.assignedRating && !result.assignedRating.closed) {
 					locals.stateOfRequest = 'open';
 				} else if (result.assignedRating && result.assignedRating.closed) {
 					locals.stateOfRequest = 'invalid';
@@ -77,39 +77,24 @@ exports = module.exports = function (req, res) {
 		async.series([
 
 			function(cb) {
-				const	newRating = new RatingModel({
-					value: req.body.ratingValue,
-					comment: req.body.ratingComment,
-					assignedRequest: locals.filters.requestId,
-					closed: Date.now()
-				});
+				RatingModel
+					.findOne()
+					.where('assignedRequest', locals.filters.requestId)
+					.exec(function (err, resultRating) {
+						if (err) return cb(err);
 
-				newRating.save(function(err) {
-					return cb(err);
-				});
+						const updateData = {
+							'value': req.body.ratingValue,
+							'comment': req.body.ratingComment,
+							'closed': Date.now()
+						};
 
-			},
-
-			function(cb) {
-				RequestModel
-					.findById(locals.filters.requestId)
-					.exec(function (err, resultRequest) {
-						RatingModel.findOne()
-							.where('assignedRequest', resultRequest._id)
-							.exec(function (err, resultRating) {
-
-								const assignedData = {
-									'assignedRating': resultRating._id
-								};
-
-								resultRequest.getUpdateHandler(req).process(assignedData, {
-									fields: 'assignedRating,',
-									flashErrors: true
-								}, function(err) {
-									locals.stateOfRequest = 'invalid';
-									return cb(err);
-								});
-							});
+						resultRating.getUpdateHandler(req).process(updateData, {
+							fields: 'value, comment, closed,',
+							flashErrors: true
+						}, function(err) {
+							return cb(err);
+						});
 					});
 			},
 
@@ -118,8 +103,19 @@ exports = module.exports = function (req, res) {
 					.findById(locals.filters.requestId)
 					.populate('assignedRating')
 					.exec(function(err, result) {
+						if (err) return cb(err);
+
+						const updateData = {
+							'rated': true
+						};
+
+						result.getUpdateHandler(req).process(updateData, {
+							fields: 'rated,',
+							flashErrors: true
+						}, function(err) {
 							sentMail(result);
 							return cb(err);
+						});
 					});
 			}
 

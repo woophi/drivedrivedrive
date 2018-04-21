@@ -21,6 +21,7 @@
 var keystone = require('keystone');
 var middleware = require('./middleware');
 var importRoutes = keystone.importer(__dirname);
+const scheduler = require('./scheduler');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -33,6 +34,7 @@ var routes = {
 
 // Setup Route Bindings
 exports = module.exports = function (app) {
+	scheduler.schedulerWorker();
 	// Views
 	app.all('/', routes.views.index);
 	app.get('/blog/:category?', routes.views.blog);
