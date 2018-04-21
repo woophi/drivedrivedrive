@@ -13,7 +13,7 @@ exports = module.exports = function (req, res) {
 	locals.filters = {
 		requestId: req.params.id,
 	};
-	locals.stateOfRequest = 'process';
+	locals.stateOfRequest = 'open';
 
 	const RequestModel = keystone.list('Request').model;
 	const RatingModel = keystone.list('Rating').model;
@@ -64,8 +64,10 @@ exports = module.exports = function (req, res) {
 	view.on('post', { action: 'guest.rate.request' }, function(next) {
 
 		if (locals.stateOfRequest === 'invalid') {
+			req.flash('warning', 'Заявка была оценена');
 			return next();
 		} else if (locals.stateOfRequest === 'failed') {
+			req.flash('warning', 'Что-то пошло не так...');
 			return next();
 		}
 

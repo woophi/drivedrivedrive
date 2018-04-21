@@ -2,9 +2,9 @@ extends ../layouts/default
 
 block content
 	.container: .jumbotron
-		if stateOfRequest === 'success'
-			h1 Заявка подтверждена!
-			p Данные о заявки были отправлены клиенту на почту.
+		+flash-messages(messages)
+		if stateOfRequest === 'open'
+			h1 Оцените водителя!
 		else if stateOfRequest === 'invalid'
 			p ссылка не действительна
 		else
