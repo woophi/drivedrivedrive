@@ -7,9 +7,9 @@ const RatingModel = keystone.list('Rating').model;
 const host =  keystone.get('locals').host;
 
 exports.schedulerWorker = () => {
-	schedule.scheduleJob('1 * * * * *', async () => {
+	schedule.scheduleJob('23 23 * * *', async () => {
 		console.log('The answer to life, the universe, and everything!');
-		// await sendEmailToPastRequests();
+		await sendEmailToPastRequests();
 	});
 }
 
