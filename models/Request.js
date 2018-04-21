@@ -21,16 +21,16 @@ Request.add({
 		comment: { type: String },
 		phone: { type: String }
 	},
-	created: { type: Types.Datetime },
-	accepted: { type: Types.Datetime },
+	created: { type: Types.Datetime, noedit: true },
+	accepted: { type: Types.Datetime, noedit: true },
 	assignedBy: { type: Types.Relationship, ref: 'User', many: true, index: true },
 	assignedPrices: { type: Types.Relationship, ref: 'Price', many: true, index: true },
-	submitedOn: { type: Types.Relationship, ref: 'User', index: true },
-	submitedPrice: { type: Types.Relationship, ref: 'Price', index: true },
+	submitedOn: { type: Types.Relationship, ref: 'User', index: true, noedit: true },
+	submitedPrice: { type: Types.Relationship, ref: 'Price', index: true, noedit: true },
 	wasAssignedOn: { type: Types.Relationship, ref: 'User', many: true, index: true },
-	wasConfirmed: { type: Boolean, default: false },
-	wasConfirmedTime: { type: Types.Datetime },
-	assignedRating: { type: Types.Relationship, ref: 'Rating' },
+	wasConfirmed: { type: Boolean, default: false, noedit: true },
+	wasConfirmedTime: { type: Types.Datetime, noedit: true },
+	assignedRating: { type: Types.Relationship, ref: 'Rating', noedit: true },
 	rated: { type: Boolean, default: false, noedit: true  }
 });
 
