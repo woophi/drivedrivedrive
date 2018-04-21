@@ -30,7 +30,8 @@ Request.add({
 	wasAssignedOn: { type: Types.Relationship, ref: 'User', many: true, index: true },
 	wasConfirmed: { type: Boolean, default: false },
 	wasConfirmedTime: { type: Types.Datetime },
-	assignedRating: { type: Types.Relationship, ref: 'Rating', index: true, noedit: true }
+	assignedRating: { type: Types.Relationship, ref: 'Rating' },
+	rated: { type: Boolean, default: false, noedit: true  }
 });
 
 Request.relationship({ ref: 'Price', path: 'prices', refPath: 'assignedRequest' });
