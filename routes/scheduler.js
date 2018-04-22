@@ -7,7 +7,6 @@ const RatingModel = keystone.list('Rating').model;
 const host =  keystone.get('locals').host;
 
 exports.schedulerWorker = () => {
-	console.warn(keystone.get('env'), 'ENV');
 	const devPattern = '1 * * * * *';
 	const prodPattern = '23 23 * * *';
 	const getPatternTime = keystone.get('env') === 'production' || keystone.get('env') === 'staging' ?
