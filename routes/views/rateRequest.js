@@ -15,17 +15,80 @@ exports = module.exports = function (req, res) {
 	};
 	locals.stateOfRequest = 'open';
 
-	locals.initRatingValue = 0;
+	locals.initRatings = {
+		trip: 0,
+		driver: 0,
+		car: 0,
+		comment: ''
+	};
 
 	const RequestModel = keystone.list('Request').model;
 	const RatingModel = keystone.list('Rating').model;
 	const UserModel = keystone.list('User').model;
 
-	function callback (err) {
-		if (err) {
-			console.error('There was an error sending the notification email:', err);
+	function calculateRating (newRating, ratings) {
+		var Ad = newRating.values.driver;
+		var Ac = newRating.values.car;
+		var At = newRating.values.trip;
+		var SI = 2.5;
+		Ad = Ad === 1 && At === 1 || Ad === 1 && Ac === 1 || Ac === 1 && At === 1 ?
+			Ad + SI : Ad;
+		var R = (Ad + Ac + At) / 3;
+		var newCounter = ratings.count + 1;
+		var oldRealValue = ratings.realValue;
+		var Sum = oldRealValue * ratings.count;
+
+		var realValue = (Sum + R) / newCounter;
+		var nominalValue = newCounter > 3 ? Math.ceil(realValue) : ratings.nominalValue;
+
+		return { realValue, nominalValue };
+	}
+
+	function rateDriver (next) {
+		RequestModel
+			.findById(locals.filters.requestId)
+			.populate('assignedRating')
+			.populate('submitedOn')
+			.exec(function(err, result) {
+				if (err) return next(err);
+				UserModel
+					.findById(result.submitedOn._id)
+					.exec(async function(err, userResult) {
+						if (err) return next(err);
+
+						const assignedRatingsConc = userResult.rating.assignedRatings ?
+							[...userResult.rating.assignedRatings, result.assignedRating._id ] :
+							[ result.assignedRating._id ];
+
+						const { realValue, nominalValue } = await calculateRating(result.assignedRating, userResult.rating);
+
+						const newCount = userResult.rating.count + 1;
+
+						const updateData = {
+							'rating.nominalValue': nominalValue,
+							'rating.realValue': realValue,
+							'rating.count': newCount,
+							'rating.assignedRatings': assignedRatingsConc
+						};
+
+						userResult.getUpdateHandler(req).process(updateData, {
+							fields: 'rating.nominalValue, rating.realValue, rating.count, rating.assignedRatings,',
+							flashErrors: true
+						});
+
+					});
+			});
+	}
+
+	function oneRatingLOEThree () {
+		if (parseInt(req.body.ratingDriver) <= 3 ||
+				parseInt(req.body.ratingTrip) <= 3 ||
+				parseInt(req.body.ratingCar) <= 3) {
+			return true;
+		} else {
+			return false;
 		}
-	};
+	}
 
 	function sentMail(result) {
 		UserModel
@@ -45,7 +108,7 @@ exports = module.exports = function (req, res) {
 					data: result,
 					moment,
 					host: req.headers.origin
-				}, callback);
+				}, err => err && console.error(err));
 			});
 	};
 
@@ -65,6 +128,10 @@ exports = module.exports = function (req, res) {
 	});
 
 	view.on('post', { action: 'guest.rate.request' }, function(next) {
+			locals.initRatings.car = req.body.ratingCar;
+			locals.initRatings.trip = req.body.ratingTrip;
+			locals.initRatings.driver = req.body.ratingDriver;
+			locals.initRatings.comment = req.body.ratingComment;
 
 		if (locals.stateOfRequest === 'invalid') {
 			req.flash('warning', 'Ссылка на рейтинг не активна');
@@ -74,12 +141,19 @@ exports = module.exports = function (req, res) {
 			return next();
 		}
 
-		if (parseInt(req.body.ratingValue) === 0) {
+		if (parseInt(req.body.ratingDriver) === 0) {
 			req.flash('error', "Пожалуйста, оцените водителя.");
 			return next();
 		}
-		if (parseInt(req.body.ratingValue) <= 3 && !req.body.ratingComment) {
-			locals.initRatingValue = req.body.ratingValue;
+		if (parseInt(req.body.ratingTrip) === 0) {
+			req.flash('error', "Пожалуйста, оцените поездку.");
+			return next();
+		}
+		if (parseInt(req.body.ratingCar) === 0) {
+			req.flash('error', "Пожалуйста, оцените машину.");
+			return next();
+		}
+		if (oneRatingLOEThree() && !req.body.ratingComment) {
 			req.flash('warning', 'Пожалуйста, оставьте свой комментарий.');
 			return next();
 		}
@@ -94,13 +168,15 @@ exports = module.exports = function (req, res) {
 						if (err) return cb(err);
 
 						const updateData = {
-							'value': req.body.ratingValue,
+							'values.trip': req.body.ratingTrip,
+							'values.driver': req.body.ratingDriver,
+							'values.car': req.body.ratingCar,
 							'comment': req.body.ratingComment,
 							'closed': Date.now()
 						};
 
 						resultRating.getUpdateHandler(req).process(updateData, {
-							fields: 'value, comment, closed,',
+							fields: 'values.trip, values.driver, values.car, comment, closed,',
 							flashErrors: true
 						}, function(err) {
 							return cb(err);
@@ -135,6 +211,7 @@ exports = module.exports = function (req, res) {
 			var onSuccess = function(err) {
 				req.flash('success', 'Спасибо за вашу оценку');
 				locals.stateOfRequest = 'done';
+				rateDriver(next);
 				return next(err)
 			}
 

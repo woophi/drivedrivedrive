@@ -4,16 +4,22 @@ block content
 	.container: .jumbotron
 		+flash-messages(messages)
 		if stateOfRequest === 'open'
-			h1 Оцените водителя!
+			h1 Оцените Вашу поездку!
 			form(method='post', enctype='multipart/form-data').auth-form
 				input(type='hidden', name='action', value='guest.rate.request')
 				.form-groups
 					.form-group
-						label(for='ratingValue') Рейтинг
-						input(data-max='5', data-min='1', type='number', name='ratingValue', value=initRatingValue).rating
+						label(for='ratingTrip') Как Вам поездка?
+						input(data-max='5', data-min='1', type='number', name='ratingTrip', value=initRatings.trip).rating
+					.form-group
+						label(for='ratingCar') Как Вам машина?
+						input(data-max='5', data-min='1', type='number', name='ratingCar', value=initRatings.car).rating
+					.form-group
+						label(for='ratingDriver') Как Вам водитель?
+						input(data-max='5', data-min='1', type='number', name='ratingDriver', value=initRatings.driver).rating
 					.form-group
 						label(for='ratingComment') Комментарий
-						textarea(type='textarea', name='ratingComment', rows='5').form-control
+						textarea(type='textarea', name='ratingComment', rows='5', value=initRatings.comment).form-control
 				button(type='submit').btn.btn-block.btn-primary.btn-submit Оценить
 		else if stateOfRequest === 'done'
 			p Спасибо за Вашу оценку
