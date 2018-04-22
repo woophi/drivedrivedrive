@@ -74,7 +74,7 @@ exports = module.exports = function (req, res) {
 						userResult.getUpdateHandler(req).process(updateData, {
 							fields: 'rating.nominalValue, rating.realValue, rating.count, rating.assignedRatings,',
 							flashErrors: true
-						});
+						}, err => err && next(err));
 
 					});
 			});

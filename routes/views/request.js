@@ -116,7 +116,8 @@ exports = module.exports = function (req, res) {
 						car: authUser.car,
 						id: authUser._id,
 						from: result.guest.from,
-						to: result.guest.to
+						to: result.guest.to,
+						nominalValue: authUser.rating.nominalValue
 					};
 						new keystone.Email({
 							templateName: 'guest-notify',
