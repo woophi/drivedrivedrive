@@ -8,6 +8,8 @@ exports = module.exports = function (req, res) {
 	if (!req.user) {
 		req.session.redirectTo = req.url.split("?")[0];
 		return res.redirect('/signin');
+	} else if (req.user && !req.user.isActive) {
+		return res.redirect('/');
 	}
 
 	var view = new keystone.View(req, res);
