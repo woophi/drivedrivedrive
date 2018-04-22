@@ -39,8 +39,10 @@ User.add({
 	isActive: { type: Boolean, default: false, label: 'Активный водитель' },
 }, 'Rating', {
 	rating: {
-		averageValue: { type: Number, label: 'Рейтинг водителя', default: 5, dependsOn: deps.driver },
-		count: { type: Number, hidden: true }
+		nominalValue: { type: Number, label: 'Видимый рейтинг', default: 5, noedit: true, dependsOn: deps.driver },
+		realValue: { type: Number, label: 'Настощий рейтинг', default: 5, noedit: true, dependsOn: deps.driver },
+		count: { type: Number, hidden: true, default: 1 },
+		assignedRatings: { type: Types.Relationship, ref: 'Rating', many: true, index: true, noedit: true, dependsOn: deps.driver },
 	}
 });
 
@@ -53,11 +55,11 @@ User.schema.virtual('canAccessKeystone').get(function () {
 /**
  * Relationships
  */
-User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
-User.relationship({ ref: 'Price', path: 'prices', refPath: 'submitedBy' });
-User.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedBy' });
+// User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
+// User.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedBy' });
 User.relationship({ ref: 'Request', path: 'submited', refPath: 'submitedOn' });
 User.relationship({ ref: 'Request', path: 'was assigned', refPath: 'wasAssignedOn' });
+User.relationship({ ref: 'Price', path: 'prices', refPath: 'submitedBy' });
 // TODO: relation with guests requests
 
 User.schema.methods.resetPassword = function(req, res, next) {

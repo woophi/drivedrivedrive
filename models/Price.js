@@ -16,7 +16,7 @@ Price.add({
 	assignedRequest: { type: Types.Relationship, ref: 'Request', index: true }
 });
 
-Price.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedPrices' });
+// Price.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedPrices' });
 Price.relationship({ ref: 'Request', path: 'submited', refPath: 'submitedPrice' });
 
 Price.defaultColumns = 'value, submitedBy, assignedRequest';

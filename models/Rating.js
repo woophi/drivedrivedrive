@@ -7,18 +7,23 @@ var Types = keystone.Field.Types;
  */
 
 var Rating = new keystone.List('Rating', {
-	map: {name: 'value'}
+	map: {name: 'hashId'}
 });
 
 Rating.add({
-	value: { type: Number, index: true  },
+	hashId: { type: String, index: true, default: Math.random().toString(36).slice(-8), noedit: true },
+	values: {
+		trip: { type: Number },
+		driver: { type: Number },
+		car: { type: Number }
+	},
 	comment: { type: String, noedit: true },
 	open: { type: Types.Datetime },
 	closed: { type: Types.Datetime },
 	assignedRequest: { type: Types.Relationship, ref: 'Request', index: true }
 });
 
-Rating.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedRating' });
+// Rating.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedRating' });
 
-Rating.defaultColumns = 'value, assignedRequest';
+Rating.defaultColumns = 'hashId, assignedRequest';
 Rating.register();
