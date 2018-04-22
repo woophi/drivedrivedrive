@@ -142,7 +142,7 @@ exports = module.exports = function (req, res) {
 				return next(err)
 			}
 
-			var onFail = function(erre) {
+			var onFail = function(err) {
 				req.flash('error', 'Что-то пошло не так... попробуйте еще раз');
 				return next(err);
 			}
