@@ -2,11 +2,11 @@ extends layouts/basecard
 block content
 	div#section: h1 Новое ценовое предложение
 	div#section
-		p#cardP #{driverData.car.kind} #{driverData.car.model}, #{driverData.car.year}
+		p#cardPCar #{driverData.car.kind} #{driverData.car.model}, #{driverData.car.year}
 		img(src=driverData.specialPhoto)#imgCar
 	div#section
 		img(src=driverData.driverPhoto)#imgDriver
-		p#cardP 5
+		p#cardP #{driverData.rating.nominalValue}
 		p#cardP #{driverData.name.first}
 		p#cardP Добрый день, готов предложить Вам услуги трансфера из #{driverData.from} в #{driverData.to}
 		p#cardP Стоимость составит #{price} €(евро) за авто

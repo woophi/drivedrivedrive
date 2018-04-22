@@ -77,7 +77,7 @@ exports = module.exports = function (req, res) {
 		], function(err){
 
 			var onSuccess = function() {
-				req.flash('success', 'Ваша заявка отпрвавлена');
+				req.flash('success', 'Ваша заявка отправлена');
 				return next();
 			}
 

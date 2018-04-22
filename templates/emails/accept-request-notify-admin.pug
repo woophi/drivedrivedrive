@@ -12,11 +12,11 @@ block content
 			p#cardP дата #{date}, время #{data.guest.time}
 			if data.guest.comment
 				p#cardP Комментарий: #{data.guest.comment}
-			p#cardP Номер телфона: #{data.guest.phone}
+			p#cardP Номер телефона: #{data.guest.phone}
 		div#bodyCard.padding1rem
 			h2 Выбранный водитель
 			p#cardP #{data.submitedOn.name.first} #{data.submitedOn.name.last}
-			p#cardP Номер телфона: #{data.submitedOn.phone}
+			p#cardP Номер телефона: #{data.submitedOn.phone}
 			p#cardP Машина: #{data.submitedOn.car.kind} #{data.submitedOn.car.model} #{data.submitedOn.car.year}
 		div.linkContainer
 			a(href=host + '/request/' + data._id + '/confirm').marginAuto
