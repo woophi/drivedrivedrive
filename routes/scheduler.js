@@ -7,7 +7,11 @@ const RatingModel = keystone.list('Rating').model;
 const host =  keystone.get('locals').host;
 
 exports.schedulerWorker = () => {
-	schedule.scheduleJob('23 23 * * *', async () => {
+	const devPattern = '1 * * * * *';
+	const prodPattern = '23 23 * * *';
+	const getPatternTime = keystone.get('env') === 'production' || keystone.get('env') === 'staging' ?
+		prodPattern : devPattern;
+	schedule.scheduleJob(getPatternTime, async () => {
 		console.log('The answer to life, the universe, and everything!');
 		await sendEmailToPastRequests();
 	});
