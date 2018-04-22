@@ -18,6 +18,7 @@ block content
 			p.lead Ваш профиль до сих пор не активен. Необходимо заполнить все поля и фото, получить разрешение от администратора, выбрать способ рассылки уведомлений.
 		else
 			p.lead Ваш профиль активен. Новые заявки будут поступать на выбранный вами способ рассылки.
+			p.lead Рейтинг - #{user.rating.nominalValue}
 		.page-content.tile.ph-2.pv-2.mb-2
 			form(method='post', enctype='multipart/form-data', autocomplete='off', novalidate).form-horizontal
 				input(type='hidden', name='action', value='profile.details')
