@@ -21,7 +21,6 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node keystone.js",
-    "heroku-prebuild": "cd ../client && yarn && yarn build"
+    "start": "node keystone.js"
   }
 }

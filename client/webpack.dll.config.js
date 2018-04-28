@@ -1,7 +1,7 @@
 /// <binding ProjectOpened='Watch - Development' />
 const path = require('path');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer') && require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isProduction = process.argv.find(a => a === '-p');
 

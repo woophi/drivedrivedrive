@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "heroku-prebuild": "cd client && yarn && yarn build"
+    "heroku-prebuild": "cd client && yarn --force && yarn build"
   },
   "repository": {
     "type": "git",
