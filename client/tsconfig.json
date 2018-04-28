@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "es5", "es2015.proxy", "es2015.core", "es2015.promise", "es2015.iterable"],
+    "module": "commonjs",
+    "declaration": false,
+    "noLib": false,
+    "sourceMap": true,
+    "jsx": "react",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./node_modules/",
+    "paths": {
+      "core/*": ["../src/core/*"],
+      "ui/*": ["../src/ui/*"],
+      "tslib" : ["./node_modules/tslib"]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

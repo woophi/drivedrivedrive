@@ -1,0 +1,15 @@
+extends layouts/basecard
+block content
+	div.padding1rem
+		p#cardP Добрый день, %recipient.firstName%, клиент оценил водителя.
+		div#bodyCard.padding1rem
+			h2 Трансфер - #{data.guest.from} - #{data.guest.to}.
+			p#cardP Клиент #{data.guest.name} оценил водителя #{data.submitedOn.name.first} #{data.submitedOn.name.last}
+			p#cardP Водитель получил оценки:
+			p#cardP поездка - #{data.assignedRating.values.trip};
+			p#cardP машина - #{data.assignedRating.values.car};
+			p#cardP водитель - #{data.assignedRating.values.driver};
+			if data.assignedRating.comment
+				h3 Комментарий:
+				p#cardP #{data.assignedRating.comment}
+		a(href=host + '/admin/requests/' + data._id) Более подробная информация

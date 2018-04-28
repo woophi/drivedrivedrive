@@ -1,0 +1,9 @@
+extends ../../layouts/default
+
+block content
+	.container: .jumbotron
+		.page-intro
+			h1 Вход в личный кабинет водителя
+			+flash-messages(messages)
+		.page-content
+			+auth-forms({ modal: false, initial: 'signin' })

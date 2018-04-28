@@ -1,0 +1,23 @@
+extends layouts/basecard
+block content
+	div.padding1rem
+		-const date = moment(data.guest.date).format('L')
+		p#cardP Добрый день, %recipient.firstName%, клиент выбрал водителя.
+		div#bodyCard.padding1rem
+			h2 Данные заявки
+			p#cardP Клиент - #{data.guest.name}
+			p#cardP поедет из #{data.guest.from} в #{data.guest.to}
+			p#cardP количество пассажиров #{data.guest.count}
+			p#cardP цена #{price}
+			p#cardP дата #{date}, время #{data.guest.time}
+			if data.guest.comment
+				p#cardP Комментарий: #{data.guest.comment}
+			p#cardP Номер телефона: #{data.guest.phone}
+		div#bodyCard.padding1rem
+			h2 Выбранный водитель
+			p#cardP #{data.submitedOn.name.first} #{data.submitedOn.name.last}
+			p#cardP Номер телефона: #{data.submitedOn.phone}
+			p#cardP Машина: #{data.submitedOn.car.kind} #{data.submitedOn.car.model} #{data.submitedOn.car.year}
+		div.linkContainer
+			a(href=host + '/request/' + data._id + '/confirm').marginAuto
+				button.bttn подтвердить

@@ -1,0 +1,45 @@
+extends ../layouts/default
+
+block intro
+	+flash-messages(messages)
+
+block content
+	if !alreadySubmited
+		.container: .jumbotron
+			-const date = moment(request.guest.date).format('L')
+			h1 Новая заявка
+			p Из #{request.guest.from}, в #{request.guest.to}
+			p дата #{date}, время #{request.guest.time}
+			p количество человек #{request.guest.count}
+			if request.guest.comment
+				p комментарий #{request.guest.comment}
+
+		.container: .jumbotron
+			if !alreadyAssigned
+				h1 Ваша цена
+					if form.error
+						.flash-messages
+							.alert.alert-danger
+								div!= form.error.message || form.error
+
+								//- Field Errors
+								if form.error.errors && !_.isEmpty(form.error.errors)
+									ul
+										each error, key in form.error.errors
+											li!= error.msg
+
+				form(method='post', enctype='multipart/form-data').auth-form
+					input(type='hidden', name='action', value='driver.answer.request')
+					.form-groups
+						.form-row.form-group
+							label(for='requestPrice') Цена
+							.input-group
+								span.input-group-addon €
+								input(type='number', name='requestPrice', required, value='0' min='0', data-number-to-fixed="2" data-number-stepfactor="100").form-control
+					button(type='submit').btn.btn-block.btn-primary.btn-submit Откликнуться
+			else
+				h1 Ценовое предложение отправлено
+				p В случае заинтересованности клиента Вам на почту придет отклик
+	else
+		.container: .jumbotron
+			p заявка была закрыта

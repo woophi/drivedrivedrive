@@ -1,0 +1,11 @@
+extends ../layouts/default
+
+block content
+	.container: .jumbotron
+		if stateOfRequest === 'success'
+			h1 Заявка подтверждена!
+			p Данные о заявки были отправлены клиенту на почту.
+		else if stateOfRequest === 'invalid'
+			p ссылка не действительна
+		else
+			p ошибка

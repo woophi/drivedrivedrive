@@ -1,0 +1,16 @@
+extends layouts/basecard
+block content
+	div#section: h1 Новое ценовое предложение
+	div#section
+		p#cardPCar #{driverData.car.kind} #{driverData.car.model}, #{driverData.car.year}
+		img(src=driverData.specialPhoto)#imgCar
+	div#section
+		img(src=driverData.driverPhoto)#imgDriver
+		p#cardP #{driverData.nominalValue}
+		p#cardP #{driverData.name.first}
+		p#cardP Добрый день, готов предложить Вам услуги трансфера из #{driverData.from} в #{driverData.to}
+		p#cardP Стоимость составит #{price} €(евро) за авто
+	a(href=host + '/request/' + requestId + '/accept/' + driverData.id)
+		button#submitCardBtn
+			p#cardPBtn Поехали!
+			p#cardPBtn Нажмите для выбора данного ценового предложения
