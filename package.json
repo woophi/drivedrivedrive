@@ -9,5 +9,8 @@
     "type": "git",
     "url": "https://github.com/woophi/drivedrivedrive"
   },
-  "cacheDirectories": ["client/node_modules", "server/node_modules"]
+  "cacheDirectories": ["client/node_modules", "server/node_modules"],
+  "engines": {
+    "yarn": "1.6.0"
+  }
 }
