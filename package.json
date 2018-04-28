@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "heroku-prebuild": "cd client && yarn --force && yarn build && cd ../server yarn"
+    "heroku-prebuild": "yarn build:client && yarn build:server",
+    "build:client": "cd client && yarn --force && yarn build",
+		"build:server": "cd server && npm install"
   },
   "repository": {
     "type": "git",
