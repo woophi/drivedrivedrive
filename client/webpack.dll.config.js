@@ -1,7 +1,6 @@
-/// <binding ProjectOpened='Watch - Development' />
 const path = require('path');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer') && require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer') && require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isProduction = process.argv.find(a => a === '-p');
 
@@ -32,13 +31,13 @@ module.exports = {
     ]
   },
   plugins: [
-    new BundleAnalyzerPlugin({
-      reportFilename: 'report.dll.html',
-      statsFilename: 'stats.dll.json',
-      analyzerMode: 'static',
-      generateStatsFile: true,
-      openAnalyzer: false
-    }),
+    // new BundleAnalyzerPlugin({
+    //   reportFilename: 'report.dll.html',
+    //   statsFilename: 'stats.dll.json',
+    //   analyzerMode: 'static',
+    //   generateStatsFile: true,
+    //   openAnalyzer: false
+    // }),
     new webpack.IgnorePlugin(/\blocale.*/, /\bmoment\b/),
     new webpack.DllPlugin({
       path: path.join('../server/public/lib.[name]-manifest.json'),
