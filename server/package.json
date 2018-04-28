@@ -21,10 +21,12 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node keystone.js"
+    "start": "node keystone.js",
+    "heroku-prebuild": "cd ../client && yarn && yarn build"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/woophi/drivedrivedrive"
-  }
+  },
+  "cacheDirectories": ["../client/node_modules", "node_modules"]
 }
