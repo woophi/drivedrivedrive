@@ -1,0 +1,13 @@
+{
+  "name": "my-site",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "heroku-prebuild": "cd client && yarn && yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woophi/drivedrivedrive"
+  },
+  "cacheDirectories": ["client/node_modules", "server/node_modules"]
+}
