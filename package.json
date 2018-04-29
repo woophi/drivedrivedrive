@@ -5,7 +5,10 @@
   "scripts": {
     "heroku-prebuild": "yarn build:client && yarn build:server",
     "build:client": "cd client && yarn --force && yarn build",
-		"build:server": "cd server && npm install"
+    "build:server": "cd server && yarn --force",
+    "start": "yarn start:client && yarn start:server",
+    "start:client": "cd client && yarn start",
+    "start:server": "cd server && yarn start"
   },
   "repository": {
     "type": "git",
