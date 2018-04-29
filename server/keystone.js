@@ -13,7 +13,6 @@ keystone.init({
 	'name': 'My Site',
 	'brand': 'My Site',
 
-	'sass': 'public',
 	'static': 'public',
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
