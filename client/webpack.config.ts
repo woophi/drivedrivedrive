@@ -95,6 +95,10 @@ const config: webpack.Configuration = {
         loader: 'file-loader?name=sounds/[name].[ext]?[md5:hash:base62]'
       },
       {
+        test: /\.(mov|mp4)$/,
+        loader: 'file-loader?name=videos/[name].[ext]?[md5:hash:base62]',
+      },
+      {
         test: /\.(scss)$/,
         use: [
           'style-loader', // Inject CSS to page.

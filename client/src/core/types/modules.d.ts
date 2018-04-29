@@ -1,6 +1,5 @@
 declare module 'react-loadable';
-
-// declare module 'reactstrap'; // Declarations are now OK, TODO: fix wrong usages
+declare module 'react-spring';
 
 declare module 'react-fela' {
   import { Omit } from 'ramda';
