@@ -94,5 +94,5 @@ exports = module.exports = function (req, res) {
 	});
 
 	// Render the view
-	view.render('index');
+	view.render('default');
 };
