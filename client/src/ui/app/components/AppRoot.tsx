@@ -7,8 +7,7 @@ import * as React from 'react';
 import * as ReactHintFactory from 'react-hint';
 import { compose } from 'redux';
 import 'react-hint/css/index.css';
-// import '../scss/main.scss';
-// import Routes from './Routes';
+import Routes from './Routes';
 import ScreenMeasurer from '../modules/ScreenMeasurer';
 
 const ReactHint = ReactHintFactory(React);
@@ -27,7 +26,7 @@ class Main extends React.Component<Props & FelaProps> {
     return (
         <div className={styles.container}>
           <ScreenMeasurer />
-          {/* <Routes /> */}
+          <Routes />
           <div id="user_confirmation_modal_container" />
           <ReactHint events delay={0} />
         </div>
@@ -41,7 +40,7 @@ const container: FelaRule<Props> = () => ({
   boxSizing: 'border-box',
   height: '100vh',
   width: '100%',
-  backgroundColor: driveTheme.palette.darkHover,
+  backgroundColor: '#fff',
   '&:after': {
     content: '""',
     display: 'block',
