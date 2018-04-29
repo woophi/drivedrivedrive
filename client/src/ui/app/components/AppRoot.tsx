@@ -28,7 +28,6 @@ class Main extends React.Component<Props & FelaProps> {
         <div className={styles.container}>
           <ScreenMeasurer />
           {/* <Routes /> */}
-          <div>HELO</div>
           <div id="user_confirmation_modal_container" />
           <ReactHint events delay={0} />
         </div>
@@ -36,31 +35,20 @@ class Main extends React.Component<Props & FelaProps> {
   }
 }
 
-const container: FelaRule<Props> = ({ isMobile }) => ({
-  overflow: 'hidden',
+const container: FelaRule<Props> = () => ({
   display: 'flex',
   flexDirection: 'row',
   boxSizing: 'border-box',
-  position: 'absolute',
-  height: '100%',
+  height: '100vh',
   width: '100%',
+  backgroundColor: driveTheme.palette.darkHover,
   '&:after': {
     content: '""',
     display: 'block',
     clear: 'both'
   }
 });
-
-const rootContainer: FelaRule<Props> = () => ({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'row',
-  backgroundColor: driveTheme.palette.light,
-  boxSizing: 'border-box',
-  height: '100%'
-});
-
-const mapStylesToProps = { container, rootContainer };
+const mapStylesToProps = { container };
 
 export default compose (
   ReduxConnect(mapStateToProps),

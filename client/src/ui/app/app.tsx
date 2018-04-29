@@ -9,6 +9,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import store from 'core/shared/store';
 import { history } from 'ui/app/history';
 import { AppEntrySettings } from 'core/models/app';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppRoot from './components/AppRoot';
 
 function renderApp(fela: { renderer: FelaRenderer, mountNode: HTMLElement }) {
@@ -16,9 +17,11 @@ function renderApp(fela: { renderer: FelaRenderer, mountNode: HTMLElement }) {
     <Redux store={store}>
       <Fela renderer={fela.renderer} mountNode={fela.mountNode}>
         <ThemeProvider theme={driveTheme}>
-          <ConnectedRouter history={history}>
-            <AppRoot />
-          </ConnectedRouter>
+          <MuiThemeProvider>
+            <ConnectedRouter history={history}>
+              <AppRoot />
+            </ConnectedRouter>
+          </MuiThemeProvider>
         </ThemeProvider>
       </Fela>
     </Redux>,
