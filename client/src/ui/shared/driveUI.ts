@@ -39,6 +39,7 @@ const driveColors = { // theme.palette
   yellow: '#fbd105',
   red: '#FF5A32',
   lightGreen: '#aed580',
+  lightYellow: '#BDBF37'
 };
 
 const driveStyles = { // theme.common
@@ -95,7 +96,7 @@ const genericButton: CSSProperties = {
   textAlign: 'center',
   height: '2rem',
   minWidth: '7rem', // !!
-  fontSize: '14px',
+  fontSize: '1rem',
   whiteSpace: 'nowrap',
   flexShrink: 0,
   padding: '0.25rem 0.75rem',
@@ -107,7 +108,7 @@ const genericButton: CSSProperties = {
     marginRight: '0.5rem'
   },
   ':hover': {
-    boxShadow: '0px 0px 6px 0px rgba(0,0,0,0.4)'
+    boxShadow: '0px 0px 6px 0px rgba(0,0,0,1)'
   },
   transition: '.2s ease',
   borderRadius: driveStyles.radius,
@@ -141,8 +142,9 @@ const button: CSSProperties = {
 
 const primaryButton: CSSProperties = {
   ...button,
-  backgroundColor: driveColors.blue,
-  color: '#FFFFFF'
+  backgroundColor: driveColors.lightYellow,
+  color: '#FFFFFF',
+  borderRadius: '1rem',
 };
 
 const disabledButton: CSSProperties = {

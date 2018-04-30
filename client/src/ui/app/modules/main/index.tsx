@@ -3,7 +3,8 @@ import { compose } from 'redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import Header from './Header';
 import { Parallax } from 'react-spring';
-import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import CompanyTittle from './CompanyTitle';
 
 const url = (name: string, wrap = false) => `${wrap ? 'url(' : ''}https://awv3node-homepage.surge.sh/build/assets/${name}.svg${wrap ? ')' : ''}`
 
@@ -30,7 +31,7 @@ class Index extends React.Component<FelaProps> {
     const { styles } = this.props;
     return (
       <div className={styles.container}>
-        <video className={styles.video} autoPlay loop muted>
+        <video className={styles.video} /*autoPlay*/ loop muted>
           <source src={VIDEO_BG} type="video/mp4" />
         </video>
         <Header parallaxRef={this.parallax} />
@@ -47,11 +48,29 @@ class Index extends React.Component<FelaProps> {
           />
 
           <Parallax.Layer
+            offset={0}
+            speed={0.1}
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <button className={styles.button}>Вход для водителей</button>
+          </Parallax.Layer>
+
+          <Parallax.Layer
             offset={0.1}
             speed={0.1}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ display: 'flex', flexDirection: 'column' }}
           >
-            <img src={url('server')} style={{ width: '20%' }} />
+            <CompanyTittle />
+          </Parallax.Layer>
+
+          <Parallax.Layer
+            offset={0.2}
+            speed={0.1}
+            style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}
+          >
+            <h1 className={styles.headingStyle}>
+              {'Закажите трансфер у нас.\n Выберите авто, водителя и наслаждайтесь поездкой.\n По лучшей цене.'}
+            </h1>
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -105,9 +124,27 @@ const video: FelaRule = () => ({
   }
 });
 
+const button: FelaRule<Props> = props => ({
+  ...props.theme.items.primaryButton,
+  marginTop: '4rem',
+  alignSelf: 'flex-end',
+  marginRight: '4rem'
+});
 
+const headingStyle: FelaRule<Props> = ({theme}) => ({
+  minWidth: 320,
+  margin: '5rem auto 0',
+  maxWidth: 1100,
+  color: '#fff',
+  fontSize: '4rem',
+  fontWeight: 'normal',
+  lineHeight: 1.1,
+  ...theme.mobile({
+    fontSize: '2.5rem',
+  })
+})
 
-const mapStylesToProps = { container, video };
+const mapStylesToProps = { container, video, button, headingStyle };
 
 export default compose(
   FelaConnect(mapStylesToProps)

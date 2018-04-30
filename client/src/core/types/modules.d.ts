@@ -3,7 +3,7 @@ declare module 'react-spring';
 
 declare module 'react-fela' {
   import { Omit } from 'ramda';
-  import { MluviiTheme } from 'ui/shared/mluviiUI';
+  import { DriveTheme } from 'ui/shared/driveUI';
 
   type ComponentClass<P> = React.ComponentClass<P>;
   type StatelessComponent<P> = React.StatelessComponent<P>;
@@ -11,7 +11,7 @@ declare module 'react-fela' {
   type Component<P> = ComponentClass<P> | StatelessComponent<P>;
 
   interface FelaThemeProps {
-    theme: MluviiTheme
+    theme: DriveTheme
   }
 
   type FelaRule<TOwnProps = {}> = (props?: TOwnProps & FelaThemeProps) => React.CSSProperties;
