@@ -5,6 +5,7 @@ const defaultState = {
   localAppState: {
 
   } as models.LocalAppState,
+  authInfo: null as models.UserAuthInfo,
 };
 
 export const localAppState = (state = defaultState.localAppState, dispatch: SharedDispatch): models.LocalAppState => {
@@ -14,6 +15,23 @@ export const localAppState = (state = defaultState.localAppState, dispatch: Shar
         ...state,
         isMobile: dispatch.isMobile
       };
+    case 'setLoginProcessStep':
+      return {
+        ...state,
+        loginProcessStep: dispatch.step,
+        loginFailMsg: dispatch.failMsg || null
+      };
+    default:
+      return state;
+  }
+};
+
+export const authInfo = (state = defaultState.authInfo, dispatch: SharedDispatch): models.AuthInfo => {
+  switch (dispatch.type) {
+    case 'setAuthInfo':
+      return dispatch.payload;
+    case 'removeAuthInfo':
+      return null;
     default:
       return state;
   }

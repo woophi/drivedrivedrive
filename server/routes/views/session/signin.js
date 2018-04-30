@@ -30,7 +30,7 @@ exports = module.exports = function(req, res) {
 				User.model.findOne().where('email', req.body.email).exec(function(err, user) {
 					if (err) return cb(err);
 					if (!user) {
-						req.flash('error', "Sorry, that reset password key isn't valid.");
+						req.flash('error', "Sorry, user not found");
 						return cb();
 					} else {
 						let result = user;

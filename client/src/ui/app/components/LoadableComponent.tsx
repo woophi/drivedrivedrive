@@ -57,7 +57,7 @@ class LoadableComponent extends React.Component<LoadableComponentProps, Loadable
   render() {
     const { visibility } = this.props;
     if (!this.state.error) {
-      return <this.component disableUpdates={!visibility} visibility={visibility} {...this.props.props} />;
+      return visibility && <this.component disableUpdates={!visibility} {...this.props.props} />;
     }
     return (
       <div style={{ textAlign: 'center' }}>

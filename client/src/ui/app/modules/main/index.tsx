@@ -5,6 +5,7 @@ import Header from './Header';
 import { Parallax } from 'react-spring';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import CompanyTittle from './CompanyTitle';
+import { Link } from 'ui/app/components/Links';
 
 const url = (name: string, wrap = false) => `${wrap ? 'url(' : ''}https://awv3node-homepage.surge.sh/build/assets/${name}.svg${wrap ? ')' : ''}`
 
@@ -52,7 +53,9 @@ class Index extends React.Component<FelaProps> {
             speed={0.1}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
-            <button className={styles.button}>Вход для водителей</button>
+            <Link to={'/signin'} className={styles.alignButton}>
+              <button className={styles.button}>Вход для водителей</button>
+            </Link>
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -137,11 +140,14 @@ const video: FelaRule = () => ({
   }
 });
 
-const button: FelaRule<Props> = props => ({
-  ...props.theme.items.primaryButton,
+const alignButton: FelaRule<Props> = () => ({
   marginTop: '4rem',
   alignSelf: 'flex-end',
   marginRight: '4rem'
+})
+
+const button: FelaRule<Props> = props => ({
+  ...props.theme.items.primaryButton,
 });
 
 const buttonLarge: FelaRule<Props> = ({ theme }) => ({
@@ -168,7 +174,14 @@ const headingStyle: FelaRule<Props> = ({theme}) => ({
   })
 })
 
-const mapStylesToProps = { container, video, button, headingStyle, buttonLarge };
+const mapStylesToProps = {
+  container,
+  video,
+  button,
+  headingStyle,
+  buttonLarge,
+  alignButton
+};
 
 export default compose(
   FelaConnect(mapStylesToProps)

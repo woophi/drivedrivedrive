@@ -35,12 +35,21 @@ const styles: React.CSSProperties = {
 
 const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
   <React.Fragment>
-    <Route path="/" location={location}>
+    <Route exact strict path="/" location={location}>
       {({ match }) =>
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/main'), 'app.index')}
+        />}
+    </Route>
+
+    <Route exact strict path="/signin" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/login'), 'app.login')}
         />}
     </Route>
 
