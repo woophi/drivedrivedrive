@@ -15,3 +15,4 @@ require('react-redux');
 require('redux-logger');
 require('redux-observable');
 require('tslib');
+require('react-custom-scrollbars');

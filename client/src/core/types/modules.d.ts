@@ -26,9 +26,3 @@ declare module 'react-fela' {
 
   export function connect<T>(mapStylesToProps: T): ComponentDecorator<T>;
 }
-
-// declare module 'react-tippy' {
-//   type ElementFunction = (props?: any) => JSX.Element;
-
-//   export function withTooltip(element: ElementFunction, settings: object): React.ComponentClass<{}>
-// }

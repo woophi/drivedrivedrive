@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const url = (name: string, wrap = false) => `${wrap ? 'url(' : ''}https://awv3node-homepage.surge.sh/build/assets/${name}.svg${wrap ? ')' : ''}`
 
-const VIDEO_BG = require('../../../assets/file.mp4');
+const VIDEO_BG = 'http://res.cloudinary.com/dqbo8zk4k/video/upload/v1525077103/file.mp4';
 
 type Props = {};
 
