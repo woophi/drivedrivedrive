@@ -74,6 +74,19 @@ class Index extends React.Component<FelaProps> {
           </Parallax.Layer>
 
           <Parallax.Layer
+            offset={0.5}
+            speed={0.1}
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <button
+              className={styles.buttonLarge}
+              onClick={() => this.parallax.scrollTo(2)}
+            >
+              Узнать цену
+            </button>
+          </Parallax.Layer>
+
+          <Parallax.Layer
             offset={1}
             speed={0.1}
             onClick={() => this.parallax.scrollTo(2)}
@@ -131,6 +144,17 @@ const button: FelaRule<Props> = props => ({
   marginRight: '4rem'
 });
 
+const buttonLarge: FelaRule<Props> = ({ theme }) => ({
+  ...theme.items.primaryButton,
+  marginTop: '10rem',
+  alignSelf: 'center',
+  fontSize: '2rem',
+  textTransform: 'uppercase',
+  height: '4rem',
+  borderRadius: '2rem',
+  padding: '0 2rem'
+});
+
 const headingStyle: FelaRule<Props> = ({theme}) => ({
   minWidth: 320,
   margin: '5rem auto 0',
@@ -144,7 +168,7 @@ const headingStyle: FelaRule<Props> = ({theme}) => ({
   })
 })
 
-const mapStylesToProps = { container, video, button, headingStyle };
+const mapStylesToProps = { container, video, button, headingStyle, buttonLarge };
 
 export default compose(
   FelaConnect(mapStylesToProps)
