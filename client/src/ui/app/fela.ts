@@ -81,8 +81,8 @@ export function configureFela(mountNodeId: string) {
     flex: 1
   }, '.flex-1');
   renderer.renderStatic({
-    flex: 2
-  }, '.flex-2');
+    marginRight: '1rem'
+  }, '.mr-1');
   renderer.renderStatic({
     cursor: 'pointer'
   }, '.curp');

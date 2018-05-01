@@ -18,10 +18,6 @@ export default ReduxConnect((state: AppState) => ({
       {/* <PermissionDenied waitForAdminState> */}
         <Route component={AppRoutes} location={location} />
       {/* </PermissionDenied> */}
-
-      {/* TODO: 404 page */}
-      {/* <Route render={() => '404'} /> */}
-      {/* TODO: loading */}
     </div>
   )
 );

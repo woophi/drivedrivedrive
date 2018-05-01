@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { connect as reduxConnect } from 'react-redux';
-import { returntypeof } from 'react-redux-typescript';
-import { AppState } from 'core/models/app';
 import { Link as RouterLink, LinkProps, NavLink as RouterNavLink, NavLinkProps } from 'react-router-dom';
 
 

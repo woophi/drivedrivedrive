@@ -11,9 +11,12 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'ui/app/components/Links';
+import { authInfo } from 'core/shared/reducers';
+import { changeUrl } from 'ui/app/operations';
+import { Alert } from 'ui/app/components/Alert';
 
 const mapStateToProps = (state: AppState) => ({
-  isMobile: state.localAppState.isMobile
+  authInfo: state.authInfo
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -28,20 +31,26 @@ type TextFieldProps = {
 }
 
 class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.LoginInfo, Props>> {
+  componentDidMount() {
+    if (this.props.authInfo) {
+      changeUrl('/me');
+    }
+  }
 
   render() {
     const { styles, handleSubmit, error, pristine, submitting } = this.props;
     return (
-        <div className={styles.container}>
-          <form onSubmit={handleSubmit} autoComplete={''}>
-            {error && <Paper zDepth={2}>{error}</Paper>}
+        <Paper className={styles.container} zDepth={2}>
+          <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
+            <h1 className={styles.heading}>Вход в личный кабинет водителя</h1>
+            {error && <Alert mssg={error} type={'error'} />}
             <Field
               name="email"
               component={CustomInputField}
               type="text"
               {...{
-                floatingLabelText: 'email',
-                errorText: error ? 'required' : ''
+                floatingLabelText: 'E-mail',
+                fullWidth: true
               }}
             />
             <Field
@@ -49,39 +58,75 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.L
               component={CustomInputField}
               type="password"
               {...{
-                floatingLabelText: 'пароль',
-                errorText: error ? 'required' : ''
+                floatingLabelText: 'Пароль',
+                fullWidth: true
               }}
             />
-            <Link to={`/`}>
-              <RaisedButton>{'отмена'}</RaisedButton>
-            </Link>
-            <RaisedButton type="submit" primary disabled={pristine || submitting}>
-              {submitting ? <i className="fa fa-circle-o-notch fa-spin" /> : 'Войти'}
-            </RaisedButton>
+            <div className={styles.btnContainer}>
+              <Link to={`/`} className={'mr-1'}>
+                <RaisedButton>{'отмена'}</RaisedButton>
+              </Link>
+              <RaisedButton type="submit" primary disabled={pristine || submitting}>
+                {submitting ? <i className="fa fa-circle-o-notch fa-spin" /> : 'Войти'}
+              </RaisedButton>
+            </div>
+            <div className={styles.subContainer}>
+              <span>Новый водитель? <Link to={'/join'}>Зарегистрироваться</Link></span>
+              <Link to={'/forgot-password'}>Забыли пароль?</Link>
+            </div>
           </form>
-        </div>
+        </Paper>
     );
   }
 }
 
 
 const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
-    // {/* <Input {...props.input} {...props} invalid={!!(props.meta.touched && props.meta.error)} /> */}
     <TextField
       {...props.input}
       {...props}
-      // value={props.input.value}
-      // onChange={props.input.onChange}
+      errorText={!!(props.meta.touched && props.meta.error) ? props.meta.error : ''}
     />
 ;
 
 const container: FelaRule<Props> = () => ({
-  display: 'flex',
-  flexDirection: 'row',
-  flex: 1
+  maxWidth: 650,
+  margin: 'auto',
+  minWidth: 320,
+  width: '100%'
 });
-const mapStylesToProps = { container };
+
+const form: FelaRule<Props> = () => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  padding: '1rem'
+});
+
+const heading: FelaRule<Props> = () => ({
+  alignSelf:  'flex-start'
+});
+
+const subContainer: FelaRule<Props> = () => ({
+  display:  'flex',
+  width:  '100%',
+  justifyContent: 'space-between'
+});
+
+const btnContainer: FelaRule<Props> = () => ({
+  margin: '2rem 0',
+  justifyContent: 'center',
+  display: 'flex',
+  width: '100%',
+});
+
+const mapStylesToProps = {
+  container,
+  heading,
+  form,
+  subContainer,
+  btnContainer
+};
 
 export default compose (
   ReduxConnect(mapStateToProps),

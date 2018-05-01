@@ -6,13 +6,13 @@ import { changeUrl } from 'ui/app/operations';
 export const validateLogin = (values: Partial<data.LoginInfo>): FormErrors<data.LoginInfo> => {
   const errors = {} as FormErrors<data.LoginInfo>;
   if (!values.email) {
-    errors.email = 'required';
+    errors.email = 'Поле обязательно к заполнению';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'invalid';
+    errors.email = 'Недействительный e-mail';
   }
 
   if (!values.secret) {
-    errors.secret = 'required';
+    errors.secret = 'Поле обязательно к заполнению';
   }
 
   return errors;
@@ -25,6 +25,6 @@ export const submitLogin: FormSubmitHandler<data.LoginInfo> = async (values: dat
     changeUrl(`/me`);
   } catch (e) {
     console.debug('wtf', e);
-    throw new SubmissionError({  _error: JSON.stringify(e) });
+    throw new SubmissionError({  _error: e.error.message });
   }
 };
