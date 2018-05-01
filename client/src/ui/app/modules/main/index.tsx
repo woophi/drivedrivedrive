@@ -7,8 +7,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import CompanyTittle from './CompanyTitle';
 import { Link } from 'ui/app/components/Links';
 
-const url = (name: string, wrap = false) => `${wrap ? 'url(' : ''}https://awv3node-homepage.surge.sh/build/assets/${name}.svg${wrap ? ')' : ''}`
-
 const VIDEO_BG = 'http://res.cloudinary.com/dqbo8zk4k/video/upload/v1525077103/file.mp4';
 
 type Props = {};
@@ -36,17 +34,7 @@ class Index extends React.Component<FelaProps> {
           <source src={VIDEO_BG} type="video/mp4" />
         </video>
         <Header parallaxRef={this.parallax} />
-        <Parallax ref={this.setRef.refLax} pages={4}>
-
-          <Parallax.Layer
-            offset={2}
-            speed={-0.3}
-            style={{
-              backgroundSize: '80%',
-              backgroundPosition: 'center',
-              backgroundImage: url('clients', true)
-            }}
-          />
+        <Parallax ref={this.setRef.refLax} pages={3.5}>
 
           <Parallax.Layer
             offset={0}
@@ -90,27 +78,32 @@ class Index extends React.Component<FelaProps> {
           </Parallax.Layer>
 
           <Parallax.Layer
-            offset={1}
+            offset={1.1}
             speed={0.1}
-            onClick={() => this.parallax.scrollTo(2)}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <img src={url('bash')} style={{ width: '40%' }} />
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <h2 className={styles.headingStyle2}>
+              {'Как мы работаем'}
+            </h2>
           </Parallax.Layer>
 
           <Parallax.Layer
-            offset={2}
+            offset={2.1}
             speed={0.1}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            onClick={() => this.parallax.scrollTo(0)}>
-            <img src={url('clients-main')} style={{ width: '40%' }} />
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <h2 className={styles.headingStyle2}>
+              {'Узнайте цену'}
+            </h2>
           </Parallax.Layer>
 
           <Parallax.Layer
             offset={3}
+            factor={0.5}
             speed={0}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            onClick={() => this.parallax.scrollTo(0)}>
-            <img src={url('clients-main')} style={{ width: '40%' }} />
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'red', border: '1px solid green' }}
+          >
+            <div>kek</div>
           </Parallax.Layer>
         </Parallax>
       </div>
@@ -172,6 +165,18 @@ const headingStyle: FelaRule<Props> = ({theme}) => ({
   ...theme.mobile({
     fontSize: '2.5rem',
   })
+});
+
+const headingStyle2: FelaRule<Props> = ({theme}) => ({
+  alignSelf: 'center',
+  color: '#fff',
+  fontSize: '2.5rem',
+  textTransform: 'uppercase',
+  letterSpacing: 3,
+  fontWeight: 'normal',
+  ...theme.mobile({
+    fontSize: '1.5rem',
+  })
 })
 
 const mapStylesToProps = {
@@ -180,7 +185,8 @@ const mapStylesToProps = {
   button,
   headingStyle,
   buttonLarge,
-  alignButton
+  alignButton,
+  headingStyle2
 };
 
 export default compose(

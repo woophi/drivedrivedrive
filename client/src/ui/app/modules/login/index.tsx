@@ -67,7 +67,7 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.L
                 <RaisedButton>{'отмена'}</RaisedButton>
               </Link>
               <RaisedButton type="submit" primary disabled={pristine || submitting}>
-                {submitting ? <i className="fa fa-circle-o-notch fa-spin" /> : 'Войти'}
+                {submitting ? <i className="fas fa-circle-notch fa-spin" /> : 'Войти'}
               </RaisedButton>
             </div>
             <div className={styles.subContainer}>
