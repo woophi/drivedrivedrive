@@ -17,15 +17,12 @@ export async function login(token: string) {
 
   console.debug('Logging in…');
 
-  const authResult = await common.callApi<models.UserAuthInfo>('/api/user/auth/user', postData).then(re => re, err => {
+  const authResult = await common.callApi<models.UserAuthInfo>('/api/user/auth', postData).then(re => re, err => {
     // TODO: var msg = i18n.t('loginModal.loginFailed');
     const msg = 'fail';
-    if (err && err.statusText && err.statusText.indexOf('ONLINE_LIMIT_EXCEEDED') !== -1) {
-      // TODO: msg = i18n.t('loginModal.loginFailedOpLimitEx');
-    }
 
     store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: msg });
-    return Promise.reject(null);
+    return Promise.reject(err);
   });
 
   console.debug('authResult >>', authResult);
