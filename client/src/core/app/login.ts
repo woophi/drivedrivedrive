@@ -4,7 +4,7 @@ import * as models from 'core/models';
 
 export interface LoginParams {
   secret: string;
-  userName?: string;
+  email?: string;
 };
 
 export async function login(token: string) {
@@ -43,12 +43,17 @@ function issueLoginTokenFromSecret(secretParams: LoginParams): Promise<string> {
     });
 }
 
-export function loginSecret(loginParams: LoginParams) {
-  issueLoginTokenFromSecret(loginParams)
-    .then(token => login(token), () => loginFailed());
+export async function loginSecret(loginParams: LoginParams) {
+  try {
+    const token = await issueLoginTokenFromSecret(loginParams);
+    await login(token);
+  } catch (error) {
+    loginFailed(error);
+    throw error;
+  }
 }
 
-function loginFailed() {
-  store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: '' });
+function loginFailed(e: any) {
+  store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: JSON.stringify(e) });
 }
 

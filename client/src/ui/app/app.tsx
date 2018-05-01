@@ -11,6 +11,7 @@ import { history } from 'ui/app/history';
 import { AppEntrySettings } from 'core/models/app';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppRoot from './components/AppRoot';
+import { init } from 'core/app/init';
 
 function renderApp(fela: { renderer: FelaRenderer, mountNode: HTMLElement }) {
   ReactDOM.render(
@@ -37,5 +38,5 @@ export async function entryOperatorDesktop(args: AppEntrySettings) {
   const fela = configureFela('stylesheet');
   renderApp(fela);
 
-  // init();
+  init();
 }

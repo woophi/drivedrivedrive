@@ -8,3 +8,8 @@ export interface UserAuthInfo extends AuthInfo {
   userName: string;
   roles: string[];
 }
+
+export interface LoginInfo {
+  email: string;
+  secret: string;
+}
