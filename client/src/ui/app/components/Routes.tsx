@@ -4,7 +4,7 @@ import { connect as ReduxConnect } from 'react-redux';
 import { Route, RouteComponentProps, Switch } from 'react-router';
 import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
-// import TopBarMobile from 'ui/application/modules/TopBarMobile';
+import TopBar from 'ui/app/modules/topBar';
 import { Redirect } from 'react-router';
 // import PermissionDenied from 'ui/application/components/PermissionDenied';
 
@@ -13,7 +13,7 @@ export default ReduxConnect((state: AppState) => ({
 }))(
   ({ location }) => (
     <div style={styles}>
-      {/* <TopBarMobile /> */}
+      {location.pathname !== '/' && <TopBar />}
 
       {/* <PermissionDenied waitForAdminState> */}
         <Route component={AppRoutes} location={location} />

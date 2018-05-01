@@ -95,6 +95,9 @@ export function configureFela(mountNodeId: string) {
   renderer.renderStatic({
     overflow: 'hidden'
   }, '.ovh');
+  renderer.renderStatic({
+    textDecoration: 'none'
+  }, '.tD-none')
 
   return { renderer, mountNode };
 }

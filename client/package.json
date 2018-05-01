@@ -75,7 +75,6 @@
     "fela": "^6.0.3",
     "fela-plugin-embedded": "^5.1.1",
     "fela-preset-web": "^5.0.1",
-    "font-awesome": "^4.7.0",
     "fork-ts-checker-webpack-plugin": "^0.3.0",
     "happypack": "^4.0.1",
     "howler": "^2.0.4",
