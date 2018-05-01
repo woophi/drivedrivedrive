@@ -11,8 +11,7 @@ exports.signin = function(req, res) {
       User.model.findOne().where('email', req.body.email).exec(function(err, user) {
         if (err) return res.apiError(err);
         if (!user) {
-          res.apiError({message: "Sorry, user not found" });
-          return cb();
+          return res.apiError({message: "Sorry, user not found" });
         } else {
           let result = user;
           if (result.resetPasswordKey) {
@@ -69,4 +68,24 @@ exports.auth = function(req, res) {
     }
 
 	});
-}
+};
+
+exports.checkAuth = function(req, res) {
+  const user = req.user;
+
+  if (user) {
+    let roles = [];
+
+    roles = user.isAdmin ? ['Admin'] : [];
+    roles = user.isSuperAdmin ? [...roles, 'Godlike'] : [...roles];
+    roles = user.isActive ? [...roles, 'Driver'] : [...roles];
+
+    return res.apiResponse({
+      userId: user.id || user._id,
+      fullName: user.name,
+      userName: user.email,
+      roles
+    });
+  }
+  return res.apiResponse(null);
+};

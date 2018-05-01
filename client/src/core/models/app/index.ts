@@ -10,7 +10,8 @@ export type AppState = {
   screen: ScreenState,
   form: any | null,
   user: UserState | null,
-  localAppState: models.LocalAppState
+  localAppState: models.LocalAppState,
+  authInfo: models.UserAuthInfo,
 };
 
 export type AppEntrySettings = {

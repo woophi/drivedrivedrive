@@ -40,24 +40,25 @@ exports = module.exports = function (app) {
 	app.all('/', routes.views.index);
 
 	// Session
-	app.all('/join', routes.views.session.join);
-	app.all('/signin', routes.views.session.signin);
-	app.get('/signout', routes.views.session.signout);
-	app.all('/forgot-password', routes.views.session['forgot-password']);
-	app.all('/reset-password/:key', routes.views.session['reset-password']);
+	app.all('/join', routes.views.index);
+	app.all('/signin', routes.views.index);
+	// app.get('/signout', routes.views.session.signout);
+	// app.all('/forgot-password', routes.views.session['forgot-password']);
+	// app.all('/reset-password/:key', routes.views.session['reset-password']);
 
-	// User
+	// // User
 	app.all('/me*', middleware.requireUser);
-	app.all('/me', routes.views.me);
+	app.all('/me', routes.views.index);
 
-	// Request
-	app.all('/request/:id', routes.views.request);
-	app.all('/request/:id/accept/:driverId', routes.views.acceptRequest);
-	app.all('/request/:id/confirm', routes.views.confirmRequest);
-	app.all('/request/:id/rate', routes.views.rateRequest);
+	// // Request
+	// app.all('/request/:id', routes.views.request);
+	// app.all('/request/:id/accept/:driverId', routes.views.acceptRequest);
+	// app.all('/request/:id/confirm', routes.views.confirmRequest);
+	// app.all('/request/:id/rate', routes.views.rateRequest);
 
   // API
   app.all('/api*', keystone.middleware.api);
   app.all('/api/user/signin', routes.api.app.user.signin);
   app.all('/api/user/auth', routes.api.app.user.auth);
+  app.all('/api/user/check', routes.api.app.user.checkAuth);
 };

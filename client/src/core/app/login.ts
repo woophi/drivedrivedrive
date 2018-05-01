@@ -35,7 +35,6 @@ export async function login(token: string) {
 function issueLoginTokenFromSecret(secretParams: LoginParams): Promise<string> {
   return common.callApi<any>('/api/user/signin', secretParams)
     .then(result => {
-      console.warn(result);
       return result.token;
     });
 }
@@ -52,5 +51,12 @@ export async function loginSecret(loginParams: LoginParams) {
 
 function loginFailed(e: any) {
   store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: JSON.stringify(e) });
+}
+
+export function checkAuth() {
+  return common.callApi<any>('/api/user/check', {})
+    .then(result => {
+      store.dispatch({ type: 'setAuthInfo', payload: result });
+    });
 }
 
