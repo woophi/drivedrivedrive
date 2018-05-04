@@ -6,6 +6,7 @@ import { Parallax } from 'react-spring';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import CompanyTittle from './CompanyTitle';
 import { Link } from 'ui/app/components/Links';
+import HowWork from './HowWork';
 
 const VIDEO_BG = 'http://res.cloudinary.com/dqbo8zk4k/video/upload/v1525077103/file.mp4';
 
@@ -78,13 +79,21 @@ class Index extends React.Component<FelaProps> {
           </Parallax.Layer>
 
           <Parallax.Layer
-            offset={1.1}
+            offset={1}
             speed={0.1}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
             <h2 className={styles.headingStyle2}>
               {'Как мы работаем'}
             </h2>
+          </Parallax.Layer>
+
+          <Parallax.Layer
+            offset={1.1}
+            speed={0.1}
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <HowWork />
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -174,8 +183,10 @@ const headingStyle2: FelaRule<Props> = ({theme}) => ({
   textTransform: 'uppercase',
   letterSpacing: 3,
   fontWeight: 'normal',
+  marginTop: '6rem',
   ...theme.mobile({
     fontSize: '1.5rem',
+    marginTop: '-17rem'
   })
 })
 

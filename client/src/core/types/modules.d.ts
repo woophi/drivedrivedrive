@@ -1,5 +1,7 @@
 declare module 'react-loadable';
 declare module 'react-spring';
+declare module 'react-visibility-sensor';
+
 
 declare module 'react-fela' {
   import { Omit } from 'ramda';

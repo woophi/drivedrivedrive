@@ -84,6 +84,9 @@ export function configureFela(mountNodeId: string) {
     marginRight: '1rem'
   }, '.mr-1');
   renderer.renderStatic({
+    margin: 'auto'
+  }, '.m-auto');
+  renderer.renderStatic({
     cursor: 'pointer'
   }, '.curp');
   renderer.renderStatic({
