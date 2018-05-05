@@ -3,7 +3,6 @@ import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { compose } from 'redux';
 import Divider from 'material-ui/Divider';
 import * as VisibilitySensor from 'react-visibility-sensor';
-import { resolve } from 'dns';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import * as equals from 'ramda/src/equals';
@@ -64,7 +63,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
     if (!this.state.boxes[1]) {
         this.changeStateOfBoxes();
     } else if (hiddenBoxes.length) {
-      setTimeout(this.changeStateOfBoxes, 2000);
+      setTimeout(this.changeStateOfBoxes, 1000);
     }
   }
 
@@ -73,25 +72,25 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
       visibility: show ? 'visible' : 'hidden',
       opacity: show ? 1 : 0.01,
       transform: show ? 'translateX(0)' : 'translateX(750px)',
-      transition: 'all 2s ease'
+      transition: 'all 1s ease'
     });
     const handleStyleBox2 = (show: boolean): React.CSSProperties => ({
       visibility: show ? 'visible' : 'hidden',
       opacity: show ? 1 : 0.01,
       transform: show ? 'translateX(0)' : 'translateX(500px)',
-      transition: 'all 2s ease'
+      transition: 'all 1s ease'
     });
     const handleStyleBox3= (show: boolean): React.CSSProperties => ({
       visibility: show ? 'visible' : 'hidden',
       opacity: show ? 1 : 0.01,
       transform: show ? 'translateX(0)' : 'translateX(250px)',
-      transition: 'all 2s ease'
+      transition: 'all 1s ease'
     });
     const handleStyleBottomBox= (show: boolean): React.CSSProperties => ({
       visibility: show ? 'visible' : 'hidden',
       opacity: show ? 1 : 0.9,
       clip: show ?  'rect(0px,282px,auto,0px)' :  'rect(0px,0,auto,0px)',
-      transition: 'all 2s ease',
+      transition: 'all 1s ease',
     });
     const { styles } = this.props;
     return (

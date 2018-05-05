@@ -7,6 +7,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import CompanyTittle from './CompanyTitle';
 import { Link } from 'ui/app/components/Links';
 import HowWork from './HowWork';
+import PriceInfo from './priceInfo';
 
 const VIDEO_BG = 'http://res.cloudinary.com/dqbo8zk4k/video/upload/v1525077103/file.mp4';
 
@@ -97,13 +98,21 @@ class Index extends React.Component<FelaProps> {
           </Parallax.Layer>
 
           <Parallax.Layer
-            offset={2.1}
+            offset={1.8}
             speed={0.1}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
             <h2 className={styles.headingStyle21}>
               {'Узнайте цену'}
             </h2>
+          </Parallax.Layer>
+
+          <Parallax.Layer
+            offset={1.9}
+            speed={0.1}
+            style={{ display: 'flex', flexDirection: 'column' }}
+          >
+            <PriceInfo />
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -192,9 +201,10 @@ const headingStyle2: FelaRule<Props> = ({theme}) => ({
 
 const headingStyle21: FelaRule<Props> = ({theme}) => ({
   ...headingStyle2({theme}),
+  marginTop: '8rem',
   ...theme.mobile({
     fontSize: '1.5rem',
-    marginTop: '-14rem'
+    marginTop: '10rem'
   })
 })
 

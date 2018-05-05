@@ -65,7 +65,7 @@ class Header extends React.Component<Props & FelaProps, LocalState> {
       style={styles}
       labelStyle={this.labelStyle()}
       onClick={() => {
-        this.props.parallaxRef.scrollTo(1);
+        this.props.parallaxRef.scrollTo(this.props.isMobile ? 0.7 : 1);
         if (this.props.isMobile) {
           this.handleMenuClick();
         }
@@ -77,7 +77,7 @@ class Header extends React.Component<Props & FelaProps, LocalState> {
       style={styles}
       labelStyle={this.labelStyle()}
       onClick={() => {
-        this.props.parallaxRef.scrollTo(2);
+        this.props.parallaxRef.scrollTo(1.8);
         if (this.props.isMobile) {
           this.handleMenuClick();
         }
