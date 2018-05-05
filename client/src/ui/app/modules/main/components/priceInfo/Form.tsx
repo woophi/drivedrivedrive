@@ -6,7 +6,7 @@ import * as React from 'react';
 import { compose } from 'redux';
 import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
 import * as data from 'core/models';
-// import { validateLogin, submitLogin } from './form';
+import { validateRequest, submitRequest } from '../../form';
 import { Alert } from 'ui/app/components/Alert';
 import { parseToInt } from 'ui/shared/transforms';
 
@@ -24,6 +24,7 @@ type TextFieldProps = {
   styleInput?: React.CSSProperties;
   styleLable?: React.CSSProperties;
   additionalClassName?: string;
+  required?: boolean
 }
 
 class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.RequestInfo, Props>> {
@@ -39,12 +40,12 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
           {props.label}
         </label>
         <input
-          className={styles.inputSt}
-          value={props.input.value}
-          onChange={props.input.onChange}
+          {...props.input}
+          className={props.meta.touched && props.meta.error ? styles.errInputSt : styles.inputSt}
           type={props.type}
           placeholder={props.placeHodler || ''}
           style={props.styleInput || {}}
+          required={props.required || false}
         />
       </div>
     )
@@ -61,12 +62,18 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
               component={this.componentInput}
               type="text"
               label={'Имя'}
+              {...{
+                required: true
+              }}
             />
             <Field
               name="email"
               component={this.componentInput}
-              type="text"
+              type="email"
               label={'E-mail'}
+              {...{
+                required: true
+              }}
             />
             <Field
               name="count"
@@ -74,27 +81,39 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
               type="number"
               parse={parseToInt}
               label={'Количество пассажиров'}
-              {...{styleInput: {
-                maxWidth: 50
-              }}}
+              {...{
+                styleInput: {
+                  maxWidth: 150,
+                },
+                required: true
+              }}
             />
             <Field
               name="from"
               component={this.componentInput}
               type="text"
               label={'Отправление из'}
+              {...{
+                required: true
+              }}
             />
             <Field
               name="to"
               component={this.componentInput}
               type="text"
               label={'Прибытие в'}
+              {...{
+                required: true
+              }}
             />
             <Field
               name="date"
               component={this.componentInput}
               type="date"
               label={'Дата трансфера'}
+              {...{
+                required: true
+              }}
             />
 
             <Field
@@ -102,6 +121,9 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
               component={this.componentInput}
               type="time"
               label={'Время трансфера'}
+              {...{
+                required: true
+              }}
             />
 
             <Field
@@ -122,22 +144,13 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
   }
 }
 
-
-// const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
-//     <TextField
-//       {...props.input}
-//       {...props}
-//       errorText={!!(props.meta.touched && props.meta.error) ? props.meta.error : ''}
-//     />
-// ;
-
 const container: FelaRule<Props> = ({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: 'rgba(85, 85, 85, 0.7)',
   width: 360,
   marginLeft: '3rem',
-  height: 493,
+  height: 525,
   ...theme.mobile({
     margin: '0 1rem'
   })
@@ -158,7 +171,7 @@ const labelSt: FelaRule<Props> = () => ({
   paddingRight: 5,
   '&:after': {
     content: '"*"',
-    color: 'red',
+    color: ' #cc0000',
     verticalAlign: 'top',
     margin: '0 3px',
   }
@@ -171,6 +184,7 @@ const fieldSt: FelaRule<Props> = () => ({
   padding: 0,
   display: 'flex',
   flexDirection: 'column',
+  position: 'relative'
 });
 
 const inputSt: FelaRule<Props> = () => ({
@@ -182,14 +196,19 @@ const inputSt: FelaRule<Props> = () => ({
   width: '100%',
   boxShadow: 'inset 0 1px 1px rgba(0,0,0,.075)',
   transition: 'border-color linear .2s,box-shadow linear .2s',
-  font: 'normal normal normal 9px/11px helvetica-w01-roman,helvetica-w02-roman,helvetica-lt-w10-roman,sans-serif',
+  font: 'normal normal normal 14px helvetica-w01-roman,helvetica-w02-roman,helvetica-lt-w10-roman,sans-serif',
   color: 'rgba(0,0,0,1)',
   boxSizing: 'border-box'
 });
 
+const errInputSt: FelaRule<Props> = () => ({
+  ...inputSt(),
+  borderColor: ' #cc0000',
+})
+
 const buttonSt: FelaRule<Props> = props => ({
   ...props.theme.items.flatButton,
-  margin: '0 5px',
+  margin: '5px 5px 0',
   backgroundColor: props.theme.palette.lightYellow,
   color: '#fff'
 });
@@ -207,17 +226,18 @@ const mapStylesToProps = {
   fieldSt,
   inputSt,
   buttonSt,
-  hideRequired
+  hideRequired,
+  errInputSt
 };
 
 export default compose (
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
-  reduxForm<data.LoginInfo, Props>({
+  reduxForm<data.RequestInfo, Props>({
     form: 'newRequest',
     enableReinitialize: true,
     destroyOnUnmount: true,
-    // validate: validateLogin,
-    // onSubmit: submitLogin
+    validate: validateRequest,
+    onSubmit: submitRequest
   })
 )(Form);

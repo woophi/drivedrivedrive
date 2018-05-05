@@ -61,4 +61,5 @@ exports = module.exports = function (app) {
   app.all('/api/user/signin', routes.api.app.user.signin);
   app.all('/api/user/auth', routes.api.app.user.auth);
   app.all('/api/user/check', routes.api.app.user.checkAuth);
+  app.all('/api/sendRequest', routes.api.app.form.sendRequest);
 };
