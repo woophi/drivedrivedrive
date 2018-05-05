@@ -6,6 +6,7 @@ import * as VisibilitySensor from 'react-visibility-sensor';
 import { resolve } from 'dns';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
+import * as equals from 'ramda/src/equals';
 
 const MOBILE_SCREEN_WIDTH = 768;
 
@@ -33,10 +34,11 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
       7: false
     }
   }
-  componentDidUpdate() {
+
+  componentDidUpdate(prevProps: Props, prevState: LocalState) {
     const keys = Object.keys(this.state.boxes);
     const hiddenBoxes = keys.filter(k => !this.state.boxes[Number(k)]);
-    if (hiddenBoxes.length) {
+    if (hiddenBoxes.length && !equals(this.state.boxes, prevState.boxes)) {
       this.awaitAnimation(true);
     }
   }

@@ -101,7 +101,7 @@ class Index extends React.Component<FelaProps> {
             speed={0.1}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
-            <h2 className={styles.headingStyle2}>
+            <h2 className={styles.headingStyle21}>
               {'Узнайте цену'}
             </h2>
           </Parallax.Layer>
@@ -188,6 +188,14 @@ const headingStyle2: FelaRule<Props> = ({theme}) => ({
     fontSize: '1.5rem',
     marginTop: '-17rem'
   })
+});
+
+const headingStyle21: FelaRule<Props> = ({theme}) => ({
+  ...headingStyle2({theme}),
+  ...theme.mobile({
+    fontSize: '1.5rem',
+    marginTop: '-14rem'
+  })
 })
 
 const mapStylesToProps = {
@@ -197,7 +205,8 @@ const mapStylesToProps = {
   headingStyle,
   buttonLarge,
   alignButton,
-  headingStyle2
+  headingStyle2,
+  headingStyle21
 };
 
 export default compose(
