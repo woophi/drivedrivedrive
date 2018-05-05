@@ -7,7 +7,7 @@ import Info from './Info';
 import Form from './Form';
 import Points from './Points';
 
-const MOBILE_SCREEN_WIDTH = 768;
+const MOBILE_SCREEN_WIDTH = 973;
 type OwnProps = {
   isMobile: boolean
 };
@@ -36,7 +36,7 @@ const container: FelaRule<Props> = ({theme}) => ({
   justifyContent: 'center',
   marginTop: '6rem',
   flexWrap: 'wrap',
-  ...theme.mobile({
+  ...theme.mobileEarly({
     marginTop: '8rem'
   })
 });

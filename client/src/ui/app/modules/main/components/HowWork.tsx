@@ -7,7 +7,7 @@ import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import * as equals from 'ramda/src/equals';
 
-const MOBILE_SCREEN_WIDTH = 768;
+const MOBILE_SCREEN_WIDTH = 973;
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 type Props = {
@@ -190,7 +190,7 @@ const container: FelaRule<Props> = ({theme}) => ({
   justifyContent: 'center',
   marginTop: '6rem',
   flexWrap: 'wrap',
-  ...theme.mobile({
+  ...theme.mobileEarly({
     marginTop: '-19rem'
   })
 });
@@ -206,7 +206,7 @@ const box: FelaRule<Props> = ({theme}) => ({
   backgroundColor: 'rgba(85, 85, 85, 0.7)',
   position: 'relative',
   height: 420,
-  ...theme.mobile({
+  ...theme.mobileEarly({
     height: 'auto'
   })
 });
@@ -216,7 +216,7 @@ const numberHead: FelaRule<Props> = ({theme}) => ({
   fontWeight: 300,
   fontStyle: 'italic',
   margin: '0 auto 1rem',
-  ...theme.mobile({
+  ...theme.mobileEarly({
     fontSize: '3rem',
     margin: '0 0 0 .5rem'
   })
@@ -225,7 +225,7 @@ const numberHead: FelaRule<Props> = ({theme}) => ({
 const boxText: FelaRule<Props> = ({theme}) => ({
   fontSize: '1rem',
   margin: '1rem auto',
-  ...theme.mobile({
+  ...theme.mobileEarly({
     letterSpacing: 1.6,
     margin: '0 0 0 .5rem'
   })
@@ -265,7 +265,7 @@ const bottomTextMob: FelaRule<Props> = ({theme}) => ({
 
 const dividerStl: FelaRule<Props> = ({theme}) => ({
   height: '2 !important',
-  ...theme.mobile({
+  ...theme.mobileEarly({
     margin: '0 .5rem !important'
   })
 });

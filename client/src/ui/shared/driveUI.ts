@@ -6,6 +6,12 @@ const mobile = (content: CSSProperties, maxWidth?: string) => ({
   }
 });
 
+const mobileEarly = (content: CSSProperties, maxWidth?: string) => ({
+  [`@media screen and (max-width: ${maxWidth ? maxWidth : '973px'})`]: {
+    ...content
+  }
+});
+
 const desktop = (content: CSSProperties, minWidth?: string) => ({
   [`@media screen and (min-width: ${minWidth ? minWidth : '769px'})`]: {
     ...content
@@ -389,6 +395,7 @@ export const driveTheme = {
   media,
   mobile,
   desktop,
+  mobileEarly
 };
 
 export type DriveTheme = typeof driveTheme;

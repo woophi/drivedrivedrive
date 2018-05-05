@@ -12,7 +12,7 @@ type OwnProps = {
   parallaxRef: any
 };
 
-const MOBILE_SCREEN_WIDTH = 768;
+const MOBILE_SCREEN_WIDTH = 834;
 const mapStateToProps = (state: AppState, props: OwnProps) => ({
   isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH
 });
