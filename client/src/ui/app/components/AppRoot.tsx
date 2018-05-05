@@ -8,7 +8,7 @@ import * as ReactHintFactory from 'react-hint';
 import { compose } from 'redux';
 import 'react-hint/css/index.css';
 import Routes from './Routes';
-import ScreenMeasurer from '../modules/ScreenMeasurer';
+import ScreenMeasurer from '../modules/screenMeasurer';
 
 const ReactHint = ReactHintFactory(React);
 
