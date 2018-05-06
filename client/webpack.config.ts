@@ -39,9 +39,9 @@ const config: webpack.Configuration = {
   },
   output: {
     libraryTarget: 'this',
-    path: path.resolve(__dirname, '../server/public'),
+    path: path.resolve(__dirname, '../server/public/'),
     filename: 'js/[name].js',
-    publicPath: '../server/public',
+    publicPath: '../server/public/',
     chunkFilename: 'js/[name].js?[hash]',
     pathinfo: !isProduction
   },
