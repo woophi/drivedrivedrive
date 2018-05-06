@@ -37,7 +37,7 @@ var routes = {
 exports = module.exports = function (app) {
 	scheduler.schedulerWorker();
 	// Views
-	app.all('/', routes.views.index);
+	app.all('/*', routes.views.index);
 
 	// Session
 	app.all('/join', routes.views.index);
