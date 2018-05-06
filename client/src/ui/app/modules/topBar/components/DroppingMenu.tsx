@@ -60,7 +60,6 @@ class DroppingMenu extends React.Component<Props> {
 
   render() {
     const { authInfo } = this.props;
-    console.warn(this.props.slectedPath);
     return (
       <IconMenu
         iconButtonElement={

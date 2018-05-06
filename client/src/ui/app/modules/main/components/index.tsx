@@ -15,6 +15,7 @@ import { AppState } from 'core/models/app';
 const MOBILE_SCREEN_WIDTH = 834;
 
 const VIDEO_BG = 'http://res.cloudinary.com/dqbo8zk4k/video/upload/v1525077103/file.mp4';
+const IMG_BG = require('../../../../assets/bck.jpg')
 
 type Props = {
   isMobile: boolean
@@ -35,13 +36,18 @@ class Index extends React.Component<Props & FelaProps> {
     refLax: (el: any) => this.parallax = el
   }
 
+  get renderBackground() {
+    return (this.props.isMobile ? <img className={this.props.styles.img} src={IMG_BG} alt="default back"/> :
+    <video className={this.props.styles.video} autoPlay loop muted>
+      <source src={VIDEO_BG} type="video/mp4" />
+    </video>)
+  }
+
   render() {
     const { styles, isMobile } = this.props;
     return (
       <div className={styles.container}>
-        <video className={styles.video} /*autoPlay*/ loop muted>
-          <source src={VIDEO_BG} type="video/mp4" />
-        </video>
+        {this.renderBackground}
         <Header parallaxRef={this.parallax} />
         <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.5 : 3.4}>
 
@@ -219,7 +225,22 @@ const headingStyle21: FelaRule<Props> = props => ({
   ...props.theme.mobileEarly({
     marginTop: '10rem'
   })
-})
+});
+
+const img: FelaRule<Props> = ({theme}) => ({
+  position: 'absolute',
+  left: 0,
+  width: '100%',
+  height: '100%',
+  [`@media (min-aspect-ratio: 16/9)`]: {
+    height: '300%',
+    top: '-100%'
+  },
+  ...theme.mobileEarly({
+    height: '100% !important',
+    top: '0 !important'
+  })
+});
 
 const mapStylesToProps = {
   container,
@@ -229,7 +250,8 @@ const mapStylesToProps = {
   buttonLarge,
   alignButton,
   headingStyle2,
-  headingStyle21
+  headingStyle21,
+  img
 };
 
 export default compose(
