@@ -7,9 +7,9 @@ type OwnProps = {
 }
 
 const Points: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
-  const DRGESDEN = "https://static.wixstatic.com/media/78d0ca_6fa62954888c4dff9b27f387ded73359~mv2.gif";
-  const KARLOVY_VARY = "https://static.wixstatic.com/media/78d0ca_ee5c4321b9fc46c99ff3b5a9c75b034e~mv2.gif";
-  const VENA = "https://static.wixstatic.com/media/78d0ca_50f4cb1aa58345adbe75ad1dfe001fe9~mv2.gif";
+  const DRGESDEN = require('../../../../../assets/dresden.gif');
+  const KARLOVY_VARY = require('../../../../../assets/vary.gif');
+  const VENA = require('../../../../../assets/vienna.gif');
   return (
     <div className={styles.container}>
       <div className={styles.box1}>

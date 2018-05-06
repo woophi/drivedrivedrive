@@ -14,8 +14,8 @@ import { AppState } from 'core/models/app';
 
 const MOBILE_SCREEN_WIDTH = 834;
 
-const VIDEO_BG = 'http://res.cloudinary.com/dqbo8zk4k/video/upload/v1525077103/file.mp4';
-const IMG_BG = require('../../../../assets/bck.jpg')
+const VIDEO_BG = require('../../../../assets/file.mp4');
+const IMG_BG = require('../../../../assets/bck.jpg');
 
 type Props = {
   isMobile: boolean
@@ -38,8 +38,8 @@ class Index extends React.Component<Props & FelaProps> {
 
   get renderBackground() {
     return (this.props.isMobile ? <img className={this.props.styles.img} src={IMG_BG} alt="default back"/> :
-    <video className={this.props.styles.video} autoPlay loop muted>
-      <source src={VIDEO_BG} type="video/mp4" />
+    <video preload="none" className={this.props.styles.video} autoPlay loop muted>
+      <source src={`${VIDEO_BG}`} type="video/mp4" />
     </video>)
   }
 
@@ -49,7 +49,7 @@ class Index extends React.Component<Props & FelaProps> {
       <div className={styles.container}>
         {this.renderBackground}
         <Header parallaxRef={this.parallax} />
-        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.5 : 3.4} style={{minHeight: 900}}>
+        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.5 : 3.4} style={{minHeight: 500}}>
 
           <Parallax.Layer
             offset={0}
