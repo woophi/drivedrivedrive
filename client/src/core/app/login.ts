@@ -1,6 +1,7 @@
 import * as common from 'core/shared/common';
 import store from 'core/shared/store';
 import * as models from 'core/models';
+import { changeUrl } from 'ui/app/operations';
 
 export interface LoginParams {
   secret: string;
@@ -37,6 +38,13 @@ function issueLoginTokenFromSecret(secretParams: LoginParams): Promise<string> {
     .then(result => {
       return result.token;
     });
+}
+
+export async function signOut() {
+  await common.callApi<any>('/api/user/signout', {})
+    .then(() => store.dispatch({ type: 'setAuthInfo', payload: null }))
+    .then(() => changeUrl('/signin'));
+  return true;
 }
 
 export async function loginSecret(loginParams: LoginParams) {

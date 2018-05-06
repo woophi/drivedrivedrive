@@ -182,3 +182,13 @@ exports.register = function(req, res) {
   });
 };
 
+exports.signout = function(req, res) {
+  keystone.session.signout(req, res, function(err) {
+		if (err) {
+      return res.apiError({
+        message: (err && err.message ? err.message : false) || 'Что-то пошло не так, попробуйте снова'
+      });
+    }
+    return res.apiResponse(true);
+	});
+};

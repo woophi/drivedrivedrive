@@ -61,6 +61,8 @@ exports = module.exports = function (app) {
   app.all('/api/user/signin', routes.api.app.user.signin);
   app.all('/api/user/auth', routes.api.app.user.auth);
   app.all('/api/user/check', routes.api.app.user.checkAuth);
+  app.all('/api/user/join', routes.api.app.user.register);
+  app.all('/api/user/signout', routes.api.app.user.signout);
+
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
-  app.all('/api/join', routes.api.app.user.register);
 };

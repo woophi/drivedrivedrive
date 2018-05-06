@@ -12,6 +12,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {blue500} from 'material-ui/styles/colors';
 import { Link } from 'ui/app/components/Links';
 import { AppState } from 'core/models/app';
+import { signOut } from 'core/app/login';
 import { returntypeof } from 'react-redux-typescript';
 import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
@@ -37,12 +38,12 @@ class DroppingMenu extends React.Component<Props> {
   get logInOutBtn() {
     if (this.props.authInfo) {
       return (
-        <Link className={'tD-none'} to={'/signout'}>
-          <MenuItem
-            leftIcon={<FontIcon className="fas fa-sign-out-alt" />}
-            primaryText="Выйти"
-          />
-        </Link>
+        <MenuItem
+          onClick={signOut}
+          className={'tD-none'}
+          leftIcon={<FontIcon className="fas fa-sign-out-alt" />}
+          primaryText="Выйти"
+        />
       );
     } else {
       return (
@@ -78,7 +79,7 @@ class DroppingMenu extends React.Component<Props> {
         }
         {authInfo &&
           <Link className={'tD-none'} to={'/request'}>
-            <MenuItem leftIcon={this.changeIconOnPath(<Receipts />, 'request')} primaryText="Профиль" />
+            <MenuItem leftIcon={this.changeIconOnPath(<Receipts />, 'request')} primaryText="Заявки" />
           </Link>
         }
         {authInfo &&

@@ -18,5 +18,5 @@ export async function newTransferRequest(requestParams: models.RequestInfo) {
 }
 
 export function registerNewUser(userParams: models.NewUser): Promise<null> {
-  return common.callApi<any>('/api/join', userParams);
+  return common.callApi<any>('/api/user/join', userParams);
 }
