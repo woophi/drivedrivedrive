@@ -49,7 +49,7 @@ class Index extends React.Component<Props & FelaProps> {
       <div className={styles.container}>
         {this.renderBackground}
         <Header parallaxRef={this.parallax} />
-        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.5 : 3.4} style={{minHeight: 500}}>
+        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.86 : 3.4} style={{minHeight: 900}}>
 
           <Parallax.Layer
             offset={0}

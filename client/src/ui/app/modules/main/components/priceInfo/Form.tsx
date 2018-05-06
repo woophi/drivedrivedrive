@@ -9,9 +9,12 @@ import * as data from 'core/models';
 import { validateRequest, submitRequest } from '../../form';
 import { Alert } from 'ui/app/components/Alert';
 import { parseToInt } from 'ui/shared/transforms';
+import IconButton  from 'material-ui/IconButton';
+import { triggerForm } from '../../operations';
 
 const mapStateToProps = (state: AppState) => ({
-  authInfo: state.authInfo
+  authInfo: state.authInfo,
+  formState: state.ui.guests.guestSubmitForm
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -51,96 +54,125 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
     )
   }
 
-  render() {
+  componentForm = () => {
     const { styles, handleSubmit, error, pristine, submitting } = this.props;
     return (
+      <React.Fragment>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          {error && <Alert mssg={error} type={'error'} />}
+          <Field
+            name="name"
+            component={this.componentInput}
+            type="text"
+            label={'Имя'}
+            {...{
+              required: true
+            }}
+          />
+          <Field
+            name="email"
+            component={this.componentInput}
+            type="email"
+            label={'E-mail'}
+            {...{
+              required: true
+            }}
+          />
+          <Field
+            name="count"
+            component={this.componentInput}
+            type="number"
+            parse={parseToInt}
+            label={'Количество пассажиров'}
+            {...{
+              styleInput: {
+                maxWidth: 150,
+              },
+              required: true
+            }}
+          />
+          <Field
+            name="from"
+            component={this.componentInput}
+            type="text"
+            label={'Отправление из'}
+            {...{
+              required: true
+            }}
+          />
+          <Field
+            name="to"
+            component={this.componentInput}
+            type="text"
+            label={'Прибытие в'}
+            {...{
+              required: true
+            }}
+          />
+          <Field
+            name="date"
+            component={this.componentInput}
+            type="date"
+            label={'Дата трансфера'}
+            {...{
+              required: true
+            }}
+          />
+
+          <Field
+            name="time"
+            component={this.componentInput}
+            type="time"
+            label={'Время трансфера'}
+            {...{
+              required: true
+            }}
+          />
+
+          <Field
+            name="comment"
+            component={this.componentInput}
+            type="text"
+            label={'Ваш комментарий'}
+            {...{
+              placeHodler: 'ваши пожелания, телефон или номер рейса',
+              additionalClassName: styles.hideRequired
+            }}
+          />
+
+          <button disabled={submitting} className={styles.buttonSt}>
+            {submitting ? <i className="fas fa-circle-notch fa-spin" /> : 'Отправить'}
+          </button>
+        </form>
+      </React.Fragment>
+    )
+  }
+
+  get componentModal() {
+    return (this.props.formState &&
+      <div className={this.props.styles.modalSent}>
+        <div className={this.props.styles.modalBody}>
+          <IconButton
+            iconClassName="fa fa-times fa-2"
+            onClick={this.handleClose}
+            style={{alignSelf: 'flex-end'}}
+          />
+          <span className={this.props.styles.modalText}>
+            Спасибо за Вашу заявку! В ближайшее время Вам начнут поступать предложения от водителей
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  handleClose = () => triggerForm(false);
+
+  render() {
+    const { styles, formState } = this.props;
+    return (
         <div className={styles.container}>
-          <form className={styles.form} onSubmit={handleSubmit}>
-            {error && <Alert mssg={error} type={'error'} />}
-            <Field
-              name="name"
-              component={this.componentInput}
-              type="text"
-              label={'Имя'}
-              {...{
-                required: true
-              }}
-            />
-            <Field
-              name="email"
-              component={this.componentInput}
-              type="email"
-              label={'E-mail'}
-              {...{
-                required: true
-              }}
-            />
-            <Field
-              name="count"
-              component={this.componentInput}
-              type="number"
-              parse={parseToInt}
-              label={'Количество пассажиров'}
-              {...{
-                styleInput: {
-                  maxWidth: 150,
-                },
-                required: true
-              }}
-            />
-            <Field
-              name="from"
-              component={this.componentInput}
-              type="text"
-              label={'Отправление из'}
-              {...{
-                required: true
-              }}
-            />
-            <Field
-              name="to"
-              component={this.componentInput}
-              type="text"
-              label={'Прибытие в'}
-              {...{
-                required: true
-              }}
-            />
-            <Field
-              name="date"
-              component={this.componentInput}
-              type="date"
-              label={'Дата трансфера'}
-              {...{
-                required: true
-              }}
-            />
-
-            <Field
-              name="time"
-              component={this.componentInput}
-              type="time"
-              label={'Время трансфера'}
-              {...{
-                required: true
-              }}
-            />
-
-            <Field
-              name="comment"
-              component={this.componentInput}
-              type="text"
-              label={'Ваш комментарий'}
-              {...{
-                placeHodler: 'ваши пожелания, телефон или номер рейса',
-                additionalClassName: styles.hideRequired
-              }}
-            />
-
-            <button disabled={submitting} className={styles.buttonSt}>
-              {submitting ? <i className="fas fa-circle-notch fa-spin" /> : 'Отправить'}
-            </button>
-          </form>
+          {this.componentForm()}
+          {this.componentModal}
         </div>
     );
   }
@@ -153,6 +185,7 @@ const container: FelaRule<Props> = ({theme}) => ({
   width: 360,
   marginLeft: '3rem',
   height: 525,
+  position: 'relative',
   ...theme.mobileEarly({
     margin: '0 1rem'
   })
@@ -221,6 +254,30 @@ const hideRequired: FelaRule<Props> = props => ({
   }
 });
 
+const modalSent: FelaRule<Props> = props => ({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(85, 85, 85, 0.9)',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const modalBody: FelaRule<Props> = () => ({
+  margin: 'auto 2rem',
+  display: 'flex',
+  flexDirection: 'column',
+  backgroundColor: 'rgba(186,218,85,1)',
+});
+
+const modalText: FelaRule = () => ({
+  textAlign: 'center',
+  margin: '1rem',
+  fontSize: '19px',
+  letterSpacing: '1px',
+  color: 'black',
+})
+
 const mapStylesToProps = {
   container,
   labelSt,
@@ -229,7 +286,10 @@ const mapStylesToProps = {
   inputSt,
   buttonSt,
   hideRequired,
-  errInputSt
+  errInputSt,
+  modalSent,
+  modalBody,
+  modalText
 };
 
 export default compose (

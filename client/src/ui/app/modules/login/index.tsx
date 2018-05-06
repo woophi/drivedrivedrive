@@ -11,7 +11,6 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'ui/app/components/Links';
-import { authInfo } from 'core/shared/reducers';
 import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 
