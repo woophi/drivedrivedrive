@@ -16,5 +16,4 @@ require('redux-observable');
 require('tslib');
 require('react-custom-scrollbars');
 require('react-loadable');
-require('react-spring');
 require('react-visibility-sensor');
