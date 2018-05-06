@@ -18,7 +18,7 @@ keystone.init({
 	'views': 'templates/views',
 	'view engine': 'pug',
 
-	'emails': 'templates/emails',
+	'emails':  keystone.get('env') === 'production' ? 'server/templates/emails' : 'templates/emails',
 
 	'auto update': true,
 	'session': true,
