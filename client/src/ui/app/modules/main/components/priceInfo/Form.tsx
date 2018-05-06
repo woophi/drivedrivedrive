@@ -137,7 +137,9 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
               }}
             />
 
-            <button className={styles.buttonSt}>Отправить</button>
+            <button disabled={submitting} className={styles.buttonSt}>
+              {submitting ? <i className="fas fa-circle-notch fa-spin" /> : 'Отправить'}
+            </button>
           </form>
         </div>
     );
