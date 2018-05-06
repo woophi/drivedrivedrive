@@ -43,7 +43,7 @@ exports = module.exports = function (app) {
 	app.all('/join', routes.views.index);
 	app.all('/signin', routes.views.index);
 	// app.get('/signout', routes.views.session.signout);
-	// app.all('/forgot-password', routes.views.session['forgot-password']);
+	app.all('/forgot-password', routes.views.index);
 	// app.all('/reset-password/:key', routes.views.session['reset-password']);
 
 	// // User
@@ -62,4 +62,5 @@ exports = module.exports = function (app) {
   app.all('/api/user/auth', routes.api.app.user.auth);
   app.all('/api/user/check', routes.api.app.user.checkAuth);
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
+  app.all('/api/join', routes.api.app.user.register);
 };

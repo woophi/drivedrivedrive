@@ -72,11 +72,12 @@ const AlertComponent: React.SFC<Props & FelaProps> = props => {
 
 const container: FelaRule<Props> = () => ({
   width: '100%',
-  height: '3rem',
+  height: 'auto',
   padding: '1rem .5rem',
   border: '1px solid transparent',
   borderRadius: '.25rem',
-  boxSizing: 'border-box'
+  boxSizing: 'border-box',
+  minHeight: '3rem'
 });
 
 const mapStylesToProps = {

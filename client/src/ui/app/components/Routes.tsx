@@ -12,7 +12,7 @@ export default ReduxConnect((state: AppState) => ({
   location: state.router.location as Location
 }))(
   ({ location }) => (
-    <div style={styles}>
+    <div style={styles(location)}>
       {location.pathname !== '/' && <TopBar />}
 
       {/* <PermissionDenied waitForAdminState> */}
@@ -22,12 +22,13 @@ export default ReduxConnect((state: AppState) => ({
   )
 );
 
-const styles: React.CSSProperties = {
+const styles = (location: Location): React.CSSProperties => ({
   flex: 1,
   position: 'relative',
   display: 'flex',
-  flexDirection: 'column'
-};
+  flexDirection: 'column',
+  minHeight: location.pathname !== '/' ? 850 : 'unset'
+});
 
 const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
   <React.Fragment>
@@ -46,6 +47,15 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
           visibility={!!match}
           props={{ match }}
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/login'), 'app.login')}
+        />}
+    </Route>
+
+    <Route exact strict path="/join" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/join'), 'app.join')}
         />}
     </Route>
 

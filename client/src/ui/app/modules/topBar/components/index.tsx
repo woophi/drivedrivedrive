@@ -9,8 +9,10 @@ import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
 import DroppingMenu from './DroppingMenu';
 
+const MOBILE_SCREEN_WIDTH = 450;
 const mapStateToProps = (state: AppState) => ({
-  path: state.router.location.pathname
+  path: state.router.location.pathname,
+  isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH
 });
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
@@ -44,8 +46,10 @@ class Index extends React.Component<Props> {
   }
 
   render() {
+    const { isMobile } = this.props;
     return (
       <AppBar
+        titleStyle={{maxWidth: isMobile ? 200 : 'unset'}}
         title={this.titleChange}
         iconElementLeft={<IconButton><NavigationLogo onClick={this.handleHome} /></IconButton>}
         iconElementRight={<DroppingMenu />}
