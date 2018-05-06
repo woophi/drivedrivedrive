@@ -20,6 +20,7 @@ keystone.init({
 
   'emails':  keystone.get('env') === 'production' ? 'server/templates/emails' : 'templates/emails',
 
+  'auto update': true,
 	'session': true,
 	'auth': true,
 	'user model': 'User',
