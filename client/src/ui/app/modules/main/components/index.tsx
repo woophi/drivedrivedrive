@@ -49,7 +49,7 @@ class Index extends React.Component<Props & FelaProps> {
       <div className={styles.container}>
         {this.renderBackground}
         <Header parallaxRef={this.parallax} />
-        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.5 : 3.4}>
+        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.5 : 3.4} style={{minHeight: 900}}>
 
           <Parallax.Layer
             offset={0}
@@ -132,7 +132,7 @@ class Index extends React.Component<Props & FelaProps> {
             offset={3}
             factor={isMobile ? 0.5 : 0.4}
             speed={0}
-            style={{ display: 'flex', flexDirection: 'column'}}
+            style={{ display: 'flex', flexDirection: 'column', minHeight: 450}}
           >
             <Contacts />
           </Parallax.Layer>
@@ -242,6 +242,11 @@ const img: FelaRule<Props> = ({theme}) => ({
   })
 });
 
+const preventHChageHeight: FelaRule = () => ({
+  minHeight: '900px !important',
+  height: '900px !important'
+})
+
 const mapStylesToProps = {
   container,
   video,
@@ -251,7 +256,8 @@ const mapStylesToProps = {
   alignButton,
   headingStyle2,
   headingStyle21,
-  img
+  img,
+  preventHChageHeight
 };
 
 export default compose(
