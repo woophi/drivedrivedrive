@@ -11,7 +11,7 @@ module.exports = {
   output: {
     libraryTarget: 'this',
     library: 'lib[name]',
-    path: path.resolve(__dirname, '/'),
+    path: path.resolve(__dirname, '../server/public/'),
     filename: 'js/lib.[name].js',
     chunkFilename: 'js/lib.[name].js?[hash]',
     pathinfo: !isProduction
