@@ -21,3 +21,17 @@ export interface NewUser {
   password: string;
   phone: string;
 }
+
+export interface PasswordForgot {
+  email: string;
+}
+
+export interface PasswordReset {
+  key: string;
+  password: string;
+  password_confirm: string;
+}
+
+export interface PasswordKey {
+  key: string;
+}

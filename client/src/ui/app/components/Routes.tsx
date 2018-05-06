@@ -59,6 +59,24 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         />}
     </Route>
 
+    <Route exact strict path="/forgot-password" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/password/forgot'), 'app.password')}
+        />}
+    </Route>
+
+    <Route exact strict path="/reset-password/:key" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/password/reset'), 'app.password')}
+        />}
+    </Route>
+
     {/* <Route path="/:companyId/:tenantId/users" location={location}>
       {({ match }) =>
         <LoadableComponent

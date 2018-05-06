@@ -31,7 +31,10 @@ class Index extends React.Component<Props> {
       case 'join':
         return 'Регистрация';
 
-      case 'forgot-password' || 'reset-password':
+      case 'forgot-password':
+        return 'Восстановление пароля';
+
+      case 'reset-password':
         return 'Восстановление пароля';
 
       case 'me':

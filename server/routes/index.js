@@ -42,9 +42,8 @@ exports = module.exports = function (app) {
 	// Session
 	app.all('/join', routes.views.index);
 	app.all('/signin', routes.views.index);
-	// app.get('/signout', routes.views.session.signout);
 	app.all('/forgot-password', routes.views.index);
-	// app.all('/reset-password/:key', routes.views.session['reset-password']);
+	app.all('/reset-password/:key', routes.views.index);
 
 	// // User
 	app.all('/me*', middleware.requireUser);
@@ -63,6 +62,9 @@ exports = module.exports = function (app) {
   app.all('/api/user/check', routes.api.app.user.checkAuth);
   app.all('/api/user/join', routes.api.app.user.register);
   app.all('/api/user/signout', routes.api.app.user.signout);
+  app.all('/api/user/password/forgot', routes.api.app.user.forgotPassword);
+  app.all('/api/user/password/reset', routes.api.app.user.resetPassword);
+  app.all('/api/user/password/key', routes.api.app.user.getPasswordKey);
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
 };

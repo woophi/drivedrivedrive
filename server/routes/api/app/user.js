@@ -192,3 +192,85 @@ exports.signout = function(req, res) {
     return res.apiResponse(true);
 	});
 };
+
+exports.forgotPassword = function(req, res) {
+
+  User.model.findOne().where('email', req.body.email).exec(function(err, user) {
+    if (err) return res.apiError({
+      message: 'Пользователь с таким email не существует'
+    });
+
+    if (!user) {
+      return res.apiError({
+        message: 'Пользователь с таким email не существует'
+      });
+    }
+
+    user.resetPassword(req, res, function(err) {
+      if (err) {
+        return res.apiError({
+          message: 'Не удалось сбросить пароль'
+        });
+      } else {
+        return res.apiResponse(true);
+      }
+    });
+
+  });
+
+};
+
+exports.resetPassword = function(req, res) {
+
+  if (req.body.password !== req.body.password_confirm) {
+    return res.apiError({
+      message: 'Пароли не совпадают'
+    });
+  }
+
+  User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
+    if (err) return res.apiError({
+      message: 'Ссылка для сброса пароля недействительна'
+    });
+    if (!user) {
+      return res.apiError({
+        message: 'Ссылка для сброса пароля недействительна'
+      });
+    }
+    user.save(function(err) {
+      if (err) return res.apiError({
+        message: 'Не удалось сбросить пароль'
+      });
+      return res.apiResponse(true);
+    });
+
+  })
+    .then(user => {
+      let result = user;
+      result.resetPasswordKey = '';
+      result.save(function(err) {
+        if (err) console.warn(err);
+      });
+    });
+
+};
+
+exports.getPasswordKey = function(req, res) {
+
+  User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
+    if (err) return res.apiError({
+      message: 'Ссылка для сброса пароля недействительна',
+      status: false
+    });
+    if (!user) {
+      return res.apiError({
+        message: 'Ссылка для сброса пароля недействительна',
+        status: false
+      });
+    }
+    return res.apiResponse({
+      status: true
+    });
+  });
+
+};
