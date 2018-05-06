@@ -2,14 +2,44 @@ include ../mixins/flash-messages
 include ../mixins/auth/auth-forms
 
 doctype html
-html
+html(lang="ru")
   head
     meta(charset="utf-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, viewport-fit=cover")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
 
-    title= title || 'My Site'
-    link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+    title= title || 'VETTURA'
+    link(rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png")
+    link(rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png")
+    link(rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png")
+    link(rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png")
+    link(rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png")
+    link(rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png")
+    link(rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png")
+    link(rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png")
+    link(rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png")
+    link(rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png")
+    link(rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png")
+    link(rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png")
+    link(rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png")
+    link(rel="manifest" href="/manifest.json")
+    meta(name="msapplication-TileColor" content="#ffffff")
+    meta(name="msapplication-TileImage" content="/ms-icon-144x144.png")
+    meta(name="msapplication-config" content="/browserconfig.xml")
+    meta(name="theme-color" content="#ffffff")
+    meta(name="apple-mobile-web-app-capable" content="yes")
+    meta(name="apple-mobile-web-app-status-bar-style" content="black")
+    //- link(rel="canonical" href="/")
+
+    //-vfacebook
+    meta(property="og:url" content="https://drivedrivedrive.herokuapp.com")
+    meta(property="og:type" content="website")
+    meta(property="og:title" content="VETTURA")
+    meta(property="og:description" content="Закажите трансфер у нас. Выберите авто, водителя и наслаждайтесь поездкой. По лучшей цене.")
+    meta(property="og:image" content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg")
+    //- change img
+
+    meta(name="description" content="Закажите трансфер у нас. Выберите авто, водителя и наслаждайтесь поездкой. По лучшей цене.")
 
     if env === 'development'
       script(src="https://localhost:3001/js/lib.base.js")
@@ -27,6 +57,7 @@ html
       link(rel="stylesheet" href="/css/app.drive.css")
 
     link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous")
+    link(href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet")
     //- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
     //- Safely remove this block if you are not targeting IE8
     //-[if lt IE 9]

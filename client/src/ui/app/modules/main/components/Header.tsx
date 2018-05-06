@@ -141,9 +141,9 @@ class Header extends React.Component<Props & FelaProps, LocalState> {
   render() {
     const { styles, parallaxRef } = this.props;
     return (
-      <div className={styles.container}>
+      <header className={styles.container}>
         {this.renderBtns()}
-      </div>
+      </header>
     )
   }
 }

@@ -28,7 +28,7 @@ const Contacts: React.SFC<FelaProps> = ({ styles }) => {
     height: 12
   };
   return (
-    <div className={styles.container}>
+    <footer className={styles.container}>
       <div className={styles.stars}>
         <Star style={star1} />
         <Star style={star2} />
@@ -42,7 +42,7 @@ const Contacts: React.SFC<FelaProps> = ({ styles }) => {
         <a href="tel:+420774804414">mob. +420-774-804-414</a>
         <a href="mailto:info@transferring.cz">Email: info@transferring.cz</a>
       </span>
-    </div>
+    </footer>
   );
 };
 

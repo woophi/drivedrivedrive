@@ -10,17 +10,16 @@ var keystone = require('keystone');
 // and documentation.
 
 keystone.init({
-	'name': 'My Site',
-	'brand': 'My Site',
+	'name': 'VETTURA',
+	'brand': 'VETTURA',
 
 	'static': 'public',
 	'favicon': 'public/favicon.ico',
 	'views': 'templates/views',
 	'view engine': 'pug',
 
-	'emails':  keystone.get('env') === 'production' ? 'server/templates/emails' : 'templates/emails',
+  'emails':  keystone.get('env') === 'production' ? 'server/templates/emails' : 'templates/emails',
 
-	'auto update': true,
 	'session': true,
 	'auth': true,
 	'user model': 'User',

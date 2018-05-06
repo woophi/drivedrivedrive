@@ -21,10 +21,10 @@ const Index: React.SFC<Props & FelaProps> = props => {
 
   return (
     <React.Fragment>
-      <div className={styles.container}>
+      <section className={styles.container}>
         <Info />
         <Form />
-      </div>
+      </section>
       {!isMobile && <Points />}
     </React.Fragment>
   );

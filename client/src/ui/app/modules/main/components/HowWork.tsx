@@ -96,7 +96,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
     return (
       <VisibilitySensor onChange={this.awaitAnimation}>
         {({isVisible}: {isVisible: boolean}) =>
-          <div className={styles.container}>
+          <section className={styles.container}>
             <div style={handleStyleBox1(this.state.boxes[1])} className={`${styles.box}`}>
               <span className={styles.numberHead}>01</span>
               <Divider className={styles.dividerStl} />
@@ -130,7 +130,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
                 <span className={'m-auto'}>Вам на почту придет подтверждение и контактные данные водителя. Приятной поездки!</span>
               </div>
             </div>
-          </div>
+          </section>
         }
       </VisibilitySensor>
     )
@@ -139,7 +139,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
   renderMobile = () => {
     const { styles } = this.props;
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
           <div className={`${styles.box}`}>
             <div className={`${styles.subBoxMob} `}>
               <span className={styles.numberHead}>01</span>
@@ -173,7 +173,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
               <span className={`${styles.bottomTextMob} m-auto`}>Вам на почту придет подтверждение и контактные данные водителя. Приятной поездки!</span>
             </div>
           </div>
-        </div>
+        </section>
     )
   }
 
