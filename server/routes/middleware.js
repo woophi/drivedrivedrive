@@ -25,7 +25,7 @@ exports.initLocals = function (req, res, next) {
 	};
 
 	if (req.cookies.target && req.cookies.target == locals.page.path) res.clearCookie('target');
-
+  console.warn(req.user);
 	next();
 };
 

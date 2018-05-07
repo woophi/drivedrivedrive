@@ -274,3 +274,29 @@ exports.getPasswordKey = function(req, res) {
   });
 
 };
+
+exports.getProfile = function(req, res) {
+
+  User.model.findById(req.body.userId).exec(function(err, user) {
+    if (err) return res.apiError(null);
+    if (!user) {
+      return res.apiError({
+        message: 'Пользователь не найден',
+      });
+    }
+    return res.apiResponse({
+      firstName: user.name.first,
+      lastName: user.name.last,
+      email: user.email,
+      phone: user.phone,
+      photoFront: user.photoFront ? user.photoFront.secure_url : null,
+      photoSide: user.photoSide ? user.photoSide.secure_url : null,
+      photoInside: user.photoInside ? user.photoInside.secure_url : null,
+      driverPhoto: user.driverPhoto ? user.driverPhoto.secure_url : null,
+      car: user.car ? user.car : null,
+      notifications: user.notifications,
+      rating: user.rating ? user.rating.realValue : null
+    });
+  });
+
+};

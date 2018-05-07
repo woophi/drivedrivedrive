@@ -23,7 +23,8 @@ export default ReduxConnect((state: AppState) => ({
 );
 
 const styles = (location: Location): React.CSSProperties => ({
-  flex: 1,
+  height: '100%',
+  width: '100%',
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
@@ -77,76 +78,13 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         />}
     </Route>
 
-    {/* <Route path="/:companyId/:tenantId/users" location={location}>
+    <Route exact strict path="/me" location={location}>
       {({ match }) =>
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
-          loader={async () => require.ensure([], (require: any) => require('ui/admin/modules/users'), 'app.admin')}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/me'), 'app.driver')}
         />}
     </Route>
-
-    <Route path="/:companyId/:tenantId/wallboard" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], (require: any) => require('ui/admin/modules/wallboard'), 'app.admin')}
-        />}
-    </Route>
-
-    <Route path="/:companyId/:tenantId/operators" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], require => require('ui/admin/modules/operators'), 'app.admin')}
-        />}
-    </Route>
-
-    <Route path="/:companyId/:tenantId/companies" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], require => require('ui/admin/modules/companies'), 'app.admin')}
-        />}
-    </Route>
-
-    <Route path="/:companyId/:tenantId/sessions" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], require => require('ui/admin/modules/sessions'), 'app.admin')}
-        />}
-    </Route>
-
-    <Route path="/:companyId/:tenantId/:userId(\\d+)/sessions" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], require => require('ui/admin/modules/sessions'), 'app.admin')}
-        />}
-    </Route>
-
-    <Route path="/:companyId/:tenantId/visitors" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], require => require('ui/admin/modules/visitors'), 'app.admin')}
-        />}
-    </Route>
-
-    <Route path="/:companyId/:tenantId/settings" location={location}>
-      {({ match }) =>
-        <LoadableComponent
-          visibility={!!match}
-          props={{ match }}
-          loader={async () => require.ensure([], require => require('ui/admin'), 'app.admin')}
-        />}
-    </Route> */}
   </React.Fragment>
 );

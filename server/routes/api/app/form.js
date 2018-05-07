@@ -2,7 +2,8 @@ var async = require('async'),
   keystone = require('keystone'),
 		_ = require('lodash'),
   User = keystone.list('User'),
-  moment = require('moment');
+  moment = require('moment'),
+  mailFrom = require('../staticVars').mailFrom;
 
 exports.sendRequest = function(req, res) {
 
@@ -54,10 +55,7 @@ exports.sendRequest = function(req, res) {
             transport: 'mailgun',
           }).send({
             to: users,
-            from: {
-              name: 'Vettura',
-              email: 'info@km-webstudio.xyz',
-            },
+            from: mailFrom,
             subject: 'Новая заявка на трансфер',
             guestData: newRequest,
             host: req.headers.origin,

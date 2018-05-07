@@ -20,3 +20,10 @@ export async function newTransferRequest(requestParams: models.RequestInfo) {
 export function registerNewUser(userParams: models.NewUser): Promise<null> {
   return common.callApi<any>('/api/user/join', userParams);
 }
+
+export function getUserProfile(params: Partial<models.UserAuthInfo>): Promise<models.UseProfile> {
+  return common.callApi<any>('/api/user/profile', params)
+    .then(result => {
+      return result;
+    });
+}

@@ -65,6 +65,7 @@ exports = module.exports = function (app) {
   app.all('/api/user/password/forgot', routes.api.app.user.forgotPassword);
   app.all('/api/user/password/reset', routes.api.app.user.resetPassword);
   app.all('/api/user/password/key', routes.api.app.user.getPasswordKey);
+  app.all('/api/user/profile', routes.api.app.user.getProfile);
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
 };

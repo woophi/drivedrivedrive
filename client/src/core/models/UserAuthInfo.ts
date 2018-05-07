@@ -3,7 +3,7 @@ export interface AuthInfo {
 }
 
 export interface UserAuthInfo extends AuthInfo {
-  userId: number;
+  userId: string;
   fullName: string;
   userName: string;
   roles: string[];
@@ -34,4 +34,29 @@ export interface PasswordReset {
 
 export interface PasswordKey {
   key: string;
+}
+
+export interface UseProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  photoFront: string | null;
+  photoSide: string | null;
+  photoInside: string | null;
+  driverPhoto: string | null;
+  car: Car | null;
+  notifications: Notifications | null;
+  rating: number | null;
+}
+
+export interface Car {
+  kind: string;
+  year: number;
+  model: string;
+}
+
+export interface Notifications {
+  email: boolean;
+  sms: boolean;
 }
