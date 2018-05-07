@@ -1,7 +1,7 @@
 extends layouts/base
 block content
 	-const date = moment(guestData.guest.date).format('L')
-	p Hi %recipient.firstName%,
-	p новая заявка от #{guestData.guest.name}
+	p Здравствуйте %recipient.firstName%,
+	p Новая заявка от #{guestData.guest.name}
 	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
-	p: a(href=host + '/request/' + guestData._id) Link to request submited by #{guestData.guest.name}
+	p: a(href=host + '/request/' + guestData._id) Ссылка на новую заявку

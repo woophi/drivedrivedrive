@@ -55,8 +55,8 @@ exports.sendRequest = function(req, res) {
           }).send({
             to: users,
             from: {
-              name: 'DRIVE SUKA DRIVE',
-              email: 'postmaster@sandboxdae723c3f3084598b74d3512385ba33b.mailgun.org',
+              name: 'Vettura',
+              email: 'info@km-webstudio.xyz',
             },
             subject: 'Новая заявка на трансфер',
             guestData: newRequest,
