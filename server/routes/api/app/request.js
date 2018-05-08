@@ -276,6 +276,15 @@ exports.acceptRequest = function(req, res) {
 };
 
 exports.confirmRequest = function(req, res) {
+  if (!req.user) {
+		return res.apiResponse({
+      Rstatus: -1
+    });
+	} else if (req.user && (!req.user.isAdmin || !req.user.isSuperAdmin)) {
+		return res.apiResponse({
+      Rstatus: -2
+    });
+  }
 
   function sentMail(resultRequest, price) {
 		const address = resultRequest.guest;

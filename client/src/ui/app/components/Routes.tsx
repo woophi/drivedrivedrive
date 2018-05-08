@@ -28,8 +28,7 @@ const styles = (location: Location): React.CSSProperties => ({
   width: '100%',
   position: 'relative',
   display: 'flex',
-  flexDirection: 'column',
-  minHeight: location.pathname !== '/' ? 850 : 'unset'
+  flexDirection: 'column'
 });
 
 const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (

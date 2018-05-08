@@ -41,10 +41,7 @@ class Index extends React.Component<Props & FelaProps> {
                 <p>Данные о заявки были отправлены клиенту на почту</p>
               </span>
             </div>}
-            {confirmedRequest && <div className={styles.headBox}>
-              <h1 className={styles.texts}>Данная заявка была подтверждена</h1>
-            </div>}
-            {invalidRequest &&
+            {(invalidRequest || confirmedRequest) &&
             <div className={styles.headBox}>
               <h1 className={styles.texts}>Ошибка: недействительная ссылка</h1>
             </div> }
