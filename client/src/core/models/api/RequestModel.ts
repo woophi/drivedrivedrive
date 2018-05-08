@@ -6,6 +6,8 @@ export const enum Rstatus {
   OPEN = 0,
   ASSIGNED = 1,
   CLOSED = 2,
+  PROCESS = 3,
+  INVALID = 4,
   UNAUTHORIZED = -1,
   FORBIDDEN = -2
 }
@@ -25,6 +27,12 @@ export interface NewRequest {
 }
 
 export interface AssignRequest {
-  requestPrice: number
-  requestId: string
+  requestPrice: number;
+  requestId: string;
+}
+
+export interface AcceptRequest {
+  guestPhone: string;
+  requestId: string;
+  driverId: string;
 }

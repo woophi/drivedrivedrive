@@ -16,6 +16,7 @@ export const api = {
     getRequestState: (data: apiData.GetRequest) => a<apiData.StateRequest>('request/get/state', data),
     getRequest: (requestId: string) => a<apiData.NewRequest>('request/get', { requestId }),
     assignRequest: (data: apiData.AssignRequest) => a<boolean>('request/driver/answer', data),
+    acceptRequest: (data: apiData.AcceptRequest) => a<boolean>('request/guest/answer', data)
   }
 };
 

@@ -42,7 +42,6 @@ class Index extends React.Component<Props & FelaProps> {
     const { styles, getRoles, getRequestStatus, request } = this.props;
     const openRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN;
     const assignedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED;
-    const closedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
 
     return (
         <div className={styles.container}>

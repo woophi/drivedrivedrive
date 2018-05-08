@@ -5,7 +5,8 @@ var async = require('async'),
   moment = require('moment'),
   mailFrom = require('../staticVars').mailFrom,
   Request = keystone.list('Request'),
-	Price = keystone.list('Price');
+  Price = keystone.list('Price'),
+  ObjectID = require("mongodb").ObjectID;
 
 exports.getRequestState = function(req, res) {
   if (!req.user) {
@@ -16,26 +17,67 @@ exports.getRequestState = function(req, res) {
 		return res.apiResponse({
       Rstatus: -2
     });
-	}
+  }
 
-  Request.model.findById(req.body.requestId)
-    .where('assignedBy', req.body.userId)
+  if (req.body.userId) {
+    Request.model.findById(req.body.requestId)
+      .where('assignedBy', req.body.userId)
+      .exec(function (err, result) {
+        if (err) return res.apiError(null);
+        if (!result) {
+          Request.model.findById(req.body.requestId)
+            .exec(function (err, subResult) {
+              if (err) return res.apiError(null);
+              if (subResult.accepted) return res.apiResponse({
+                Rstatus: 2
+              });
+              if (result) {
+                if (result.submitedOn) {
+                  return res.apiResponse({
+                    Rstatus: 2
+                  });
+                } else {
+                  return res.apiResponse({
+                    Rstatus: 1
+                  });
+                }
+              } else {
+                return res.apiResponse({
+                  Rstatus: 0
+                });
+              }
+            });
+        } else {
+          if (result.submitedOn) {
+            return res.apiResponse({
+              Rstatus: 2
+            });
+          } else {
+            return res.apiResponse({
+              Rstatus: 1
+            });
+          }
+        }
+      });
+  } else {
+    Request.model.findById(req.body.requestId)
     .exec(function (err, result) {
       if (err) return res.apiError(null);
-      if (result && result.submitedOn) {
+      if (result.submitedOn) {
         return res.apiResponse({
           Rstatus: 2
         });
-      } else if (result) {
+      } else if (!result.accepted && result.assignedBy && result.assignedBy.length) {
         return res.apiResponse({
-          Rstatus: 1
+          Rstatus: 3
         });
       } else {
         return res.apiResponse({
-          Rstatus: 0
+          Rstatus: 4
         });
       }
     });
+  }
 
 };
 
@@ -150,5 +192,99 @@ exports.driverOnRequest = function(req, res) {
     return res.apiResponse(true);
 
   });
+
+};
+
+function sentMail(price, requestId, host) {
+  User.model.findOne().where('isAdmin', true).exec(function(err, resultAdmin) {
+    Request.model.findById(requestId)
+      .populate('submitedOn')
+      .exec(function (err, resultRequest) {
+        console.warn('start sending mails');
+
+        const addresses = [resultRequest.submitedOn];
+
+        new keystone.Email({
+          templateName: 'accept-request-notify',
+          transport: 'mailgun',
+        }).send({
+          to: addresses,
+          from: mailFrom,
+          subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`,
+          guestData: resultRequest,
+          moment,
+          price
+        }, (e) => e && console.warn('not done', e));
+        new keystone.Email({
+          templateName: 'accept-request-notify-admin',
+          transport: 'mailgun',
+        }).send({
+          to: resultAdmin,
+          from: mailFrom,
+          subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`,
+          data: resultRequest,
+          moment,
+          price,
+          host
+        }, (e) => e && console.warn('not done', e));
+      });
+      // .then((resultRequestNext) => {
+      //   new keystone.Email({
+      //     templateName: 'accept-request-notify-admin',
+      //     transport: 'mailgun',
+      //   }).send({
+      //     to: resultAdmin,
+      //     from: mailFrom,
+      //     subject: `Трансфер ${resultRequestNext.guest.from} - ${resultRequestNext.guest.to}`,
+      //     data: resultRequestNext,
+      //     moment,
+      //     price,
+      //     host: req.headers.origin
+      //   }, (e) => e && console.warn('not done', e));
+      // });
+  });
+};
+
+exports.acceptRequest = function(req, res) {
+
+  Request.model.findById(req.body.requestId)
+    .where('assignedBy', req.body.driverId)
+    .exec(function (err, result) {
+      if (err) return res.apiError({
+        message: 'Невозможно получить данные'
+      });
+      if (result && !result.accepted) {
+        Price.model.findOne()
+          .where('submitedBy', req.body.driverId)
+          .where('assignedRequest', result._id)
+          .exec(function (err, resultPrice) {
+
+            const filterAssignedDrivers = result.assignedBy
+              .filter(i => !_.isEqual(i, new ObjectID(req.body.driverId)));
+
+            const submitedData = {
+              'submitedOn': req.body.driverId,
+              'submitedPrice': resultPrice._id,
+              'assignedBy': [],
+              'accepted': Date.now(),
+              'guest.phone': req.body.guestPhone,
+              'wasAssignedOn': [...filterAssignedDrivers]
+            };
+
+            result.getUpdateHandler(req).process(submitedData, {
+              fields: 'submitedOn, submitedPrice, assignedBy, ' +
+              'accepted, guest.phone, wasAssignedOn,',
+              flashErrors: true
+            }, function(err) {
+              if (err) return res.apiError({
+                message: 'Невозможно выбрать водителя'
+              });
+              sentMail(resultPrice.value, req.body.requestId, req.headers.origin);
+              return res.apiResponse(true);
+            });
+
+          });
+      }
+});
 
 };

@@ -51,7 +51,7 @@ exports = module.exports = function (app) {
 
 	// // Request
 	app.all('/request/:id', routes.views.index);
-	// app.all('/request/:id/accept/:driverId', routes.views.acceptRequest);
+	app.all('/request/:id/accept/:driverId', routes.views.index);
 	// app.all('/request/:id/confirm', routes.views.confirmRequest);
 	// app.all('/request/:id/rate', routes.views.rateRequest);
 
@@ -71,6 +71,7 @@ exports = module.exports = function (app) {
   app.all('/api/request/get/state', routes.api.app.request.getRequestState);
   app.all('/api/request/get', routes.api.app.request.getRequest);
   app.all('/api/request/driver/answer', routes.api.app.request.driverOnRequest);
+  app.all('/api/request/guest/answer', routes.api.app.request.acceptRequest);
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
 };

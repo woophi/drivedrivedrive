@@ -96,5 +96,15 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/request'), 'app.request')}
         />}
     </Route>
+
+    <Route exact strict path="/request/:id/accept/:driverId" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/acceptRequest'), 'app.request')}
+        />}
+    </Route>
+
   </React.Fragment>
 );

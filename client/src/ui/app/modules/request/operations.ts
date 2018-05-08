@@ -5,10 +5,10 @@ import { api, loadData } from 'core/app/api';
 
 const state = () => store.getState();
 
-export const getRequestState = async (requestId: string) => {
+export const getRequestState = async (requestId: string, noUserId?: boolean) => {
   try {
     const payload: GetRequest = {
-      userId: state().authInfo && state().authInfo.userId || '',
+      userId: noUserId ? null : state().authInfo && state().authInfo.userId || '',
       requestId
     };
     await loadData('requsetState', () => api.request.getRequestState(payload));
