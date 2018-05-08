@@ -52,6 +52,7 @@ class Index extends React.Component<Props> {
     const { isMobile } = this.props;
     return (
       <AppBar
+        style={{minHeight: 60}}
         titleStyle={{maxWidth: isMobile ? 200 : 'unset'}}
         title={this.titleChange}
         iconElementLeft={<IconButton><NavigationLogo onClick={this.handleHome} /></IconButton>}

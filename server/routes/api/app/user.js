@@ -1,6 +1,7 @@
 var async = require('async'),
 	keystone = require('keystone'),
-  User = keystone.list('User');
+  User = keystone.list('User'),
+  mailFrom = require('../staticVars').mailFrom;;
 
 exports.signin = function(req, res) {
 
@@ -297,6 +298,86 @@ exports.getProfile = function(req, res) {
       notifications: user.notifications,
       rating: user.rating && user.isActive ? user.rating.realValue : null
     });
+  });
+
+};
+
+
+exports.updateProfile = function(req, res) {
+
+  if (!req.user) {
+    return res.apiError({
+      message: 'Пользователь не найден',
+    });
+  }
+  //TODO update notifications
+
+  function checkPhoto(photo, key) {
+    if (typeof photo === 'string') {
+      return req.user[key] || null
+    } else {
+      return photo
+    }
+  }
+
+  const updatedData = {
+    'name.first': req.body.firstName,
+    'name.last': req.body.lastName,
+    'email': req.body.email,
+    'phone': req.body.phone,
+    // 'photoFront': checkPhoto(req.body.photoFront, 'photoFront'),
+    // 'photoSide': checkPhoto(req.body.photoSide, 'photoSide'),
+    // 'photoInside': checkPhoto(req.body.photoInside, 'photoInside'),
+    // 'driverPhoto': checkPhoto(req.body.driverPhoto, 'driverPhoto'),
+    'car.kind': req.body.car.kind,
+    'car.model': req.body.car.model,
+    'car.year': req.body.car.year || null
+  };
+
+  req.user.getUpdateHandler(req).process(updatedData, {
+    fields: 'name, email, phone,' +
+    'car.kind,' +
+    'car.model, car.year',
+    flashErrors: true
+  }, function(err) {
+
+    const requiredUser = (!!req.user.photoFront.public_id
+      && !!req.user.photoSide.public_id
+      && !!req.user.photoInside.public_id && !!req.user.driverPhoto.public_id
+      && !req.user.isActive && !!req.user.notifications.email
+      && !!req.user.car.model && !!req.user.car.year && !!req.user.car.kind
+      && (!req.user.isAdmin || !req.user.isSuperAdmin)
+    );
+
+    if (requiredUser) {
+      keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
+        if (err) {
+          console.error(err);
+          return res.apiError({
+            message: 'Не получилось обновить данные',
+          });
+        }
+        new keystone.Email({
+          templateName: 'admin-notify',
+          transport: 'mailgun',
+        }).send({
+          to: admins,
+          from: mailFrom,
+          subject: 'Новый водитель',
+          user: req.user,
+          host: req.headers.origin
+        }, err => err && console.error(err));
+      });
+    }
+
+    if (err) {
+      console.error(err);
+      return res.apiError({
+        message: 'Не получилось обновить данные',
+      });
+    }
+
+    return res.apiResponse();
   });
 
 };

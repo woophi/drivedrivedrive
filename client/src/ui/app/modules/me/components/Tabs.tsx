@@ -17,7 +17,7 @@ const TabsComp: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
   };
 
   return (
-    <Tabs>
+    <Tabs className={styles.container}>
       <Tab label="Данные водителя" >
         <Profile />
       </Tab>
@@ -37,7 +37,8 @@ const TabsComp: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
 };
 
 const container: FelaRule = () => ({
-
+  width: '100%',
+  height: 500
 });
 
 const mapStylesToProps = {

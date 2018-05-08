@@ -12,7 +12,8 @@ const a = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, mo
  */
 export const api = {
   user: {
-    getProfile: (data: Partial<models.UserAuthInfo>) => a<apiData.UseProfile>('user/profile', data),
+    getProfile: (data: Partial<models.UserAuthInfo>) => a<apiData.UserProfile>('user/profile', data),
+    updateProfile: (data: apiData.UserProfile) => a<null>('user/profile/update', data)
   }
 };
 

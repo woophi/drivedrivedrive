@@ -82,7 +82,7 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
             <Field
               name="phone"
               component={CustomInputField}
-              type="text"
+              type="tel"
               {...{
                 floatingLabelText: 'Номер телефона',
                 fullWidth: true
