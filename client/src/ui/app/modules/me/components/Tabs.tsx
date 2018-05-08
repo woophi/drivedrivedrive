@@ -21,7 +21,7 @@ const TabsComp: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
       <Tab label="Данные водителя" >
         <Profile />
       </Tab>
-      <Tab label="Изменить пароль" >
+      {/* <Tab label="Изменить пароль" >
         <div>
           <h2 style={headline}>Tab One</h2>
           <p>
@@ -31,7 +31,7 @@ const TabsComp: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
             You can put any sort of HTML or react component in here. It even keeps the component state!
           </p>
         </div>
-      </Tab>
+      </Tab> */}
     </Tabs>
   );
 };

@@ -77,11 +77,11 @@ class DroppingMenu extends React.Component<Props> {
             <MenuItem leftIcon={this.changeIconOnPath(<PersonAdd />, 'join')} primaryText="Регистрация" />
           </Link>
         }
-        {authInfo &&
+        {/* {authInfo &&
           <Link className={'tD-none'} to={'/request'}>
             <MenuItem leftIcon={this.changeIconOnPath(<Receipts />, 'request')} primaryText="Заявки" />
           </Link>
-        }
+        } */}
         {authInfo &&
           <Link className={'tD-none'} to={'/me'}>
             <MenuItem leftIcon={this.changeIconOnPath(<Profile />, 'me')} primaryText="Профиль" />
