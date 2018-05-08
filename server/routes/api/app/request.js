@@ -228,20 +228,6 @@ function sentMail(price, requestId, host) {
           host
         }, (e) => e && console.warn('not done', e));
       });
-      // .then((resultRequestNext) => {
-      //   new keystone.Email({
-      //     templateName: 'accept-request-notify-admin',
-      //     transport: 'mailgun',
-      //   }).send({
-      //     to: resultAdmin,
-      //     from: mailFrom,
-      //     subject: `Трансфер ${resultRequestNext.guest.from} - ${resultRequestNext.guest.to}`,
-      //     data: resultRequestNext,
-      //     moment,
-      //     price,
-      //     host: req.headers.origin
-      //   }, (e) => e && console.warn('not done', e));
-      // });
   });
 };
 
