@@ -295,7 +295,7 @@ exports.getProfile = function(req, res) {
       driverPhoto: user.driverPhoto ? user.driverPhoto.secure_url : null,
       car: user.car ? user.car : null,
       notifications: user.notifications,
-      rating: user.rating ? user.rating.realValue : null
+      rating: user.rating && user.isActive ? user.rating.realValue : null
     });
   });
 

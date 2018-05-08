@@ -5,7 +5,7 @@ import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
 import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
-import * as data from 'core/models';
+import { UseProfile } from 'core/models/api';
 // import { validateLogin, submitLogin } from './form';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -30,7 +30,7 @@ type TextFieldProps = {
   type?: string
 }
 
-class Profile extends React.Component<Props & FelaProps & InjectedFormProps<data.UseProfile, Props>> {
+class Profile extends React.Component<Props & FelaProps & InjectedFormProps<UseProfile, Props>> {
   async componentDidMount() {
     await getProfile();
   }
@@ -129,7 +129,7 @@ const mapStylesToProps = {
 export default compose (
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
-  reduxForm<data.UseProfile, Props>({
+  reduxForm<UseProfile, Props>({
     form: 'userProfile',
     enableReinitialize: true,
     destroyOnUnmount: true,
