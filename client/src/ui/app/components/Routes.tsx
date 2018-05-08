@@ -18,6 +18,7 @@ export default ReduxConnect((state: AppState) => ({
       {/* <PermissionDenied waitForAdminState> */}
         <Route component={AppRoutes} location={location} />
       {/* </PermissionDenied> */}
+      {location.pathname === '/admin' && window.location.reload()}
     </div>
   )
 );

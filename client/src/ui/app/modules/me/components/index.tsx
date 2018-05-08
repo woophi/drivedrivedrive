@@ -18,7 +18,6 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-
 class Index extends React.Component<Props & FelaProps> {
 
   render() {
@@ -27,15 +26,20 @@ class Index extends React.Component<Props & FelaProps> {
     return (
         <div className={styles.container}>
           <Paper zDepth={2}>
-            <div>
-              {admin && <NavLink to={`/admin/`} className={'mr-1'}>
-                <RaisedButton>{'Админ кабинет'}</RaisedButton>
-              </NavLink>}
-              Привет {authInfo && authInfo.fullName.toString()}, это ваш профиль!
+            <div className={styles.headBox}>
+              <span className={styles.texts}>
+                {admin && <NavLink to={`/admin`} className={'mr-1'}>
+                  <RaisedButton primary>
+                    <span style={{margin: 8}}>Админ кабинет</span>
+                  </RaisedButton>
+                </NavLink>}
+                <span>Привет {authInfo && authInfo.fullName.first}, это ваш профиль!</span>
+              </span>
               {!activeDriver &&
-                'Ваш профиль до сих пор не активен. Необходимо заполнить все поля и фото, получить разрешение от администратора, выбрать способ рассылки уведомлений.'
+                <span className={styles.texts}>
+                  Ваш профиль до сих пор не активен. Необходимо заполнить все поля и фото, получить разрешение от администратора, выбрать способ рассылки уведомлений.
+                </span>
               }
-              kek
             </div>
           </Paper>
           <TabsComp />
@@ -49,36 +53,21 @@ const container: FelaRule<Props> = () => ({
   width: '100%'
 });
 
-const form: FelaRule<Props> = () => ({
+const headBox: FelaRule<Props> = () => ({
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  fontSize: '1rem',
   padding: '1rem'
 });
 
-const heading: FelaRule<Props> = () => ({
-  alignSelf:  'flex-start'
-});
-
-const subContainer: FelaRule<Props> = () => ({
-  display:  'flex',
-  width:  '100%',
-  justifyContent: 'space-between'
-});
-
-const btnContainer: FelaRule<Props> = () => ({
-  margin: '2rem 0',
-  justifyContent: 'center',
-  display: 'flex',
-  width: '100%',
+const texts: FelaRule<Props> = () => ({
+  margin: '1rem 0'
 });
 
 const mapStylesToProps = {
   container,
-  heading,
-  form,
-  subContainer,
-  btnContainer
+  headBox,
+  texts
 };
 
 export default compose (

@@ -4,9 +4,14 @@ export interface AuthInfo {
 
 export interface UserAuthInfo extends AuthInfo {
   userId: string;
-  fullName: string;
+  fullName: FullName;
   userName: string;
   roles: string[];
+}
+
+export interface FullName {
+  first: string;
+  last: string;
 }
 
 export interface LoginInfo {
