@@ -11,7 +11,9 @@ export const enum DataStatus {
 }
 
 export type DataState = {
-  userProfile: DataStateItem<data.UserProfile>
+  userProfile: DataStateItem<data.UserProfile>,
+  requsetState: DataStateItem<data.StateRequest>,
+  selectedRequest: DataStateItem<data.NewRequest>
 };
 
 export type DataStateItem<T> = {

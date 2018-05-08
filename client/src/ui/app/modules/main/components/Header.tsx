@@ -168,7 +168,7 @@ const relativeContainer: FelaRule<Props> = () => ({
 
 const mapStylesToProps = { container, relativeContainer };
 
-export default compose (
+export default compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(Header);

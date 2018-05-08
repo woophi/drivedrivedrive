@@ -7,13 +7,15 @@ import { callApi } from 'core/shared/common';
 
 const a = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, model);
 
-/**
- * api.<CONTROLLER_NAME>.<ACTION>
- */
 export const api = {
   user: {
     getProfile: (data: Partial<models.UserAuthInfo>) => a<apiData.UserProfile>('user/profile', data),
     updateProfile: (data: apiData.UserProfile) => a<null>('user/profile/update', data)
+  },
+  request: {
+    getRequestState: (data: apiData.GetRequest) => a<apiData.StateRequest>('request/get/state', data),
+    getRequest: (requestId: string) => a<apiData.NewRequest>('request/get', { requestId }),
+    assignRequest: (data: apiData.AssignRequest) => a<boolean>('request/driver/answer', data),
   }
 };
 
@@ -106,7 +108,9 @@ const loadDataImpl = async (name: keyof apiData.DataState, apiCallerDataDelivere
 
 type DLF<N extends keyof apiData.DataState, T extends ResultType> = (name: N, apiCallerDataDeliverer: () => Promise<T>, config?: DeliveryParams<T>) => Promise<T>;
 type DataLoader =
-  DLF<'userProfile', apiData.DataState['userProfile']['result']>
+  DLF<'userProfile', apiData.DataState['userProfile']['result']> &
+  DLF<'requsetState', apiData.DataState['requsetState']['result']> &
+  DLF<'selectedRequest', apiData.DataState['selectedRequest']['result']>
   ;
 
 export const loadData: DataLoader = loadDataImpl as any;
