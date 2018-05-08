@@ -8,6 +8,7 @@ export const enum Rstatus {
   CLOSED = 2,
   PROCESS = 3,
   INVALID = 4,
+  CONFIRMED = 5,
   UNAUTHORIZED = -1,
   FORBIDDEN = -2
 }

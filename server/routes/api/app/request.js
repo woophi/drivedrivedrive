@@ -274,3 +274,65 @@ exports.acceptRequest = function(req, res) {
 });
 
 };
+
+exports.confirmRequest = function(req, res) {
+
+  function sentMail(resultRequest, price) {
+		const address = resultRequest.guest;
+
+		new keystone.Email({
+			templateName: 'confirm-request-notify',
+			transport: 'mailgun',
+		}).send({
+			to: address,
+			from: mailFrom,
+			subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to} подтвержден`,
+			data: resultRequest,
+			moment,
+			price
+		}, (e) => e && console.warn('not done', e));
+	};
+
+    Request.model.findById(req.body.requestId)
+			.populate('submitedOn')
+			.populate('submitedPrice')
+			.exec(function (err, result) {
+				if (!result.wasConfirmed) {
+
+					if (err) {
+						return res.apiError({
+              message: 'Невозможно получить данные'
+            });
+          }
+
+					const confirmedData = {
+						'wasConfirmed': true,
+						'wasConfirmedTime': Date.now()
+					};
+
+					result.getUpdateHandler(req).process(confirmedData, {
+						fields: 'wasConfirmed, wasConfirmedTime,',
+						flashErrors: true
+          }, function(err) {
+            if (err) {
+              return res.apiError({
+                message: 'Невозможно обновить данные'
+              });
+            }
+            sentMail(result, result.submitedPrice.value);
+            return res.apiResponse({
+              Rstatus: 2
+            });
+					});
+				} else if (result.wasConfirmed) {
+					return res.apiResponse({
+            Rstatus: 5
+          });
+				} else {
+					return res.apiResponse({
+            Rstatus: 4
+          });
+				}
+			});
+
+};

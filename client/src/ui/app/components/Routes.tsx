@@ -106,5 +106,14 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         />}
     </Route>
 
+    <Route exact strict path="/request/:id/confirm" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/confirmRequest'), 'app.request')}
+        />}
+    </Route>
+
   </React.Fragment>
 );
