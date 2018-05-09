@@ -312,31 +312,32 @@ exports.updateProfile = function(req, res) {
   }
   //TODO update notifications
 
-  function checkPhoto(photo, key) {
-    if (typeof photo === 'string') {
-      return req.user[key] || null
+  function checkPhoto(photo) {
+    if (!photo || typeof photo === 'string') {
+      return null;
     } else {
-      return photo
+      return photo;
     }
   }
 
-  const updatedData = {
+  let updatedData = {
     'name.first': req.body.firstName,
     'name.last': req.body.lastName,
     'email': req.body.email,
     'phone': req.body.phone,
-    // 'photoFront': checkPhoto(req.body.photoFront, 'photoFront'),
-    // 'photoSide': checkPhoto(req.body.photoSide, 'photoSide'),
-    // 'photoInside': checkPhoto(req.body.photoInside, 'photoInside'),
-    // 'driverPhoto': checkPhoto(req.body.driverPhoto, 'driverPhoto'),
     'car.kind': req.body.car.kind,
     'car.model': req.body.car.model,
     'car.year': req.body.car.year || null
   };
 
+  updatedData = checkPhoto(req.body.driverPhoto) ? { ...updatedData, 'driverPhoto': req.body.driverPhoto } : updatedData;
+  updatedData = checkPhoto(req.body.photoInside) ? { ...updatedData, 'photoInside': req.body.photoInside } : updatedData;
+  updatedData = checkPhoto(req.body.photoSide) ? { ...updatedData, 'photoSide': req.body.photoSide } : updatedData;
+  updatedData = checkPhoto(req.body.photoFront) ? { ...updatedData, 'photoFront': req.body.photoFront } : updatedData;
+
   req.user.getUpdateHandler(req).process(updatedData, {
     fields: 'name, email, phone,' +
-    'car.kind,' +
+    'car.kind, driverPhoto, photoInside, photoSide, photoFront,' +
     'car.model, car.year',
     flashErrors: true
   }, function(err) {

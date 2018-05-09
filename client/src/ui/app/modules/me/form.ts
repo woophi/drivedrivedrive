@@ -1,8 +1,11 @@
 import * as data from 'core/models/api';
 import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
-import { updateProfile, getProfile, upload } from './operations';
+import { updateProfile, getProfile, upload, clearPreSave, uploading } from './operations';
 import { resolve } from 'url';
 import { reject } from 'ramda';
+import store from 'core/shared/store';
+
+const state = () => store.getState();
 
 export const validateProfile = (values: Partial<data.UserProfile>): FormErrors<data.UserProfile> => {
   const errors = {} as FormErrors<data.UserProfile>;
@@ -35,6 +38,41 @@ function checkFile(f: any) {
   }
 }
 
+function getFileName(f: any) {
+  const re = /(?:\.([^.]+))?$/;
+  const fileName = f.name.replace(re, '');;
+  return fileName ? fileName : null;
+}
+
+function getPreSave(f: any) {
+  if (checkFile(f)) {
+    const fileName = getFileName(f);
+    const preSaveFiles = state().ui.profile.filesOnUpload;
+    if (fileName) {
+      const file = preSaveFiles.find(pf => pf.original_filename === fileName);
+      if (file) {
+        return {
+          public_id: file.public_id,
+          version: file.version,
+          signature: file.signature,
+          width: file.width,
+          height: file.height,
+          format: file.format,
+          resource_type: file.resource_type,
+          url: file.url,
+          secure_url: file.secure_url
+        }
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
 async function promiseFiles(files: any[]) {
   for (var i = 0; i < files.length; i++) {
     await upload(files[i]);
@@ -48,30 +86,28 @@ export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values:
     files = checkFile(values.photoFront) ? [ ...files, values.photoFront ] : files;
     files = checkFile(values.photoSide) ? [ ...files, values.photoSide ] : files;
     files = checkFile(values.photoInside) ? [ ...files, values.photoInside ] : files;
-    console.warn(files);
+
     if (files.length) {
-      console.warn(promiseFiles(files));
-      // promiseFiles(files)
-      //   .then((r: any) => {
-      //     const driverPhoto: any = (checkFile(values.driverPhoto) ? {
-      //       public_id: r.public_id,
-      //       version: r.version,
-      //       signature: r.signature,
-      //       width: r.width,
-      //       height: r.height,
-      //       format: r.format,
-      //       resource_type: r.resource_type,
-      //       url: r.url,
-      //       secure_url: r.secure_url
-      //     } : null);
-      //     const payload: data.UserProfile = {
-      //       ...values,
-      //       driverPhoto
-      //     };
-      //     console.warn(driverPhoto);
-      //     updateProfile(values);
-      //   })
-      //   .then(() => getProfile());
+      promiseFiles(files)
+        .then(() => {
+          const driverPhoto = getPreSave(values.driverPhoto);
+          const photoFront = getPreSave(values.photoFront);
+          const photoSide = getPreSave(values.photoSide);
+          const photoInside = getPreSave(values.photoInside);
+
+          const payload: data.UserProfile = {
+            ...values,
+            driverPhoto,
+            photoFront,
+            photoSide,
+            photoInside
+          };
+          console.warn(payload);
+          updateProfile(payload);
+        })
+        .then(() => clearPreSave())
+        .then(() => uploading(0))
+        .then(() => getProfile());
     } else {
       await updateProfile(values);
       await getProfile();

@@ -3,10 +3,10 @@ export interface UserProfile {
   lastName: string;
   email: string;
   phone: string;
-  photoFront: string | null;
-  photoSide: string | null;
-  photoInside: string | null;
-  driverPhoto: string | null;
+  photoFront: any | null;
+  photoSide: any | null;
+  photoInside: any | null;
+  driverPhoto: any | null;
   car: Car | null;
   notifications: Notifications | null;
   rating: number | null;

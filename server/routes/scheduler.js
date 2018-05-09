@@ -13,7 +13,7 @@ exports.schedulerWorker = () => {
 		prodPattern : devPattern;
 	schedule.scheduleJob(getPatternTime, async () => {
 		console.log('The answer to life, the universe, and everything!');
-		await sendEmailToPastRequests();
+		// await sendEmailToPastRequests();
 	});
 }
 

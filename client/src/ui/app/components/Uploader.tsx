@@ -40,23 +40,23 @@ class UploadComponent extends React.Component<Props & FelaProps, LocalState> {
     if (!files.length) {
       this.setState({err: 'Максимальный размер файла 2 Мб, допускаются форматы .png,.jpg,.jpeg'})
     } else {
+      this.props.filedProps.input.onChange(files[0]);
       this.setState({
         files,
         filePreviewUrl: (files[0] as any).preview,
         err: null
       });
-      this.props.filedProps.input.onChange(files[0])
     }
   }
 
   handleRemove = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
+    this.props.filedProps.input.onChange(this.props.filedProps.meta.initial);
     this.setState({
       files: [],
       filePreviewUrl: this.props.filedProps.meta.initial || this.props.exampleFile
     });
-    this.props.filedProps.input.onChange(this.props.filedProps.meta.initial);
   }
 
   get renderPreview() {

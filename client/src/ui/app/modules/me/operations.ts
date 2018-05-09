@@ -2,6 +2,7 @@ import store from 'core/shared/store';
 import { UserAuthInfo } from 'core/models';
 import { UserProfile } from 'core/models/api';
 import { api, loadData } from 'core/app/api';
+import { ProfileDispatch, FileCloud } from './types';
 
 const state = () => store.getState();
 
@@ -18,9 +19,11 @@ export const getProfile = async () => {
 
 export const updateProfile = (data: UserProfile) => api.user.updateProfile(data);
 
-/**
- * @param setContent
- */
+const fileToPreSave = (payload: FileCloud) => store.dispatch({ type: 'user/upload/file', payload } as ProfileDispatch);
+export const clearPreSave = () => store.dispatch({ type: 'user/upload/clear' } as ProfileDispatch);
+
+export const uploading = (payload: number) => store.dispatch({ type: 'user/upload/progress', payload } as ProfileDispatch);
+
 export const upload = (file: File) => {
 
 
@@ -36,29 +39,16 @@ export const upload = (file: File) => {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
     xhr.upload.addEventListener('progress', e => {
-      // store.dispatch({ type: 'admin/files/uploadProgress', payload: e.loaded / e.total } as FilesDispatch);
       const progress = Math.round((e.loaded * 100.0) / e.total);
-
-      console.log(`fileuploadprogress data.loaded: ${e.loaded},
-      data.total: ${e.total}`);
+      uploading(progress)
     });
 
     xhr.onreadystatechange = function(e) {
       if (xhr.readyState == 4 && xhr.status == 200) {
-        console.warn();
         // File uploaded successfully
         var response = JSON.parse(xhr.responseText);
-        // https://res.cloudinary.com/cloudName/image/upload/v1483481128/public_id.jpg
-        var url = response.secure_url;
-        // Create a thumbnail of the uploaded image, with 150px width
-        var tokens = url.split('/');
-        tokens.splice(-2, 0, 'w_150,c_scale');
-        var img = new Image(); // HTML5 Constructor
-        img.src = tokens.join('/');
-        img.alt = response.public_id;
-        // document.getElementById('gallery').appendChild(img);
+        fileToPreSave(response);
         resolve();
-        console.warn(response);
       }
     };
 
