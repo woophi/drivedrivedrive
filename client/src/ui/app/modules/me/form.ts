@@ -102,7 +102,6 @@ export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values:
             photoSide,
             photoInside
           };
-          console.warn(payload);
           updateProfile(payload);
         })
         .then(() => clearPreSave())

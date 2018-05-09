@@ -1,5 +1,6 @@
 import * as common from 'core/shared/common';
 import * as models from 'core/models';
+import { checkAuth } from './login';
 
 function sendRequestParams(requestParams: models.RequestInfo): Promise<boolean> {
   return common.callApi<any>('/api/sendRequest', requestParams)
@@ -17,6 +18,10 @@ export async function newTransferRequest(requestParams: models.RequestInfo) {
   }
 }
 
-export function registerNewUser(userParams: models.NewUser): Promise<null> {
-  return common.callApi<any>('/api/user/join', userParams);
+export function registerNewUser(userParams: models.NewUser): Promise<boolean> {
+  return common.callApi<any>('/api/user/join', userParams)
+  .then(async r => {
+    await checkAuth();
+    return r;
+  });
 }

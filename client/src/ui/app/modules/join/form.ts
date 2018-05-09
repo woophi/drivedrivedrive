@@ -1,6 +1,7 @@
 import * as data from 'core/models';
 import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
 import { registerNewUser } from 'core/app/request';
+import { changeUrl } from 'ui/app/operations';
 
 export const validateNewUser = (values: Partial<data.NewUser>): FormErrors<data.NewUser> => {
   const errors = {} as FormErrors<data.NewUser>;
@@ -33,8 +34,10 @@ export const validateNewUser = (values: Partial<data.NewUser>): FormErrors<data.
 
 export const submitNewUser: FormSubmitHandler<data.NewUser> = async (values: data.NewUser, dispatch) => {
   try {
-    await registerNewUser(values);
+    await registerNewUser(values)
+      .then(() => changeUrl('/me'));
     await dispatch(reset('newUser'));
+
   } catch (e) {
     throw new SubmissionError({  _error: e.error.message || e });
   }
