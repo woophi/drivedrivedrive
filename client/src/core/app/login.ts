@@ -19,7 +19,6 @@ export async function login(token: string) {
   console.debug('Logging in…');
 
   const authResult = await common.callApi<models.UserAuthInfo>('/api/user/auth', postData).then(re => re, err => {
-    // TODO: var msg = i18n.t('loginModal.loginFailed');
     const msg = 'fail';
 
     store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: msg });

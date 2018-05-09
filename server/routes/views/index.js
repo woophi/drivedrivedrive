@@ -39,7 +39,6 @@ exports = module.exports = function (req, res) {
 		async.series([
 
 			function(cb) {
-				// TODO: check if already exists
 				newRequest.save(function(err) {
 					return cb(err);
 				});

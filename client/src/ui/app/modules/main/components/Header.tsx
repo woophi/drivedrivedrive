@@ -5,7 +5,6 @@ import { returntypeof } from 'react-redux-typescript';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton  from 'material-ui/IconButton';
-import * as FlipMove from 'react-flip-move';
 import { connect as ReduxConnect } from 'react-redux';
 
 type OwnProps = {

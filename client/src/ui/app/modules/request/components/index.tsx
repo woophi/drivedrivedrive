@@ -42,6 +42,8 @@ class Index extends React.Component<Props & FelaProps> {
     const { styles, getRoles, getRequestStatus, request } = this.props;
     const openRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN;
     const assignedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED;
+    const closedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
+    const invalidRequset = getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
 
     return (
         <div className={styles.container}>
@@ -55,9 +57,12 @@ class Index extends React.Component<Props & FelaProps> {
                 <p>количество человек {request.count}</p>
                 {request.comment && <p>комментарий {request.comment}</p>}
               </span>
-            </div> ||
-            <div className={styles.headBox}>
+            </div>}
+            {closedRequest && <div className={styles.headBox}>
               <h1 className={styles.texts}>заявка была закрыта</h1>
+            </div>}
+            {invalidRequset && <div className={styles.headBox}>
+              <h1 className={styles.texts}>Ошибка: недействительная ссылка</h1>
             </div>}
           </Paper>
           {(openRequest || assignedRequest) &&

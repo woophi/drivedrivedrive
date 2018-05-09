@@ -9,6 +9,8 @@ export const enum Rstatus {
   PROCESS = 3,
   INVALID = 4,
   CONFIRMED = 5,
+  RATED = 6,
+  RATING = 7,
   UNAUTHORIZED = -1,
   FORBIDDEN = -2
 }
@@ -16,6 +18,7 @@ export const enum Rstatus {
 export interface GetRequest {
   requestId: string;
   userId: string;
+  forDriver?: boolean;
 }
 
 export interface NewRequest {
@@ -36,4 +39,12 @@ export interface AcceptRequest {
   guestPhone: string;
   requestId: string;
   driverId: string;
+}
+
+export interface RateRequest {
+  requestId: string;
+  ratingTrip: number;
+  ratingCar: number;
+  ratingDriver: number;
+  ratingComment: string;
 }

@@ -53,7 +53,7 @@ exports = module.exports = function (app) {
 	app.all('/request/:id', routes.views.index);
 	app.all('/request/:id/accept/:driverId', routes.views.index);
 	app.all('/request/:id/confirm', routes.views.index);
-	// app.all('/request/:id/rate', routes.views.index);
+	app.all('/request/:id/rate?', routes.views.index);
 
   // API
   app.all('/api*', keystone.middleware.api);
@@ -73,6 +73,8 @@ exports = module.exports = function (app) {
   app.all('/api/request/driver/answer', routes.api.app.request.driverOnRequest);
   app.all('/api/request/guest/answer', routes.api.app.request.acceptRequest);
   app.all('/api/request/confirm', routes.api.app.request.confirmRequest);
+  app.all('/api/request/rate', routes.api.app.request.rateRequest);
+  app.all('/api/request/get/rate', routes.api.app.request.getRequestToRate);
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
 };

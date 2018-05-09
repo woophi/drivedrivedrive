@@ -8,7 +8,6 @@ require('moment');
 require('react');
 require('react-dom');
 require('react-fela');
-require('react-flip-move');
 require('react-virtualized');
 require('react-redux');
 require('redux-logger');

@@ -17,7 +17,9 @@ export const api = {
     getRequest: (requestId: string) => a<apiData.NewRequest>('request/get', { requestId }),
     assignRequest: (data: apiData.AssignRequest) => a<boolean>('request/driver/answer', data),
     acceptRequest: (data: apiData.AcceptRequest) => a<boolean>('request/guest/answer', data),
-    confirmRequest: (requestId: string) => a<apiData.StateRequest>('request/confirm', { requestId })
+    confirmRequest: (requestId: string) => a<apiData.StateRequest>('request/confirm', { requestId }),
+    getRequestToRate: (requestId: string, query: number) => a<apiData.StateRequest>('request/get/rate', { requestId, query }),
+    rateRequest: (data: apiData.RateRequest) => a<boolean>('request/rate', data),
   }
 };
 
@@ -49,7 +51,7 @@ const loadDataImpl = async (name: keyof apiData.DataState, apiCallerDataDelivere
   let timeout: number = null;
   switch (store.getState().ui.api[name].status) {
     case (apiData.DataStatus.FETCHING || apiData.DataStatus.QUIET_FETCHING): {
-      throw new Error('Unable to call: Already fetching data'); // TODO: without thowing
+      throw new Error('Unable to call: Already fetching data');
     }
 
     case (apiData.DataStatus.UPDATING): {

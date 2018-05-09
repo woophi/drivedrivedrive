@@ -1,7 +1,7 @@
 var async = require('async'),
 	keystone = require('keystone'),
   User = keystone.list('User'),
-  mailFrom = require('../staticVars').mailFrom;;
+  mailFrom = require('../staticVars').mailFrom;
 
 exports.signin = function(req, res) {
 

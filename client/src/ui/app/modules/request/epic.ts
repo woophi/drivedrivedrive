@@ -11,7 +11,7 @@ const checkRequestStatus: Epic<any, AppState> = (action$, store) => action$
   .filter(d => d.type === 'api/data/setResult' && d.name === 'requsetState')
   .do((dispatch) => {
     const payload = dispatch.payload;
-    console.warn(payload);
+
     if (payload.Rstatus === Rstatus.UNAUTHORIZED) {
       changeUrl('/signin');
     } else if (payload.Rstatus === Rstatus.FORBIDDEN) {

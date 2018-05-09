@@ -1,5 +1,6 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
+var mailFrom = require('../routes/api/staticVars').mailFrom;
 
 /**
  * User Model
@@ -72,10 +73,7 @@ User.schema.methods.resetPassword = function(req, res, next) {
 			transport: 'mailgun',
 		}).send({
 			to: user.email,
-			from: {
-				name: 'DRIVE SUKA DRIVE',
-				email: 'postmaster@sandboxdae723c3f3084598b74d3512385ba33b.mailgun.org',
-			},
+			from: mailFrom,
 			subject: 'Сброс пароля',
 			user: user,
 			link: '/reset-password/' + user.resetPasswordKey,
