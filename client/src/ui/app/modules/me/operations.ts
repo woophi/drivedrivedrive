@@ -32,8 +32,8 @@ export const upload = (file: File) => {
 
 
   return new Promise((resolve, reject) => {
-    const url = `https://api.cloudinary.com/v1_1/dqbo8zk4k/upload`;
-    const unsignedUploadPreset = 'h0uihgmr';
+    const url = `https://api.cloudinary.com/v1_1/vettura/upload`; //dqbo8zk4k
+    const unsignedUploadPreset = 'redigyrf'; // 'h0uihgmr';
 
     const fd = new FormData();
 
