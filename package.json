@@ -1,6 +1,6 @@
 {
-  "name": "my-site",
-  "version": "0.0.0",
+  "name": "vettura-app",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "heroku-prebuild": "yarn build:client && yarn build:server",
