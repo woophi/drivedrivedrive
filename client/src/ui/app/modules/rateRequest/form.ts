@@ -19,7 +19,7 @@ export const validateRR = (values: Partial<RateRequest>): FormErrors<RateRequest
     errors.ratingTrip = 'Пожалуйста, поставьте оценку';
   }
 
-  if (values && (values.ratingTrip <= 1 || values.ratingDriver <= 1 || values.ratingCar <= 1)) {
+  if (values && (values.ratingTrip <= 4 || values.ratingDriver <= 4 || values.ratingCar <= 4)) {
     errors.ratingComment = 'Пожалуйста, напишите, что Вам не понравилось';
   }
 
