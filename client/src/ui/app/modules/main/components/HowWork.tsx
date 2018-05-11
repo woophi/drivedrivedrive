@@ -34,12 +34,24 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
     }
   }
 
+  defaultState = this.state;
+  timeOut: NodeJS.Timer = null;
+
   componentDidUpdate(prevProps: Props, prevState: LocalState) {
     const keys = Object.keys(this.state.boxes);
     const hiddenBoxes = keys.filter(k => !this.state.boxes[Number(k)]);
-    if (hiddenBoxes.length && !equals(this.state.boxes, prevState.boxes)) {
+    if (hiddenBoxes.length && hiddenBoxes.length <= 6 && !equals(this.state.boxes, prevState.boxes)) {
       this.awaitAnimation(true);
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeOut);
+  }
+
+  clearAnimation = () => {
+    clearTimeout(this.timeOut);
+    this.setState(this.defaultState);
   }
 
   changeStateOfBoxes = () => {
@@ -59,11 +71,14 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
   awaitAnimation = (visible: boolean) => {
     const keys = Object.keys(this.state.boxes);
     const hiddenBoxes = keys.filter(k => !this.state.boxes[Number(k)]);
-    if (!visible) return;
+    if (!visible) {
+      this.clearAnimation();
+      return;
+    };
     if (!this.state.boxes[1]) {
         this.changeStateOfBoxes();
     } else if (hiddenBoxes.length) {
-      setTimeout(this.changeStateOfBoxes, 1000);
+      this.timeOut = setTimeout(this.changeStateOfBoxes, 1000);
     }
   }
 
