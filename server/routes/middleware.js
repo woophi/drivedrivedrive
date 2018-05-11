@@ -41,6 +41,16 @@ exports.requireUser = function (req, res, next) {
 	}
 };
 
+exports.enforceHttps = function (req, res, next) {
+  if (!req.secure &&
+    req.get("x-forwarded-proto") !== "https" &&
+    process.env.NODE_ENV === "production") {
+    res.redirect(301, `https://${req.get("host")}${req.url}`);
+  } else {
+    next();
+  }
+}
+
 const mobileCheck = req => {
 	const md = new MobileDetect(req.headers['user-agent']);
 	keystone.set('locals', {

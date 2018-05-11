@@ -34,7 +34,8 @@ var routes = {
 
 // Setup Route Bindings
 exports = module.exports = function (app) {
-	scheduler.schedulerWorker();
+  scheduler.schedulerWorker();
+  app.use(middleware.enforceHttps);
 
 	// Views
   app.all('/', routes.views.index);
