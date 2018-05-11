@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { compose } from 'redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
+import { handlePoints } from '../../operations';
+import { HandlePoints } from '../../types';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 type OwnProps = {
@@ -10,25 +12,30 @@ const Points: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
   const DRGESDEN = require('../../../../../assets/dresden.gif');
   const KARLOVY_VARY = require('../../../../../assets/vary.gif');
   const VENA = require('../../../../../assets/vienna.gif');
+
+  const handleDresden = () => handlePoints(HandlePoints.p_d);
+  const handleVary = () => handlePoints(HandlePoints.p_kv);
+  const handleVena = () => handlePoints(HandlePoints.p_v);
+
   return (
     <div className={styles.container}>
       <div className={styles.box1}>
         <img className={styles.img} src={DRGESDEN} alt="dresden flag"/>
         <span className={styles.mainTitle}>ПРАГА - ДРЕЗДЕН</span>
         <span className={styles.text}>Всего 90 минут пути до одного из крупнейших центров культуры Германии</span>
-        <button className={styles.button}>Узнать цену</button>
+        <button onClick={handleDresden} className={styles.button}>Узнать цену</button>
       </div>
       <div className={styles.box2}>
         <img className={styles.img} src={KARLOVY_VARY} alt="karlovy vary flag"/>
         <span className={styles.mainTitle} style={{color: '#4CC89A'}}>ПРАГА - КАРЛОВЫ ВАРЫ</span>
         <span className={styles.text}>Один из самых популярных маршрутов из Праги в город-курорт Карловы Вары</span>
-        <button className={styles.button}>Узнать цену</button>
+        <button onClick={handleVary} className={styles.button}>Узнать цену</button>
       </div>
       <div className={styles.box3}>
         <img className={styles.img} src={VENA} alt="vena flag"/>
         <span className={styles.mainTitle} style={{color: '#4CC89A'}}>ПРАГА - ВЕНА</span>
         <span className={styles.text}>Вена - культурная столица Европы. Всего в 3,5 часах от Праги</span>
-        <button className={styles.button}>Узнать цену</button>
+        <button onClick={handleVena} className={styles.button}>Узнать цену</button>
       </div>
       <div className={styles.box4}>
         <i className={`fas fa-map-marker-alt ${styles.icon}`} />

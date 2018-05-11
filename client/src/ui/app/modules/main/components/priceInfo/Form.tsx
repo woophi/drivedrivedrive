@@ -27,7 +27,8 @@ type TextFieldProps = {
   styleInput?: React.CSSProperties;
   styleLable?: React.CSSProperties;
   additionalClassName?: string;
-  required?: boolean
+  required?: boolean;
+  id?: string;
 }
 
 class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.RequestInfo, Props>> {
@@ -49,6 +50,7 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
           placeholder={props.placeHodler || ''}
           style={props.styleInput || {}}
           required={props.required || false}
+          id={props.id || ''}
         />
       </div>
     )
@@ -66,7 +68,8 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
             type="text"
             label={'Имя'}
             {...{
-              required: true
+              required: true,
+              id: 'guest_name_input'
             }}
           />
           <Field

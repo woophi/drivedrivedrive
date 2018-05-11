@@ -1,7 +1,8 @@
-import { GuestDispatch, GuestState } from './types';
+import { GuestDispatch, GuestState, HandlePoints } from './types';
 
 const defaultState: GuestState = {
-  guestSubmitForm: false
+  guestSubmitForm: false,
+  handlePoint: HandlePoints.none
 };
 
 export const reducer = (state = defaultState, dispatch: GuestDispatch): GuestState => {
@@ -10,6 +11,11 @@ export const reducer = (state = defaultState, dispatch: GuestDispatch): GuestSta
       return {
         ...state,
         guestSubmitForm: dispatch.payload
+      };
+    case 'guest/handlePoint':
+      return {
+        ...state,
+        handlePoint: dispatch.payload
       };
 
     default:
