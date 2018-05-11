@@ -41,8 +41,7 @@ keystone.set('locals', {
 	editable: keystone.content.editable,
 	moment: require('moment'),
 	host: (function() {
-		if (keystone.get('env') === 'staging') return 'http://drivedrivedrive.herokuapp.com';
-		if (keystone.get('env') === 'production') return 'http://drivedrivedrive.herokuapp.com';
+		if (keystone.get('env') === 'production') return 'https://www.vettura.eu';
 		return 'http://localhost:3000';
 	})(),
 	isMobile: false
