@@ -2,7 +2,8 @@ import { ProfileDispatch, ProfileState } from './types';
 
 const defaultState: ProfileState = {
   filesOnUpload: [],
-  uploadProgress: 0
+  uploadProgress: 0,
+  handleSubmitting: false
 };
 
 export const reducer = (state = defaultState, dispatch: ProfileDispatch): ProfileState => {
@@ -24,7 +25,13 @@ export const reducer = (state = defaultState, dispatch: ProfileDispatch): Profil
       return {
         ...state,
         uploadProgress: dispatch.payload
+      };
+    case 'user/upload/submitting':
+      return {
+        ...state,
+        handleSubmitting: dispatch.payload
       }
+
 
     default:
       return state;

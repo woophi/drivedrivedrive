@@ -24,6 +24,8 @@ export const clearPreSave = () => store.dispatch({ type: 'user/upload/clear' } a
 
 export const uploading = (payload: number) => store.dispatch({ type: 'user/upload/progress', payload } as ProfileDispatch);
 
+export const handleSubmitting = (payload: boolean) => store.dispatch({ type: 'user/upload/submitting', payload } as ProfileDispatch);
+
 export const upload = (file: File) => {
 
 

@@ -1,6 +1,7 @@
 export type ProfileState = {
   filesOnUpload: Array<FileCloud>;
   uploadProgress: number;
+  handleSubmitting: boolean;
 };
 
 export type FileCloud = {
@@ -26,4 +27,5 @@ export type ProfileDispatch =
   | { type: 'user/upload/file', payload: FileCloud }
   | { type: 'user/upload/clear' }
   | { type: 'user/upload/progress', payload: number }
+  | { type: 'user/upload/submitting', payload: boolean }
 ;

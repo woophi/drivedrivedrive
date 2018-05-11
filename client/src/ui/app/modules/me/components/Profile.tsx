@@ -29,7 +29,8 @@ const CarInside = require('../../../../assets/inside.jpg');
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
   fetchProfile: state.ui.api.userProfile.status === DataStatus.QUIET_FETCHING,
-  initialValues: state.ui.api.userProfile.result
+  initialValues: state.ui.api.userProfile.result,
+  handleSubmitting: state.ui.profile.handleSubmitting
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -65,7 +66,7 @@ class Profile extends React.Component<Props & FelaProps & InjectedFormProps<User
   }
 
   render() {
-    const { styles, handleSubmit, error, pristine, submitting, fetchProfile } = this.props;
+    const { styles, handleSubmit, error, pristine, submitting, fetchProfile, handleSubmitting } = this.props;
     return (
         <Paper className={styles.container} zDepth={2}>
           <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
@@ -168,8 +169,8 @@ class Profile extends React.Component<Props & FelaProps & InjectedFormProps<User
             />
             <Progress />
             <div className={styles.btnContainer}>
-              <RaisedButton type="submit" primary disabled={pristine || submitting}>
-                {submitting ? <i className="fas fa-circle-notch fa-spin" /> : 'Сохранить'}
+              <RaisedButton type="submit" primary disabled={handleSubmitting || pristine || submitting}>
+                {(submitting || handleSubmitting) ? <i className="fas fa-circle-notch fa-spin" /> : 'Сохранить'}
               </RaisedButton>
             </div>
           </form>

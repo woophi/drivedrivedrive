@@ -1,6 +1,6 @@
 import * as data from 'core/models/api';
 import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
-import { updateProfile, getProfile, upload, clearPreSave, uploading } from './operations';
+import * as operations from './operations';
 import { resolve } from 'url';
 import { reject } from 'ramda';
 import store from 'core/shared/store';
@@ -75,12 +75,13 @@ function getPreSave(f: any) {
 
 async function promiseFiles(files: any[]) {
   for (var i = 0; i < files.length; i++) {
-    await upload(files[i]);
+    await operations.upload(files[i]);
   }
 }
 
 export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values: data.UserProfile, dispatch) => {
   try {
+    operations.handleSubmitting(true);
     let files: any[] = []
     files = checkFile(values.driverPhoto) ? [ values.driverPhoto ] : [];
     files = checkFile(values.photoFront) ? [ ...files, values.photoFront ] : files;
@@ -102,14 +103,16 @@ export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values:
             photoSide,
             photoInside
           };
-          updateProfile(payload);
+          operations.updateProfile(payload);
         })
-        .then(() => clearPreSave())
-        .then(() => uploading(0))
-        .then(() => getProfile());
+        .then(() => operations.clearPreSave())
+        .then(() => operations.uploading(0))
+        .then(() => operations.handleSubmitting(false))
+        .then(() => operations.getProfile());
     } else {
-      await updateProfile(values);
-      await getProfile();
+      await operations.updateProfile(values);
+      await operations.handleSubmitting(false);
+      await operations.getProfile();
     }
 
   } catch (e) {
