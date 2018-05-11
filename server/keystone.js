@@ -11,8 +11,7 @@ var keystone = require('keystone');
 
 keystone.init({
 	'name': 'VETTURA',
-  'brand': 'VETTURA',
-  'frame guard': false,
+	'brand': 'VETTURA',
 
 	'static': 'public',
 	'favicon': 'public/favicon.ico',
@@ -25,7 +24,7 @@ keystone.init({
 	'session': true,
 	'auth': true,
 	'user model': 'User',
-  'admin path' : 'admin',
+	'admin path' : 'admin',
 });
 
 // Load your project's Models
