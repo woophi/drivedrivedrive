@@ -107,8 +107,8 @@ export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values:
         })
         .then(() => operations.clearPreSave())
         .then(() => operations.uploading(0))
-        .then(() => operations.handleSubmitting(false))
-        .then(() => operations.getProfile());
+        .then(() => operations.getProfile())
+        .then(() => operations.handleSubmitting(false));
     } else {
       await operations.updateProfile(values);
       await operations.handleSubmitting(false);

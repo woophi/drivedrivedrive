@@ -164,6 +164,7 @@ const img: FelaRule<Props> = props => ({
   height: '100%',
   margin: 'auto',
   borderRadius: '.5rem',
+  maxWidth: 320,
   ...props.theme.mobile({
     width: 'inherit',
     marginTop: 5,
