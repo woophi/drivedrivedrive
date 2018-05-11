@@ -51,7 +51,7 @@ class Profile extends React.Component<Props & FelaProps & InjectedFormProps<User
   customImgFieldDriver = (props: WrappedFieldProps) => <Uploader filedProps={props} labelName={'Фото водителя'} />
   customImgFieldCarFront = (props: WrappedFieldProps) => <Uploader filedProps={props} exampleFile={CarFront} labelName={'Фото спереди'} />
   customImgFieldCarSide = (props: WrappedFieldProps) => <Uploader filedProps={props} exampleFile={CarSide} labelName={'Фото сбоку'} />
-  customImgFieldCarInside = (props: WrappedFieldProps) => <Uploader filedProps={props} exampleFile={CarFront} labelName={'Фото внутри'} />
+  customImgFieldCarInside = (props: WrappedFieldProps) => <Uploader filedProps={props} exampleFile={CarInside} labelName={'Фото внутри'} />
 
   customToggleField = (props: WrappedFieldProps & TextFieldProps) => {
     return (
