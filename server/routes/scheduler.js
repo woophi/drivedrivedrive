@@ -65,7 +65,7 @@ const sendEmailToPastRequests = async () => {
                     .where('assignedRequest', request._id)
                     .exec(function (err, resultRating) {
                       if (err) return cb(err);
-                      console.warn(resultRating);
+
                       const submitedData = {
                         'assignedRating': resultRating._id,
                         'assignedRatingTime': new Date().getTime()

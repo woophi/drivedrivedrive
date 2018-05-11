@@ -4,13 +4,16 @@ var async = require('async'),
   mailFrom = require('../staticVars').mailFrom;
 
 exports.signin = function(req, res) {
+  const email = req.body.email.toLowerCase();
 
   async.series([
 
     function(cb) {
-
-      User.model.findOne().where('email', req.body.email).exec(function(err, user) {
-        if (err) return res.apiError(err);
+      User.model.findOne().where('email', email).exec(function(err, user) {
+        if (err) {
+          console.error(err);
+          return res.apiError({message: "Извините, пользователь не найден" });
+        }
         if (!user) {
           return res.apiError({message: "Извините, пользователь не найден" });
         } else {
@@ -18,7 +21,10 @@ exports.signin = function(req, res) {
           if (result.resetPasswordKey) {
             result.resetPasswordKey = '';
             result.save(function(err) {
-              if (err) return cb(err);
+              if (err) {
+                console.error(err);
+                return cb(err);
+              }
               return cb();
             });
           } else {
@@ -29,16 +35,16 @@ exports.signin = function(req, res) {
     }
   ], function(err) {
 
-    keystone.session.signin({ email: req.body.email, password: req.body.secret }, req, res, function(user) {
+    keystone.session.signin({ email, password: req.body.secret }, req, res, function(user) {
 
       return res.apiResponse({
         token: user._id
       });
 
     }, function(err) {
-
+      console.error(err);
       return res.apiError({
-        message: (err && err.message ? err.message : false) || 'Sorry, there was an issue signing you in, please try again.'
+        message: 'Извините, не удалось зайти, пожалуйста попробуйте снова.'
       });
 
     });
@@ -50,8 +56,9 @@ exports.auth = function(req, res) {
   User.model.findById(req.body.token).exec(function(err, user) {
 
 		if (err || !user) {
+      console.error(err);
 			return res.apiError({
-				message: (err && err.message ? err.message : false) || 'Sorry, there was an issue signing you in, please try again.'
+				message: 'Авторизация не удалась'
 			});
 		} else {
       let roles = [];
@@ -93,6 +100,7 @@ exports.checkAuth = function(req, res) {
 
 exports.register = function(req, res) {
   const user = req.user;
+  const email = req.body.email.toLowerCase();
 
   if (req.user) {
 		return res.redirect(req.cookies.target || '/me');
@@ -102,9 +110,9 @@ exports.register = function(req, res) {
 
     function(cb) {
 
-      if (!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.password || !req.body.phone) {
+      if (!req.body.firstname || !req.body.lastname || !email || !req.body.password || !req.body.phone) {
         return res.apiError({
-          message: (err && err.message ? err.message : false) || 'Все поля обязательны к заполнению'
+          message: 'Все поля обязательны к заполнению'
         });
       }
 
@@ -114,17 +122,18 @@ exports.register = function(req, res) {
 
     function(cb) {
 
-      User.model.findOne({ email: req.body.email }, function(err, user) {
+      User.model.findOne({ email }, function(err, user) {
 
         if (err) {
+          console.error(err);
           return res.apiError({
-            message: (err && err.message ? err.message : false) || 'Пользователь с таким email уже существует'
+            message: 'Пользователь с таким email уже существует'
           });
         }
 
         if (user) {
           return res.apiError({
-            message: (err && err.message ? err.message : false) || 'Пользователь с таким email уже существует'
+            message: 'Пользователь с таким email уже существует'
           });
         }
 
@@ -141,7 +150,7 @@ exports.register = function(req, res) {
           first: req.body.firstname,
           last: req.body.lastname,
         },
-        email: req.body.email,
+        email,
         password: req.body.password,
         phone: req.body.phone
       };
@@ -151,8 +160,9 @@ exports.register = function(req, res) {
 
       newUser.save(function(err) {
         if (err) {
+          console.error(err);
           return res.apiError({
-            message: (err && err.message ? err.message : false) || 'Ошибка при регистрации нового пользователя'
+            message: 'Ошибка при регистрации нового пользователя'
           });
         }
         return cb();
@@ -163,8 +173,9 @@ exports.register = function(req, res) {
   ], function(err){
 
     if (err) {
+      console.error(err);
       return res.apiError({
-        message: (err && err.message ? err.message : false) || 'Что-то пошло не так, попробуйте снова'
+        message: 'Что-то пошло не так, попробуйте снова'
       });
     }
 
@@ -173,12 +184,13 @@ exports.register = function(req, res) {
     }
 
     var onFail = function(e) {
+      console.error(e);
       return res.apiError({
-        message: (err && err.message ? err.message : false) || 'Что-то пошло не так, попробуйте снова'
+        message: 'Что-то пошло не так, попробуйте снова'
       });
     }
 
-    keystone.session.signin({ email: req.body.email, password: req.body.password }, req, res, onSuccess, onFail);
+    keystone.session.signin({ email, password: req.body.password }, req, res, onSuccess, onFail);
 
   });
 };
@@ -186,8 +198,9 @@ exports.register = function(req, res) {
 exports.signout = function(req, res) {
   keystone.session.signout(req, res, function(err) {
 		if (err) {
+      console.error(err);
       return res.apiError({
-        message: (err && err.message ? err.message : false) || 'Что-то пошло не так, попробуйте снова'
+        message: 'Что-то пошло не так, попробуйте снова'
       });
     }
     return res.apiResponse(true);
@@ -195,11 +208,14 @@ exports.signout = function(req, res) {
 };
 
 exports.forgotPassword = function(req, res) {
-
-  User.model.findOne().where('email', req.body.email).exec(function(err, user) {
-    if (err) return res.apiError({
-      message: 'Пользователь с таким email не существует'
-    });
+  const email = req.body.email.toLowerCase();
+  User.model.findOne().where('email', email).exec(function(err, user) {
+    if (err) {
+      console.error(err);
+      return res.apiError({
+        message: 'Пользователь с таким email не существует'
+      });
+    }
 
     if (!user) {
       return res.apiError({
@@ -209,6 +225,7 @@ exports.forgotPassword = function(req, res) {
 
     user.resetPassword(req, res, function(err) {
       if (err) {
+        console.error(err);
         return res.apiError({
           message: 'Не удалось сбросить пароль'
         });
@@ -230,18 +247,24 @@ exports.resetPassword = function(req, res) {
   }
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
-    if (err) return res.apiError({
-      message: 'Ссылка для сброса пароля недействительна'
-    });
+    if (err) {
+      console.error(err);
+      return res.apiError({
+        message: 'Ссылка для сброса пароля недействительна'
+      });
+    }
     if (!user) {
       return res.apiError({
         message: 'Ссылка для сброса пароля недействительна'
       });
     }
     user.save(function(err) {
-      if (err) return res.apiError({
-        message: 'Не удалось сбросить пароль'
-      });
+      if (err) {
+        console.error(err);
+        return res.apiError({
+          message: 'Не удалось сбросить пароль'
+        });
+      }
       return res.apiResponse(true);
     });
 
@@ -250,7 +273,7 @@ exports.resetPassword = function(req, res) {
       let result = user;
       result.resetPasswordKey = '';
       result.save(function(err) {
-        if (err) console.warn(err);
+        if (err) console.error(err);
       });
     });
 
@@ -259,10 +282,13 @@ exports.resetPassword = function(req, res) {
 exports.getPasswordKey = function(req, res) {
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
-    if (err) return res.apiError({
-      message: 'Ссылка для сброса пароля недействительна',
-      status: false
-    });
+    if (err) {
+      console.error(err);
+      return res.apiError({
+        message: 'Ссылка для сброса пароля недействительна',
+        status: false
+      });
+    }
     if (!user) {
       return res.apiError({
         message: 'Ссылка для сброса пароля недействительна',
@@ -279,7 +305,10 @@ exports.getPasswordKey = function(req, res) {
 exports.getProfile = function(req, res) {
 
   User.model.findById(req.body.userId).exec(function(err, user) {
-    if (err) return res.apiError(null);
+    if (err) {
+      console.error(err);
+      return res.apiError(null);
+    }
     if (!user) {
       return res.apiError({
         message: 'Пользователь не найден',
@@ -304,7 +333,7 @@ exports.getProfile = function(req, res) {
 
 
 exports.updateProfile = function(req, res) {
-
+  const email = req.body.email.toLowerCase();
   if (!req.user) {
     return res.apiError({
       message: 'Пользователь не найден',
@@ -323,7 +352,7 @@ exports.updateProfile = function(req, res) {
   let updatedData = {
     'name.first': req.body.firstName,
     'name.last': req.body.lastName,
-    'email': req.body.email,
+    'email': email,
     'phone': req.body.phone,
     'car.kind': req.body.car.kind,
     'car.model': req.body.car.model,

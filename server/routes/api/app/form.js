@@ -32,9 +32,12 @@ exports.sendRequest = function(req, res) {
 
     function(cb) {
       newRequest.save(function(err) {
-        if (err) return res.apiError({
-          message: (err && err.message ? err.message : false) || 'Проблема создать новый запрос.'
-        });
+        if (err) {
+          console.error(err);
+          return res.apiError({
+            message: 'Проблема создать новый запрос.'
+          });
+        }
         return cb();
       });
 
@@ -44,8 +47,9 @@ exports.sendRequest = function(req, res) {
 
       User.model.find().where('isActive', true).exec(function(err, users) {
         if (err) {
+          console.error(err);
           return res.apiError({
-            message: (err && err.message ? err.message : false) || 'Неудалось найти водителей.'
+            message: 'Неудалось найти водителей.'
           });
         }
 
@@ -72,9 +76,12 @@ exports.sendRequest = function(req, res) {
 
   ], function(err){
 
-    if (err) return res.apiError({
-      message: (err && err.message ? err.message : false) || 'Что-то пошло не так... попробуйте еще раз'
-    });
+    if (err) {
+      console.error(err);
+      return res.apiError({
+        message: (err && err.message ? err.message : false) || 'Что-то пошло не так... попробуйте еще раз'
+      });
+    }
 
     return res.apiResponse(true);
 
