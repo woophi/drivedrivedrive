@@ -278,7 +278,7 @@ const modalText: FelaRule = () => ({
   margin: '1rem',
   fontSize: '19px',
   letterSpacing: '1px',
-  color: 'black',
+  color: '#fff',
 })
 
 const mapStylesToProps = {
