@@ -13,17 +13,15 @@ var Rating = new keystone.List('Rating', {
 Rating.add({
 	hashId: { type: String, index: true, default: Math.random().toString(36).slice(-8), noedit: true },
 	values: {
-		trip: { type: Number },
-		driver: { type: Number },
-		car: { type: Number }
+		trip: { type: Number, label: 'Поездка' },
+		driver: { type: Number, label: 'Водитель' },
+		car: { type: Number, label: 'Машина' }
 	},
-	comment: { type: String, noedit: true },
-	open: { type: Types.Datetime },
-	closed: { type: Types.Datetime },
-	assignedRequest: { type: Types.Relationship, ref: 'Request', index: true }
+	comment: { type: String, noedit: true, label: 'Комментарий' },
+	open: { type: Types.Datetime, label: 'Рейтинг отправлен' },
+	closed: { type: Types.Datetime, label: 'Рейтинг назначен' },
+	assignedRequest: { type: Types.Relationship, ref: 'Request', index: true, label: 'Оцененная заявка' }
 });
-
-// Rating.relationship({ ref: 'Request', path: 'assigned', refPath: 'assignedRating' });
 
 Rating.defaultColumns = 'hashId, assignedRequest';
 Rating.register();
