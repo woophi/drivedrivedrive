@@ -2,6 +2,7 @@ export type ProfileState = {
   filesOnUpload: Array<FileCloud>;
   uploadProgress: number;
   handleSubmitting: boolean;
+  unauthPath: string;
 };
 
 export type FileCloud = {
@@ -28,4 +29,5 @@ export type ProfileDispatch =
   | { type: 'user/upload/clear' }
   | { type: 'user/upload/progress', payload: number }
   | { type: 'user/upload/submitting', payload: boolean }
+  | { type: 'user/unauth/path', payload: string }
 ;

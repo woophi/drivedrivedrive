@@ -26,6 +26,8 @@ export const uploading = (payload: number) => store.dispatch({ type: 'user/uploa
 
 export const handleSubmitting = (payload: boolean) => store.dispatch({ type: 'user/upload/submitting', payload } as ProfileDispatch);
 
+export const saveUnauthPath = (payload: string) => store.dispatch({ type: 'user/unauth/path', payload } as ProfileDispatch);
+
 export const upload = (file: File) => {
 
 

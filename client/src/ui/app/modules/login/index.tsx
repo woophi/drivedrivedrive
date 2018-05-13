@@ -15,7 +15,8 @@ import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 
 const mapStateToProps = (state: AppState) => ({
-  authInfo: state.authInfo
+  authInfo: state.authInfo,
+  unauthPath: state.ui.profile.unauthPath
 });
 
 const StateProps = returntypeof(mapStateToProps);

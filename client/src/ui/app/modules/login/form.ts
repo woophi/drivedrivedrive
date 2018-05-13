@@ -2,6 +2,11 @@ import * as data from 'core/models';
 import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
 import { loginSecret } from 'core/app/login';
 import { changeUrl } from 'ui/app/operations';
+import { saveUnauthPath } from 'ui/app/modules/me/operations';
+
+type SharedProps = {
+  unauthPath: string
+}
 
 export const validateLogin = (values: Partial<data.LoginInfo>): FormErrors<data.LoginInfo> => {
   const errors = {} as FormErrors<data.LoginInfo>;
@@ -18,11 +23,16 @@ export const validateLogin = (values: Partial<data.LoginInfo>): FormErrors<data.
   return errors;
 };
 
-export const submitLogin: FormSubmitHandler<data.LoginInfo> = async (values: data.LoginInfo, dispatch) => {
+export const submitLogin: FormSubmitHandler<data.LoginInfo> = async (values: data.LoginInfo, dispatch, props: SharedProps) => {
   try {
     await loginSecret(values);
     await dispatch(reset('login'));
-    changeUrl(`/me`);
+    if (props.unauthPath) {
+      changeUrl(props.unauthPath);
+      saveUnauthPath('');
+    } else {
+      changeUrl(`/me`);
+    }
   } catch (e) {
     console.debug('wtf', e);
     throw new SubmissionError({  _error: e.error.message });
