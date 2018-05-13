@@ -20,6 +20,7 @@ export const api = {
     confirmRequest: (requestId: string) => a<apiData.StateRequest>('request/confirm', { requestId }),
     getRequestToRate: (requestId: string, query: number) => a<apiData.StateRequest>('request/get/rate', { requestId, query }),
     rateRequest: (data: apiData.RateRequest) => a<boolean>('request/rate', data),
+    getRequestStateToAccept: (data: apiData.GetRequest) => a<apiData.StateRequest>('request/get/accept/state', data),
   }
 };
 

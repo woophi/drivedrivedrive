@@ -9,8 +9,7 @@ export const getRequestState = async (requestId: string, noUserId?: boolean) => 
   try {
     const payload: GetRequest = {
       userId: noUserId ? null : state().authInfo && state().authInfo.userId || '',
-      requestId,
-      forDriver: !noUserId
+      requestId
     };
     await loadData('requsetState', () => api.request.getRequestState(payload));
   } catch (error) {

@@ -17,8 +17,7 @@ export const enum Rstatus {
 
 export interface GetRequest {
   requestId: string;
-  userId: string;
-  forDriver?: boolean;
+  userId?: string;
 }
 
 export interface NewRequest {

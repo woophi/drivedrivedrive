@@ -10,70 +10,54 @@ var async = require('async'),
   Rating = keystone.list('Rating');
 
 exports.getRequestState = function(req, res) {
-  if (!req.user && req.body.forDriver) {
+  if (!req.user) {
 		return res.apiResponse({
       Rstatus: -1
     });
-	} else if (req.user && !req.user.isActive && req.body.forDriver) {
+	} else if (req.user && !req.user.isActive) {
 		return res.apiResponse({
       Rstatus: -2
     });
   }
 
-  if (req.body.userId) {
-    Request.model.findById(req.body.requestId)
-      .where('assignedBy', req.body.userId)
-      .exec(function (err, result) {
-        if (err) {
-          console.error(err);
-          return res.apiResponse({
-            Rstatus: 4
-          });
-        }
-        if (!result) {
-          Request.model.findById(req.body.requestId)
-            .exec(function (err, subResult) {
-              if (err) {
-                console.error(err);
-                return res.apiResponse({
-                  Rstatus: 4
-                });
-              }
-              if (subResult && subResult.accepted) return res.apiResponse({
-                Rstatus: 2
-              });
-              if (result) {
-                if (result.submitedOn) {
-                  return res.apiResponse({
-                    Rstatus: 2
-                  });
-                } else {
-                  return res.apiResponse({
-                    Rstatus: 1
-                  });
-                }
-              } else {
-                return res.apiResponse({
-                  Rstatus: 0
-                });
-              }
-            });
-        } else {
-          if (result && result.submitedOn) {
-            return res.apiResponse({
-              Rstatus: 2
-            });
-          } else {
-            return res.apiResponse({
-              Rstatus: 1
-            });
-          }
-        }
-      });
-  } else {
-    Request.model.findById(req.body.requestId)
+  Request.model.findById(req.body.requestId)
     .exec(function (err, result) {
-      if (err) {
+      if (err || !result) {
+        console.error(err);
+        return res.apiResponse({
+          Rstatus: 4
+        });
+      }
+
+      const findAssignedDriver = result.assignedBy
+              .find(i => _.isEqual(i, new ObjectID(req.body.userId)));
+
+      if (result.submitedOn && !result.wasConfirmed) {
+        return res.apiResponse({
+          Rstatus: 2
+        });
+      } else if (findAssignedDriver) {
+        return res.apiResponse({
+          Rstatus: 1
+        });
+      } else if (result.wasConfirmed) {
+        return res.apiResponse({
+          Rstatus: 4
+        });
+      } else {
+        return res.apiResponse({
+          Rstatus: 0
+        });
+      }
+    });
+
+
+};
+
+exports.getRequestToAccept = function(req, res) {
+  Request.model.findById(req.body.requestId)
+    .exec(function (err, result) {
+      if (err || !result) {
         console.error(err);
         return res.apiResponse({
           Rstatus: 4
@@ -93,8 +77,6 @@ exports.getRequestState = function(req, res) {
         });
       }
     });
-  }
-
 };
 
 exports.getRequest = function(req, res) {

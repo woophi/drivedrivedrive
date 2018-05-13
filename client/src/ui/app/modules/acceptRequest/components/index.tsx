@@ -6,7 +6,7 @@ import * as React from 'react';
 import { compose } from 'redux';
 import Paper from 'material-ui/Paper';
 import { getRequestId } from '../selectors';
-import { getRequestState, getRequest } from 'ui/app/modules/request/operations';
+import { getRequestState, } from '../operations';
 import { Rstatus } from 'core/models/api';
 import * as moment from 'moment';
 import Form from './Form';
@@ -23,7 +23,7 @@ class Index extends React.Component<Props & FelaProps> {
 
   async componentDidMount() {
     if (this.props.requestId) {
-      await getRequestState(this.props.requestId, true);
+      await getRequestState(this.props.requestId);
     }
   }
 
@@ -31,6 +31,7 @@ class Index extends React.Component<Props & FelaProps> {
     const { styles, getRequestStatus } = this.props;
     const processRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.PROCESS;
     const closedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
+    const invalidRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
 
     return (
         <div className={styles.container}>
@@ -49,10 +50,11 @@ class Index extends React.Component<Props & FelaProps> {
                 <p>Ваш отклик отправлен водителю.</p>
                 <p>В ближайшее время Вам на почту придет подтверждение трансфера с деталями.</p>
               </span>
-            </div> || !processRequest &&
-            <div className={styles.headBox}>
-              <h1 className={styles.texts}>Ошибка недействительная ссылка или заявка была закрыта</h1>
             </div>}
+            {invalidRequest &&
+              <div className={styles.headBox}>
+                <h1 className={styles.texts}>Ошибка: недействительная ссылка или заявка была закрыта</h1>
+              </div>}
           </Paper>
         </div>
     );
