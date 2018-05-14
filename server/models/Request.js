@@ -32,7 +32,8 @@ Request.add({
 	wasConfirmedTime: { type: Types.Datetime, noedit: true, label: 'Время подтверждения' },
   assignedRating: { type: Types.Relationship, ref: 'Rating', noedit: true, label: 'Назначенный рейтинг' },
   assignedRatingTime: { type: Number, noedit: true, hidden: true },
-	rated: { type: Boolean, default: false, noedit: true, label: 'Заявка оценена'  }
+	rated: { type: Boolean, default: false, noedit: true, label: 'Заявка оценена' },
+	notified: { type: Date, noedit: true, label: 'Отправлено уведомление' }
 });
 
 Request.relationship({ ref: 'Price', path: 'prices', refPath: 'assignedRequest' });

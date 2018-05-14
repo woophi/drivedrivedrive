@@ -1,0 +1,17 @@
+extends layouts/basecard
+block content
+	div.padding1rem
+		-const date = moment(request.guest.date).format('L')
+		h1 Напоминание о предстоящей поездки
+		p#cardP Здравствуйте, #{request.submitedOn.name.first}
+		p#cardP Напоминаем Вам, что завтра состоится поездка
+		div#bodyCard.padding1rem
+			h2 Данные трансфера
+			p#cardP Клиент - #{request.guest.name}
+			p#cardP поедет из #{request.guest.from} в #{request.guest.to}
+			p#cardP количество пассажиров #{request.guest.count}
+			p#cardP цена #{request.submitedPrice.value} €(евро)
+			p#cardP дата #{date}, время #{request.guest.time}
+			if request.guest.comment
+				p#cardP Комментарий: #{request.guest.comment}
+			p#cardP Номер телефона: #{request.guest.phone}
