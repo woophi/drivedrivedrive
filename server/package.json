@@ -12,6 +12,9 @@
     "pug": "2.0.3"
   },
   "scripts": {
-    "start": "node keystone.js"
+    "start": "nodemon keystone.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }

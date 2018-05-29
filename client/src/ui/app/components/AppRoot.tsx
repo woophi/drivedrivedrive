@@ -49,7 +49,7 @@ const container: FelaRule<Props> = () => ({
 });
 const mapStylesToProps = { container };
 
-export default compose (
+export default compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(Main);

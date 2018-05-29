@@ -1,4 +1,3 @@
-// / <binding ProjectOpened='Watch - Development' />
 import * as path from 'path';
 import * as webpack from 'webpack';
 import { Configuration as wdsConfiguration } from 'webpack-dev-server';
@@ -13,14 +12,12 @@ const threadPool = HappyPack.ThreadPool({ size: TsCheckerPlugin.ONE_CPU_FREE, id
 const devServer: wdsConfiguration = {
   port: 3001,
   https: true,
-  // hot: true,
   disableHostCheck: true,
   headers: { 'Access-Control-Allow-Origin': '*' },
   contentBase: path.resolve(__dirname, '../server/public')
 };
 
 const tsLoaders = [
-  // 'react-hot-loader/webpack',
   {
     loader: 'ts-loader',
     options: {
@@ -131,9 +128,6 @@ const config: webpack.Configuration = {
     // }),
     new ExtractTextPlugin('css/[name].css'),
     new webpack.IgnorePlugin(/\blocale.*/, /\bmoment\b/),
-
-    // new webpack.HotModuleReplacementPlugin(),
-    // new webpack.NamedModulesPlugin(),
 
     new TsCheckerPlugin({
       checkSyntacticErrors: true,

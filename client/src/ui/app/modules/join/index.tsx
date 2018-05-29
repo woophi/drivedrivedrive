@@ -1,12 +1,12 @@
+import * as data from 'core/models';
 import { AppState } from 'core/models/app';
-import { connect as ReduxConnect } from 'react-redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
 import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
-import * as data from 'core/models';
-import { validateNewUser, submitNewUser } from './form';
+import { connect as ReduxConnect } from 'react-redux';
+import { submitNewUser, validateNewUser } from './form';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -27,7 +27,7 @@ type TextFieldProps = {
   floatingLabelText?: string;
   errorText?: string;
   type?: string
-}
+};
 
 class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.NewUser, Props>> {
   componentDidMount() {
@@ -102,7 +102,6 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
   }
 }
 
-
 const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
     <TextField
       {...props.input}
@@ -131,7 +130,6 @@ const form: FelaRule<Props> = () => ({
 const heading: FelaRule<Props> = () => ({
   alignSelf:  'flex-start'
 });
-
 
 const btnContainer: FelaRule<Props> = () => ({
   margin: '2rem 0',
