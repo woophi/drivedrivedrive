@@ -14,6 +14,10 @@
   "scripts": {
     "start": "nodemon keystone.js"
   },
+  "nodemonConfig": {
+    "ignore": ["public/*"],
+    "delay": "2500"
+  },
   "devDependencies": {
     "nodemon": "^1.17.5"
   }
