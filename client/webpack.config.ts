@@ -95,23 +95,6 @@ const config: webpack.Configuration = {
         test: /\.(mov|mp4)$/,
         loader: 'file-loader?name=videos/[name].[ext]?[md5:hash:base62]',
       },
-      {
-        test: /\.(scss)$/,
-        use: [
-          'style-loader', // Inject CSS to page.
-          'css-loader', // Translates CSS into CommonJS modules.
-          {
-            loader: 'postcss-loader', // Run post css actions.
-            options: {
-              plugins: () => [// Post css plugins, can be exported to postcss.config.js
-                require('precss'),
-                require('autoprefixer')
-              ]
-            }
-          },
-          'sass-loader' // Compiles Sass to CSS.
-        ]
-      },
     ]
   },
   externals: {},
