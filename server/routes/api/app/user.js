@@ -11,18 +11,16 @@ exports.signin = function(req, res) {
     function(cb) {
       User.model.findOne().where('email', email).exec(function(err, user) {
         if (err) {
-          console.error(err);
-          return res.apiError({message: "Извините, пользователь не найден" });
+          return res.apiError({message: "Извините, пользователь не найден" }, '', err, 500);
         }
         if (!user) {
-          return res.apiError({message: "Извините, пользователь не найден" });
+          return res.apiError({message: "Извините, пользователь не найден" }, '', err, 403);
         } else {
           let result = user;
           if (result.resetPasswordKey) {
             result.resetPasswordKey = '';
             result.save(function(err) {
               if (err) {
-                console.error(err);
                 return cb(err);
               }
               return cb();
@@ -42,10 +40,9 @@ exports.signin = function(req, res) {
       });
 
     }, function(err) {
-      console.error(err);
       return res.apiError({
         message: 'Извините, не удалось зайти, пожалуйста попробуйте снова.'
-      });
+      }, '', err, 400);
 
     });
   });
@@ -56,7 +53,7 @@ exports.auth = function(req, res) {
   User.model.findById(req.body.token).exec(function(err, user) {
 
 		if (err || !user) {
-      console.error(err);
+      console.error(JSON.stringify(err));
 			return res.apiError({
 				message: 'Авторизация не удалась'
 			});
@@ -125,7 +122,7 @@ exports.register = function(req, res) {
       User.model.findOne({ email }, function(err, user) {
 
         if (err) {
-          console.error(err);
+          console.error(JSON.stringify(err));
           return res.apiError({
             message: 'Пользователь с таким email уже существует'
           });
@@ -160,7 +157,7 @@ exports.register = function(req, res) {
 
       newUser.save(function(err) {
         if (err) {
-          console.error(err);
+          console.error(JSON.stringify(err));
           return res.apiError({
             message: 'Ошибка при регистрации нового пользователя'
           });
@@ -173,7 +170,7 @@ exports.register = function(req, res) {
   ], function(err){
 
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError({
         message: 'Что-то пошло не так, попробуйте снова'
       });
@@ -198,7 +195,7 @@ exports.register = function(req, res) {
 exports.signout = function(req, res) {
   keystone.session.signout(req, res, function(err) {
 		if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError({
         message: 'Что-то пошло не так, попробуйте снова'
       });
@@ -211,7 +208,7 @@ exports.forgotPassword = function(req, res) {
   const email = req.body.email.toLowerCase();
   User.model.findOne().where('email', email).exec(function(err, user) {
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError({
         message: 'Пользователь с таким email не существует'
       });
@@ -225,7 +222,7 @@ exports.forgotPassword = function(req, res) {
 
     user.resetPassword(req, res, function(err) {
       if (err) {
-        console.error(err);
+        console.error(JSON.stringify(err));
         return res.apiError({
           message: 'Не удалось сбросить пароль'
         });
@@ -248,7 +245,7 @@ exports.resetPassword = function(req, res) {
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError({
         message: 'Ссылка для сброса пароля недействительна'
       });
@@ -260,7 +257,7 @@ exports.resetPassword = function(req, res) {
     }
     user.save(function(err) {
       if (err) {
-        console.error(err);
+        console.error(JSON.stringify(err));
         return res.apiError({
           message: 'Не удалось сбросить пароль'
         });
@@ -273,7 +270,7 @@ exports.resetPassword = function(req, res) {
       let result = user;
       result.resetPasswordKey = '';
       result.save(function(err) {
-        if (err) console.error(err);
+        if (err) console.error(JSON.stringify(err));
       });
     });
 
@@ -283,7 +280,7 @@ exports.getPasswordKey = function(req, res) {
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError({
         message: 'Ссылка для сброса пароля недействительна',
         status: false
@@ -306,7 +303,7 @@ exports.getProfile = function(req, res) {
 
   User.model.findById(req.body.userId).exec(function(err, user) {
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError(null);
     }
     if (!user) {
@@ -382,7 +379,7 @@ exports.updateProfile = function(req, res) {
     if (requiredUser) {
       keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
         if (err) {
-          console.error(err);
+          console.error(JSON.stringify(err));
           return res.apiError({
             message: 'Не получилось обновить данные',
           });
@@ -396,12 +393,12 @@ exports.updateProfile = function(req, res) {
           subject: 'Новый водитель',
           user: req.user,
           host: req.headers.origin
-        }, err => err && console.error(err));
+        }, err => err && console.error(JSON.stringify(err)));
       });
     }
 
     if (err) {
-      console.error(err);
+      console.error(JSON.stringify(err));
       return res.apiError({
         message: 'Не получилось обновить данные',
       });
