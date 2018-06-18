@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "heroku-prebuild": "yarn build:client && yarn build:server",
-    "build:client": "cd client && yarn --force && yarn build",
-    "build:server": "cd server && yarn --force",
-    "start": "yarn start:client && yarn start:server",
+    "build:client": "cd client && yarn && yarn build",
+    "build:server": "cd server && yarn",
     "start:client": "cd client && yarn start",
     "start:server": "cd server && yarn start"
   },
