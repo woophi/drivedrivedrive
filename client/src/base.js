@@ -10,7 +10,6 @@ require('react-dom');
 require('react-fela');
 require('react-virtualized');
 require('react-redux');
-require('redux-logger');
 require('redux-observable');
 require('tslib');
 require('react-custom-scrollbars');
