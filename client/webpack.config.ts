@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import { Configuration as wdsConfiguration } from 'webpack-dev-server';
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
+import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as TsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
 import * as HappyPack from 'happypack';
 
@@ -58,15 +58,6 @@ const config: webpack.Configuration = {
         loader: 'happypack/loader?id=js-svg'
       },
       {
-        test: /\.json$/,
-        loader: 'happypack/loader?id=json'
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'happypack/loader?id=ts',
-      },
-      {
         test: require.resolve('webpack-require-weak'),
         loader: 'happypack/loader?id=ts'
       },
@@ -77,7 +68,7 @@ const config: webpack.Configuration = {
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'happypack/loader?id=css' })
+        use: [ MiniCssExtractPlugin.loader, "happypack/loader?id=css" ]
       },
       {
         test: /\.(png|gif|jpg|jpeg)$/,
@@ -109,8 +100,10 @@ const config: webpack.Configuration = {
     //   generateStatsFile: true,
     //   openAnalyzer: false
     // }),
-    new ExtractTextPlugin('css/[name].css'),
-    new webpack.IgnorePlugin(/\blocale.*/, /\bmoment\b/),
+    new MiniCssExtractPlugin({
+      filename: "css/[name].css",
+      chunkFilename: "css/[id].css"
+    }),
 
     new TsCheckerPlugin({
       checkSyntacticErrors: true,
@@ -141,11 +134,6 @@ const config: webpack.Configuration = {
           }
         }
       ]
-    }),
-    new HappyPack({
-      id: 'json',
-      loaders: ['json-loader'],
-      threadPool
     }),
     new HappyPack({
       id: 'css',
