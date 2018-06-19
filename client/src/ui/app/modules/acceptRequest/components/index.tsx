@@ -8,7 +8,6 @@ import Paper from 'material-ui/Paper';
 import { getRequestId } from '../selectors';
 import { getRequestState, } from '../operations';
 import { Rstatus } from 'core/models/api';
-import * as moment from 'moment';
 import Form from './Form';
 
 const mapStateToProps = (state: AppState) => ({
