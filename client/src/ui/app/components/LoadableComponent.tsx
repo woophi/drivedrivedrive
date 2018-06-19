@@ -12,27 +12,27 @@ type LoadableComponentProps = {
   loader: any,
   visibility: boolean,
   props?: any,
-}
+};
 
 type LoadableComponentState = {
   loaded: boolean,
   error: Error | null;
   errorInfo: React.ErrorInfo | null;
-}
+};
 
 class LoadableComponent extends React.Component<LoadableComponentProps, LoadableComponentState> {
-  component: any = (): null => null;
   state: LoadableComponentState = {
     loaded: false,
     error: null,
     errorInfo: null
-  }
+  };
+  component: any = (): null => null;
 
   loadComponent = () => {
     this.component = Loadable({
       loader: this.props.loader,
       loading: Loading
-    })
+    });
   }
 
   componentDidMount() {

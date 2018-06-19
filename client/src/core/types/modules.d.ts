@@ -1,4 +1,3 @@
-declare module 'react-loadable';
 declare module 'react-spring';
 declare module 'react-visibility-sensor';
 

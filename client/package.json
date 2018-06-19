@@ -13,7 +13,7 @@
     "@types/node": "^10.3.4",
     "@types/react-custom-scrollbars": "^4.0.1",
     "@types/react-dom": "^16.0.3",
-    "@types/react-loadable": "4.0.1",
+    "@types/react-loadable": "^5.4.0",
     "@types/react-router": "^4.0.19",
     "@types/react-router-dom": "^4.2.3",
     "@types/react-router-redux": "^5.0.10",
@@ -70,7 +70,7 @@
     "react-dropzone": "^4.2.9",
     "react-fela": "5.0.3",
     "react-hint": "^3.1.0",
-    "react-loadable": "4.0.5",
+    "react-loadable": "^5.4.0",
     "react-rating": "^1.1.2",
     "react-redux": "^5.0.3",
     "react-redux-typescript": "^2.3.0",
@@ -89,6 +89,7 @@
     "reselect": "^3.0.1",
     "rxjs": "5.5.11",
     "ts-node": "4.1.0",
-    "tslib": "^1.9.0"
+    "tslib": "^1.9.0",
+    "webpack-require-weak": "^1.0.1"
   }
 }
