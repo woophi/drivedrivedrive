@@ -9,9 +9,9 @@
     core-js "^2.5.6"
     regenerator-runtime "^0.11.1"
 
-"@reactivex/rxjs@^5.1.1":
-  version "5.5.10"
-  resolved "https://registry.yarnpkg.com/@reactivex/rxjs/-/rxjs-5.5.10.tgz#d055fea58cac2809eeedcd7750e034301a42fdc8"
+"@reactivex/rxjs@5.5.11":
+  version "5.5.11"
+  resolved "https://registry.yarnpkg.com/@reactivex/rxjs/-/rxjs-5.5.11.tgz#52c478c26b47ed74f4357b0f7cfa74cc06cf6689"
   dependencies:
     symbol-observable "1.0.1"
 
@@ -76,9 +76,9 @@
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.0.0.tgz#c40f8e07dce607d3ef25a626b93a6a7cdcf97881"
 
-"@types/node@^8.9.1":
-  version "8.10.10"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.10.tgz#fec07bc2ad549d9e6d2f7aa0fb0be3491b83163a"
+"@types/node@^10.3.4":
+  version "10.3.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.4.tgz#c74e8aec19e555df44609b8057311052a2c84d9e"
 
 "@types/prop-types@*":
   version "15.5.2"
@@ -5254,9 +5254,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rxjs@^5.4.1:
-  version "5.5.10"
-  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.10.tgz#fde02d7a614f6c8683d0d1957827f492e09db045"
+rxjs@5.5.11:
+  version "5.5.11"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-5.5.11.tgz#f733027ca43e3bec6b994473be4ab98ad43ced87"
   dependencies:
     symbol-observable "1.0.1"
 
@@ -5812,7 +5812,7 @@ ts-loader@^2.1.0:
     loader-utils "^1.0.2"
     semver "^5.0.1"
 
-ts-node@^4.1.0:
+ts-node@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-4.1.0.tgz#36d9529c7b90bb993306c408cd07f7743de20712"
   dependencies:

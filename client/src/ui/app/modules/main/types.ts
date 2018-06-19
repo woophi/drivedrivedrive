@@ -12,5 +12,7 @@ export const enum HandlePoints {
 
 export type GuestDispatch =
   | { type: 'guest/changeFormState', payload: boolean }
-  | { type: 'guest/handlePoint', payload: HandlePoints }
+  | HandlePointAction
 ;
+
+export type HandlePointAction = { type: 'guest/handlePoint', payload: HandlePoints };

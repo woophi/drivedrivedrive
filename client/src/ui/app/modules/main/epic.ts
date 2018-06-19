@@ -1,14 +1,10 @@
-import { AppState } from 'core/models/app';
-import { Epic, combineEpics } from 'redux-observable';
-import 'rxjs/add/operator/ignoreElements';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import { HandlePoints } from './types';
+import { AppDispatch, AppState } from 'core/models/app';
+import { combineEpics, Epic } from 'redux-observable';
+import { HandlePointAction, HandlePoints } from './types';
 
-
-const checkGuestClickShit: Epic<any, AppState> = (action$, store) => action$
+const checkGuestClickShit: Epic<AppDispatch, AppState> = (action$, store) => action$
   .filter(d => d.type === 'guest/handlePoint')
-  .do((dispatch) => {
+  .do((dispatch: HandlePointAction) => {
     const payload = dispatch.payload;
     const metaFrom = {
       form: "newRequest",
@@ -30,10 +26,10 @@ const checkGuestClickShit: Epic<any, AppState> = (action$, store) => action$
       store.dispatch({ type: '@@redux-form/CHANGE', meta: metaTo, payload: 'Дрезден' });
     } else if (payload === HandlePoints.p_kv) {
 
-      store.dispatch({ type: '@@redux-form/CHANGE', meta: metaTo, payload: 'Карловы Вары' })
+      store.dispatch({ type: '@@redux-form/CHANGE', meta: metaTo, payload: 'Карловы Вары' });
     } else if (payload === HandlePoints.p_v) {
 
-      store.dispatch({ type: '@@redux-form/CHANGE', meta: metaTo, payload: 'Вена' })
+      store.dispatch({ type: '@@redux-form/CHANGE', meta: metaTo, payload: 'Вена' });
     }
     const nameInput = document.getElementById('guest_name_input');
     if (nameInput) {
