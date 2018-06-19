@@ -1,12 +1,12 @@
+import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
 import { AppState } from 'core/models/app';
-import { connect as ReduxConnect } from 'react-redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
-import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
+import { connect as ReduxConnect } from 'react-redux';
 import * as data from 'core/models';
-import { validateRequest, submitRequest } from '../../form';
+import { submitRequest, validateRequest } from '../../form';
 import { Alert } from 'ui/app/components/Alert';
 import { parseToInt } from 'ui/shared/transforms';
 import IconButton  from 'material-ui/IconButton';
@@ -23,13 +23,14 @@ type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 type TextFieldProps = {
   type: string;
+  label: string;
   placeHodler?: string;
   styleInput?: React.CSSProperties;
   styleLable?: React.CSSProperties;
   additionalClassName?: string;
   required?: boolean;
   id?: string;
-}
+};
 
 class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.RequestInfo, Props>> {
 
@@ -53,7 +54,7 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
           id={props.id || ''}
         />
       </div>
-    )
+    );
   }
 
   componentForm = () => {
@@ -148,7 +149,7 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
           </button>
         </form>
       </React.Fragment>
-    )
+    );
   }
 
   get componentModal() {
@@ -165,7 +166,7 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
           </span>
         </div>
       </div>
-    )
+    );
   }
 
   handleClose = () => triggerForm(false);
@@ -242,7 +243,7 @@ const inputSt: FelaRule<Props> = () => ({
 const errInputSt: FelaRule<Props> = () => ({
   ...inputSt(),
   borderColor: ' #cc0000',
-})
+});
 
 const buttonSt: FelaRule<Props> = props => ({
   ...props.theme.items.flatButton,
@@ -279,7 +280,7 @@ const modalText: FelaRule = () => ({
   fontSize: '19px',
   letterSpacing: '1px',
   color: '#fff',
-})
+});
 
 const mapStylesToProps = {
   container,
