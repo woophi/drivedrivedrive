@@ -65,7 +65,7 @@
     "material-ui": "^0.20.0",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.11",
-    "ramda": "^0.24.0",
+    "ramda": "^0.25.0",
     "react": "^16.4.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.4.0",
