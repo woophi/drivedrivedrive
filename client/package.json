@@ -55,7 +55,7 @@
     "@types/react-virtualized": "^9.7.6",
     "@types/redux-form": "7.2.0",
     "@types/redux-logger": "^3.0.0",
-    "axios": "^0.15.3",
+    "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.5.7",
     "es6-promise": "^4.2.4",
