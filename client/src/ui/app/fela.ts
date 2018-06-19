@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { createRenderer } from 'fela';
-import embedded from 'fela-plugin-embedded';
+import * as embedded from 'fela-plugin-embedded';
 import webPreset from 'fela-preset-web';
 import { driveTheme } from 'ui/shared/driveUI';
 
@@ -9,7 +9,7 @@ export function configureFela(mountNodeId: string) {
 
   const renderer = createRenderer({
     selectorPrefix: 'f_',
-    plugins: [...webPreset, embedded()],
+    plugins: [...webPreset, embedded.default() ],
     mediaQueryOrder: [
       'screen and (max-width: 1440px)',
       'screen and (max-width: 768px)'
@@ -100,7 +100,7 @@ export function configureFela(mountNodeId: string) {
   }, '.ovh');
   renderer.renderStatic({
     textDecoration: 'none'
-  }, '.tD-none')
+  }, '.tD-none');
 
   return { renderer, mountNode };
 }
