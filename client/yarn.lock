@@ -4747,9 +4747,9 @@ react-fela@5.0.3:
     fela-dom "^5.0.2"
     prop-types "^15.5.8"
 
-react-hint@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-hint/-/react-hint-3.0.1.tgz#8ec6848708469d5da99a5035054bfb5b4257c050"
+react-hint@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-hint/-/react-hint-3.1.0.tgz#d90269a875ab805c1510e7490bdbbbed189e6ce8"
 
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
