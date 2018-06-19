@@ -58,7 +58,7 @@
     "axios": "^0.15.3",
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.5.1",
-    "es6-promise": "^4.1.0",
+    "es6-promise": "^4.2.4",
     "fela": "^6.0.3",
     "fela-plugin-embedded": "^5.1.1",
     "fela-preset-web": "^5.0.1",
