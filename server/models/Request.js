@@ -33,7 +33,8 @@ Request.add({
   assignedRating: { type: Types.Relationship, ref: 'Rating', noedit: true, label: 'Назначенный рейтинг' },
   assignedRatingTime: { type: Number, noedit: true, hidden: true },
 	rated: { type: Boolean, default: false, noedit: true, label: 'Заявка оценена' },
-	notified: { type: Date, noedit: true, label: 'Отправлено уведомление' }
+	notified: { type: Date, noedit: true, label: 'Отправлено уведомление' },
+	confirmedGDPR: { type: Types.Relationship, ref: 'Gdpr', index: true, noedit: true, label: 'GDPR'}
 });
 
 Request.relationship({ ref: 'Price', path: 'prices', refPath: 'assignedRequest' });

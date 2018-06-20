@@ -55,7 +55,8 @@ keystone.set('routes', require('./routes'));
 keystone.set('nav', {
 	users: 'users',
 	requests: ['requests', 'prices'],
-	ratings: 'ratings'
+	ratings: 'ratings',
+	gdpr: 'gdprs'
 });
 
 // Start Keystone to connect to your database and initialise the web server
