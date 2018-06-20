@@ -19,7 +19,7 @@
     "@types/react-router-redux": "^5.0.10",
     "@types/webpack": "^4.4.1",
     "@types/webpack-dev-server": "^2.9.4",
-    "autoprefixer": "^7.2.5",
+    "autoprefixer": "^8.6.3",
     "babel-cli": "^6.26.0",
     "babel-core": "6.26.3",
     "babel-loader": "7.1.4",
