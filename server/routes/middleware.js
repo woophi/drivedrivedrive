@@ -47,5 +47,4 @@ const mobileCheck = req => {
 		...keystone.get('locals'),
 		isMobile: !!md.mobile()
 	});
-	console.warn(keystone.get('locals'));
 }
