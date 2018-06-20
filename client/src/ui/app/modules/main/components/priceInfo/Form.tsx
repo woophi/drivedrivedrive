@@ -252,7 +252,7 @@ const buttonSt: FelaRule<Props> = props => ({
   color: '#fff'
 });
 
-const hideRequired: FelaRule<Props> = props => ({
+const hideRequired = () => ({
   '&:after': {
     content: '"" !important',
   }
