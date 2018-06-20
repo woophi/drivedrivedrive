@@ -3,7 +3,6 @@ import { compose } from 'redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import Header from './Header';
 import { Parallax } from 'react-spring';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import CompanyTittle from './CompanyTitle';
 import { Link } from 'ui/app/components/Links';
 import HowWork from './HowWork';
@@ -18,39 +17,62 @@ const VIDEO_BG = require('../../../../assets/file.mp4');
 const IMG_BG = require('../../../../assets/bck.jpg');
 
 type Props = {
-  isMobile: boolean
+  isMobile: boolean;
 };
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class Index extends React.Component<Props & FelaProps> {
+  parallax: any = null;
+
+  setRef = {
+    refLax: (el: any) => (this.parallax = el)
+  };
+
   componentDidMount() {
     if (this.parallax) {
       this.forceUpdate();
     }
   }
 
-  parallax: any = null;
-
-  setRef = {
-    refLax: (el: any) => this.parallax = el
-  }
-
   get renderBackground() {
-    return (this.props.isMobile ? <img className={this.props.styles.img} src={IMG_BG} alt="default back"/> :
-    <video preload="none" className={this.props.styles.video} autoPlay loop muted>
-      <source src={`${VIDEO_BG}`} type="video/mp4" />
-    </video>)
+    return this.props.isMobile ? (
+      <img className={this.props.styles.img} src={IMG_BG} alt="default back" />
+    ) : (
+      <video
+        preload="none"
+        className={this.props.styles.video}
+        autoPlay
+        loop
+        muted
+      >
+        <source src={`${VIDEO_BG}`} type="video/mp4" />
+      </video>
+    );
   }
+
+  handleScrollTo = () => this.parallax.scrollTo(1.8);
 
   render() {
     const { styles, isMobile } = this.props;
+
+    const mainLayer: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '1rem'
+    };
+
+    const headText =
+      'Закажите трансфер у нас.\n Выберите авто, водителя и наслаждайтесь поездкой.\n По лучшей цене.';
     return (
       <div className={styles.container}>
         {this.renderBackground}
         <Header parallaxRef={this.parallax} />
-        <Parallax ref={this.setRef.refLax} pages={isMobile ? 3.86 : 3.4} style={{minHeight: 900}}>
-
+        <Parallax
+          ref={this.setRef.refLax}
+          pages={isMobile ? 3.86 : 3.4}
+          style={{ minHeight: 900 }}
+        >
           <Parallax.Layer
             offset={0}
             speed={0.1}
@@ -69,14 +91,8 @@ class Index extends React.Component<Props & FelaProps> {
             <CompanyTittle />
           </Parallax.Layer>
 
-          <Parallax.Layer
-            offset={0.2}
-            speed={0.1}
-            style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}
-          >
-            <h1 className={styles.headingStyle}>
-              {'Закажите трансфер у нас.\n Выберите авто, водителя и наслаждайтесь поездкой.\n По лучшей цене.'}
-            </h1>
+          <Parallax.Layer offset={0.2} speed={0.1} style={mainLayer}>
+            <h1 className={styles.headingStyle}>{headText}</h1>
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -86,7 +102,7 @@ class Index extends React.Component<Props & FelaProps> {
           >
             <button
               className={styles.buttonLarge}
-              onClick={() => this.parallax.scrollTo(1.8)}
+              onClick={this.handleScrollTo}
             >
               Узнать цену
             </button>
@@ -97,9 +113,7 @@ class Index extends React.Component<Props & FelaProps> {
             speed={0.1}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
-            <h2 className={styles.headingStyle2}>
-              {'Как мы работаем'}
-            </h2>
+            <h2 className={styles.headingStyle2}>{'Как мы работаем'}</h2>
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -115,9 +129,7 @@ class Index extends React.Component<Props & FelaProps> {
             speed={0.1}
             style={{ display: 'flex', flexDirection: 'column' }}
           >
-            <h2 className={styles.headingStyle21}>
-              {'Узнайте цену'}
-            </h2>
+            <h2 className={styles.headingStyle21}>{'Узнайте цену'}</h2>
           </Parallax.Layer>
 
           <Parallax.Layer
@@ -132,21 +144,21 @@ class Index extends React.Component<Props & FelaProps> {
             offset={3}
             factor={isMobile ? 0.5 : 0.4}
             speed={0}
-            style={{ display: 'flex', flexDirection: 'column', minHeight: 450}}
+            style={{ display: 'flex', flexDirection: 'column', minHeight: 450 }}
           >
             <Contacts />
           </Parallax.Layer>
         </Parallax>
       </div>
-    )
+    );
   }
 }
 
 const container: FelaRule<Props> = () => ({
-    overflow: 'hidden',
-    flex: 1,
-    position: 'relative',
-    height: '100vh'
+  overflow: 'hidden',
+  flex: 1,
+  position: 'relative',
+  height: '100vh'
 });
 
 const video: FelaRule = () => ({
@@ -168,10 +180,10 @@ const alignButton: FelaRule<Props> = () => ({
   marginTop: '4rem',
   alignSelf: 'flex-end',
   marginRight: '4rem'
-})
+});
 
 const button: FelaRule<Props> = props => ({
-  ...props.theme.items.primaryButton,
+  ...props.theme.items.primaryButton
 });
 
 const buttonLarge: FelaRule<Props> = ({ theme }) => ({
@@ -185,7 +197,7 @@ const buttonLarge: FelaRule<Props> = ({ theme }) => ({
   padding: '0 2rem'
 });
 
-const headingStyle: FelaRule<Props> = ({theme}) => ({
+const headingStyle: FelaRule<Props> = ({ theme }) => ({
   minWidth: 320,
   margin: '5rem auto 0',
   maxWidth: 1100,
@@ -194,7 +206,7 @@ const headingStyle: FelaRule<Props> = ({theme}) => ({
   fontWeight: 'normal',
   lineHeight: 1.1,
   ...theme.mobile({
-    fontSize: '2.5rem',
+    fontSize: '2.5rem'
   })
 });
 
@@ -227,7 +239,7 @@ const headingStyle21: FelaRule<Props> = props => ({
   })
 });
 
-const img: FelaRule<Props> = ({theme}) => ({
+const img: FelaRule<Props> = ({ theme }) => ({
   position: 'absolute',
   left: 0,
   width: '100%',
@@ -245,7 +257,7 @@ const img: FelaRule<Props> = ({theme}) => ({
 const preventHChageHeight: FelaRule = () => ({
   minHeight: '900px !important',
   height: '900px !important'
-})
+});
 
 const mapStylesToProps = {
   container,
