@@ -89,7 +89,7 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "rxjs": "5.5.11",
-    "ts-node": "4.1.0",
+    "ts-node": "^6.1.1",
     "tslib": "^1.9.0",
     "webpack-require-weak": "^1.0.1"
   }
