@@ -24,14 +24,11 @@
     "quotemark": false,
     "trailing-comma": false,
     "arrow-parens": [true, "ban-single-arg-parens"],
-    "no-console": false,
     "radix": false,
-    "ordered-imports": {
-      "options": {
-        "import-sources-order": "any"
-      }
-    },
+    "ordered-imports": false,
     "member-access": false,
-    "interface-over-type-literal": false
+    "interface-over-type-literal": false,
+    "no-console": true,
+    "no-var-requires": false
   }
 }
