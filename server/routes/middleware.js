@@ -7,8 +7,8 @@
  * you have more middleware you may want to group it as separate
  * modules in your project's /lib directory.
  */
-var _ = require('lodash');
-
+const MobileDetect = require('mobile-detect');
+const keystone = require('keystone');
 
 /**
 	Initialises the standard view locals
@@ -25,24 +25,9 @@ exports.initLocals = function (req, res, next) {
 	};
 
 	if (req.cookies.target && req.cookies.target == locals.page.path) res.clearCookie('target');
-
+	mobileCheck(req);
 	next();
 };
-
-/**
-	Fetches and clears the flashMessages before a view is rendered
-*/
-exports.flashMessages = function (req, res, next) {
-	var flashMessages = {
-		info: req.flash('info'),
-		success: req.flash('success'),
-		warning: req.flash('warning'),
-		error: req.flash('error'),
-	};
-	res.locals.messages = _.some(flashMessages, function (msgs) { return msgs.length; }) ? flashMessages : false;
-	next();
-};
-
 
 /**
 	Prevents people from accessing protected pages when they're not signed in
@@ -55,3 +40,12 @@ exports.requireUser = function (req, res, next) {
 		next();
 	}
 };
+
+const mobileCheck = req => {
+	const md = new MobileDetect(req.headers['user-agent']);
+	keystone.set('locals', {
+		...keystone.get('locals'),
+		isMobile: !!md.mobile()
+	});
+	console.warn(keystone.get('locals'));
+}

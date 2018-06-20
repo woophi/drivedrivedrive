@@ -25,7 +25,6 @@ const scheduler = require('./scheduler');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
-keystone.pre('render', middleware.flashMessages);
 
 // Import Route Controllers
 var routes = {
@@ -36,6 +35,7 @@ var routes = {
 // Setup Route Bindings
 exports = module.exports = function (app) {
 	scheduler.schedulerWorker();
+
 	// Views
   app.all('/', routes.views.index);
 

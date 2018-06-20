@@ -43,7 +43,8 @@ keystone.set('locals', {
 		if (keystone.get('env') === 'staging') return 'http://drivedrivedrive.herokuapp.com';
 		if (keystone.get('env') === 'production') return 'http://drivedrivedrive.herokuapp.com';
 		return 'http://localhost:3000';
-	})()
+	})(),
+	isMobile: false
 });
 
 // Load your project's Routes
