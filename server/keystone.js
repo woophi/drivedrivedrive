@@ -1,7 +1,6 @@
 // Simulate config options from your production environment by
 // customising the .env file in your project's root folder.
 require('dotenv').config();
-
 // Require keystone
 var keystone = require('keystone');
 
@@ -43,7 +42,8 @@ keystone.set('locals', {
 		if (keystone.get('env') === 'production') return 'https://www.vettura.eu';
 		return 'http://localhost:3000';
 	})(),
-	isMobile: false
+	isMobile: false,
+	SERVER_RENDERED_HTML: ''
 });
 
 // Load your project's Routes

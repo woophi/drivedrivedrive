@@ -1,7 +1,7 @@
 import { AppState } from 'core/models/app';
 import * as React from "react";
 import { connect as ReduxConnect } from 'react-redux';
-import { Route, RouteComponentProps, Switch } from 'react-router';
+import { Route, RouteComponentProps } from 'react-router';
 import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
 import TopBar from 'ui/app/modules/topBar';
