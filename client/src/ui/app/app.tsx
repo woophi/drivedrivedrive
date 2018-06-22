@@ -13,7 +13,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppRoot from './components/AppRoot';
 import { init } from 'core/app/init';
 
-function renderApp(fela: { renderer: FelaRenderer, mountNode: HTMLElement }) {
+const renderApp = (fela: {
+  renderer: FelaRenderer;
+  mountNode: HTMLElement;
+}) => {
   ReactDOM.render(
     <Redux store={store}>
       <Fela renderer={fela.renderer} mountNode={fela.mountNode}>
@@ -28,9 +31,9 @@ function renderApp(fela: { renderer: FelaRenderer, mountNode: HTMLElement }) {
     </Redux>,
     document.getElementById('app')
   );
-}
+};
 
-export async function entryOperatorDesktop(args: AppEntrySettings) {
+export const entryApplication = (args: AppEntrySettings) => {
   console.debug('AppEntry args:', args);
 
   store.dispatch({ type: 'appInit', isMobile: args.isMobile });
@@ -39,4 +42,4 @@ export async function entryOperatorDesktop(args: AppEntrySettings) {
   renderApp(fela);
 
   init();
-}
+};

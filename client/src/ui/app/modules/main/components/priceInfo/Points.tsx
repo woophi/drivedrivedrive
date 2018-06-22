@@ -5,10 +5,8 @@ import { handlePoints } from '../../operations';
 import { HandlePoints } from '../../types';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-type OwnProps = {
-}
 
-const Points: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
+const Points: React.SFC<FelaProps> = ({ styles }) => {
   const DRGESDEN = require('../../../../../assets/dresden.gif');
   const KARLOVY_VARY = require('../../../../../assets/vary.gif');
   const VENA = require('../../../../../assets/vienna.gif');
@@ -88,22 +86,22 @@ const text: FelaRule = () => ({
   margin: '1rem',
 });
 
-const button: FelaRule<OwnProps> = props => ({
+const button: FelaRule = props => ({
   ...props.theme.items.primaryButton,
   margin: '1rem'
 });
 
-const box2: FelaRule<OwnProps> = props => ({
+const box2: FelaRule = () => ({
   ...box1(),
   backgroundColor: '#555555'
 });
 
-const box3: FelaRule<OwnProps> = props => ({
+const box3: FelaRule = () => ({
   ...box1(),
   backgroundColor: '#EDEDED',
   color: '#000'
 });
-const box4: FelaRule<OwnProps> = props => ({
+const box4: FelaRule = () => ({
   ...box1(),
   backgroundColor: '#4BD1A0',
   color: '#000'
