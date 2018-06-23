@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Preloader from './preloader';
 import { createComponent } from 'react-fela';
+import Scrollbar from 'react-custom-scrollbars';
 
 type Props = {
   fetchGdpr: () => Promise<void>;
@@ -10,7 +11,7 @@ type Props = {
 
 const Container = createComponent(
   () => ({
-    height: '100%',
+    height: '350px',
     width: '100%',
     position: 'relative'
   }),
@@ -25,7 +26,9 @@ class PrivacyPolicyComp extends React.PureComponent<Props> {
   render() {
     return (
       <Container>
-        {this.props.data}
+        <Scrollbar style={{ height: 350 }}>
+          <div dangerouslySetInnerHTML={{ __html: this.props.data }} />
+        </Scrollbar>
         <Preloader isShow={this.props.isLoading} />
       </Container>
     );
