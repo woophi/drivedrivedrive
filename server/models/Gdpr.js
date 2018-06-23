@@ -8,13 +8,13 @@ var async = require('async');
  */
 
 var Gdpr = new keystone.List('Gdpr', {
-	map: {name: 'keyName'}
+	map: {name: 'title'}
 });
 
 Gdpr.add({
-	keyName: { type: String, index: true, label: 'Ключ', noedit: true },
 	title: { type: String, index: true, label: 'Заголовок' },
-	text: { type: Types.Markdown, index: true, label: 'Содержание' }
+	text: { type: Types.Markdown, index: true, label: 'Содержание' },
+	keyName: { type: String, label: 'Ключ', noedit: true },
 });
 
 Gdpr.schema.pre('save', function(next) {
@@ -28,7 +28,7 @@ Gdpr.schema.pre('save', function(next) {
 					console.error(err);
 					return done();
 				}
-				gdpr.keyName = `gdpr_${count}`;
+				gdpr.keyName = `gdpr_${count + 1}`;
 				return done();
 			});
 		}
