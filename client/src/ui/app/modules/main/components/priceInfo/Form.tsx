@@ -1,5 +1,11 @@
-import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
+import {
+  Field,
+  InjectedFormProps,
+  reduxForm,
+  WrappedFieldProps
+} from 'redux-form';
 import { AppState } from 'core/models/app';
+import { DataStatus } from 'core/models/api';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
@@ -8,13 +14,27 @@ import { connect as ReduxConnect } from 'react-redux';
 import * as data from 'core/models';
 import { submitRequest, validateRequest } from '../../form';
 import { Alert } from 'ui/app/components/Alert';
+import { Modal } from 'ui/app/components/Modal';
+import { PrivacyPolicy } from 'ui/app/components/PrivacyPolicy';
 import { parseToInt } from 'ui/shared/transforms';
-import IconButton  from 'material-ui/IconButton';
-import { triggerForm } from '../../operations';
+import IconButton from 'material-ui/IconButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import {
+  triggerForm,
+  handleTriggerGDPRDialog,
+  getGdprGuest
+} from '../../operations';
+import { getGdprGuestData, getGdprGuestResult } from '../../selectors';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
-  formState: state.ui.guests.guestSubmitForm
+  formState: state.ui.guests.guestSubmitForm,
+  isOpenGDPR: state.ui.guests.openPrivacyPolicy,
+  isLoadingGdpr:
+    getGdprGuestData(state).status === DataStatus.FETCHING ||
+    getGdprGuestData(state).status === DataStatus.QUIET_FETCHING,
+  gdprResult:
+    (getGdprGuestResult(state) && getGdprGuestResult(state).text) || ''
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -23,7 +43,7 @@ type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 type TextFieldProps = {
   type: string;
-  label: string;
+  label: any;
   placeHodler?: string;
   styleInput?: React.CSSProperties;
   styleLable?: React.CSSProperties;
@@ -32,10 +52,15 @@ type TextFieldProps = {
   id?: string;
 };
 
-class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.RequestInfo, Props>> {
-
+class Form extends React.Component<
+  Props & FelaProps & InjectedFormProps<data.RequestInfo, Props>
+> {
   componentInput = (props: WrappedFieldProps & TextFieldProps) => {
     const { styles } = this.props;
+    const labelClassName =
+      props.meta.touched && props.meta.error
+        ? styles.errInputSt
+        : styles.inputSt;
     return (
       <div className={styles.fieldSt}>
         <label
@@ -46,7 +71,7 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
         </label>
         <input
           {...props.input}
-          className={props.meta.touched && props.meta.error ? styles.errInputSt : styles.inputSt}
+          className={labelClassName}
           type={props.type}
           placeholder={props.placeHodler || ''}
           style={props.styleInput || {}}
@@ -55,10 +80,46 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
         />
       </div>
     );
-  }
+  };
+
+  componentCheckbox = (props: WrappedFieldProps & TextFieldProps) => {
+    const { styles } = this.props;
+    const labelClassName =
+      props.meta.touched && props.meta.error
+        ? styles.checkboxLabelErr
+        : styles.checkboxLabel;
+    return (
+      <div className={styles.flexContainer}>
+        <input
+          {...props.input}
+          type={props.type}
+          id={props.id}
+          className={styles.checkbox}
+          required={props.required}
+        />
+        <label htmlFor={props.id} className={labelClassName}>
+          <i className="fas fa-check" />
+        </label>
+        <label className={styles.checkboxLabel2}>{props.label}</label>
+      </div>
+    );
+  };
+
+  handleClick = () => handleTriggerGDPRDialog(true);
 
   componentForm = () => {
     const { styles, handleSubmit, error, pristine, submitting } = this.props;
+    const submittingButton = submitting ? (
+      <i className="fas fa-circle-notch fa-spin" />
+    ) : (
+      'Отправить'
+    );
+
+    const gdprLink = (
+      <a style={{ textDecoration: 'underline' }} onClick={this.handleClick}>
+        Пользовательское соглашение
+      </a>
+    );
     return (
       <React.Fragment>
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -90,7 +151,7 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
             label={'Количество пассажиров'}
             {...{
               styleInput: {
-                maxWidth: 150,
+                maxWidth: 150
               },
               required: true
             }}
@@ -144,51 +205,92 @@ class Form extends React.Component<Props & FelaProps & InjectedFormProps<data.Re
             }}
           />
 
+          <Field
+            name="gdpr"
+            component={this.componentCheckbox}
+            type="checkbox"
+            label={gdprLink}
+            {...{
+              required: true,
+              id: 'checkGDPR'
+            }}
+          />
+
           <button disabled={submitting} className={styles.buttonSt}>
-            {submitting ? <i className="fas fa-circle-notch fa-spin" /> : 'Отправить'}
+            {submittingButton}
           </button>
         </form>
       </React.Fragment>
     );
-  }
+  };
 
   get componentModal() {
-    return (this.props.formState &&
-      <div className={this.props.styles.modalSent}>
-        <div className={this.props.styles.modalBody}>
-          <IconButton
-            iconClassName="fa fa-times fa-2"
-            onClick={this.handleClose}
-            style={{alignSelf: 'flex-end'}}
-          />
-          <span className={this.props.styles.modalText}>
-            Спасибо за Вашу заявку! В ближайшее время Вам начнут поступать предложения от водителей
-          </span>
+    return (
+      this.props.formState && (
+        <div className={this.props.styles.modalSent}>
+          <div className={this.props.styles.modalBody}>
+            <IconButton
+              iconClassName="fa fa-times fa-2"
+              onClick={this.handleCloseAfterSubmit}
+              style={{ alignSelf: 'flex-end' }}
+            />
+            <span className={this.props.styles.modalText}>
+              Спасибо за Вашу заявку! В ближайшее время Вам начнут поступать
+              предложения от водителей
+            </span>
+          </div>
         </div>
-      </div>
+      )
     );
   }
 
-  handleClose = () => triggerForm(false);
+  get gdprComponent() {
+    return (
+      <PrivacyPolicy
+        data={this.props.gdprResult}
+        fetchGdpr={getGdprGuest}
+        isLoading={this.props.isLoadingGdpr}
+      />
+    );
+  }
+
+  handleCloseAfterSubmit = () => triggerForm(false);
+  handleCloseModalGDPR = () => handleTriggerGDPRDialog(false);
 
   render() {
-    const { styles, formState } = this.props;
+    const { styles, formState, isOpenGDPR } = this.props;
+    const actionButtons = [
+      <RaisedButton
+        label={'Закрыть'}
+        primary
+        onClick={this.handleCloseModalGDPR}
+      />
+    ];
     return (
+      <React.Fragment>
         <div className={styles.container}>
           {this.componentForm()}
           {this.componentModal}
         </div>
+        <Modal
+          actions={actionButtons}
+          body={this.gdprComponent}
+          handleClose={this.handleCloseModalGDPR}
+          open={isOpenGDPR}
+          title={'Пользовательское соглашение'}
+        />
+      </React.Fragment>
     );
   }
 }
 
-const container: FelaRule<Props> = ({theme}) => ({
+const container: FelaRule<Props> = ({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   backgroundColor: 'rgba(85, 85, 85, 0.7)',
   width: 360,
   marginLeft: '3rem',
-  height: 525,
+  height: 550,
   position: 'relative',
   ...theme.mobileEarly({
     margin: '0 1rem'
@@ -202,7 +304,8 @@ const form: FelaRule<Props> = () => ({
 });
 
 const labelSt: FelaRule<Props> = () => ({
-  font: 'normal normal normal 11px/13px helvetica-w01-roman,helvetica-w02-roman,helvetica-lt-w10-roman,sans-serif',
+  font:
+    'normal normal normal 11px/13px helvetica-w01-roman,helvetica-w02-roman,helvetica-lt-w10-roman,sans-serif',
   width: 'auto',
   paddingBottom: 5,
   letterSpacing: '.03em',
@@ -212,7 +315,7 @@ const labelSt: FelaRule<Props> = () => ({
     content: '"*"',
     color: ' #cc0000',
     verticalAlign: 'top',
-    margin: '0 3px',
+    margin: '0 3px'
   }
 });
 
@@ -235,14 +338,15 @@ const inputSt: FelaRule<Props> = () => ({
   width: '100%',
   boxShadow: 'inset 0 1px 1px rgba(0,0,0,.075)',
   transition: 'border-color linear .2s,box-shadow linear .2s',
-  font: 'normal normal normal 14px helvetica-w01-roman,helvetica-w02-roman,helvetica-lt-w10-roman,sans-serif',
+  font:
+    'normal normal normal 14px helvetica-w01-roman,helvetica-w02-roman,helvetica-lt-w10-roman,sans-serif',
   color: 'rgba(0,0,0,1)',
   boxSizing: 'border-box'
 });
 
 const errInputSt: FelaRule<Props> = () => ({
   ...inputSt(),
-  borderColor: ' #cc0000',
+  borderColor: ' #cc0000'
 });
 
 const buttonSt: FelaRule<Props> = props => ({
@@ -254,7 +358,7 @@ const buttonSt: FelaRule<Props> = props => ({
 
 const hideRequired = () => ({
   '&:after': {
-    content: '"" !important',
+    content: '"" !important'
   }
 });
 
@@ -264,14 +368,14 @@ const modalSent: FelaRule<Props> = props => ({
   height: '100%',
   backgroundColor: 'rgba(85, 85, 85, 0.9)',
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column'
 });
 
 const modalBody: FelaRule<Props> = () => ({
   margin: 'auto 2rem',
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: 'rgba(186,218,85,1)',
+  backgroundColor: 'rgba(186,218,85,1)'
 });
 
 const modalText: FelaRule = () => ({
@@ -279,7 +383,61 @@ const modalText: FelaRule = () => ({
   margin: '1rem',
   fontSize: '19px',
   letterSpacing: '1px',
-  color: '#fff',
+  color: '#fff'
+});
+
+const checkboxLabel: FelaRule = () => ({
+  flexShrink: 0,
+  display: 'block',
+  cursor: 'pointer',
+  outline: 'none',
+  marginRight: '8px',
+  height: '1.5rem',
+  width: '1.5rem',
+  borderRadius: '.5rem',
+  boxShadow: '0px 0 5px rgba(0, 0, 0, 0.3)',
+  boxSizing: 'border-box',
+  backgroundColor: '#FFF',
+  transition: '0.2s ease',
+  borderColor: 'rgba(186,218,85,1)',
+  borderWidth: 1,
+  borderStyle: 'solid',
+  position: 'relative',
+  top: '-1px',
+  '>i': {
+    display: 'none'
+  }
+});
+
+const checkboxLabelErr: FelaRule = () => ({
+  ...checkboxLabel(),
+  borderColor: ' #cc0000'
+});
+
+const checkbox: FelaRule = () => ({
+  position: 'absolute',
+  top: 5,
+  left: 5,
+  ':checked + label': {
+    '>i': {
+      display: 'inline-block',
+      margin: 3,
+      fontSize: '1rem',
+      color: '#000'
+    }
+  }
+});
+
+const checkboxLabel2: FelaRule = () => ({
+  display: 'block',
+  marginBottom: '.25rem',
+  cursor: 'pointer'
+});
+
+const flexContainer: FelaRule = () => ({
+  display: 'flex',
+  margin: '1rem 0 .25rem 0.35rem',
+  position: 'relative'
 });
 
 const mapStylesToProps = {
@@ -293,10 +451,15 @@ const mapStylesToProps = {
   errInputSt,
   modalSent,
   modalBody,
-  modalText
+  modalText,
+  checkboxLabel,
+  checkbox,
+  checkboxLabel2,
+  flexContainer,
+  checkboxLabelErr
 };
 
-export default compose (
+export default compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<data.RequestInfo, Props>({

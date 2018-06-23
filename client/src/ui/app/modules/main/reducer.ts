@@ -2,10 +2,14 @@ import { GuestDispatch, GuestState, HandlePoints } from './types';
 
 const defaultState: GuestState = {
   guestSubmitForm: false,
-  handlePoint: HandlePoints.none
+  handlePoint: HandlePoints.none,
+  openPrivacyPolicy: false
 };
 
-export const reducer = (state = defaultState, dispatch: GuestDispatch): GuestState => {
+export const reducer = (
+  state = defaultState,
+  dispatch: GuestDispatch
+): GuestState => {
   switch (dispatch.type) {
     case 'guest/changeFormState':
       return {
@@ -16,6 +20,11 @@ export const reducer = (state = defaultState, dispatch: GuestDispatch): GuestSta
       return {
         ...state,
         handlePoint: dispatch.payload
+      };
+    case 'guest/openModalDialog':
+      return {
+        ...state,
+        openPrivacyPolicy: dispatch.payload
       };
 
     default:

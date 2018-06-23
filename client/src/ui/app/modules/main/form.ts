@@ -1,9 +1,17 @@
 import * as data from 'core/models';
-import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
+import {
+  change,
+  FormErrors,
+  FormSubmitHandler,
+  reset,
+  SubmissionError
+} from 'redux-form';
 import { newTransferRequest } from 'core/app/request';
 import { triggerForm } from './operations';
 
-export const validateRequest = (values: Partial<data.RequestInfo>): FormErrors<data.RequestInfo> => {
+export const validateRequest = (
+  values: Partial<data.RequestInfo>
+): FormErrors<data.RequestInfo> => {
   const errors = {} as FormErrors<data.RequestInfo>;
   if (!values.email) {
     errors.email = 'Пожалуйста, заполните это поле';
@@ -28,16 +36,22 @@ export const validateRequest = (values: Partial<data.RequestInfo>): FormErrors<d
   if (!values.count) {
     errors.count = 'Пожалуйста, заполните это поле';
   }
+  if (!values.gdpr) {
+    errors.gdpr = 'Согласие обязательно';
+  }
   return errors;
 };
 
-export const submitRequest: FormSubmitHandler<data.RequestInfo> = async (values: data.RequestInfo, dispatch) => {
+export const submitRequest: FormSubmitHandler<data.RequestInfo> = async (
+  values: data.RequestInfo,
+  dispatch
+) => {
   try {
     await newTransferRequest(values);
     triggerForm(true);
     await dispatch(reset('newRequest'));
   } catch (e) {
     console.error('err', e);
-    throw new SubmissionError({  _error: e.error.message });
+    throw new SubmissionError({ _error: e.error.message });
   }
 };

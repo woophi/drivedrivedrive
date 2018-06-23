@@ -1,6 +1,7 @@
 export type GuestState = {
   guestSubmitForm: boolean;
-  handlePoint: HandlePoints
+  handlePoint: HandlePoints;
+  openPrivacyPolicy: boolean;
 };
 
 export const enum HandlePoints {
@@ -11,8 +12,11 @@ export const enum HandlePoints {
 }
 
 export type GuestDispatch =
-  | { type: 'guest/changeFormState', payload: boolean }
+  | { type: 'guest/changeFormState'; payload: boolean }
   | HandlePointAction
-;
+  | { type: 'guest/openModalDialog'; payload: boolean };
 
-export type HandlePointAction = { type: 'guest/handlePoint', payload: HandlePoints };
+export type HandlePointAction = {
+  type: 'guest/handlePoint';
+  payload: HandlePoints;
+};
