@@ -1,11 +1,17 @@
 var async = require('async'),
   keystone = require('keystone'),
 		_ = require('lodash'),
-  User = keystone.list('User'),
+	User = keystone.list('User'),
+  Gdpr = keystone.list('Gdpr'),
   moment = require('moment'),
   mailFrom = require('../staticVars').mailFrom;
 
 exports.sendRequest = function(req, res) {
+	if (!req.body.gdpr) {
+		return res.apiError({message: 'Без gdpr нельзя' }, '', err, 400);
+	}
+
+	let confirmedGDPR;
 
   function callback (err) {
 		if (err) {
@@ -24,13 +30,39 @@ exports.sendRequest = function(req, res) {
       time: req.body.time,
       comment: req.body.comment,
     },
-    created: Date.now()
+		created: Date.now()
   };
   const Request = keystone.list('Request').model;
-  const	newRequest = new Request(guestData);
+  const	requestData = new Request(guestData);
   async.series([
 
+		function(cb) {
+      Gdpr.model.findOne()
+				.where('keyName', 'gdpr_1')
+				.exec(function (err, result) {
+					if (err) {
+						console.error(err);
+						return res.apiResponse({
+							Rstatus: 4
+						});
+					}
+					if (err) {
+						return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+					}
+					if (!result) {
+						return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+					}
+					confirmedGDPR = result._id;
+					return cb();
+				});
+    },
+
+
     function(cb) {
+			const	newRequest = new Request({
+				...guestData,
+				confirmedGDPR
+			});
       newRequest.save(function(err) {
         if (err) {
           console.error(err);
@@ -61,7 +93,7 @@ exports.sendRequest = function(req, res) {
             to: users,
             from: mailFrom,
             subject: 'Новая заявка на трансфер',
-            guestData: newRequest,
+            guestData: requestData,
             host: req.headers.origin,
             moment
           }, callback);

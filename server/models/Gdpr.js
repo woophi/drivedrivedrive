@@ -22,8 +22,15 @@ Gdpr.schema.pre('save', function(next) {
 	async.parallel([
 		function(done) {
 			if (gdpr.keyName) return done();
-			gdpr.keyName = Math.random().toString(36).slice(-8);
-			return done();
+			keystone.list('Gdpr').model.count().exec(function(err, count) {
+				if (err) {
+					console.error('===== Error counting gdprs =====');
+					console.error(err);
+					return done();
+				}
+				gdpr.keyName = `gdpr_${count}`;
+				return done();
+			});
 		}
 	], next);
 });
