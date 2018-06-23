@@ -1,11 +1,13 @@
 import * as React from 'react';
 import Animation from './Animation';
 
-export default ({ isShow }: {isShow: boolean}) => {
-  return isShow && (
-    <div style={container}>
-      <Animation />
-    </div>
+export default ({ isShow }: { isShow: boolean }) => {
+  return (
+    isShow && (
+      <div style={container}>
+        <Animation />
+      </div>
+    )
   );
 };
 
@@ -21,5 +23,3 @@ const container: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center'
 };
-
-
