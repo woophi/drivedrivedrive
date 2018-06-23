@@ -21,6 +21,9 @@ export const api = {
     getRequestToRate: (requestId: string, query: number) => a<apiData.StateRequest>('request/get/rate', { requestId, query }),
     rateRequest: (data: apiData.RateRequest) => a<boolean>('request/rate', data),
     getRequestStateToAccept: (data: apiData.GetRequest) => a<apiData.StateRequest>('request/get/accept/state', data),
+  },
+  gdrp: {
+    getGuestGdpr: () => a<apiData.Gdpr>('gdpr/guest')
   }
 };
 
@@ -115,7 +118,8 @@ type DLF<N extends keyof apiData.DataState, T extends ResultType> = (name: N, ap
 type DataLoader =
   DLF<'userProfile', apiData.DataState['userProfile']['result']> &
   DLF<'requsetState', apiData.DataState['requsetState']['result']> &
-  DLF<'selectedRequest', apiData.DataState['selectedRequest']['result']>
+  DLF<'selectedRequest', apiData.DataState['selectedRequest']['result']> &
+  DLF<'guestGdpr', apiData.DataState['guestGdpr']['result']>
   ;
 
 export const loadData: DataLoader = loadDataImpl as any;

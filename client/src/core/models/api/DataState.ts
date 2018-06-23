@@ -13,7 +13,8 @@ export const enum DataStatus {
 export type DataState = {
   userProfile: DataStateItem<data.UserProfile>,
   requsetState: DataStateItem<data.StateRequest>,
-  selectedRequest: DataStateItem<data.NewRequest>
+  selectedRequest: DataStateItem<data.NewRequest>,
+  guestGdpr: DataStateItem<data.Gdpr>
 };
 
 export type DataStateItem<T> = {

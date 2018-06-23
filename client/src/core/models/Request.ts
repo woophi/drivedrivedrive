@@ -6,5 +6,6 @@ export interface RequestInfo {
   to: string,
   date: string,
   time: string,
+  gdpr: string;
   comment?: string,
 }
