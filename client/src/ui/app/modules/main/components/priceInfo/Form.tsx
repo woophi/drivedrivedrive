@@ -117,7 +117,7 @@ class Form extends React.Component<
 
     const gdprLink = (
       <a style={{ textDecoration: 'underline' }} onClick={this.handleClick}>
-        Пользовательское соглашение
+        Согласие на обработку персональных данных
       </a>
     );
     return (
