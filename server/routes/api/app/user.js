@@ -1,7 +1,9 @@
 var async = require('async'),
 	keystone = require('keystone'),
   User = keystone.list('User'),
-  mailFrom = require('../staticVars').mailFrom;
+	mailFrom = require('../staticVars').mailFrom,
+	secret = require('../staticVars').secret,
+  jwt = require('jsonwebtoken');
 
 exports.signin = function(req, res) {
   const email = req.body.email.toLowerCase();
@@ -16,18 +18,19 @@ exports.signin = function(req, res) {
         if (!user) {
           return res.apiError({message: "Извините, пользователь не найден" }, '', err, 403);
         } else {
-          let result = user;
-          if (result.resetPasswordKey) {
-            result.resetPasswordKey = '';
-            result.save(function(err) {
-              if (err) {
-                return cb(err);
-              }
-              return cb();
-            });
-          } else {
-            return cb();
-          }
+					const token = jwt.sign({ id: user._id }, secret, {
+						expiresIn: 86400 // expires in 24 hours
+					});
+					user.token = token;
+					if (user.resetPasswordKey) {
+						user.resetPasswordKey = '';
+					}
+					user.save(function(err) {
+						if (err) {
+							return cb(err);
+						}
+						return cb();
+					});
         }
       });
     }
@@ -36,7 +39,7 @@ exports.signin = function(req, res) {
     keystone.session.signin({ email, password: req.body.secret }, req, res, function(user) {
 
       return res.apiResponse({
-        token: user._id
+        token: user.token
       });
 
     }, function(err) {
@@ -50,28 +53,35 @@ exports.signin = function(req, res) {
 
 exports.auth = function(req, res) {
 
-  User.model.findById(req.body.token).exec(function(err, user) {
+	if (!req.body.token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 
-		if (err || !user) {
-      console.error(JSON.stringify(err));
-			return res.apiError({
-				message: 'Авторизация не удалась'
-			});
-		} else {
-      let roles = [];
+  jwt.verify(req.body.token, secret, function(err, decoded) {
+    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
 
-      roles = user.isAdmin ? ['Admin'] : [];
-      roles = user.isSuperAdmin ? [...roles, 'Godlike'] : [...roles];
-      roles = user.isActive ? [...roles, 'Driver'] : [...roles];
+		User.model.findById(decoded.id).exec(function(err, user) {
 
-      return res.apiResponse({
-        userId: user.id || user._id,
-        fullName: user.name,
-        userName: user.email,
-        roles
-      });
-    }
+			if (err || !user) {
+				console.error(JSON.stringify(err));
+				return res.apiError({
+					message: 'Авторизация не удалась'
+				});
+			} else {
+				let roles = [];
 
+				roles = user.isAdmin ? ['Admin'] : [];
+				roles = user.isSuperAdmin ? [...roles, 'Godlike'] : [...roles];
+				roles = user.isActive ? [...roles, 'Driver'] : [...roles];
+
+				return res.apiResponse({
+					userId: user.id || user._id,
+					fullName: user.name,
+					userName: user.email,
+					roles,
+					token: req.body.token
+				});
+			}
+
+		});
 	});
 };
 
@@ -89,7 +99,8 @@ exports.checkAuth = function(req, res) {
       userId: user.id || user._id,
       fullName: user.name,
       userName: user.email,
-      roles
+			roles,
+			token: user.token
     });
   }
   return res.apiResponse(null);

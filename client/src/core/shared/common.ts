@@ -20,7 +20,7 @@ export function callApi<T>(url: string, params: any, auth?: string): Promise<T> 
   }
 
   if (auth) {
-    rc.headers['Authorization'] = `Bearer ${auth}`;
+    rc.headers['Authorization'] = `${auth}`;
   }
 
   return axios.post(url, data, rc)

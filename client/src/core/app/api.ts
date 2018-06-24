@@ -4,8 +4,8 @@ import * as apiData from 'core/models/api';
 import * as isEmpty from 'ramda/src/isEmpty';
 import { callApi } from 'core/shared/common';
 
-
-const a = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, model);
+const a = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, model, store.getState().authInfo.token);
+const c = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, model);
 
 export const api = {
   user: {
@@ -13,17 +13,17 @@ export const api = {
     updateProfile: (data: apiData.UserProfile) => a<null>('user/profile/update', data)
   },
   request: {
-    getRequestState: (data: apiData.GetRequest) => a<apiData.StateRequest>('request/get/state', data),
+    getRequestState: (data: apiData.GetRequest) => c<apiData.StateRequest>('request/get/state', data),
     getRequest: (requestId: string) => a<apiData.NewRequest>('request/get', { requestId }),
     assignRequest: (data: apiData.AssignRequest) => a<boolean>('request/driver/answer', data),
-    acceptRequest: (data: apiData.AcceptRequest) => a<boolean>('request/guest/answer', data),
+    acceptRequest: (data: apiData.AcceptRequest) => c<boolean>('request/guest/answer', data),
     confirmRequest: (requestId: string) => a<apiData.StateRequest>('request/confirm', { requestId }),
-    getRequestToRate: (requestId: string, query: number) => a<apiData.StateRequest>('request/get/rate', { requestId, query }),
-    rateRequest: (data: apiData.RateRequest) => a<boolean>('request/rate', data),
-    getRequestStateToAccept: (data: apiData.GetRequest) => a<apiData.StateRequest>('request/get/accept/state', data),
+    getRequestToRate: (requestId: string, query: number) => c<apiData.StateRequest>('request/get/rate', { requestId, query }),
+    rateRequest: (data: apiData.RateRequest) => c<boolean>('request/rate', data),
+    getRequestStateToAccept: (data: apiData.GetRequest) => c<apiData.StateRequest>('request/get/accept/state', data),
   },
   gdrp: {
-    getGuestGdpr: () => a<apiData.Gdpr>('gdpr/guest')
+    getGuestGdpr: () => c<apiData.Gdpr>('gdpr/guest')
   }
 };
 

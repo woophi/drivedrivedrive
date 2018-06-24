@@ -9,6 +9,8 @@
  */
 const MobileDetect = require('mobile-detect');
 const keystone = require('keystone');
+const secret = require('./api/staticVars').secret;
+const jwt = require('jsonwebtoken');
 
 /**
 	Initialises the standard view locals
@@ -57,4 +59,25 @@ const mobileCheck = req => {
 		...keystone.get('locals'),
 		isMobile: !!md.mobile()
 	});
+}
+
+exports.validateToken = function (req, res, next) {
+	if (!req.user) {
+		return res.apiResponse({
+      Rstatus: -1
+    });
+	}
+	const userId = req.body.userId;
+	const token = req.headers.authorization;
+	if (!token)
+		return res.status(403).send({ auth: false, message: 'No token provided.', Rstatus: -2 });
+  jwt.verify(token, secret, function(err, decoded) {
+    if (err)
+			return res.status(500).send({ auth: false, message: 'Failed to authenticate token.', Rstatus: -2 });
+
+		if (userId && userId !== decoded.id)
+			return res.status(400).send({ auth: false, message: 'Unable to get data.', Rstatus: -2 });
+    // if everything good, save to request for use in other routes
+    next();
+  });
 }

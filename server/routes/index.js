@@ -62,21 +62,21 @@ exports = module.exports = function (app) {
   app.all('/api/user/auth', routes.api.app.user.auth);
   app.all('/api/user/check', routes.api.app.user.checkAuth);
   app.all('/api/user/join', routes.api.app.user.register);
-  app.all('/api/user/signout', routes.api.app.user.signout);
+  app.all('/api/user/signout', middleware.validateToken, routes.api.app.user.signout);
   app.all('/api/user/password/forgot', routes.api.app.user.forgotPassword);
   app.all('/api/user/password/reset', routes.api.app.user.resetPassword);
   app.all('/api/user/password/key', routes.api.app.user.getPasswordKey);
-  app.all('/api/user/profile', routes.api.app.user.getProfile);
-  app.all('/api/user/profile/update', routes.api.app.user.updateProfile);
+  app.all('/api/user/profile', middleware.validateToken, routes.api.app.user.getProfile);
+  app.all('/api/user/profile/update', middleware.validateToken, routes.api.app.user.updateProfile);
 
   app.all('/api/request/get/state', routes.api.app.request.getRequestState);
-  app.all('/api/request/get', routes.api.app.request.getRequest);
-  app.all('/api/request/driver/answer', routes.api.app.request.driverOnRequest);
+  app.all('/api/request/get', middleware.validateToken, routes.api.app.request.getRequest);
+  app.all('/api/request/driver/answer', middleware.validateToken, routes.api.app.request.driverOnRequest);
   app.all('/api/request/guest/answer', routes.api.app.request.acceptRequest);
-  app.all('/api/request/confirm', routes.api.app.request.confirmRequest);
+  app.all('/api/request/confirm', middleware.validateToken, routes.api.app.request.confirmRequest);
   app.all('/api/request/rate', routes.api.app.request.rateRequest);
   app.all('/api/request/get/rate', routes.api.app.request.getRequestToRate);
-  app.all('/api/request/get/accept/state', routes.api.app.request.getRequestToAccept);
+  app.all('/api/request/get/accept/state', routes.api.app.request.getRequestToAcceptStatus);
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
   app.all('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);

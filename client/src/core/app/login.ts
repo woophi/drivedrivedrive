@@ -16,16 +16,12 @@ export async function login(token: string) {
 
   store.dispatch({ type: 'setLoginProcessStep', step: 1 });
 
-  console.debug('Logging in…');
-
   const authResult = await common.callApi<models.UserAuthInfo>('/api/user/auth', postData).then(re => re, err => {
     const msg = 'fail';
 
     store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: msg });
     return Promise.reject(err);
   });
-
-  console.debug('authResult >>', authResult);
 
   store.dispatch({ type: 'setAuthInfo', payload: authResult });
 
@@ -40,7 +36,7 @@ function issueLoginTokenFromSecret(secretParams: LoginParams): Promise<string> {
 }
 
 export async function signOut() {
-  await common.callApi<any>('/api/user/signout', {})
+  await common.callApi<any>('/api/user/signout', {}, store.getState().authInfo.token)
     .then(() => store.dispatch({ type: 'setAuthInfo', payload: null }))
     .then(() => changeUrl('/signin'));
   return true;

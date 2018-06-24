@@ -17,7 +17,8 @@ User.add({
 	email: { type: Types.Email, initial: true, required: true, unique: true, index: true, label: 'E-mail' },
 	password: { type: Types.Password, initial: true, required: true, label: 'Пароль' },
 	phone: { type: String, initial: true, required: true, index: true, label: 'Телефон' },
-	resetPasswordKey: { type: String, hidden: true }
+	resetPasswordKey: { type: String, hidden: true },
+	token: { type: String, hidden: true }
 }, 'Водитель и машина', {
 	photoFront: { type: Types.CloudinaryImage, label: 'Фото спереди' },
 	photoSide: { type: Types.CloudinaryImage, label: 'Фото сбоку' },

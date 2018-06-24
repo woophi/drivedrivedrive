@@ -54,7 +54,7 @@ exports.getRequestState = function(req, res) {
 
 };
 
-exports.getRequestToAccept = function(req, res) {
+exports.getRequestToAcceptStatus = function(req, res) {
   Request.model.findById(req.body.requestId)
     .exec(function (err, result) {
       if (err || !result) {
@@ -303,7 +303,7 @@ exports.acceptRequest = function(req, res) {
 
           });
       }
-});
+		});
 
 };
 
