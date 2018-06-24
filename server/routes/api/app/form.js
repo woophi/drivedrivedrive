@@ -33,7 +33,7 @@ exports.sendRequest = function(req, res) {
 		created: Date.now()
   };
   const Request = keystone.list('Request').model;
-  const	requestData = new Request(guestData);
+  let	requestData;
   async.series([
 
 		function(cb) {
@@ -59,11 +59,11 @@ exports.sendRequest = function(req, res) {
 
 
     function(cb) {
-			const	newRequest = new Request({
+			requestData = new Request({
 				...guestData,
 				confirmedGDPR
 			});
-      newRequest.save(function(err) {
+      requestData.save(function(err) {
         if (err) {
           console.error(err);
           return res.apiError({
