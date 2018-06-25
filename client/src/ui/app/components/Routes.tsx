@@ -6,6 +6,7 @@ import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
 import TopBar from 'ui/app/modules/topBar';
 import { Redirect } from 'react-router';
+import { SnackBar } from 'ui/app/modules/snackbar';
 // import PermissionDenied from 'ui/application/components/PermissionDenied';
 
 export default ReduxConnect((state: AppState) => ({
@@ -19,6 +20,7 @@ export default ReduxConnect((state: AppState) => ({
         <Route component={AppRoutes} location={location} />
       {/* </PermissionDenied> */}
       {location.pathname === '/admin' && window.location.reload()}
+      <SnackBar />
     </div>
   )
 );
