@@ -1,13 +1,17 @@
 var keystone = require('keystone'),
 		async = require('async'),
 		_ = require('lodash'),
-		moment = require('moment');
+		moment = require('moment'),
+		mainView = require('./ssr').templateView;
 
 exports = module.exports = function (req, res) {
 
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-
+	res.render('default', {}, (e, html) => {
+		const testReplace = html.replace('ALESHA', mainView);
+		res.send(testReplace);
+	})
 	// locals.section is used to set the currently selected
 	// item in the header navigation.
 	locals.section = 'home';
@@ -93,5 +97,5 @@ exports = module.exports = function (req, res) {
 	});
 
 	// Render the view
-	view.render('default');
+	// view.render('default');
 };
