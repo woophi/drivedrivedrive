@@ -14,7 +14,8 @@ export type DataState = {
   userProfile: DataStateItem<data.UserProfile>,
   requsetState: DataStateItem<data.StateRequest>,
   selectedRequest: DataStateItem<data.NewRequest>,
-  guestGdpr: DataStateItem<data.Gdpr>
+  guestGdpr: DataStateItem<data.Gdpr>,
+  userGdpr: DataStateItem<data.Gdpr>
 };
 
 export type DataStateItem<T> = {

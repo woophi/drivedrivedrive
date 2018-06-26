@@ -12,7 +12,8 @@ const defaultState: data.DataState = {
   userProfile: defaultStateItem<data.UserProfile>(null),
   requsetState: defaultStateItem<data.StateRequest>(null),
   selectedRequest: defaultStateItem<data.NewRequest>(null),
-  guestGdpr: defaultStateItem<data.Gdpr>(null)
+  guestGdpr: defaultStateItem<data.Gdpr>(null),
+  userGdpr: defaultStateItem<data.Gdpr>(null)
 };
 
 export const reducer = (state = defaultState, dispatch: data.DataDispatch): data.DataState => {

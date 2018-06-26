@@ -13,9 +13,21 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'ui/app/components/Links';
 import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
+import Checkbox from 'material-ui/Checkbox';
+import { Modal } from 'ui/app/components/Modal';
+import { PrivacyPolicy } from 'ui/app/components/PrivacyPolicy';
+import { handleTriggerGDPRDialog, getGdprUser } from './operations';
+import { DataStatus } from 'core/models/api';
+import { getGdprUserData, getGdprUserResult } from './selectors';
 
 const mapStateToProps = (state: AppState) => ({
-  authInfo: state.authInfo
+  authInfo: state.authInfo,
+  isOpenGDPR: state.ui.user.openPrivacyPolicy,
+  isLoadingGdpr:
+    getGdprUserData(state).status === DataStatus.FETCHING ||
+    getGdprUserData(state).status === DataStatus.QUIET_FETCHING,
+  gdprResult:
+    (getGdprUserResult(state) && getGdprUserResult(state).text) || ''
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -24,7 +36,7 @@ type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 type TextFieldProps = {
   hintText?: string;
-  floatingLabelText?: string;
+  floatingLabelText?: any;
   errorText?: string;
   type?: string
 };
@@ -36,9 +48,39 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
     }
   }
 
-  render() {
-    const { styles, handleSubmit, error, pristine, submitting } = this.props;
+  get gdprComponent() {
     return (
+      <PrivacyPolicy
+        data={this.props.gdprResult}
+        fetchGdpr={getGdprUser}
+        isLoading={this.props.isLoadingGdpr}
+      />
+    );
+  }
+
+  handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    handleTriggerGDPRDialog(true);
+  }
+  handleCloseModalGDPR = () => handleTriggerGDPRDialog(false);
+
+  render() {
+    const { styles, handleSubmit, error, pristine, submitting, isOpenGDPR } = this.props;
+    const actionButtons = [
+      <RaisedButton
+        label={'Закрыть'}
+        primary
+        onClick={this.handleCloseModalGDPR}
+      />
+    ];
+
+    const gdprLink = (
+      <a style={{ textDecoration: 'underline' }} onClick={this.handleClick}>
+        Согласие на обработку персональных данных
+      </a>
+    );
+    return (
+      <>
         <Paper className={styles.container} zDepth={2}>
           <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
             <h1 className={styles.heading}>Регистрация нового водителя</h1>
@@ -88,6 +130,14 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
                 fullWidth: true
               }}
             />
+            <Field
+              name="gdpr"
+              component={CustomCheckbox}
+              type="checkbox"
+              {...{
+                floatingLabelText: gdprLink
+              }}
+            />
             <div className={styles.btnContainer}>
               <Link to={`/`} className={'mr-1'}>
                 <RaisedButton>{'отмена'}</RaisedButton>
@@ -98,6 +148,14 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
             </div>
           </form>
         </Paper>
+        <Modal
+          actions={actionButtons}
+          body={this.gdprComponent}
+          handleClose={this.handleCloseModalGDPR}
+          open={isOpenGDPR}
+          title={'Пользовательское соглашение'}
+        />
+      </>
     );
   }
 }
@@ -107,6 +165,16 @@ const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
       {...props.input}
       {...props}
       errorText={!!(props.meta.touched && props.meta.error) ? props.meta.error : ''}
+    />
+;
+const CustomCheckbox: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
+    <Checkbox
+      {...props.input}
+      required={!!(props.meta.touched && props.meta.error)}
+      onCheck={props.input.onChange}
+      checked={Boolean(props.input.value)}
+      // label={props.floatingLabelText}
+      style={{marginTop: '1rem'}}
     />
 ;
 

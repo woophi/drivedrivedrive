@@ -25,6 +25,7 @@ export interface NewUser {
   email: string;
   password: string;
   phone: string;
+  gdpr: boolean;
 }
 
 export interface PasswordForgot {

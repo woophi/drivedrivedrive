@@ -1,6 +1,5 @@
 import store from 'core/shared/store';
 import { GuestDispatch, HandlePoints } from './types';
-import { Gdpr } from 'core/models/api';
 import { api, loadData } from 'core/app/api';
 
 const state = () => store.getState();

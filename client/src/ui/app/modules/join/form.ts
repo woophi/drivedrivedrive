@@ -29,6 +29,10 @@ export const validateNewUser = (values: Partial<data.NewUser>): FormErrors<data.
     errors.phone = 'Поле обязательно к заполнению';
   }
 
+  if (!values.gdpr) {
+    errors.gdpr = 'Поле обязательно к заполнению';
+  }
+
   return errors;
 };
 
