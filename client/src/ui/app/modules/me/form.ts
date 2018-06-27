@@ -116,7 +116,7 @@ export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values:
     }
 
   } catch (e) {
-    throw new SubmissionError({  _error: e || e.error.message || e.error });
+    throw new SubmissionError({  _error: e.message });
   }
 };
 
