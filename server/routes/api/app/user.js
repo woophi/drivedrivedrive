@@ -1,6 +1,7 @@
 var async = require('async'),
 	keystone = require('keystone'),
-  User = keystone.list('User'),
+	User = keystone.list('User'),
+	Gdpr = keystone.list('Gdpr'),
 	mailFrom = require('../staticVars').mailFrom,
 	secret = require('../staticVars').secret,
   jwt = require('jsonwebtoken');
@@ -114,11 +115,20 @@ exports.register = function(req, res) {
 		return res.redirect(req.cookies.target || '/me');
 	}
 
+	let confirmedGDPR;
+
   async.series([
 
     function(cb) {
 
-      if (!req.body.firstname || !req.body.lastname || !email || !req.body.password || !req.body.phone) {
+      if (
+				!req.body.firstname ||
+				!req.body.lastname ||
+				!email ||
+				!req.body.password ||
+				!req.body.phone ||
+				!req.body.gdpr
+			) {
         return res.apiError({
           message: 'Все поля обязательны к заполнению'
         });
@@ -126,6 +136,22 @@ exports.register = function(req, res) {
 
       return cb();
 
+		},
+
+    function(cb) {
+
+      Gdpr.model.findOne()
+				.where('keyName', 'gdpr_2')
+				.exec(function (err, result) {
+					if (err) {
+						return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+					}
+					if (!result) {
+						return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+					}
+					confirmedGDPR = result._id;
+					return cb();
+				});
     },
 
     function(cb) {
@@ -160,7 +186,8 @@ exports.register = function(req, res) {
         },
         email,
         password: req.body.password,
-        phone: req.body.phone
+				phone: req.body.phone,
+				confirmedGDPR
       };
 
       var User = keystone.list('User').model,
@@ -176,6 +203,24 @@ exports.register = function(req, res) {
         return cb();
       });
 
+		},
+
+		function(cb) {
+      User.model.findOne().where('email', email).exec(function(err, user) {
+        if (err || !user) {
+          return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+        }
+				const token = jwt.sign({ id: user._id }, secret, {
+					expiresIn: 86400 // expires in 24 hours
+				});
+				user.token = token;
+				user.save(function(err) {
+					if (err) {
+						return cb(err);
+					}
+					return cb();
+				});
+      });
     }
 
   ], function(err){

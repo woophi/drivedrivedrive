@@ -26,3 +26,28 @@ exports.getGuestGdpr = (req, res) => {
 			});
     });
 };
+exports.getUserGdpr = (req, res) => {
+
+	GDPR.model.findOne()
+		.where('keyName', 'gdpr_2')
+    .exec(function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.apiResponse({
+          Rstatus: 4
+        });
+			}
+			if (err) {
+				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+			}
+			if (!result) {
+				return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+			}
+
+      return res.apiResponse({
+				title: result.title,
+				keyName: result.keyName,
+				text: result.text.html
+			});
+    });
+};

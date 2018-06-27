@@ -80,4 +80,5 @@ exports = module.exports = function (app) {
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
   app.all('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
+  app.all('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
 };
