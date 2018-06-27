@@ -17,7 +17,6 @@ const Container = createComponent(
   }),
   'div'
 );
-
 class PrivacyPolicyComp extends React.PureComponent<Props> {
   async componentDidMount() {
     await this.props.fetchGdpr();
@@ -26,8 +25,11 @@ class PrivacyPolicyComp extends React.PureComponent<Props> {
   render() {
     return (
       <Container>
-        <Scrollbar style={{ height: 350 }}>
-          <div dangerouslySetInnerHTML={{ __html: this.props.data }} />
+        <Scrollbar>
+          <div
+            style={{ padding: '0.35rem' }}
+            dangerouslySetInnerHTML={{ __html: this.props.data }}
+          />
         </Scrollbar>
         <Preloader isShow={this.props.isLoading} />
       </Container>
