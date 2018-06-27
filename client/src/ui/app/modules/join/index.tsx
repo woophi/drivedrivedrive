@@ -4,7 +4,12 @@ import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
-import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
+import {
+  Field,
+  InjectedFormProps,
+  reduxForm,
+  WrappedFieldProps
+} from 'redux-form';
 import { connect as ReduxConnect } from 'react-redux';
 import { submitNewUser, validateNewUser } from './form';
 import Paper from 'material-ui/Paper';
@@ -26,8 +31,7 @@ const mapStateToProps = (state: AppState) => ({
   isLoadingGdpr:
     getGdprUserData(state).status === DataStatus.FETCHING ||
     getGdprUserData(state).status === DataStatus.QUIET_FETCHING,
-  gdprResult:
-    (getGdprUserResult(state) && getGdprUserResult(state).text) || ''
+  gdprResult: (getGdprUserResult(state) && getGdprUserResult(state).text) || ''
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -38,10 +42,13 @@ type TextFieldProps = {
   hintText?: string;
   floatingLabelText?: any;
   errorText?: string;
-  type?: string
+  type?: string;
+  className?: string;
 };
 
-class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.NewUser, Props>> {
+class Index extends React.Component<
+  Props & FelaProps & InjectedFormProps<data.NewUser, Props>
+> {
   componentDidMount() {
     if (this.props.authInfo) {
       changeUrl('/me');
@@ -61,11 +68,18 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
   handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     handleTriggerGDPRDialog(true);
-  }
+  };
   handleCloseModalGDPR = () => handleTriggerGDPRDialog(false);
 
   render() {
-    const { styles, handleSubmit, error, pristine, submitting, isOpenGDPR } = this.props;
+    const {
+      styles,
+      handleSubmit,
+      error,
+      pristine,
+      submitting,
+      isOpenGDPR
+    } = this.props;
     const actionButtons = [
       <RaisedButton
         label={'Закрыть'}
@@ -75,14 +89,22 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
     ];
 
     const gdprLink = (
-      <a style={{ textDecoration: 'underline' }} onClick={this.handleClick}>
+      <a
+        className={'curp'}
+        style={{ textDecoration: 'underline' }}
+        onClick={this.handleClick}
+      >
         Согласие на обработку персональных данных
       </a>
     );
     return (
       <>
         <Paper className={styles.container} zDepth={2}>
-          <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
+          <form
+            className={styles.form}
+            onSubmit={handleSubmit}
+            autoComplete={''}
+          >
             <h1 className={styles.heading}>Регистрация нового водителя</h1>
             {error && <Alert mssg={error} type={'error'} />}
             <Field
@@ -135,7 +157,8 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
               component={CustomCheckbox}
               type="checkbox"
               {...{
-                floatingLabelText: gdprLink
+                floatingLabelText: gdprLink,
+                className: styles.gdprCheckbox
               }}
             />
             <div className={styles.btnContainer}>
@@ -143,7 +166,11 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
                 <RaisedButton>{'отмена'}</RaisedButton>
               </Link>
               <RaisedButton type="submit" primary disabled={submitting}>
-                {submitting ? <i className="fas fa-circle-notch fa-spin" /> : <span style={{margin: 8}}>Зарегистрироваться</span>}
+                {submitting ? (
+                  <i className="fas fa-circle-notch fa-spin" />
+                ) : (
+                  <span style={{ margin: 8 }}>Зарегистрироваться</span>
+                )}
               </RaisedButton>
             </div>
           </form>
@@ -160,25 +187,30 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.N
   }
 }
 
-const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
-    <TextField
-      {...props.input}
-      {...props}
-      errorText={!!(props.meta.touched && props.meta.error) ? props.meta.error : ''}
-    />
-;
-const CustomCheckbox: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
+const CustomInputField: React.SFC<
+  WrappedFieldProps & TextFieldProps
+> = props => (
+  <TextField
+    {...props.input}
+    {...props}
+    errorText={
+      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
+    }
+  />
+);
+const CustomCheckbox: React.SFC<WrappedFieldProps & TextFieldProps> = props => (
+  <div className={props.className}>
     <Checkbox
       {...props.input}
       required={!!(props.meta.touched && props.meta.error)}
       onCheck={props.input.onChange}
       checked={Boolean(props.input.value)}
-      // label={props.floatingLabelText}
-      style={{marginTop: '1rem'}}
     />
-;
+    {props.floatingLabelText}
+  </div>
+);
 
-const container: FelaRule<Props> = ({theme}) => ({
+const container: FelaRule<Props> = ({ theme }) => ({
   maxWidth: 650,
   margin: 'auto',
   minWidth: 320,
@@ -196,24 +228,37 @@ const form: FelaRule<Props> = () => ({
 });
 
 const heading: FelaRule<Props> = () => ({
-  alignSelf:  'flex-start'
+  alignSelf: 'flex-start'
 });
 
 const btnContainer: FelaRule<Props> = () => ({
   margin: '2rem 0',
   justifyContent: 'center',
   display: 'flex',
+  width: '100%'
+});
+
+const gdprCheckbox: FelaRule = () => ({
+  display: 'flex',
   width: '100%',
+  '>div': {
+    marginTop: '1rem',
+    flex: 0
+  },
+  '>a': {
+    marginTop: '1.2rem'
+  }
 });
 
 const mapStylesToProps = {
   container,
   heading,
   form,
-  btnContainer
+  btnContainer,
+  gdprCheckbox
 };
 
-export default compose (
+export default compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<data.NewUser, Props>({
