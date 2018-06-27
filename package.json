@@ -16,6 +16,6 @@
   "cacheDirectories": ["client/node_modules", "server/node_modules"],
   "engines": {
     "node": "8.11.1",
-    "yarn": "1.6.0"
+    "yarn": "1.7.0"
   }
 }
