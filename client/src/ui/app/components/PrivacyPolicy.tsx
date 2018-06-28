@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Preloader from './preloader';
-import { createComponent } from 'react-fela';
+import { createComponent, connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import Scrollbar from 'react-custom-scrollbars';
 
 type Props = {
@@ -11,21 +11,24 @@ type Props = {
 
 const Container = createComponent(
   () => ({
-    height: '350px',
     width: '100%',
     position: 'relative'
   }),
   'div'
 );
-class PrivacyPolicyComp extends React.PureComponent<Props> {
+
+
+type FelaProps = FelaStyles<typeof mapStylesToProps>;
+class PrivacyPolicyComp extends React.PureComponent<Props & FelaProps> {
   async componentDidMount() {
     await this.props.fetchGdpr();
   }
 
   render() {
+    const { styles } = this.props;
     return (
-      <Container>
-        <Scrollbar>
+      <Container className={styles.container}>
+        <Scrollbar className={styles.container}>
           <div
             style={{ padding: '0.35rem' }}
             dangerouslySetInnerHTML={{ __html: this.props.data }}
@@ -36,5 +39,22 @@ class PrivacyPolicyComp extends React.PureComponent<Props> {
     );
   }
 }
+const container: FelaRule<Props> = props => ({
+  height: '350px',
+  ...props.theme.mobile({
+    height: 'auto',
+    minHeight: '150px',
+  })
+});
+const scroller: FelaRule<Props> = props => ({
+  ...props.theme.mobile({
+    height: 'auto !important',
+    minHeight: '150px !important',
+  })
+});
 
-export const PrivacyPolicy = PrivacyPolicyComp;
+const mapStylesToProps = {
+  container,
+  scroller
+};
+export const PrivacyPolicy = FelaConnect(mapStylesToProps)(PrivacyPolicyComp);
