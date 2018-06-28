@@ -243,10 +243,11 @@ const gdprCheckbox: FelaRule = () => ({
   width: '100%',
   '>div': {
     marginTop: '1rem',
-    flex: 0
+    flexBasis: 0
   },
   '>a': {
-    marginTop: '1.2rem'
+    marginTop: '1.2rem',
+    flexBasis: '100%'
   }
 });
 
