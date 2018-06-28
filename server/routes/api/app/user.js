@@ -7,7 +7,11 @@ var async = require('async'),
   jwt = require('jsonwebtoken');
 
 exports.signin = function(req, res) {
-  const email = req.body.email.toLowerCase();
+	const email = req.body.email.toLowerCase();
+
+	if(!req.body.secret) {
+		return res.apiError({message: 'Введите пароль' }, '', null, 403);
+	}
 
   async.series([
 
@@ -17,7 +21,7 @@ exports.signin = function(req, res) {
           return res.apiError({message: "Извините, пользователь не найден" }, '', err, 500);
         }
         if (!user) {
-          return res.apiError({message: "Извините, пользователь не найден" }, '', err, 403);
+          return res.apiError({message: "Извините, пользователь не найден" }, '', null, 403);
         } else {
 					const token = jwt.sign({ id: user._id }, secret, {
 						expiresIn: 86400 // expires in 24 hours

@@ -80,13 +80,9 @@ exports.getRequestToAcceptStatus = function(req, res) {
 };
 
 exports.getRequest = function(req, res) {
-
   Request.model.findById(req.body.requestId).exec(function (err, result) {
     if (err || !result) {
-      console.error(err);
-      return res.apiError({
-        message: 'Невозможно получить данные'
-      });
+			return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
     }
 
     return res.apiResponse({
@@ -105,11 +101,10 @@ exports.driverOnRequest = function(req, res) {
   if (!req.user) {
 		return res.apiError({
       message: 'Неавторизованный пользователь'
-    });
+		});
+		return res.apiError({message: 'Неавторизованный пользователь' }, '', null, 401);
 	} else if (req.user && !req.user.isActive) {
-		return res.apiError({
-      message: 'Неавторизованный пользователь'
-    });
+		return res.apiError({message: 'Неавторизованный пользователь' }, '', null, 403);
 	}
 
   async.series([
@@ -124,10 +119,7 @@ exports.driverOnRequest = function(req, res) {
 
       newPrice.save(function(err) {
         if (err) {
-          console.error(err);
-          return res.apiError({
-            message: 'Невозможно добавить цену'
-          });
+					return res.apiError({message: 'Невозможно добавить цену' }, '', err, 400);
         }
 
         return cb();
@@ -137,10 +129,12 @@ exports.driverOnRequest = function(req, res) {
 
     function(cb) {
       Request.model.findById(req.body.requestId).exec(function (err, resultRequest) {
+				if (err) return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
         Price.model.findOne()
           .where('submitedBy', req.user)
           .where('assignedRequest', resultRequest._id)
           .exec(function (err, resultPrice) {
+						if (err) return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
 
             const assignedData = {
               'assignedBy': [...resultRequest.assignedBy, req.user._id],
@@ -152,10 +146,7 @@ exports.driverOnRequest = function(req, res) {
               flashErrors: true
             }, function(err) {
               if (err) {
-                console.error(err);
-                return res.apiError({
-                  message: 'Не удалось обновить заявку'
-                });
+								return res.apiError({message: 'Не удалось обновить заявку' }, '', err, 400);
               }
               return cb();
             });
@@ -166,8 +157,7 @@ exports.driverOnRequest = function(req, res) {
     function (cb) {
       Request.model.findById(req.body.requestId).exec(function(err, result) {
         if (err) {
-          console.error(err);
-          return cb(err);
+					return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
         }
         const driverForEmail = {
           specialPhoto: req.user._.specialPhoto.src(),
@@ -198,10 +188,7 @@ exports.driverOnRequest = function(req, res) {
   ], function(err){
 
     if (err) {
-      console.error(err);
-      return res.apiError({
-        message: 'Что-то пошло не так... попробуйте еще раз'
-      });
+			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
     }
 
     return res.apiResponse(true);
@@ -213,13 +200,13 @@ exports.driverOnRequest = function(req, res) {
 function sentMailAfterAccept(price, requestId, host) {
   User.model.find().where('isAdmin', true).exec(function(err, resultAdmins) {
     if (err) {
-      console.error(err);
+      return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
     }
     Request.model.findById(requestId)
       .populate('submitedOn')
       .exec(function (err, resultRequest) {
         if (err) {
-          console.error(err);
+          return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
         }
 
         const addresses = [resultRequest.submitedOn];
@@ -257,10 +244,7 @@ exports.acceptRequest = function(req, res) {
     .where('assignedBy', req.body.driverId)
     .exec(function (err, result) {
       if (err) {
-        console.error(err);
-        return res.apiError({
-          message: 'Невозможно получить данные'
-        });
+				return res.apiError({message: 'Невозможно получить данные' }, '', err, 500);
       }
       if (result && !result.accepted) {
         Price.model.findOne()
@@ -268,10 +252,7 @@ exports.acceptRequest = function(req, res) {
           .where('assignedRequest', result._id)
           .exec(function (err, resultPrice) {
             if (err) {
-              console.error(err);
-              return res.apiError({
-                message: 'Невозможно найти цену'
-              })
+							return res.apiError({message: 'Невозможно найти цену' }, '', err, 500);
             }
 
             const filterAssignedDrivers = result.assignedBy
@@ -292,10 +273,7 @@ exports.acceptRequest = function(req, res) {
               flashErrors: true
             }, function(err) {
               if (err) {
-                console.error(err);
-                return res.apiError({
-                  message: 'Невозможно выбрать водителя'
-                });
+								return res.apiError({message: 'Невозможно выбрать водителя' }, '', err, 500);
               }
               sentMailAfterAccept(resultPrice.value, req.body.requestId, req.headers.origin);
               return res.apiResponse(true);
@@ -339,10 +317,7 @@ exports.confirmRequest = function(req, res) {
 			.populate('submitedPrice')
 			.exec(function (err, result) {
         if (err) {
-          console.error(err);
-          return res.apiError({
-            message: 'Невозможно получить данные'
-          });
+					return res.apiError({message: 'Невозможно получить данные' }, '', err, 500);
         }
 
 				if (result && !result.wasConfirmed) {
@@ -357,10 +332,7 @@ exports.confirmRequest = function(req, res) {
 						flashErrors: true
           }, function(err) {
             if (err) {
-              console.error(err);
-              return res.apiError({
-                message: 'Невозможно обновить данные'
-              });
+							return res.apiError({message: 'Невозможно обновить данные' }, '', err, 500);
             }
             sentMail(result, result.submitedPrice.value);
             return res.apiResponse({
@@ -441,10 +413,7 @@ function rateDriver (requestId, req, res) {
     .populate('submitedOn')
     .exec(function(err, result) {
       if (err) {
-        console.error(err);
-        return res.apiError({
-          message: 'Невозможно найти заявку'
-        });
+				return res.apiError({message: 'Невозможно найти заявку' }, '', err, 404);
       }
       User.model
         .findById(result.submitedOn._id)
