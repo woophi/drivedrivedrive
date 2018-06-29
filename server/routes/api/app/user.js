@@ -230,10 +230,7 @@ exports.register = function(req, res) {
   ], function(err){
 
     if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError({
-        message: 'Что-то пошло не так, попробуйте снова'
-      });
+			return res.apiError({message: 'Что-то пошло не так, попробуйте снова' }, '', err, 500);
     }
 
     var onSuccess = function() {
@@ -241,10 +238,7 @@ exports.register = function(req, res) {
     }
 
     var onFail = function(e) {
-      console.error(e);
-      return res.apiError({
-        message: 'Что-то пошло не так, попробуйте снова'
-      });
+			return res.apiError({message: 'Что-то пошло не так, попробуйте снова' }, '', e, 500);
     }
 
     keystone.session.signin({ email, password: req.body.password }, req, res, onSuccess, onFail);
@@ -255,10 +249,7 @@ exports.register = function(req, res) {
 exports.signout = function(req, res) {
   keystone.session.signout(req, res, function(err) {
 		if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError({
-        message: 'Что-то пошло не так, попробуйте снова'
-      });
+			return res.apiError({message: 'Что-то пошло не так, попробуйте снова' }, '', err, 500);
     }
     return res.apiResponse(true);
 	});
@@ -268,24 +259,16 @@ exports.forgotPassword = function(req, res) {
   const email = req.body.email.toLowerCase();
   User.model.findOne().where('email', email).exec(function(err, user) {
     if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError({
-        message: 'Пользователь с таким email не существует'
-      });
+			return res.apiError({message: 'Пользователь с таким email не существует' }, '', err, 404);
     }
 
     if (!user) {
-      return res.apiError({
-        message: 'Пользователь с таким email не существует'
-      });
+			return res.apiError({message: 'Пользователь с таким email не существует' }, '', err, 404);
     }
 
     user.resetPassword(req, res, function(err) {
       if (err) {
-        console.error(JSON.stringify(err));
-        return res.apiError({
-          message: 'Не удалось сбросить пароль'
-        });
+				return res.apiError({message: 'Не удалось сбросить пароль' }, '', err, 500);
       } else {
         return res.apiResponse(true);
       }
@@ -298,29 +281,19 @@ exports.forgotPassword = function(req, res) {
 exports.resetPassword = function(req, res) {
 
   if (req.body.password !== req.body.password_confirm) {
-    return res.apiError({
-      message: 'Пароли не совпадают'
-    });
+		return res.apiError({message: 'Пароли не совпадают' }, '', err, 412);
   }
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
     if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError({
-        message: 'Ссылка для сброса пароля недействительна'
-      });
+			return res.apiError({message: 'Ссылка для сброса пароля недействительна' }, '', err, 400);
     }
     if (!user) {
-      return res.apiError({
-        message: 'Ссылка для сброса пароля недействительна'
-      });
+			return res.apiError({message: 'Ссылка для сброса пароля недействительна' }, '', err, 400);
     }
     user.save(function(err) {
       if (err) {
-        console.error(JSON.stringify(err));
-        return res.apiError({
-          message: 'Не удалось сбросить пароль'
-        });
+				return res.apiError({message: 'Не удалось сбросить пароль' }, '', err, 500);
       }
       return res.apiResponse(true);
     });
@@ -330,7 +303,7 @@ exports.resetPassword = function(req, res) {
       let result = user;
       result.resetPasswordKey = '';
       result.save(function(err) {
-        if (err) console.error(JSON.stringify(err));
+        if (err) console.error('опустошение ключа не прошло', JSON.stringify(err));
       });
     });
 
@@ -340,17 +313,10 @@ exports.getPasswordKey = function(req, res) {
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec(function(err, user) {
     if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError({
-        message: 'Ссылка для сброса пароля недействительна',
-        status: false
-      });
+			return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err, 400);
     }
     if (!user) {
-      return res.apiError({
-        message: 'Ссылка для сброса пароля недействительна',
-        status: false
-      });
+			return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err, 400);
     }
     return res.apiResponse({
       status: true
@@ -363,13 +329,10 @@ exports.getProfile = function(req, res) {
 
   User.model.findById(req.body.userId).exec(function(err, user) {
     if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError(null);
+			return res.apiError({message: 'Невозможно получить данные' }, '', err, 500);
     }
     if (!user) {
-      return res.apiError({
-        message: 'Пользователь не найден',
-      });
+			return res.apiError({message: 'Пользователь не найден' }, '', err, 404);
     }
     return res.apiResponse({
       firstName: user.name.first,
@@ -392,9 +355,7 @@ exports.getProfile = function(req, res) {
 exports.updateProfile = function(req, res) {
   const email = req.body.email.toLowerCase();
   if (!req.user) {
-    return res.apiError({
-      message: 'Пользователь не найден',
-    });
+		return res.apiError({message: 'Пользователь не найден' }, '', err, 404);
   }
   //TODO update notifications
 
@@ -427,6 +388,9 @@ exports.updateProfile = function(req, res) {
     'car.model, car.year',
     flashErrors: true
   }, function(err) {
+		if (err) {
+			return res.apiError({message: 'Не удалось обновить профиль' }, '', err, 500);
+		}
 
     const requiredUser = (!!req.user.photoFront.public_id
       && !!req.user.photoSide.public_id
@@ -439,10 +403,7 @@ exports.updateProfile = function(req, res) {
     if (requiredUser) {
       keystone.list('User').model.find().where('isAdmin', true).exec(function (err, admins) {
         if (err) {
-          console.error(JSON.stringify(err));
-          return res.apiError({
-            message: 'Не получилось обновить данные',
-          });
+					return res.apiError({message: 'Не удалось получить данные' }, '', err, 500);
         }
         new keystone.Email({
           templateName: 'admin-notify',
@@ -458,10 +419,7 @@ exports.updateProfile = function(req, res) {
     }
 
     if (err) {
-      console.error(JSON.stringify(err));
-      return res.apiError({
-        message: 'Не получилось обновить данные',
-      });
+			return res.apiError({message: 'Не удалось обновить данные' }, '', err, 500);
     }
 
     return res.apiResponse();

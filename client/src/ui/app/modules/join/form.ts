@@ -43,6 +43,6 @@ export const submitNewUser: FormSubmitHandler<data.NewUser> = async (values: dat
     await dispatch(reset('newUser'));
 
   } catch (e) {
-    throw new SubmissionError({  _error: e.error.message || e });
+    throw new SubmissionError({  _error: e.error.message });
   }
 };

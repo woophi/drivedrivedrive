@@ -419,10 +419,7 @@ function rateDriver (requestId, req, res) {
         .findById(result.submitedOn._id)
         .exec(async function(err, userResult) {
           if (err) {
-            console.error(err);
-            return res.apiError({
-              message: 'Невозможно найти водителя'
-            });
+						return res.apiError({message: 'Невозможно найти водителя' }, '', err, 404);
           }
 
           const assignedRatingsConc = userResult.rating.assignedRatings ?
@@ -445,10 +442,7 @@ function rateDriver (requestId, req, res) {
             flashErrors: true
           }, function(err) {
             if (err) {
-              console.error(err);
-              return res.apiError({
-                message: 'Невозможно оценить водителя'
-              });
+							return res.apiError({message: 'Невозможно оценить водителя' }, '', err, 500);
             }
 
             return res.apiResponse(true);
@@ -486,10 +480,7 @@ exports.rateRequest = function(req, res) {
         .where('assignedRequest', req.body.requestId)
         .exec(function (err, resultRating) {
           if (err) {
-            console.error(err);
-            return res.apiError({
-              message: 'Невозможно найти рейтинг'
-            });
+						return res.apiError({message: 'Невозможно найти рейтинг' }, '', err, 404);
           }
 
           const updateData = {
@@ -505,10 +496,7 @@ exports.rateRequest = function(req, res) {
             flashErrors: true
           }, function(err) {
             if (err) {
-              console.error(err);
-              return res.apiError({
-                message: 'Невозможно обновить рейтинг'
-              });
+							return res.apiError({message: 'Невозможно обновить рейтинг' }, '', err, 500);
             }
             return cb();
           });
@@ -522,10 +510,7 @@ exports.rateRequest = function(req, res) {
         .populate('submitedOn')
         .exec(function(err, result) {
           if (err) {
-            console.error(err);
-            return res.apiError({
-              message: 'Невозможно найти рейтинг'
-            });
+						return res.apiError({message: 'Невозможно найти заявку' }, '', err, 404);
           }
 
           const updateData = {
@@ -537,10 +522,7 @@ exports.rateRequest = function(req, res) {
             flashErrors: true
           }, function(err) {
             if (err) {
-              console.error(err);
-              return res.apiError({
-                message: 'Ошибка в рейтинге'
-              });
+							return res.apiError({message: 'Ошибка в рейтинге' }, '', err, 500);
             }
             sentMailAfterRate(result, req.headers.origin);
             return cb();
@@ -551,10 +533,7 @@ exports.rateRequest = function(req, res) {
   ], function(err){
 
     if (err) {
-      console.error(err);
-      return res.apiError({
-        message: 'Что-то пошло не так... попробуйте еще раз'
-      });
+			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
     }
 
     rateDriver(req.body.requestId, req, res);

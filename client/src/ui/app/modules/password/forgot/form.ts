@@ -18,6 +18,6 @@ export const submitFP: FormSubmitHandler<data.PasswordForgot> = async (values: d
     await dispatch(reset('forgotPassword'));
     changeUrl(`/signin`);
   } catch (e) {
-    throw new SubmissionError({  _error: e.error.message || e.error });
+    throw new SubmissionError({  _error: e.error.message });
   }
 };

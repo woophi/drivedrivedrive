@@ -26,6 +26,6 @@ export const submitPrice: FormSubmitHandler<{requestPrice: number}> = async (val
       .then(() => getRequestState(props.requestId));
     dispatch(reset('assignRequest'));
   } catch (e) {
-    throw new SubmissionError({  _error: e.error.message || e.error });
+    throw new SubmissionError({  _error: e.error.message });
   }
 };

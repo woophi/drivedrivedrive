@@ -28,6 +28,6 @@ export const submitRA: FormSubmitHandler<{guestPhone: string}> = async (values: 
       .then(() => getRequestState(props.requestId, true));
     dispatch(reset('acceptRequest'));
   } catch (e) {
-    throw new SubmissionError({  _error: e.error.message || e.error });
+    throw new SubmissionError({  _error: e.error.message });
   }
 };

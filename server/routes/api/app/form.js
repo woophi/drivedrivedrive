@@ -59,10 +59,7 @@ exports.sendRequest = function(req, res) {
 			});
       requestData.save(function(err) {
         if (err) {
-          console.error(err);
-          return res.apiError({
-            message: 'Проблема создать новый запрос.'
-          });
+					return res.apiError({message: 'Проблема создать новый запрос.' }, '', err, 500);
         }
         return cb();
       });
@@ -73,10 +70,7 @@ exports.sendRequest = function(req, res) {
 
       User.model.find().where('isActive', true).exec(function(err, users) {
         if (err) {
-          console.error(err);
-          return res.apiError({
-            message: 'Неудалось найти водителей.'
-          });
+					return res.apiError({message: 'Неудалось найти водителей.' }, '', err, 404);
         }
 
         if (!_.isEmpty(users)) {
@@ -103,10 +97,7 @@ exports.sendRequest = function(req, res) {
   ], function(err){
 
     if (err) {
-      console.error(err);
-      return res.apiError({
-        message: (err && err.message ? err.message : false) || 'Что-то пошло не так... попробуйте еще раз'
-      });
+			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
     }
 
     return res.apiResponse(true);
