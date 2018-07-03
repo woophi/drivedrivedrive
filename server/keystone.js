@@ -8,6 +8,14 @@ var keystone = require('keystone');
 // See http://keystonejs.com/guide/config for available options
 // and documentation.
 
+function toCustomLogin(req, res, next) {
+	if (!req.user) {
+		res.redirect('/signin');
+	} else {
+		next();
+	}
+}
+
 keystone.init({
 	'name': 'VETTURA',
 	'brand': 'VETTURA',
@@ -21,6 +29,7 @@ keystone.init({
 
   'auto update': true,
 	'session': true,
+	'auth': toCustomLogin,
 	'user model': 'User',
 	'admin path' : 'admin',
 });
