@@ -33,7 +33,8 @@ const container: FelaRule = ({theme}) => ({
   marginRight: '3rem',
   height: 330,
   ...theme.mobileEarly({
-    margin: '0 1rem 1rem'
+    margin: '0 1rem 1rem',
+    height: 365
   })
 });
 

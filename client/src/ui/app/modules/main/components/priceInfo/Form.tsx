@@ -80,7 +80,7 @@ class Form extends React.Component<
         />
       </div>
     );
-  };
+  }
 
   componentCheckbox = (props: WrappedFieldProps & TextFieldProps) => {
     const { styles } = this.props;
@@ -103,7 +103,7 @@ class Form extends React.Component<
         <label className={styles.checkboxLabel2}>{props.label}</label>
       </div>
     );
-  };
+  }
 
   handleClick = () => handleTriggerGDPRDialog(true);
 
@@ -222,7 +222,7 @@ class Form extends React.Component<
         </form>
       </React.Fragment>
     );
-  };
+  }
 
   get componentModal() {
     return (
@@ -293,6 +293,7 @@ const container: FelaRule<Props> = ({ theme }) => ({
   height: 550,
   position: 'relative',
   ...theme.mobileEarly({
+    height: 600,
     margin: '0 1rem'
   })
 });

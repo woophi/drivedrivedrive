@@ -70,7 +70,7 @@ class Index extends React.Component<Props & FelaProps> {
         <Header parallaxRef={this.parallax} />
         <Parallax
           ref={this.setRef.refLax}
-          pages={isMobile ? 3.86 : 3.4}
+          pages={isMobile ? 3.9 : 3.5}
           style={{ minHeight: 900 }}
         >
           <Parallax.Layer
@@ -142,7 +142,7 @@ class Index extends React.Component<Props & FelaProps> {
 
           <Parallax.Layer
             offset={3}
-            factor={isMobile ? 0.5 : 0.4}
+            factor={isMobile ? 0.7 : 0.5}
             speed={0}
             style={{ display: 'flex', flexDirection: 'column', minHeight: 450 }}
           >
@@ -205,8 +205,12 @@ const headingStyle: FelaRule<Props> = ({ theme }) => ({
   fontSize: '4rem',
   fontWeight: 'normal',
   lineHeight: 1.1,
+  alignSelf: 'center',
+  ...theme.mobileEarly({
+    alignSelf: 'unset',
+  }),
   ...theme.mobile({
-    fontSize: '2.5rem'
+    fontSize: '2.5rem',
   })
 });
 

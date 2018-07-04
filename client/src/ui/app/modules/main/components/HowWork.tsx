@@ -18,7 +18,7 @@ type LocalState = {
   boxes: {
     [key: number]: boolean
   }
-}
+};
 
 class HowWork extends React.Component<Props & FelaProps, LocalState> {
 
@@ -32,7 +32,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
       6: false,
       7: false
     }
-  }
+  };
 
   defaultState = this.state;
   timeOut: NodeJS.Timer = null;
@@ -64,7 +64,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
           ...this.state.boxes,
           [Number(key)]: true
         }
-      })
+      });
     }
   }
 
@@ -74,7 +74,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
     if (!visible) {
       this.clearAnimation();
       return;
-    };
+    }
     if (!this.state.boxes[1]) {
         this.changeStateOfBoxes();
     } else if (hiddenBoxes.length) {
@@ -95,13 +95,13 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
       transform: show ? 'translateX(0)' : 'translateX(500px)',
       transition: 'all 1s ease'
     });
-    const handleStyleBox3= (show: boolean): React.CSSProperties => ({
+    const handleStyleBox3 = (show: boolean): React.CSSProperties => ({
       visibility: show ? 'visible' : 'hidden',
       opacity: show ? 1 : 0.01,
       transform: show ? 'translateX(0)' : 'translateX(250px)',
       transition: 'all 1s ease'
     });
-    const handleStyleBottomBox= (show: boolean): React.CSSProperties => ({
+    const handleStyleBottomBox = (show: boolean): React.CSSProperties => ({
       visibility: show ? 'visible' : 'hidden',
       opacity: show ? 1 : 0.9,
       clip: show ?  'rect(0px,282px,auto,0px)' :  'rect(0px,0,auto,0px)',
@@ -145,10 +145,9 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
                 <span className={'m-auto'}>Вам на почту придет подтверждение и контактные данные водителя. Приятной поездки!</span>
               </div>
             </div>
-          </section>
-        }
+          </section>}
       </VisibilitySensor>
-    )
+    );
   }
 
   renderMobile = () => {
@@ -189,7 +188,7 @@ class HowWork extends React.Component<Props & FelaProps, LocalState> {
             </div>
           </div>
         </section>
-    )
+    );
   }
 
   render() {
@@ -231,9 +230,11 @@ const numberHead: FelaRule<Props> = ({theme}) => ({
   fontWeight: 300,
   fontStyle: 'italic',
   margin: '0 auto 1rem',
+  alignSelf: 'center',
   ...theme.mobileEarly({
     fontSize: '3rem',
-    margin: '0 0 0 .5rem'
+    margin: '0 0 0 .5rem',
+    alignSelf: 'unset'
   })
 });
 
