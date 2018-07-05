@@ -14,6 +14,7 @@ import { Link } from 'ui/app/components/Links';
 import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 import { getRequestId } from '../selectors';
+import { TextFieldProps } from 'ui/formTypes';
 
 const mapStateToProps = (state: AppState) => ({
   requestId: getRequestId(state),
@@ -22,13 +23,6 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-
-type TextFieldProps = {
-  hintText?: string;
-  floatingLabelText?: string;
-  errorText?: string;
-  type?: string
-}
 
 class Index extends React.Component<Props & FelaProps & InjectedFormProps<{requestPrice: number}, Props>> {
 

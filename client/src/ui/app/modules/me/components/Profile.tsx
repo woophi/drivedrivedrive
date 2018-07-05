@@ -25,6 +25,7 @@ import { DataStatus } from 'core/models/api';
 import { parseToInt } from 'ui/shared/transforms';
 import Toggle from 'material-ui/Toggle';
 import Progress from './Progress';
+import { TextFieldProps } from 'ui/formTypes';
 
 const CarSide = require('../../../../assets/side.jpg');
 const CarFront = require('../../../../assets/front.jpg');
@@ -42,13 +43,6 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-
-type TextFieldProps = {
-  hintText?: string;
-  floatingLabelText?: string;
-  errorText?: string;
-  type?: string;
-};
 
 class Profile extends React.Component<
   Props & FelaProps & InjectedFormProps<UserProfile, Props>

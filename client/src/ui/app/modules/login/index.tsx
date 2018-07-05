@@ -13,6 +13,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'ui/app/components/Links';
 import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
+import { PasswordField } from 'ui/app/components/PasswordField';
+import { TextFieldProps } from 'ui/formTypes';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
@@ -22,13 +24,6 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-
-type TextFieldProps = {
-  hintText?: string;
-  floatingLabelText?: string;
-  errorText?: string;
-  type?: string
-}
 
 class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.LoginInfo, Props>> {
   componentDidMount() {
@@ -55,7 +50,7 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.L
             />
             <Field
               name="secret"
-              component={CustomInputField}
+              component={PasswordField}
               type="password"
               {...{
                 floatingLabelText: 'Пароль',

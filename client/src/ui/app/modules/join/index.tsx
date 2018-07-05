@@ -24,6 +24,7 @@ import { PrivacyPolicy } from 'ui/app/components/PrivacyPolicy';
 import { handleTriggerGDPRDialog, getGdprUser } from './operations';
 import { DataStatus } from 'core/models/api';
 import { getGdprUserData, getGdprUserResult } from './selectors';
+import { TextFieldProps } from 'ui/formTypes';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
@@ -37,14 +38,6 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-
-type TextFieldProps = {
-  hintText?: string;
-  floatingLabelText?: any;
-  errorText?: string;
-  type?: string;
-  className?: string;
-};
 
 class Index extends React.Component<
   Props & FelaProps & InjectedFormProps<data.NewUser, Props>

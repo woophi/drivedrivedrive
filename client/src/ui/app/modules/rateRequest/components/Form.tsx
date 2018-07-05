@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
 import { getRequestId, getRequestQuery } from '../selectors';
 const Rating = require('react-rating');
+import { TextFieldProps } from 'ui/formTypes';
 
 const StarEmpty = require('../../../../assets/starEmpty.png');
 const StarFull = require('../../../../assets/starFull.png');
@@ -24,13 +25,6 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-
-type TextFieldProps = {
-  hintText?: string;
-  floatingLabelText?: string;
-  errorText?: string;
-  type?: string
-}
 
 class Index extends React.Component<Props & FelaProps & InjectedFormProps<RateRequest, Props>> {
 
