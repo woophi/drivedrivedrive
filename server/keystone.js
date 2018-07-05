@@ -9,11 +9,11 @@ var keystone = require('keystone');
 // and documentation.
 
 function toCustomLogin(req, res, next) {
-	if (!req.user) {
-		res.redirect('/signin');
-	} else {
+	if (!req.user) res.redirect('/signin');
+	if (req.user && (!req.user.isAdmin || !req.user.isSuperAdmin))
+		res.redirect('/me');
+	else
 		next();
-	}
 }
 
 keystone.init({
