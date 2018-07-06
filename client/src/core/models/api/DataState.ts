@@ -15,7 +15,8 @@ export type DataState = {
   requsetState: DataStateItem<data.StateRequest>,
   selectedRequest: DataStateItem<data.NewRequest>,
   guestGdpr: DataStateItem<data.Gdpr>,
-  userGdpr: DataStateItem<data.Gdpr>
+  userGdpr: DataStateItem<data.Gdpr>,
+  cookieGdpr: DataStateItem<data.Gdpr>,
 };
 
 export type DataStateItem<T> = {

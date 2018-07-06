@@ -24,7 +24,9 @@ export const api = {
   },
   gdrp: {
     getGuestGdpr: () => c<apiData.Gdpr>('gdpr/guest'),
-    getUserGdpr: () => c<apiData.Gdpr>('gdpr/user')
+    getUserGdpr: () => c<apiData.Gdpr>('gdpr/user'),
+    getCookieGdpr: () => c<apiData.Gdpr>('gdpr/cookie'),
+    setUniqVisitor: () => c<null>('uniq/visitor/cookie')
   }
 };
 
@@ -121,7 +123,8 @@ type DataLoader =
   DLF<'requsetState', apiData.DataState['requsetState']['result']> &
   DLF<'selectedRequest', apiData.DataState['selectedRequest']['result']> &
   DLF<'guestGdpr', apiData.DataState['guestGdpr']['result']> &
-  DLF<'userGdpr', apiData.DataState['userGdpr']['result']>
+  DLF<'userGdpr', apiData.DataState['userGdpr']['result']> &
+  DLF<'cookieGdpr', apiData.DataState['cookieGdpr']['result']>
   ;
 
 export const loadData: DataLoader = loadDataImpl as any;

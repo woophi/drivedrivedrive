@@ -6,10 +6,11 @@ import { HandlePoints } from '../../types';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
+const DRGESDEN = require('../../../../../assets/dresden.gif');
+const KARLOVY_VARY = require('../../../../../assets/vary.gif');
+const VENA = require('../../../../../assets/vienna.gif');
+
 const Points: React.SFC<FelaProps> = ({ styles }) => {
-  const DRGESDEN = require('../../../../../assets/dresden.gif');
-  const KARLOVY_VARY = require('../../../../../assets/vary.gif');
-  const VENA = require('../../../../../assets/vienna.gif');
 
   const handleDresden = () => handlePoints(HandlePoints.p_d);
   const handleVary = () => handlePoints(HandlePoints.p_kv);

@@ -4,7 +4,7 @@ interface LocalStorageManagerType {
   delete: (userId: number | string) => any;
 }
 
-const LocalStorageManager: LocalStorageManagerType = {
+export const LocalStorageManager: LocalStorageManagerType = {
   get: (userId, key) => {
     const item: any = JSON.parse(localStorage.getItem(`${userId}`));
     if (key && item) {
@@ -43,5 +43,3 @@ const LocalStorageManager: LocalStorageManagerType = {
     localStorage.removeItem(`${userId}`);
   }
 };
-
-export default LocalStorageManager;

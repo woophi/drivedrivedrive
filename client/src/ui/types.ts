@@ -3,6 +3,7 @@ import { GuestDispatch, GuestState } from './app/modules/main/types';
 import { PasswordDispatch, PasswordState } from './app/modules/password/types';
 import { ProfileDispatch, ProfileState } from './app/modules/me/types';
 import { UserDispatch, UserState } from './app/modules/join/types';
+import { CookieDispatch, CookieState } from './app/modules/snackbar/types';
 import * as apiData from 'core/models/api';
 
 export type UIState = {
@@ -10,7 +11,8 @@ export type UIState = {
   keyPassword: PasswordState,
   api: apiData.DataState,
   profile: ProfileState,
-  user: UserState
+  user: UserState,
+  cookie: CookieState,
 };
 
 export type UIDispatch =
@@ -19,4 +21,5 @@ export type UIDispatch =
   | ProfileDispatch
   | apiData.DataDispatch
   | UserDispatch
+  | CookieDispatch
 ;

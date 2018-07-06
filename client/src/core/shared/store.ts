@@ -12,9 +12,9 @@ const router = routerMiddleware(history);
 const epicMiddleware = createEpicMiddleware(combineEpics(action$ => action$.ignoreElements()));
 const middleware = applyMiddleware(thunk, router, epicMiddleware);
 
-const asyncEpics = [] as Epic<any, AppState>[];
+const asyncEpics = [] as Epic<AppDispatch, AppState>[];
 
-export function injectEpic(epic: Epic<any, AppState>) {
+export function injectEpic(epic: Epic<AppDispatch, AppState>) {
   asyncEpics.push(epic);
   epicMiddleware.replaceEpic(
     combineEpics(...asyncEpics)
