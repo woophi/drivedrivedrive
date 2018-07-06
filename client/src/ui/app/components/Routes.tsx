@@ -5,20 +5,18 @@ import { Route, RouteComponentProps } from 'react-router';
 import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
 import TopBar from 'ui/app/modules/topBar';
-import { Redirect } from 'react-router';
-// import PermissionDenied from 'ui/application/components/PermissionDenied';
+import { SnackBar } from 'ui/app/modules/snackbar';
 
 export default ReduxConnect((state: AppState) => ({
-  location: state.router.location as Location
+  location: state.router.location as Location,
+  isCookieConfirmed: state.ui.cookie.confirmed,
 }))(
-  ({ location }) => (
+  ({ location, isCookieConfirmed }) => (
     <div style={styles(location)}>
       {location.pathname !== '/' && <TopBar />}
-
-      {/* <PermissionDenied waitForAdminState> */}
-        <Route component={AppRoutes} location={location} />
-      {/* </PermissionDenied> */}
+      <Route component={AppRoutes} location={location} />
       {location.pathname === '/admin' && window.location.reload()}
+      {!isCookieConfirmed && <SnackBar />}
     </div>
   )
 );

@@ -6,12 +6,14 @@ import { IRenderer as FelaRenderer } from 'fela';
 import { configureFela } from './fela';
 import { driveTheme } from 'ui/shared/driveUI';
 import { ConnectedRouter } from 'react-router-redux';
-import store from 'core/shared/store';
+import store, { injectReducer } from 'core/shared/store';
 import { history } from 'ui/app/history';
 import { AppEntrySettings } from 'core/models/app';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppRoot from './components/AppRoot';
 import { init } from 'core/app/init';
+import { uiReducers } from 'core/app/reducer';
+
 
 const renderApp = (fela: {
   renderer: FelaRenderer;
@@ -35,6 +37,7 @@ const renderApp = (fela: {
 
 export const entryApplication = (args: AppEntrySettings) => {
   console.debug('AppEntry args:', args);
+  injectReducer('ui', uiReducers);
 
   store.dispatch({ type: 'appInit', isMobile: args.isMobile });
 
