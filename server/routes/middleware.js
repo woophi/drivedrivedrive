@@ -7,7 +7,6 @@
  * you have more middleware you may want to group it as separate
  * modules in your project's /lib directory.
  */
-const MobileDetect = require('mobile-detect');
 const keystone = require('keystone');
 const secret = require('./api/staticVars').secret;
 const jwt = require('jsonwebtoken');
@@ -27,7 +26,6 @@ exports.initLocals = function (req, res, next) {
 	};
 
 	if (req.cookies.target && req.cookies.target == locals.page.path) res.clearCookie('target');
-	mobileCheck(req);
 	next();
 };
 
@@ -51,14 +49,6 @@ exports.enforceHttps = function (req, res, next) {
   } else {
     next();
   }
-}
-
-const mobileCheck = req => {
-	const md = new MobileDetect(req.headers['user-agent']);
-	keystone.set('locals', {
-		...keystone.get('locals'),
-		isMobile: !!md.mobile()
-	});
 }
 
 exports.validateToken = function (req, res, next) {
