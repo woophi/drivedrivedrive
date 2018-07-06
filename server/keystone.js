@@ -10,10 +10,10 @@ var keystone = require('keystone');
 
 function toCustomLogin(req, res, next) {
 	if (!req.user) res.redirect('/signin');
-	if (req.user && (!req.user.isAdmin || !req.user.isSuperAdmin))
-		res.redirect('/me');
-	else
+	if (req.user && (req.user.isAdmin || req.user.isSuperAdmin))
 		next();
+	else
+		res.redirect('/me');
 }
 
 keystone.init({
