@@ -15,8 +15,6 @@ import { validateProfile, submitProfile } from '../form';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Link } from 'ui/app/components/Links';
-import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 import { getProfile } from '../operations';
 import Preloader from 'ui/app/components/preloader';
