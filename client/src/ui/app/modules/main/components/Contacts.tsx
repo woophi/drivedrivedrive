@@ -39,8 +39,7 @@ const Contacts: React.SFC<FelaProps> = ({ styles }) => {
       <span className={styles.subTitle2}>КОНТАКТЫ</span>
       <span className={styles.text}>Вы можете разместить Ваш запрос через форму бронирования и указать в комментариях любые возникшие вопросы, мы обязательно на них ответим. Но если Вы все же предпочитаете другой способ для связи - воспользуйтесь контактами ниже:</span>
       <span className={styles.contactsSt}>
-        <a href="tel:+420774804414">mob. +420-774-804-414</a>
-        <a href="mailto:info@transferring.cz">Email: info@transferring.cz</a>
+        <a href="mailto:info@vettura.eu">Email: info@vettura.eu</a>
       </span>
     </footer>
   );
@@ -96,9 +95,6 @@ const contactsSt: FelaRule = ({theme}) => ({
   fontWeight: 700,
   letterSpacing: '1.03px',
   '>a': {
-    ':first-child': {
-      marginRight: '4rem'
-    },
     textDecoration: 'none'
   },
   ...theme.mobile({
