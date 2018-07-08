@@ -200,7 +200,7 @@ class Form extends React.Component<
             type="text"
             label={'Ваш комментарий'}
             {...{
-              placeHodler: 'ваши пожелания, телефон или номер рейса',
+              placeHodler: 'ваши пожелания или номер рейса',
               additionalClassName: styles.hideRequired
             }}
           />
