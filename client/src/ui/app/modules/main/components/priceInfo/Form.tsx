@@ -232,7 +232,8 @@ class Form extends React.Component<
             <IconButton
               iconClassName="fa fa-times fa-2"
               onClick={this.handleCloseAfterSubmit}
-              style={{ alignSelf: 'flex-end', color: '#fff' }}
+              style={{ alignSelf: 'flex-end' }}
+              iconStyle={{color: '#fff'}}
             />
             <span className={this.props.styles.modalText}>
               Спасибо за Вашу заявку! В ближайшее время Вам начнут поступать
