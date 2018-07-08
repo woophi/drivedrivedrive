@@ -10,6 +10,7 @@
 const keystone = require('keystone');
 const secret = require('./api/staticVars').secret;
 const jwt = require('jsonwebtoken');
+const RateLimit = require('express-rate-limit');
 
 /**
 	Initialises the standard view locals
@@ -67,7 +68,32 @@ exports.validateToken = function (req, res, next) {
 
 		if (userId && userId !== decoded.id)
 			return res.status(400).send({ auth: false, message: 'Unable to get data.', Rstatus: -2 });
-    // if everything good, save to request for use in other routes
-    next();
-  });
+		// if everything good, save to request for use in other routes
+		next();
+	});
 }
+const getApiLimiter = new RateLimit({
+	windowMs: 60*60*1000,
+	delayAfter: 499,
+	delayMs: 1000,
+	max: 500,
+	message: 'Вы привысили лимит запросов на сервер, попробуйте позже через час'
+});
+const postApiLimiter = new RateLimit({
+	windowMs: 60*60*1000,
+	delayAfter: 99,
+	delayMs: 1000,
+	max: 100,
+	message: 'Вы привысили лимит запросов на сервер, попробуйте позже через час'
+});
+const requestFromGuestLimit = new RateLimit({
+	windowMs: 60*1000,
+	delayMs: 0,
+	max: 1,
+	message: 'Вы привысили лимит запросов на сервер'
+});
+exports.apiLimits = {
+	get: getApiLimiter,
+	post: postApiLimiter,
+	request: requestFromGuestLimit
+};

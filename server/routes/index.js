@@ -35,8 +35,11 @@ var routes = {
 // Setup Route Bindings
 exports = module.exports = function (app) {
   scheduler.schedulerWorker();
-  app.use(middleware.enforceHttps);
-
+	app.use(middleware.enforceHttps);
+	app.use('/api/user/profile', middleware.apiLimits.get);
+	app.use('/api/user/profile/update', middleware.apiLimits.post);
+	app.use('/api/user/join', middleware.apiLimits.post);
+	app.use('/api/sendRequest', middleware.apiLimits.request);
 	// Views
   app.all('/', routes.views.index);
 
