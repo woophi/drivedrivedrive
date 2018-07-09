@@ -291,10 +291,9 @@ const container: FelaRule<Props> = ({ theme }) => ({
   backgroundColor: 'rgba(85, 85, 85, 0.7)',
   width: 360,
   marginLeft: '3rem',
-  height: 550,
+  height: 600,
   position: 'relative',
   ...theme.mobileEarly({
-    height: 600,
     margin: '0 1rem'
   })
 });

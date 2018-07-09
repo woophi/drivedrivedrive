@@ -45,10 +45,13 @@ const Points: React.SFC<FelaProps> = ({ styles }) => {
   );
 };
 
-const container: FelaRule = () => ({
+const container: FelaRule = props => ({
   display: 'flex',
   justifyContent: 'center',
-  marginTop: '7rem'
+  marginTop: '9rem',
+  [`@media screen and (max-height: 967px)`]: {
+    marginTop: '17rem',
+  },
 });
 
 const box1: FelaRule = () => ({
@@ -77,7 +80,8 @@ const mainTitle: FelaRule = () => ({
   margin: '0 auto',
   fontSize: 18,
   lineHeight: '1em',
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  alignSelf: 'center'
 });
 
 const text: FelaRule = () => ({
