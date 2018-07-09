@@ -72,28 +72,28 @@ exports.validateToken = function (req, res, next) {
 		next();
 	});
 }
-const getApiLimiter = new RateLimit({
+const getApiLimiter = () => new RateLimit({
 	windowMs: 60*60*1000,
 	delayAfter: 499,
 	delayMs: 1000,
 	max: 500,
 	message: 'Вы привысили лимит запросов на сервер, попробуйте позже через час'
 });
-const postApiLimiter = new RateLimit({
+const postApiLimiter = () => new RateLimit({
 	windowMs: 60*60*1000,
 	delayAfter: 99,
 	delayMs: 1000,
 	max: 100,
 	message: 'Вы привысили лимит запросов на сервер, попробуйте позже через час'
 });
-const requestFromGuestLimit = new RateLimit({
+const requestFromGuestLimit = () => new RateLimit({
 	windowMs: 60*1000,
 	delayMs: 0,
 	max: 1,
 	message: 'Вы привысили лимит запросов на сервер'
 });
 exports.apiLimits = {
-	get: getApiLimiter,
-	post: postApiLimiter,
-	request: requestFromGuestLimit
+	get: getApiLimiter(),
+	post: postApiLimiter(),
+	request: requestFromGuestLimit()
 };
