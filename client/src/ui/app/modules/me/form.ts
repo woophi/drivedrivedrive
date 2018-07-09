@@ -49,7 +49,7 @@ function getPreSave(f: any) {
     const fileName = getFileName(f);
     const preSaveFiles = state().ui.profile.filesOnUpload;
     if (fileName) {
-      const file = preSaveFiles.find(pf => pf.original_filename === fileName);
+      const file = preSaveFiles && preSaveFiles.find(pf => pf.original_filename === fileName);
       if (file) {
         return {
           public_id: file.public_id,

@@ -234,16 +234,18 @@ const numberHead: FelaRule<Props> = ({theme}) => ({
   ...theme.mobileEarly({
     fontSize: '3rem',
     margin: '0 0 0 .5rem',
-    alignSelf: 'unset'
+    alignSelf: 'auto'
   })
 });
 
 const boxText: FelaRule<Props> = ({theme}) => ({
   fontSize: '1rem',
   margin: '1rem auto',
+  alignSelf: 'center',
   ...theme.mobileEarly({
     letterSpacing: 1.6,
-    margin: '0 0 0 .5rem'
+    margin: '0 0 0 .5rem',
+    alignSelf: 'auto'
   })
 });
 

@@ -57,12 +57,14 @@ const container: FelaRule = () => ({
 const stars: FelaRule = () => ({
   margin: '2rem auto 0',
   position: 'relative',
+  alignSelf: 'center'
 });
 
 const mainTitle: FelaRule = () => ({
   fontSize: 25,
   margin: '3rem auto 0',
-  letterSpacing: 6
+  letterSpacing: 6,
+  alignSelf: 'center'
 });
 
 const subTitle: FelaRule = () => ({
@@ -70,7 +72,8 @@ const subTitle: FelaRule = () => ({
   fontStyle: 'italic',
   margin: '1rem auto 0',
   fontSize: 15,
-  letterSpacing: '0.2em'
+  letterSpacing: '0.2em',
+  alignSelf: 'center'
 });
 
 const subTitle2: FelaRule = () => ({

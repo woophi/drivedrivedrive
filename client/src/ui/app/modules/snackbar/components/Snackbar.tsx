@@ -102,7 +102,7 @@ const innerContainer: FelaRule<Props> = () => ({
   width: '100%',
   display: 'flex',
   padding: '1rem',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-around',
   color: 'rgb(255, 255, 255)',
   '>span': {
     padding: '.5rem',
@@ -119,7 +119,8 @@ const innerContainer: FelaRule<Props> = () => ({
     }
   },
   '>div': {
-    margin: 'auto 0'
+    margin: 'auto 0',
+    alignSelf: 'center'
   }
 });
 
