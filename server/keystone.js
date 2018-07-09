@@ -32,6 +32,7 @@ keystone.init({
 	'auth': toCustomLogin,
 	'user model': 'User',
 	'admin path' : 'admin',
+	'trust proxy': true
 });
 
 // Load your project's Models
