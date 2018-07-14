@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /admin
+Request-rate: 1/5
