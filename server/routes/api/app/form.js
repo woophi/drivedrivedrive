@@ -1,9 +1,10 @@
+require('moment/locale/ru');
 var async = require('async'),
   keystone = require('keystone'),
 		_ = require('lodash'),
 	User = keystone.list('User'),
   Gdpr = keystone.list('Gdpr'),
-  moment = require('moment'),
+	moment = require('moment'),
   mailFrom = require('../staticVars').mailFrom;
 
 exports.sendRequest = function(req, res) {

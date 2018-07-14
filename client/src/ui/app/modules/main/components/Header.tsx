@@ -138,7 +138,7 @@ class Header extends React.Component<Props & FelaProps, LocalState> {
   }
 
   render() {
-    const { styles, parallaxRef } = this.props;
+    const { styles } = this.props;
     return (
       <header className={styles.container}>
         {this.renderBtns()}
@@ -150,7 +150,7 @@ class Header extends React.Component<Props & FelaProps, LocalState> {
 const container: FelaRule<Props> = ({ isMobile }) => ({
     position: 'absolute',
     display: 'flex',
-    zIndex: 100,
+    zIndex: 1,
     height: '3rem',
     width: '100%',
     backgroundColor: '#fff',

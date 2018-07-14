@@ -1,6 +1,6 @@
 extends layouts/base
 block content
-	-const date = moment(guestData.guest.date).format('L')
+	-const date = moment(guestData.guest.date).locale('ru').format('LL')
 	p Здравствуйте %recipient.firstName%,
 	p Новая заявка
 	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
