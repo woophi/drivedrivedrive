@@ -10,7 +10,7 @@ import store, { injectReducer } from 'core/shared/store';
 import { history } from 'ui/app/history';
 import { AppEntrySettings } from 'core/models/app';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppRoot from './components/AppRoot';
+import { AppRoot } from './components/AppRoot';
 import { init } from 'core/app/init';
 import { uiReducers } from 'core/app/reducer';
 

@@ -7,6 +7,8 @@ import * as React from 'react';
 import * as ReactHintFactory from 'react-hint';
 import { compose } from 'redux';
 import 'react-hint/css/index.css';
+import 'react-dates/lib/css/_datepicker.css';
+import 'react-dates/initialize';
 import Routes from './Routes';
 import ScreenMeasurer from '../modules/screenMeasurer';
 
@@ -49,7 +51,7 @@ const container: FelaRule<Props> = () => ({
 });
 const mapStylesToProps = { container };
 
-export default compose(
+export const AppRoot = compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(Main);
