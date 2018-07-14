@@ -25,6 +25,7 @@ import {
   getGdprGuest
 } from '../../operations';
 import { getGdprGuestData, getGdprGuestResult } from '../../selectors';
+import { DatePickerComponent } from 'ui/app/components/DatePickerField';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
@@ -77,7 +78,33 @@ class Form extends React.Component<
           style={props.styleInput || {}}
           required={props.required || false}
           id={props.id || ''}
+          autoComplete={props.input.name || ''}
+          min={1}
         />
+      </div>
+    );
+  }
+  componentInputDate = (props: WrappedFieldProps & TextFieldProps) => {
+    const { styles } = this.props;
+    const labelClassName =
+      props.meta.touched && props.meta.error
+        ? styles.dateStInvalid
+        : styles.dateSt;
+    return (
+      <div className={styles.fieldSt}>
+        <label
+          className={`${props.additionalClassName || ''} ${styles.labelSt}`}
+          style={props.styleLable || {}}
+        >
+          {props.label}
+        </label>
+        <div className={labelClassName}>
+          <DatePickerComponent
+            uniqId={props.id}
+            input={props.input}
+            meta={props.meta}
+          />
+        </div>
       </div>
     );
   }
@@ -176,11 +203,12 @@ class Form extends React.Component<
           />
           <Field
             name="date"
-            component={this.componentInput}
-            type="date"
+            component={this.componentInputDate}
             label={'Дата трансфера'}
+            type={'date'}
             {...{
-              required: true
+              required: true,
+              id: 'datePcikerRequest'
             }}
           />
 
@@ -233,7 +261,7 @@ class Form extends React.Component<
               iconClassName="fa fa-times fa-2"
               onClick={this.handleCloseAfterSubmit}
               style={{ alignSelf: 'flex-end' }}
-              iconStyle={{color: '#fff'}}
+              iconStyle={{ color: '#fff' }}
             />
             <span className={this.props.styles.modalText}>
               Спасибо за Вашу заявку! В ближайшее время Вам начнут поступать
@@ -350,6 +378,47 @@ const errInputSt: FelaRule<Props> = () => ({
   borderColor: ' #cc0000'
 });
 
+const dateSt: FelaRule<Props> = () => ({
+  '>div': {
+    height: 33,
+    '>div': {
+      display: 'flex',
+      borderRadius: 7,
+      borderColor: 'rgba(186,218,85,1)',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      height: 33,
+      boxSizing: 'border-box',
+      '>button': {
+        padding: '0px 10px 4px'
+      },
+      '>div>input': {
+        padding: 1
+      }
+    }
+  }
+});
+const dateStInvalid: FelaRule<Props> = () => ({
+  '>div': {
+    height: 33,
+    '>div': {
+      display: 'flex',
+      borderRadius: 7,
+      borderColor: '#cc0000',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      height: 33,
+      boxSizing: 'border-box',
+      '>button': {
+        padding: '0px 10px 4px'
+      },
+      '>div>input': {
+        padding: 1
+      }
+    }
+  }
+});
+
 const buttonSt: FelaRule<Props> = props => ({
   ...props.theme.items.flatButton,
   margin: '5px 5px 0',
@@ -457,7 +526,9 @@ const mapStylesToProps = {
   checkbox,
   checkboxLabel2,
   flexContainer,
-  checkboxLabelErr
+  checkboxLabelErr,
+  dateSt,
+  dateStInvalid
 };
 
 export default compose(
