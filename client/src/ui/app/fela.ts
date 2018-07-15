@@ -16,7 +16,6 @@ export function configureFela(mountNodeId: string) {
     ],
   });
 
-  // Our global styles
   renderer.renderStatic({
     fontSize: '16px',
   }, 'html');
@@ -39,26 +38,6 @@ export function configureFela(mountNodeId: string) {
   renderer.renderStatic({
     fontFamily: '"Segoe UI", "SF Optimized", system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular", "Roboto", sans-serif'
   }, ' #app button, #app input, #app optgroup, #app select, #app textarea');
-
-  renderer.renderStatic({
-    fontSize: '14px',
-    wordBreak: 'break-word'
-  }, '.tippy-tooltip-content');
-  renderer.renderStatic({
-    background: driveTheme.palette.darkHover
-  }, '.tippy-tooltip');
-  renderer.renderStatic({
-    borderTopColor: driveTheme.palette.darkHover
-  }, '.tippy-popper[x-placement^=top] [x-arrow]');
-  renderer.renderStatic({
-    borderRightColor: driveTheme.palette.darkHover
-  }, '.tippy-popper[x-placement^=right] [x-arrow]');
-  renderer.renderStatic({
-    borderLeftColor: driveTheme.palette.darkHover
-  }, '.tippy-popper[x-placement^=left] [x-arrow]');
-  renderer.renderStatic({
-    borderBottomColor: driveTheme.palette.darkHover
-  }, '.tippy-popper[x-placement^=bottom] [x-arrow]');
   renderer.renderStatic({
     fontSize: '14px',
     wordBreak: 'break-word',
@@ -83,6 +62,9 @@ export function configureFela(mountNodeId: string) {
   renderer.renderStatic({
     marginRight: '1rem'
   }, '.mr-1');
+  renderer.renderStatic({
+    marginLeft: '1rem'
+  }, '.ml-1');
   renderer.renderStatic({
     margin: 'auto'
   }, '.m-auto');

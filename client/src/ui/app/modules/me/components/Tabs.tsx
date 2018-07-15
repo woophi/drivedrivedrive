@@ -1,40 +1,64 @@
 import * as React from 'react';
 import { compose } from 'redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Profile from './Profile';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import { Profile } from './Profile';
+import { Notifications } from './Notifications';
+import { Car } from './Car';
+import { connect as ReduxConnect } from 'react-redux';
+import { AppState } from 'core/models/app';
+import { getProfile } from '../operations';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
-type OwnProps = {
-}
-
-const TabsComp: React.SFC<FelaProps & OwnProps> = ({ styles }) => {
-  const headline: React.CSSProperties = {
-    fontSize: 24,
-    paddingTop: 16,
-    marginBottom: 12,
-    fontWeight: 400,
-  };
-
-  return (
-    <Tabs className={styles.container}>
-      <Tab label="Данные водителя" >
-        <Profile />
-      </Tab>
-      {/* <Tab label="Изменить пароль" >
-        <div>
-          <h2 style={headline}>Tab One</h2>
-          <p>
-            This is an example tab.
-          </p>
-          <p>
-            You can put any sort of HTML or react component in here. It even keeps the component state!
-          </p>
-        </div>
-      </Tab> */}
-    </Tabs>
-  );
+const MOBILE_SCREEN_WIDTH = 768;
+type Props = {
+  isMobile: boolean;
 };
+class TabsComp extends React.PureComponent<FelaProps & Props> {
+  async componentDidMount() {
+    await getProfile();
+  }
+  render() {
+    const { isMobile, styles } = this.props;
+    const driverLabel = isMobile ? (
+      <i className={'fas fa-user-edit'} />
+    ) : (
+      <div>
+        <i className={'fas fa-user-edit mr-1'} />
+        Данные водителя
+      </div>
+    );
+    const notifyLabel = isMobile ? (
+      <i className={'fas fa-bell'}  />
+    ) : (
+      <div>
+        <i className={'fas fa-bell mr-1'} />
+        Рассылка уведомлений
+      </div>
+    );
+    const carLabel = isMobile ? (
+      <i className={'fas fa-car'} />
+    ) : (
+      <div>
+        <i className={'fas fa-car mr-1'} />
+        Машина
+      </div>
+    );
+    return (
+      <Tabs className={styles.container}>
+        <Tab label={driverLabel}>
+          <Profile />
+        </Tab>
+        <Tab label={notifyLabel}>
+          <Notifications />
+        </Tab>
+        <Tab label={carLabel}>
+          <Car />
+        </Tab>
+      </Tabs>
+    );
+  }
+}
 
 const container: FelaRule = () => ({
   width: '100%',
@@ -45,6 +69,9 @@ const mapStylesToProps = {
   container
 };
 
-export default compose(
-  FelaConnect(mapStylesToProps)
+export const TabsProfile = compose(
+  FelaConnect(mapStylesToProps),
+  ReduxConnect((state: AppState) => ({
+    isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH
+  }))
 )(TabsComp);

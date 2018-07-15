@@ -13,12 +13,11 @@ import {
 import { UserProfile } from 'core/models/api';
 import { validateProfile, submitProfile } from '../form';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
 import Preloader from 'ui/app/components/preloader';
-import Uploader from 'ui/app/components/Uploader';
 import { DataStatus } from 'core/models/api';
+import Toggle from 'material-ui/Toggle';
 import { Progress } from './Progress';
 import { TextFieldProps } from 'ui/formTypes';
 
@@ -26,7 +25,8 @@ const mapStateToProps = (state: AppState) => ({
   fetchProfile: state.ui.api.userProfile.status === DataStatus.QUIET_FETCHING,
   initialValues: state.ui.api.userProfile.result,
   handleSubmitting: state.ui.profile.handleSubmitting,
-  getProfileErr: state.ui.api.userProfile.errorInfo &&
+  getProfileErr:
+    state.ui.api.userProfile.errorInfo &&
     JSON.stringify(state.ui.api.userProfile.errorInfo)
 });
 
@@ -34,12 +34,18 @@ const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
-class ProfileComponent extends React.Component<
+class NotificationsComponent extends React.Component<
   Props & FelaProps & InjectedFormProps<UserProfile, Props>
 > {
-  customImgFieldDriver = (props: WrappedFieldProps) => (
-    <Uploader filedProps={props} labelName={'Фото водителя'} />
-  )
+  customToggleField = (props: WrappedFieldProps & TextFieldProps) => {
+    return (
+      <Toggle
+        label={props.floatingLabelText}
+        toggled={Boolean(props.input.value)}
+        // onToggle={props.input.onChange}
+      />
+    );
+  }
 
   render() {
     const {
@@ -55,49 +61,17 @@ class ProfileComponent extends React.Component<
     return (
       <Paper className={styles.container} zDepth={2}>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
-          {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
-
-          <div className={styles.middleTitle}>Данные</div>
+          {(error || getProfileErr) && (
+            <Alert mssg={error || getProfileErr} type={'error'} />
+          )}
+          <div className={styles.middleTitle}>Рассылка уведомлений</div>
           <Field
-            name="firstName"
-            component={CustomInputField}
+            name="notifications.email"
+            component={this.customToggleField}
             type="text"
             {...{
-              floatingLabelText: 'Имя',
-              fullWidth: true
+              floatingLabelText: 'E-mail уведомления'
             }}
-          />
-          <Field
-            name="lastName"
-            component={CustomInputField}
-            type="text"
-            {...{
-              floatingLabelText: 'Фамилия',
-              fullWidth: true
-            }}
-          />
-          <Field
-            name="email"
-            component={CustomInputField}
-            type="text"
-            {...{
-              floatingLabelText: 'E-mail',
-              fullWidth: true
-            }}
-          />
-          <Field
-            name="phone"
-            component={CustomInputField}
-            type="tel"
-            {...{
-              floatingLabelText: 'Номер телефона',
-              fullWidth: true
-            }}
-          />
-          <Field
-            name="driverPhoto"
-            component={this.customImgFieldDriver as any}
-            type="text"
           />
           <Progress />
           <div className={styles.btnContainer}>
@@ -119,18 +93,6 @@ class ProfileComponent extends React.Component<
     );
   }
 }
-
-const CustomInputField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <TextField
-    {...props.input}
-    {...props}
-    errorText={
-      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
-    }
-  />
-);
 
 const container: FelaRule<Props> = () => ({
   margin: '1rem',
@@ -168,7 +130,7 @@ const mapStylesToProps = {
   btnContainer
 };
 
-export const Profile = compose(
+export const Notifications = compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<UserProfile, Props>({
@@ -178,4 +140,4 @@ export const Profile = compose(
     validate: validateProfile,
     onSubmit: submitProfile
   })
-)(ProfileComponent);
+)(NotificationsComponent);

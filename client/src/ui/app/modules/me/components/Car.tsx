@@ -19,8 +19,13 @@ import { Alert } from 'ui/app/components/Alert';
 import Preloader from 'ui/app/components/preloader';
 import Uploader from 'ui/app/components/Uploader';
 import { DataStatus } from 'core/models/api';
+import { parseToInt } from 'ui/shared/transforms';
 import { Progress } from './Progress';
 import { TextFieldProps } from 'ui/formTypes';
+
+const CarSide = require('../../../../assets/side.jpg');
+const CarFront = require('../../../../assets/front.jpg');
+const CarInside = require('../../../../assets/inside.jpg');
 
 const mapStateToProps = (state: AppState) => ({
   fetchProfile: state.ui.api.userProfile.status === DataStatus.QUIET_FETCHING,
@@ -34,11 +39,29 @@ const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
-class ProfileComponent extends React.Component<
+class CarComponent extends React.Component<
   Props & FelaProps & InjectedFormProps<UserProfile, Props>
 > {
-  customImgFieldDriver = (props: WrappedFieldProps) => (
-    <Uploader filedProps={props} labelName={'Фото водителя'} />
+  customImgFieldCarFront = (props: WrappedFieldProps) => (
+    <Uploader
+      filedProps={props}
+      exampleFile={CarFront}
+      labelName={'Фото спереди'}
+    />
+  )
+  customImgFieldCarSide = (props: WrappedFieldProps) => (
+    <Uploader
+      filedProps={props}
+      exampleFile={CarSide}
+      labelName={'Фото сбоку'}
+    />
+  )
+  customImgFieldCarInside = (props: WrappedFieldProps) => (
+    <Uploader
+      filedProps={props}
+      exampleFile={CarInside}
+      labelName={'Фото внутри'}
+    />
   )
 
   render() {
@@ -57,47 +80,49 @@ class ProfileComponent extends React.Component<
         <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
           {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
 
-          <div className={styles.middleTitle}>Данные</div>
+          <div className={styles.middleTitle}>Машина</div>
           <Field
-            name="firstName"
+            name="photoFront"
+            component={this.customImgFieldCarFront as any}
+            type="text"
+          />
+          <Field
+            name="photoSide"
+            component={this.customImgFieldCarSide as any}
+            type="text"
+          />
+          <Field
+            name="photoInside"
+            component={this.customImgFieldCarInside as any}
+            type="text"
+          />
+          <Field
+            name="car.kind"
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Имя',
+              floatingLabelText: 'Марка',
               fullWidth: true
             }}
           />
           <Field
-            name="lastName"
+            name="car.model"
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Фамилия',
+              floatingLabelText: 'Модель',
               fullWidth: true
             }}
           />
           <Field
-            name="email"
+            name="car.year"
             component={CustomInputField}
-            type="text"
+            type="number"
             {...{
-              floatingLabelText: 'E-mail',
+              floatingLabelText: 'Год',
               fullWidth: true
             }}
-          />
-          <Field
-            name="phone"
-            component={CustomInputField}
-            type="tel"
-            {...{
-              floatingLabelText: 'Номер телефона',
-              fullWidth: true
-            }}
-          />
-          <Field
-            name="driverPhoto"
-            component={this.customImgFieldDriver as any}
-            type="text"
+            parse={parseToInt}
           />
           <Progress />
           <div className={styles.btnContainer}>
@@ -168,7 +193,7 @@ const mapStylesToProps = {
   btnContainer
 };
 
-export const Profile = compose(
+export const Car = compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<UserProfile, Props>({
@@ -178,4 +203,4 @@ export const Profile = compose(
     validate: validateProfile,
     onSubmit: submitProfile
   })
-)(ProfileComponent);
+)(CarComponent);

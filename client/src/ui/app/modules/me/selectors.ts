@@ -4,6 +4,7 @@ import { matchPath } from 'react-router';
 import { authInfo } from 'core/shared/reducers';
 
 const getAuthInfo = (state: AppState) => state.authInfo;
+const getDataProfile = (state: AppState) => state.ui.api.userProfile.result;
 
 export const getCheckRoles = createSelector(getAuthInfo, info => {
   const admin =
@@ -14,3 +15,8 @@ export const getCheckRoles = createSelector(getAuthInfo, info => {
     info && info.roles && info.roles.find(r => r === 'Driver');
   return { admin, activeDriver };
 });
+
+export const getRating = createSelector(
+  getDataProfile,
+  profile => profile && profile.rating
+);
