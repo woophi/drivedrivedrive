@@ -19,7 +19,7 @@ const RateLimit = require('express-rate-limit');
 	the navigation in the header, you may wish to change this array
 	or replace it with your own templates / logic.
 */
-exports.initLocals = function (req, res, next) {
+exports.initLocals = (req, res, next) => {
 	res.locals.user = req.user;
 
 	res.locals.page = {
@@ -33,7 +33,7 @@ exports.initLocals = function (req, res, next) {
 /**
 	Prevents people from accessing protected pages when they're not signed in
  */
-exports.requireUser = function (req, res, next) {
+exports.requireUser = (req, res, next) => {
 	if (!req.user) {
 		res.redirect('/signin');
 	} else {
@@ -41,17 +41,17 @@ exports.requireUser = function (req, res, next) {
 	}
 };
 
-exports.enforceHttps = function (req, res, next) {
+exports.enforceHttps = (req, res, next) => {
   if (!req.secure &&
     req.get('x-forwarded-proto') !== 'https' &&
     process.env.NODE_ENV === 'production') {
-    res.redirect(301, `https://${req.get("host")}${req.url}`);
+    res.redirect(301, `https://${req.get('host')}${req.url}`);
   } else {
     next();
   }
 }
 
-exports.validateToken = function (req, res, next) {
+exports.validateToken = (req, res, next) => {
 	if (!req.user) {
 		return res.apiResponse({
       Rstatus: -1
@@ -61,7 +61,7 @@ exports.validateToken = function (req, res, next) {
 	const token = req.headers.authorization;
 	if (!token)
 		return res.status(403).send({ auth: false, message: 'No token provided.', Rstatus: -2 });
-  jwt.verify(token, secret, function(err, decoded) {
+  jwt.verify(token, secret, (err, decoded) => {
     if (err)
 			return res.status(500).send({ auth: false, message: 'Failed to authenticate token.', Rstatus: -2 });
 

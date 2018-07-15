@@ -5,7 +5,7 @@ exports.getGuestGdpr = (req, res) => {
 
 	GDPR.model.findOne()
 		.where('keyName', 'gdpr_1')
-    .exec(function (err, result) {
+    .exec((err, result) => {
       if (err) {
         console.error(err);
         return res.apiResponse({
@@ -16,7 +16,7 @@ exports.getGuestGdpr = (req, res) => {
 				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
 			}
 			if (!result) {
-				return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+				return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
 			}
 
       return res.apiResponse({
@@ -30,7 +30,7 @@ exports.getUserGdpr = (req, res) => {
 
 	GDPR.model.findOne()
 		.where('keyName', 'gdpr_2')
-    .exec(function (err, result) {
+    .exec((err, result) => {
       if (err) {
         console.error(err);
         return res.apiResponse({
@@ -41,7 +41,7 @@ exports.getUserGdpr = (req, res) => {
 				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
 			}
 			if (!result) {
-				return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+				return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
 			}
 
       return res.apiResponse({
@@ -55,7 +55,7 @@ exports.getCookieGdpr = (req, res) => {
 
 	GDPR.model.findOne()
 		.where('keyName', 'gdpr_3')
-    .exec(function (err, result) {
+    .exec((err, result) => {
       if (err) {
         console.error(err);
         return res.apiResponse({
@@ -66,7 +66,7 @@ exports.getCookieGdpr = (req, res) => {
 				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
 			}
 			if (!result) {
-				return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+				return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
 			}
 
       return res.apiResponse({

@@ -18,9 +18,9 @@
  * http://expressjs.com/api.html#app.VERB
  */
 
-var keystone = require('keystone');
-var middleware = require('./middleware');
-var importRoutes = keystone.importer(__dirname);
+const keystone = require('keystone');
+const middleware = require('./middleware');
+const importRoutes = keystone.importer(__dirname);
 const scheduler = require('./scheduler');
 const helmet = require('helmet');
 
@@ -28,13 +28,13 @@ const helmet = require('helmet');
 keystone.pre('routes', middleware.initLocals);
 
 // Import Route Controllers
-var routes = {
+const routes = {
   api: importRoutes('./api'),
 	views: importRoutes('./views'),
 };
 
 // Setup Route Bindings
-exports = module.exports = function (app) {
+exports = module.exports = (app) => {
 	app.use(helmet());
 	scheduler.schedulerWorker();
 	app.use(middleware.enforceHttps);

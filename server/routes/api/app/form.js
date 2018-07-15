@@ -7,14 +7,14 @@ var async = require('async'),
 	moment = require('moment'),
   mailFrom = require('../staticVars').mailFrom;
 
-exports.sendRequest = function(req, res) {
+exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
 		return res.apiError({message: 'Без gdpr нельзя' }, '', err, 400);
 	}
 
 	let confirmedGDPR;
 
-  function callback (err) {
+  const callback = (err) => {
 		if (err) {
 			console.error('There was an error sending the notification email:', err);
 		}
@@ -37,10 +37,10 @@ exports.sendRequest = function(req, res) {
   let	requestData;
   async.series([
 
-		function(cb) {
+		(cb) => {
       Gdpr.model.findOne()
 				.where('keyName', 'gdpr_1')
-				.exec(function (err, result) {
+				.exec((err, result) => {
 					if (err) {
 						return res.apiError({message: 'Системная ошибка' }, '', err, 500);
 					}
@@ -53,12 +53,12 @@ exports.sendRequest = function(req, res) {
     },
 
 
-    function(cb) {
+    (cb) => {
 			requestData = new Request({
 				...guestData,
 				confirmedGDPR
 			});
-      requestData.save(function(err) {
+      requestData.save((err) => {
         if (err) {
 					return res.apiError({message: 'Проблема создать новый запрос.' }, '', err, 500);
         }
@@ -67,9 +67,9 @@ exports.sendRequest = function(req, res) {
 
     },
 
-    function(cb) {
+    (cb) => {
 
-      User.model.find().where('isActive', true).exec(function(err, users) {
+      User.model.find().where('isActive', true).exec((err, users) => {
         if (err) {
 					return res.apiError({message: 'Неудалось найти водителей.' }, '', err, 404);
         }
@@ -95,7 +95,7 @@ exports.sendRequest = function(req, res) {
 
     },
 
-  ], function(err){
+  ], (err) => {
 
     if (err) {
 			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);

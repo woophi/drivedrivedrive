@@ -14,7 +14,7 @@ const getConfirmedRequests = () =>
 		.where('wasConfirmed', true)
 		.populate('submitedOn')
 		.populate('submitedPrice')
-		.exec(function (err, results) {
+		.exec((err, results) => {
 			if (err) {
 				return err;
 			}
@@ -33,13 +33,13 @@ exports.sendEmailToPastRequests = async () => {
 						try {
 							await async.series([
 
-								function(cb) {
+								(cb) => {
 									const	newRating = new RatingModel({
 										assignedRequest: request._id,
 										open: Date.now()
 									});
 									newRating
-										.save(async function(err, result) {
+										.save((err, result) => {
 											if (err) {
 												return cb(err);
 											}
@@ -48,11 +48,11 @@ exports.sendEmailToPastRequests = async () => {
 										});
 								},
 
-								function(cb) {
+								(cb) => {
 									RatingModel
 										.findOne()
 										.where('assignedRequest', request._id)
-										.exec(function (err, resultRating) {
+										.exec((err, resultRating) => {
 											if (err) return cb(err);
 
 											const submitedData = {
@@ -62,13 +62,13 @@ exports.sendEmailToPastRequests = async () => {
 
 											RequestModel
 												.findById(request._id)
-												.exec(function (err, result) {
+												.exec((err, result) => {
 													if (err) {
 														return cb(err);
 													}
 													result
 														.set(submitedData)
-														.save(function(err, updatedResult) {
+														.save((err, updatedResult) => {
 															if (err) return cb(err);
 															console.log('updated');
 															return cb();
@@ -77,10 +77,10 @@ exports.sendEmailToPastRequests = async () => {
 										})
 								},
 
-								function(cb) {
+								(cb) => {
 									RequestModel
 										.findById(request._id)
-										.exec(function (err, result) {
+										.exec((err, result) => {
 											if (err) {
 												return cb(err);
 											}
@@ -98,7 +98,7 @@ exports.sendEmailToPastRequests = async () => {
 										});
 								}
 
-							], function(err){
+							], (err) => {
 
 								if (err) {
 									return err;
@@ -131,7 +131,7 @@ exports.notifyBeforeTransfer = async () => {
 						try {
 							await async.series([
 
-								function(cb) {
+								(cb) => {
 
 									const submitedData = {
 										'notified': Date.now()
@@ -139,14 +139,14 @@ exports.notifyBeforeTransfer = async () => {
 
 									request
 										.set(submitedData)
-										.save(function(err) {
+										.save((err) => {
 											if (err) return cb(err);
 											console.log('notified assigned');
 											return cb();
 										});
 								},
 
-								function(cb) {
+								(cb) => {
 									new keystone.Email({
 										templateName: 'feature-request-notify-guest',
 										transport: 'mailgun',
@@ -160,7 +160,7 @@ exports.notifyBeforeTransfer = async () => {
 									return cb();
 								},
 
-								function(cb) {
+								(cb) => {
 									new keystone.Email({
 										templateName: 'feature-request-notify-driver',
 										transport: 'mailgun',

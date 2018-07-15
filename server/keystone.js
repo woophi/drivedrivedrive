@@ -2,13 +2,13 @@
 // customising the .env file in your project's root folder.
 require('dotenv').config();
 // Require keystone
-var keystone = require('keystone');
+const keystone = require('keystone');
 
 // Initialise Keystone with your project's configuration.
 // See http://keystonejs.com/guide/config for available options
 // and documentation.
 
-function toCustomLogin(req, res, next) {
+const toCustomLogin = (req, res, next) => {
 	if (!req.user) res.redirect('/signin');
 	if (req.user && (req.user.isAdmin || req.user.isSuperAdmin))
 		next();
@@ -51,9 +51,7 @@ keystone.set('locals', {
 	host: (function() {
 		if (keystone.get('env') === 'production') return 'https://www.vettura.eu';
 		return 'http://localhost:3000';
-	})(),
-	isMobile: false,
-	SERVER_RENDERED_HTML: ''
+	})()
 });
 
 // Load your project's Routes
@@ -64,7 +62,8 @@ keystone.set('nav', {
 	users: 'users',
 	requests: ['requests', 'prices'],
 	ratings: 'ratings',
-	gdpr: 'gdprs'
+	gdpr: 'gdprs',
+	visitors: 'visitors'
 });
 
 // Start Keystone to connect to your database and initialise the web server
