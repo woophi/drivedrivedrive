@@ -33,7 +33,7 @@ exports.sendRequest = (req, res) => {
       comment: req.body.comment,
     },
 		created: Date.now(),
-		ip: getUserIp()
+		ip: getUserIp(req)
   };
   const Request = keystone.list('Request').model;
   let	requestData;

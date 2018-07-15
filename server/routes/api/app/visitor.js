@@ -18,7 +18,7 @@ exports.setUniqVisitor = (req, res) => {
 	const uniqVisitorDataHash = jwt.sign(
 		{
 			language: lang,
-			ip: getUserIp(),
+			ip: getUserIp(req),
 			city,
 			country,
 			browser,
