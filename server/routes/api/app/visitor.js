@@ -4,14 +4,10 @@ const geoip = require('geoip-lite');
 const parser = require('ua-parser-js');
 const secret = require('../staticVars').secret;
 const jwt = require('jsonwebtoken');
+const { getUserIp } = require('./helpers');
 
 exports.setUniqVisitor = (req, res) => {
 	const ua = parser(req.headers['user-agent']);
-	const ip = req.headers['x-forwarded-for'] ||
-     req.connection.remoteAddress ||
-     req.socket.remoteAddress ||
-		 (req.connection.socket ? req.connection.socket.remoteAddress : null);
-
 	const lang = req.headers['accept-language'];
 	const geo = geoip.lookup(ip);
 	const city = geo && geo.city;
@@ -22,7 +18,7 @@ exports.setUniqVisitor = (req, res) => {
 	const uniqVisitorDataHash = jwt.sign(
 		{
 			language: lang,
-			ip,
+			ip: getUserIp(),
 			city,
 			country,
 			browser,

@@ -5,7 +5,8 @@ var async = require('async'),
 	User = keystone.list('User'),
   Gdpr = keystone.list('Gdpr'),
 	moment = require('moment'),
-  mailFrom = require('../staticVars').mailFrom;
+	mailFrom = require('../staticVars').mailFrom;
+const { getUserIp } = require('./helpers');
 
 exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
@@ -31,7 +32,8 @@ exports.sendRequest = (req, res) => {
       time: req.body.time,
       comment: req.body.comment,
     },
-		created: Date.now()
+		created: Date.now(),
+		ip: getUserIp()
   };
   const Request = keystone.list('Request').model;
   let	requestData;
