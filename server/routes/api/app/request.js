@@ -14,7 +14,10 @@ exports.getRequestState = function(req, res) {
 		return res.apiResponse({
       Rstatus: -1
     });
-	} else if (req.user && !req.user.isActive) {
+	} else if (
+			req.user && !req.user.isActive &&
+			(!req.user.isAdmin || !req.user.isSuperAdmin)
+		) {
 		return res.apiResponse({
       Rstatus: -2
     });
