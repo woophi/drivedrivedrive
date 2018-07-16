@@ -9,7 +9,7 @@ const { getUserIp } = require('./helpers');
 exports.setUniqVisitor = (req, res) => {
 	const ua = parser(req.headers['user-agent']);
 	const lang = req.headers['accept-language'];
-	const geo = geoip.lookup(ip);
+	const geo = geoip.lookup(getUserIp(req));
 	const city = geo && geo.city;
 	const country = geo && geo.country;
 	const browser = ua.browser;
