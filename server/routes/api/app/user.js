@@ -24,7 +24,7 @@ exports.signin = (req, res) => {
           return res.apiError({message: "Извините, пользователь не найден" }, '', null, 403);
         } else {
 					const token = jwt.sign({ id: user._id }, secret, {
-						expiresIn: 86400 // expires in 24 hours
+						expiresIn: 86400
 					});
 					user.token = token;
 					if (user.resetPasswordKey) {

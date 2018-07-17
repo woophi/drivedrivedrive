@@ -33,7 +33,15 @@ keystone.init({
 	'user model': 'User',
 	'admin path' : 'admin',
 	'trust proxy': true,
-	'session store': 'connect-mongo'
+	'session store': 'connect-mongo',
+	'session options': {
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000
+    },
+  },
 });
 
 // Load your project's Models
@@ -78,6 +86,5 @@ if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
 	+ '\n\nCreate a mailgun account and add the credentials to the .env file to'
 	+ '\nset up your mailgun integration');
 }
-
 
 keystone.start();
