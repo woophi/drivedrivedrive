@@ -1,19 +1,19 @@
-require('moment/locale/ru');
+
 var async = require('async'),
   keystone = require('keystone'),
 		_ = require('lodash'),
 	User = keystone.list('User'),
-  Gdpr = keystone.list('Gdpr'),
-	moment = require('moment'),
-	mailFrom = require('../staticVars').mailFrom;
-const { getUserIp } = require('./helpers');
+	Gdpr = keystone.list('Gdpr');
+const { getUserIp, sendEmail } = require('../../../lib/helpers');
 
 exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
 		return res.apiError({message: 'Без gdpr нельзя' }, '', err, 400);
 	}
 
+	let	requestData;
 	let confirmedGDPR;
+	let drivers;
 
   const callback = (err) => {
 		if (err) {
@@ -36,7 +36,6 @@ exports.sendRequest = (req, res) => {
 		ip: getUserIp(req)
   };
   const Request = keystone.list('Request').model;
-  let	requestData;
   async.series([
 
 		(cb) => {
@@ -47,15 +46,35 @@ exports.sendRequest = (req, res) => {
 						return res.apiError({message: 'Системная ошибка' }, '', err, 500);
 					}
 					if (!result) {
-						return res.apiError({message: 'Извините, согласие не найдено' }, '', err, 404);
+						return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
 					}
 					confirmedGDPR = result._id;
 					return cb();
 				});
     },
 
-
     (cb) => {
+
+			User.model.find()
+				.where('isActive', true)
+				.where('notifications.email', true)
+				.exec((err, users) => {
+        if (err) {
+					return res.apiError({message: 'Системная ошибка.' }, '', err, 500);
+        }
+        if (_.isEmpty(users)) {
+					return res.apiError({message: 'Не удалось найти водителей.' }, '', null, 404);
+				}
+
+				drivers = users;
+
+        return cb();
+
+      });
+
+		},
+
+		(cb) => {
 			requestData = new Request({
 				...guestData,
 				confirmedGDPR
@@ -67,35 +86,22 @@ exports.sendRequest = (req, res) => {
         return cb();
       });
 
-    },
+		},
 
-    (cb) => {
+		(cb) => {
+			if (!_.isEmpty(drivers)) {
+				const emailData = {
+					templateName: 'driver-notify',
+					to: drivers,
+					subject: 'Новая заявка на трансфер',
+					requestData
+				};
 
-      User.model.find().where('isActive', true).exec((err, users) => {
-        if (err) {
-					return res.apiError({message: 'Неудалось найти водителей.' }, '', err, 404);
-        }
-
-        if (!_.isEmpty(users)) {
-          new keystone.Email({
-            templateName: 'driver-notify',
-            transport: 'mailgun',
-          }).send({
-            to: users,
-            from: mailFrom,
-            subject: 'Новая заявка на трансфер',
-            guestData: requestData,
-            host: req.headers.origin,
-            moment
-          }, callback);
-          return cb();
-        }
-
-        return cb();
-
-      });
-
-    },
+				sendEmail(emailData, req);
+				return cb();
+			}
+			return cb();
+		}
 
   ], (err) => {
 

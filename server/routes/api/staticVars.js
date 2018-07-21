@@ -1,4 +1,4 @@
-var keystone = require('keystone');
+const keystone = require('keystone');
 
 exports.mailFrom = {
   name: 'Vettura',

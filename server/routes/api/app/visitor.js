@@ -4,7 +4,7 @@ const geoip = require('geoip-lite');
 const parser = require('ua-parser-js');
 const secret = require('../staticVars').secret;
 const jwt = require('jsonwebtoken');
-const { getUserIp } = require('./helpers');
+const { getUserIp } = require('../../../lib/helpers');
 
 exports.setUniqVisitor = (req, res) => {
 	const ua = parser(req.headers['user-agent']);
