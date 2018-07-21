@@ -1,8 +1,6 @@
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 import { UserDispatch } from './types';
 import { api, loadData } from 'core/app/api';
-
-const state = () => store.getState();
 
 export const getGdprUser = async () => {
   try {

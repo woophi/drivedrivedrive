@@ -2,7 +2,7 @@ import { combineEpics, createEpicMiddleware, Epic } from 'redux-observable';
 import 'rxjs/add/operator/ignoreElements';
 import thunk from 'redux-thunk';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
-import { applyMiddleware, combineReducers, createStore, Reducer, ReducersMapObject, Store2 } from 'redux';
+import { applyMiddleware, combineReducers, createStore, Reducer, ReducersMapObject, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as sharedReducers from './reducers';
 import { history } from 'ui/app/history';
@@ -38,7 +38,7 @@ function updateRootReducer() {
   );
 }
 
-export function injectReducer(name: string, reducer: Reducer<any>) {
+export function injectReducer<T>(name: string, reducer: Reducer<T>) {
   asyncReducers[name] = reducer;
   updateRootReducer();
   return store;
@@ -53,7 +53,6 @@ export function injectReducers(reducers: ReducersMapObject) {
   return store;
 }
 
-const store: Store2<AppState, AppDispatch> = createStore(
+export const store: Store<AppState> = createStore(
   combineReducers(rootReducerMap), composeWithDevTools(middleware)
 );
-export default store;

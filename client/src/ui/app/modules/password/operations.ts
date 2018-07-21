@@ -1,5 +1,4 @@
-import store from 'core/shared/store';
-import * as data from 'core/models';
+import { store } from 'core/shared/store';
 import { PasswordDispatch, PayloadKey } from './types';
 import { getPasswordKey } from 'core/app/password';
 import { getKeyFromPath } from './selectors';

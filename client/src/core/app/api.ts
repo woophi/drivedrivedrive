@@ -1,4 +1,4 @@
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 import * as models from 'core/models';
 import * as apiData from 'core/models/api';
 import * as isEmpty from 'ramda/src/isEmpty';

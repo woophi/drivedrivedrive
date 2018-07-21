@@ -1,5 +1,4 @@
-import store from 'core/shared/store';
-import { UserAuthInfo } from 'core/models';
+import { store } from 'core/shared/store';
 import { GetRequest } from 'core/models/api';
 import { api, loadData } from 'core/app/api';
 

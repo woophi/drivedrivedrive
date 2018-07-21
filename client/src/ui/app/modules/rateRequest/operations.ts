@@ -1,9 +1,5 @@
-import store from 'core/shared/store';
-import { UserAuthInfo } from 'core/models';
 import { RateRequest } from 'core/models/api';
 import { api, loadData } from 'core/app/api';
-
-const state = () => store.getState();
 
 export const rateRequest = async (data: RateRequest) => {
   try {
@@ -20,4 +16,3 @@ export const getRequestToRate = async (requestId: string, query: number) => {
     throw error;
   }
 };
-

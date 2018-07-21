@@ -1,5 +1,5 @@
 import * as common from 'core/shared/common';
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 import * as models from 'core/models';
 import { changeUrl } from 'ui/app/operations';
 

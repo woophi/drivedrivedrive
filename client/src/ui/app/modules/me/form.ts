@@ -1,9 +1,7 @@
 import * as data from 'core/models/api';
-import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
+import { FormErrors, FormSubmitHandler, SubmissionError } from 'redux-form';
 import * as operations from './operations';
-import { resolve } from 'url';
-import { reject } from 'ramda';
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 
 const state = () => store.getState();
 

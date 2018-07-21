@@ -1,9 +1,7 @@
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 import { CookieDispatch } from './types';
 import { api, loadData } from 'core/app/api';
 import { LocalStorageManager } from 'core/localStorageManager';
-
-const state = () => store.getState();
 
 export const getGdprCookie = async () => {
   try {

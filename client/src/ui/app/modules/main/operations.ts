@@ -1,8 +1,6 @@
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 import { GuestDispatch, HandlePoints } from './types';
 import { api, loadData } from 'core/app/api';
-
-const state = () => store.getState();
 
 export const getGdprGuest = async () => {
   try {

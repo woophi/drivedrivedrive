@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import store from './store';
 
 export function callApi<T>(url: string, params: any, auth?: string): Promise<T> {
   const rc: AxiosRequestConfig = {

@@ -1,4 +1,4 @@
-import store from 'core/shared/store';
+import { store } from 'core/shared/store';
 import { UserAuthInfo } from 'core/models';
 import { UserProfile } from 'core/models/api';
 import { api, loadData } from 'core/app/api';
@@ -9,7 +9,7 @@ const state = () => store.getState();
 export const getProfile = async () => {
   try {
     const payload: Partial<UserAuthInfo> = {
-      userId: state().authInfo && state().authInfo.userId || ''
+      userId: (state().authInfo && state().authInfo.userId) || ''
     };
     await loadData('userProfile', () => api.user.getProfile(payload));
   } catch (error) {
@@ -17,26 +17,32 @@ export const getProfile = async () => {
   }
 };
 
-export const updateProfile = (data: UserProfile) => api.user.updateProfile(data);
+export const updateProfile = (data: UserProfile) =>
+  api.user.updateProfile(data);
 
-const fileToPreSave = (payload: FileCloud) => store.dispatch({ type: 'user/upload/file', payload } as ProfileDispatch);
-export const clearPreSave = () => store.dispatch({ type: 'user/upload/clear' } as ProfileDispatch);
+const fileToPreSave = (payload: FileCloud) =>
+  store.dispatch({ type: 'user/upload/file', payload } as ProfileDispatch);
+export const clearPreSave = () =>
+  store.dispatch({ type: 'user/upload/clear' } as ProfileDispatch);
 
-export const uploading = (payload: number) => store.dispatch({ type: 'user/upload/progress', payload } as ProfileDispatch);
+export const uploading = (payload: number) =>
+  store.dispatch({ type: 'user/upload/progress', payload } as ProfileDispatch);
 
-export const handleSubmitting = (payload: boolean) => store.dispatch({ type: 'user/upload/submitting', payload } as ProfileDispatch);
+export const handleSubmitting = (payload: boolean) =>
+  store.dispatch({
+    type: 'user/upload/submitting',
+    payload
+  } as ProfileDispatch);
 
-export const saveUnauthPath = (payload: string) => store.dispatch({ type: 'user/unauth/path', payload } as ProfileDispatch);
+export const saveUnauthPath = (payload: string) =>
+  store.dispatch({ type: 'user/unauth/path', payload } as ProfileDispatch);
 
 export const upload = (file: File) => {
-
-
   return new Promise((resolve, reject) => {
     const url = `https://api.cloudinary.com/v1_1/vettura/upload`; //dqbo8zk4k
     const unsignedUploadPreset = 'redigyrf'; // 'h0uihgmr';
 
     const fd = new FormData();
-
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', url, true);
@@ -44,13 +50,13 @@ export const upload = (file: File) => {
 
     xhr.upload.addEventListener('progress', e => {
       const progress = Math.round((e.loaded * 100.0) / e.total);
-      uploading(progress)
+      uploading(progress);
     });
 
-    xhr.onreadystatechange = function(e) {
-      if (xhr.readyState == 4 && xhr.status == 200) {
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
         // File uploaded successfully
-        var response = JSON.parse(xhr.responseText);
+        const response = JSON.parse(xhr.responseText);
         fileToPreSave(response);
         resolve();
       }
@@ -59,7 +65,6 @@ export const upload = (file: File) => {
     xhr.onerror = () => {
       reject(xhr.status);
     };
-
 
     fd.append('upload_preset', unsignedUploadPreset);
     fd.append('file', file);

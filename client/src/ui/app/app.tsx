@@ -6,7 +6,7 @@ import { IRenderer as FelaRenderer } from 'fela';
 import { configureFela } from './fela';
 import { driveTheme } from 'ui/shared/driveUI';
 import { ConnectedRouter } from 'react-router-redux';
-import store, { injectReducer } from 'core/shared/store';
+import { injectReducer, store } from 'core/shared/store';
 import { history } from 'ui/app/history';
 import { AppEntrySettings } from 'core/models/app';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
