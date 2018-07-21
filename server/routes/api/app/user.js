@@ -355,7 +355,6 @@ exports.updateProfile = (req, res) => {
   if (!req.user) {
 		return res.apiError({message: 'Пользователь не найден' }, '', null, 404);
   }
-  //TODO update notifications
 
   const checkPhoto = (photo) => {
     if (!photo || typeof photo === 'string') {
@@ -372,7 +371,8 @@ exports.updateProfile = (req, res) => {
     'phone': req.body.phone,
     'car.kind': req.body.car.kind,
     'car.model': req.body.car.model,
-    'car.year': req.body.car.year || null
+		'car.year': req.body.car.year || null,
+		'notifications.email': req.body.notifications.email
   };
 
   updatedData = checkPhoto(req.body.driverPhoto) ? { ...updatedData, 'driverPhoto': req.body.driverPhoto } : updatedData;
@@ -383,7 +383,7 @@ exports.updateProfile = (req, res) => {
   req.user.getUpdateHandler(req).process(updatedData, {
     fields: 'name, email, phone,' +
     'car.kind, driverPhoto, photoInside, photoSide, photoFront,' +
-    'car.model, car.year',
+    'car.model, car.year, notifications.email',
     flashErrors: true
   }, (err) => {
 		if (err) {

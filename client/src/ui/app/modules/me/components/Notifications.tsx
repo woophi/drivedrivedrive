@@ -38,12 +38,16 @@ class NotificationsComponent extends React.Component<
   Props & FelaProps & InjectedFormProps<UserProfile, Props>
 > {
   customToggleField = (props: WrappedFieldProps & TextFieldProps) => {
+    const warningText = 'Отключая рассылку уведомлений, Вы отказываетесь от использования сервиса';
     return (
-      <Toggle
-        label={props.floatingLabelText}
-        toggled={Boolean(props.input.value)}
-        // onToggle={props.input.onChange}
-      />
+      <>
+        {!Boolean(props.input.value) && <h2>{warningText}</h2>}
+        <Toggle
+          label={props.floatingLabelText}
+          toggled={Boolean(props.input.value)}
+          onToggle={props.input.onChange}
+        />
+      </>
     );
   }
 
