@@ -4,7 +4,6 @@ import { Configuration as wdsConfiguration } from 'webpack-dev-server';
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as TsCheckerPlugin from 'fork-ts-checker-webpack-plugin';
-// import * as HappyPack from 'happypack';
 const HappyPack = require('happypack');
 
 const isProduction = process.argv.find(a => a === '-p');
@@ -27,7 +26,7 @@ const tsLoaders = [
   }
 ];
 
-const config: webpack.Configuration = {
+const config = {
   devServer,
   entry: {
     'lib.es6': './src/es6.js',
