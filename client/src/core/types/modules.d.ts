@@ -15,7 +15,11 @@ declare module 'react-fela' {
     theme: DriveTheme
   }
 
-  type FelaRule<TOwnProps = {}> = (props?: TOwnProps & FelaThemeProps) => React.CSSProperties;
+  interface IStyle extends React.CSSProperties {
+    [index: string]: any;
+  }
+
+  type FelaRule<TOwnProps = {}> = (props?: TOwnProps & FelaThemeProps) => IStyle;
 
   interface FelaStyles<S> {
     styles: {[key in keyof S]: string}
@@ -26,4 +30,9 @@ declare module 'react-fela' {
   }
 
   export function connect<T>(mapStylesToProps: T): ComponentDecorator<T>;
+
+  export function connect<Props, Styles, Theme = any>(
+    rules: TMultiRule<Props & FelaWithThemeProps<Theme>, Styles>,
+    config?: ConnectConfig,
+  ): WithRules<Props, Styles, Theme>
 }

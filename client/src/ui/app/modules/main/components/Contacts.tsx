@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { compose } from 'redux';
-import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
+import { DriveTheme, driveTheme } from 'ui/shared/driveUI';
+import { connect as fela, Style, FelaWithStylesProps, FelaRule } from 'react-fela';
 import Star from 'material-ui/svg-icons/toggle/star';
 
-type FelaProps = FelaStyles<typeof mapStylesToProps>;
+type Props = {};
 
-const Contacts: React.SFC<FelaProps> = ({ styles }) => {
+type FelaProps = FelaWithStylesProps<Props, typeof mapStylesToProps>;
+
+const ContactsComponent: React.SFC<Props & FelaProps> = ({ styles }) => {
   const star1: React.CSSProperties = {
     position: 'absolute',
     top: 21,
@@ -81,17 +84,17 @@ const subTitle2: FelaRule = () => ({
   letterSpacing: 6
 });
 
-const text: FelaRule = ({theme}) => ({
+const text: FelaRule = () => ({
   margin: '1rem auto 0',
   fontWeight: 'bold',
   width: '49%',
-  ...theme.mobile({
+  ...driveTheme.mobile({
     padding: '1rem',
     width: '90%',
   })
 });
 
-const contactsSt: FelaRule = ({theme}) => ({
+const contactsSt: FelaRule = () => ({
   margin: '1rem auto 0',
   display: 'flex',
   justifyContent: 'center',
@@ -100,15 +103,10 @@ const contactsSt: FelaRule = ({theme}) => ({
   '>a': {
     textDecoration: 'none'
   },
-  ...theme.mobile({
-    flexDirection: 'column',
-    '>a': {
-      ':first-child': {
-        marginBottom: 5
-      }
-    }
+  ...driveTheme.mobile({
+    flexDirection: 'column'
   })
-})
+});
 
 const mapStylesToProps = {
   container,
@@ -120,6 +118,6 @@ const mapStylesToProps = {
   contactsSt
 };
 
-export default compose(
-  FelaConnect(mapStylesToProps)
-)(Contacts);
+export const Contacts = compose(
+  fela<Props, typeof mapStylesToProps, DriveTheme>(mapStylesToProps)
+)(ContactsComponent);

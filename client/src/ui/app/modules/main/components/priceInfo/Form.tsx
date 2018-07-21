@@ -53,7 +53,7 @@ type TextFieldProps = {
   id?: string;
 };
 
-class Form extends React.Component<
+class FormComponent extends React.Component<
   Props & FelaProps & InjectedFormProps<data.RequestInfo, Props>
 > {
   componentInput = (props: WrappedFieldProps & TextFieldProps) => {
@@ -531,7 +531,7 @@ const mapStylesToProps = {
   dateStInvalid
 };
 
-export default compose(
+export const Form = compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<data.RequestInfo, Props>({
@@ -541,4 +541,4 @@ export default compose(
     validate: validateRequest,
     onSubmit: submitRequest
   })
-)(Form);
+)(FormComponent);

@@ -7,7 +7,7 @@ import CompanyTittle from './CompanyTitle';
 import { Link } from 'ui/app/components/Links';
 import HowWork from './HowWork';
 import PriceInfo from './priceInfo';
-import Contacts from './Contacts';
+import { Contacts } from './Contacts';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 

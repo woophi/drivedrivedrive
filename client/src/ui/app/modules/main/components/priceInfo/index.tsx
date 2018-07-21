@@ -4,7 +4,7 @@ import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import Info from './Info';
-import Form from './Form';
+import { Form } from './Form';
 import Points from './Points';
 
 const MOBILE_SCREEN_WIDTH = 973;
