@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "async": "2.6.0",
+    "async": "^2.6.1",
     "connect-mongo": "^2.0.1",
     "dotenv": "5.0.1",
     "express-rate-limit": "^2.11.0",
