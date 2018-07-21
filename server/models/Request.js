@@ -19,7 +19,8 @@ Request.add({
 		date: { type: Date, label: 'Дата' },
 		time: { type: String, label: 'Время' },
 		comment: { type: String, label: 'Комментарий' },
-		phone: { type: String, label: 'Телефон' }
+		phone: { type: String, label: 'Телефон' },
+		notify: { type: Boolean, default: true, noedit: true, label: 'Подписка на рассылку сообщений' }
 	},
 	created: { type: Types.Datetime, noedit: true, label: 'Заявка создана' },
 	accepted: { type: Types.Datetime, noedit: true, label: 'Водитель выбран' },

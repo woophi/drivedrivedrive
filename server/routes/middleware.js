@@ -8,7 +8,7 @@
  * modules in your project's /lib directory.
  */
 const keystone = require('keystone');
-const secret = require('./api/staticVars').secret;
+const secret = require('../lib/staticVars').secret;
 const jwt = require('jsonwebtoken');
 const RateLimit = require('express-rate-limit');
 

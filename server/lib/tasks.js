@@ -1,11 +1,10 @@
 const keystone = require('keystone');
 const moment = require('moment');
 const async = require('async');
-const mailFrom = require('./api/staticVars').mailFrom;
-
 const RequestModel = keystone.list('Request').model;
 const RatingModel = keystone.list('Rating').model;
 const host =  keystone.get('locals').host;
+const { sendEmail } = require('./helpers');
 
 const getConfirmedRequests = () =>
 	RequestModel
@@ -84,16 +83,19 @@ exports.sendEmailToPastRequests = async () => {
 											if (err) {
 												return cb(err);
 											}
-											new keystone.Email({
+											if (!result.guest.notify) {
+												console.log('Guest unsubscribe');
+												return cb();
+											}
+											sendEmail({
 												templateName: 'rating-request-notify-guest',
-												transport: 'mailgun',
-											}).send({
 												to: result.guest.email,
-												from: mailFrom,
-												subject: `Оцените Вашу поездку`,
+												subject: `Оцените Вашу поездку`
+											},
+											{
 												result,
 												host
-											}, err => err && console.error(err));
+											});
 											return cb();
 										});
 								}
@@ -147,30 +149,26 @@ exports.notifyBeforeTransfer = async () => {
 								},
 
 								(cb) => {
-									new keystone.Email({
+									sendEmail({
 										templateName: 'feature-request-notify-guest',
-										transport: 'mailgun',
-									}).send({
 										to: request.guest.email,
-										from: mailFrom,
-										subject: `Важное`,
-										request,
-										moment
-									}, err => err && console.error(err));
+										subject: `Важное`
+									},
+									{
+										request
+									});
 									return cb();
 								},
 
 								(cb) => {
-									new keystone.Email({
+									sendEmail({
 										templateName: 'feature-request-notify-driver',
-										transport: 'mailgun',
-									}).send({
 										to: request.submitedOn.email,
-										from: mailFrom,
-										subject: `Важное`,
-										request,
-										moment
-									}, err => err && console.error(err));
+										subject: `Важное`
+									},
+									{
+										request
+									});
 									return cb();
 								},
 							])

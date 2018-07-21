@@ -1,6 +1,6 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
-var mailFrom = require('../routes/api/staticVars').mailFrom;
+const { sendEmail } = require('../lib/helpers');
 
 /**
  * User Model
@@ -68,17 +68,18 @@ User.schema.methods.resetPassword = function(req, res, next) {
 	user.resetPasswordKey = keystone.utils.randomString([16,24]);
 	user.save(function(err) {
 		if (err) return next(err);
-		new keystone.Email({
+
+		sendEmail({
 			templateName: 'forgotten-password',
-			transport: 'mailgun',
-		}).send({
 			to: user.email,
-			from: mailFrom,
-			subject: 'Сброс пароля',
-			user: user,
+			subject: 'Сброс пароля'
+		},
+		{
+			user,
 			link: '/reset-password/' + user.resetPasswordKey,
 			host: req.headers.origin
-		}, next);
+		});
+		next();
 	});
 }
 

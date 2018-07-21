@@ -1,8 +1,7 @@
-// @flow
 require('moment/locale/ru');
 const keystone = require('keystone');
 const moment = require('moment');
-const { mailFrom } = require('../routes/api/staticVars');
+const { mailFrom } = require('./staticVars');
 
 const emailError = (err) => {
 	if (err) {
@@ -10,17 +9,16 @@ const emailError = (err) => {
 	}
 };
 
-exports.sendEmail = (emailData, req) => {
+exports.sendEmail = (emailKeys, params) => {
 	new keystone.Email({
-		templateName: emailData.templateName,
+		templateName: emailKeys.templateName,
 		transport: 'mailgun',
 	}).send({
-		to: emailData.to,
+		to: emailKeys.to,
 		from: mailFrom,
-		subject: emailData.subject,
-		guestData: emailData.requestData,
-		host: req.headers.origin,
-		moment
+		subject: emailKeys.subject,
+		moment,
+		...params
 	}, emailError);
 };
 

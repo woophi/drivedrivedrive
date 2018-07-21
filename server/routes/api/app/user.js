@@ -2,9 +2,9 @@ var async = require('async'),
 	keystone = require('keystone'),
 	User = keystone.list('User'),
 	Gdpr = keystone.list('Gdpr'),
-	mailFrom = require('../staticVars').mailFrom,
-	secret = require('../staticVars').secret,
-  jwt = require('jsonwebtoken');
+	secret = require('../../../lib/staticVars').secret,
+	jwt = require('jsonwebtoken');
+const { sendEmail } = require('../../../lib/helpers');
 
 exports.signin = (req, res) => {
 	const email = req.body.email.toLowerCase();
@@ -402,17 +402,16 @@ exports.updateProfile = (req, res) => {
       keystone.list('User').model.find().where('isAdmin', true).exec((err, admins) => {
         if (err) {
 					return res.apiError({message: 'Не удалось получить данные' }, '', err, 500);
-        }
-        new keystone.Email({
-          templateName: 'admin-notify',
-          transport: 'mailgun',
-        }).send({
-          to: admins,
-          from: mailFrom,
-          subject: 'Новый водитель',
-          user: req.user,
+				}
+				sendEmail({
+					templateName: 'admin-notify',
+					to: admins,
+					subject: `Новый водитель`
+				},
+				{
+					user: req.user,
           host: req.headers.origin
-        }, err => err && console.error(JSON.stringify(err)));
+				});
       });
     }
 

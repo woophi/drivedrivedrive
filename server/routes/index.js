@@ -21,7 +21,7 @@
 const keystone = require('keystone');
 const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
-const scheduler = require('./scheduler');
+const { schedulerWorker } = require('../lib/scheduler');
 const helmet = require('helmet');
 
 // Common Middleware
@@ -36,7 +36,7 @@ const routes = {
 // Setup Route Bindings
 exports = module.exports = (app) => {
 	app.use(helmet());
-	scheduler.schedulerWorker();
+	schedulerWorker();
 	app.use(middleware.enforceHttps);
 	app.use('/api/user/profile', middleware.apiLimits.get);
 	app.use('/api/user/profile/update', middleware.apiLimits.post);

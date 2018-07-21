@@ -1,6 +1,5 @@
 import * as data from 'core/models';
 import {
-  change,
   FormErrors,
   FormSubmitHandler,
   reset,
@@ -51,7 +50,6 @@ export const submitRequest: FormSubmitHandler<data.RequestInfo> = async (
     triggerForm(true);
     await dispatch(reset('newRequest'));
   } catch (e) {
-    console.error('err', e);
     throw new SubmissionError({ _error: e.error.message });
   }
 };

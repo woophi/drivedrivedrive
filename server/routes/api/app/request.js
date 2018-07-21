@@ -2,12 +2,11 @@ var async = require('async'),
   keystone = require('keystone'),
 		_ = require('lodash'),
   User = keystone.list('User'),
-  moment = require('moment'),
-  mailFrom = require('../staticVars').mailFrom,
   Request = keystone.list('Request'),
   Price = keystone.list('Price'),
   ObjectID = require("mongodb").ObjectID,
-  Rating = keystone.list('Rating');
+	Rating = keystone.list('Rating');
+const { sendEmail } = require('../../../lib/helpers');
 
 exports.getRequestState = (req, res) => {
   if (!req.user) {
@@ -161,7 +160,11 @@ exports.driverOnRequest = (req, res) => {
       Request.model.findById(req.body.requestId).exec((err, result) => {
         if (err) {
 					return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
-        }
+				}
+
+				if (!result.guest.notify) {
+					return res.apiError({message: 'Невозможно отправить уведомление клиенту' }, '', null, 401);
+				}
         const driverForEmail = {
           specialPhoto: req.user._.specialPhoto.src(),
           driverPhoto: req.user._.driverPhoto.thumbnail(175, 175),
@@ -171,20 +174,22 @@ exports.driverOnRequest = (req, res) => {
           from: result.guest.from,
           to: result.guest.to,
           nominalValue: req.user.rating.nominalValue
-        };
-          new keystone.Email({
-            templateName: 'guest-notify',
-            transport: 'mailgun',
-          }).send({
-            to: result.guest,
-            from: mailFrom,
-            subject: `Трансфер ${result.guest.from} - ${result.guest.to}`,
-            driverData: driverForEmail,
-            host: req.headers.origin,
-            price: req.body.requestPrice,
-            requestId: req.body.requestId
-          }, (e) => e && console.error('not done', e));
-          return cb();
+				};
+				const emailKeys = {
+					templateName: 'guest-notify',
+					to: result.guest,
+					subject: `Трансфер ${result.guest.from} - ${result.guest.to}`
+				};
+
+				const params = {
+					driverData: driverForEmail,
+					price: req.body.requestPrice,
+					requestId: req.body.requestId,
+					host: req.headers.origin
+				};
+
+				sendEmail(emailKeys, params);
+				return cb();
       });
     }
 
@@ -200,7 +205,7 @@ exports.driverOnRequest = (req, res) => {
 
 };
 
-const sentMailAfterAccept = (price, requestId, host) => {
+const sentMailsAfterAccept = (price, requestId, host) => {
   User.model.find().where('isAdmin', true).exec((err, resultAdmins) => {
     if (err) {
       return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
@@ -212,31 +217,28 @@ const sentMailAfterAccept = (price, requestId, host) => {
           return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
         }
 
-        const addresses = [resultRequest.submitedOn];
+				const addresses = [resultRequest.submitedOn];
 
-        new keystone.Email({
-          templateName: 'accept-request-notify',
-          transport: 'mailgun',
-        }).send({
-          to: addresses,
-          from: mailFrom,
-          subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`,
-          guestData: resultRequest,
-          moment,
-          price
-        }, (e) => e && console.error('not done', e));
-        new keystone.Email({
-          templateName: 'accept-request-notify-admin',
-          transport: 'mailgun',
-        }).send({
-          to: resultAdmins,
-          from: mailFrom,
-          subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`,
-          data: resultRequest,
-          moment,
-          price,
+				sendEmail({
+					templateName: 'accept-request-notify',
+					to: addresses,
+					subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`
+				},
+				{
+					guestData: resultRequest,
+					price
+				});
+
+				sendEmail({
+					templateName: 'accept-request-notify-admin',
+					to: resultAdmins,
+					subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to}`
+				},
+				{
+					data: resultRequest,
+					price,
           host
-        }, (e) => e && console.error('not done', e));
+				});
       });
   });
 };
@@ -278,7 +280,7 @@ exports.acceptRequest = (req, res) => {
               if (err) {
 								return res.apiError({message: 'Невозможно выбрать водителя' }, '', err, 500);
               }
-              sentMailAfterAccept(resultPrice.value, req.body.requestId, req.headers.origin);
+              sentMailsAfterAccept(resultPrice.value, req.body.requestId, req.headers.origin);
               return res.apiResponse(true);
             });
 
@@ -298,23 +300,6 @@ exports.confirmRequest = (req, res) => {
       Rstatus: -2
     });
   }
-
-  const sentMail = (resultRequest, price) => {
-		const address = resultRequest.guest;
-
-		new keystone.Email({
-			templateName: 'confirm-request-notify',
-			transport: 'mailgun',
-		}).send({
-			to: address,
-			from: mailFrom,
-			subject: `Трансфер ${resultRequest.guest.from} - ${resultRequest.guest.to} подтвержден`,
-			data: resultRequest,
-			moment,
-			price
-		}, (e) => e && console.error('not done', e));
-	};
-
     Request.model.findById(req.body.requestId)
 			.populate('submitedOn')
 			.populate('submitedPrice')
@@ -337,7 +322,17 @@ exports.confirmRequest = (req, res) => {
             if (err) {
 							return res.apiError({message: 'Невозможно обновить данные' }, '', err, 500);
             }
-            sentMail(result, result.submitedPrice.value);
+
+						sendEmail({
+							templateName: 'confirm-request-notify',
+							to: result.guest,
+							subject: `Трансфер ${result.guest.from} - ${result.guest.to} подтвержден`
+						},
+						{
+							data: result,
+							price: result.submitedPrice.value
+						});
+
             return res.apiResponse({
               Rstatus: 2
             });
@@ -459,17 +454,16 @@ const sentMailAfterRate = (result, host) => {
     .findOne()
     .where('isAdmin', true)
     .exec((err, resultAdmin) => {
-      new keystone.Email({
-        templateName: 'rate-request-notify-admin',
-        transport: 'mailgun',
-      }).send({
-        to: resultAdmin,
-        from: mailFrom,
-        subject: `Оценка трансфера ${result.guest.from} - ${result.guest.to}`,
-        data: result,
-        moment,
-        host
-      }, err => err && console.error(err));
+
+			sendEmail({
+				templateName: 'rate-request-notify-admin',
+				to: resultAdmin,
+				subject: `Оценка трансфера ${result.guest.from} - ${result.guest.to}`
+			},
+			{
+				data: result,
+				host
+			});
     });
 };
 

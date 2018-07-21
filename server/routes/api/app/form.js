@@ -90,14 +90,18 @@ exports.sendRequest = (req, res) => {
 
 		(cb) => {
 			if (!_.isEmpty(drivers)) {
-				const emailData = {
+				const emailKeys = {
 					templateName: 'driver-notify',
 					to: drivers,
-					subject: 'Новая заявка на трансфер',
-					requestData
+					subject: 'Новая заявка на трансфер'
 				};
 
-				sendEmail(emailData, req);
+				const params = {
+					guestData: requestData,
+					host: req.headers.origin
+				};
+
+				sendEmail(emailKeys, params);
 				return cb();
 			}
 			return cb();
