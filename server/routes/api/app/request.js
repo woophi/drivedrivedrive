@@ -29,7 +29,13 @@ exports.getRequestState = (req, res) => {
         return res.apiResponse({
           Rstatus: 4
         });
-      }
+			}
+
+			if (!result.guest.notify) {
+				return res.apiResponse({
+          Rstatus: 4
+        });
+			}
 
       const findAssignedDriver = result.assignedBy
               .find(i => _.isEqual(i, new ObjectID(req.body.userId)));
@@ -110,6 +116,18 @@ exports.driverOnRequest = (req, res) => {
 	}
 
   async.series([
+		(cb) => {
+      Request.model.findById(req.body.requestId).exec((err, result) => {
+        if (err) {
+					return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+				}
+
+				if (!result.guest.notify) {
+					return res.apiError({message: 'Невозможно отправить уведомление клиенту' }, '', null, 401);
+				}
+				return cb();
+      });
+    },
 
     (cb) => {
       const PriceModel = keystone.list('Price').model;
