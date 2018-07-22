@@ -29,6 +29,10 @@ export const api = {
     getUserGdpr: () => c<apiData.Gdpr>('gdpr/user'),
     getCookieGdpr: () => c<apiData.Gdpr>('gdpr/cookie'),
     setUniqVisitor: () => c<null>('uniq/visitor/cookie')
+  },
+  guest: {
+    unsubFromMails: (data: { hash: string }) => c<apiData.StateUnsub>('guest/unsub', data),
+    subscribeState: (data: { hash: string }) => c<apiData.StateUnsub>('guest/subState', data)
   }
 };
 

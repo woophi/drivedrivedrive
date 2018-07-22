@@ -13,6 +13,8 @@ const checkRequestStatus: Epic<any, AppState> = (action$, store) => action$
     if (payload.SubStatus === SubStatus.UNAUTHORIZED) {
       saveUnauthPath(currentPath);
       changeUrl('/signin');
+    } else if (payload.SubStatus === SubStatus.FORBIDDEN) {
+      changeUrl('/');
     }
   })
   .ignoreElements();

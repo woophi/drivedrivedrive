@@ -1,6 +1,5 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
-
 /**
  * Request Model
  * ==========
@@ -20,7 +19,8 @@ Request.add({
 		time: { type: String, label: 'Время' },
 		comment: { type: String, label: 'Комментарий' },
 		phone: { type: String, label: 'Телефон' },
-		notify: { type: Boolean, default: true, noedit: true, label: 'Подписка на рассылку сообщений' }
+		notify: { type: Boolean, default: true, noedit: true, label: 'Подписка на рассылку сообщений' },
+		uniqHash: { type: String, noedit: true, hidden: true }
 	},
 	created: { type: Types.Datetime, noedit: true, label: 'Заявка создана' },
 	accepted: { type: Types.Datetime, noedit: true, label: 'Водитель выбран' },

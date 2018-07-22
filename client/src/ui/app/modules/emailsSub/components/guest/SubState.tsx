@@ -10,8 +10,7 @@ import { SubStatus } from 'core/models/api';
 import { Form } from './Form';
 
 const mapStateToProps = (state: AppState) => ({
-  SubStateCode: getSubStateDataResult(state),
-  userName: state.authInfo && state.authInfo.fullName.first
+  SubStateCode: getSubStateDataResult(state)
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -21,12 +20,11 @@ type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class SubStateComponent extends React.PureComponent<Props & FelaProps> {
 
   get processUnsub() {
-    const { styles, SubStateCode, userName } = this.props;
+    const { styles, SubStateCode } = this.props;
     return(SubStatus.PROCESS === SubStateCode &&
       <>
         <div className={styles.headBox}>
-          <h1 className={styles.texts}>Уважаемый {userName}!</h1>
-          <p>Вы уверены, что хотите отписаться от почтовой рассылки?</p>
+          <h1 className={styles.texts}>Вы уверены, что хотите отписаться от почтовой рассылки?</h1>
           <p>Отключая рассылку уведомлений, Вы отказываетесь от использования сервиса.</p>
         </div>
         <Form />
@@ -34,10 +32,10 @@ class SubStateComponent extends React.PureComponent<Props & FelaProps> {
     );
   }
   get doneUnsub() {
-    const { styles, SubStateCode, userName } = this.props;
+    const { styles, SubStateCode } = this.props;
     return(SubStatus.DONE === SubStateCode &&
       <div className={styles.headBox}>
-        <h1 className={styles.texts}>{userName}, Вы отписались от почтовой рассылки уведомлений.</h1>
+        <h1 className={styles.texts}>Вы отписались от почтовой рассылки уведомлений.</h1>
       </div>
     );
   }

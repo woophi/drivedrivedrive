@@ -94,7 +94,8 @@ exports.sendEmailToPastRequests = async () => {
 											},
 											{
 												result,
-												host
+												host,
+												uniqHash: result.guest.uniqHash
 											});
 											return cb();
 										});
@@ -155,7 +156,8 @@ exports.notifyBeforeTransfer = async () => {
 										subject: `Важное`
 									},
 									{
-										request
+										request,
+										uniqHash: request.guest.uniqHash
 									});
 									return cb();
 								},
@@ -167,7 +169,8 @@ exports.notifyBeforeTransfer = async () => {
 										subject: `Важное`
 									},
 									{
-										request
+										request,
+										driver: true
 									});
 									return cb();
 								},

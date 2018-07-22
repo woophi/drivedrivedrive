@@ -94,5 +94,6 @@ exports = module.exports = (app) => {
 
 	app.all('/api/user/unsub', middleware.validateToken, routes.api.app.emails.unsubDriver);
 	app.all('/api/user/subState', routes.api.app.emails.subStateDriver);
-	// app.all('/api/guest/unsub', routes.api.app.mails.unsubUser);
+	app.all('/api/guest/unsub', routes.api.app.emails.unsubGuest);
+	app.all('/api/guest/subState', routes.api.app.emails.subStateGuest);
 };

@@ -126,7 +126,16 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
-          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/emailsSub'), 'app.emails')}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/emailsSub/components/driver'), 'app.emails')}
+        />}
+    </Route>
+
+    <Route exact strict path="/unsubscribe/guest/:hash" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/emailsSub/components/guest'), 'app.emails')}
         />}
     </Route>
 

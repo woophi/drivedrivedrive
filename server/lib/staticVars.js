@@ -7,4 +7,4 @@ exports.mailFrom = {
 
 exports.secret = process.env.SECRET_BASE;
 
-exports.unsubLink = (driver) => `${keystone.get('locals').host}/unsubscribe/${driver ? 'driver' : 'guest'}`;
+exports.unsubLink = (driver, uniqHash) => `${keystone.get('locals').host}/unsubscribe/${driver ? 'driver' : 'guest/' + uniqHash}`;

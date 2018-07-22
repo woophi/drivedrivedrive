@@ -185,7 +185,8 @@ exports.driverOnRequest = (req, res) => {
 					driverData: driverForEmail,
 					price: req.body.requestPrice,
 					requestId: req.body.requestId,
-					host: req.headers.origin
+					host: req.headers.origin,
+					uniqHash: result.guest.uniqHash
 				};
 
 				sendEmail(emailKeys, params);
@@ -226,7 +227,8 @@ const sentMailsAfterAccept = (price, requestId, host) => {
 				},
 				{
 					guestData: resultRequest,
-					price
+					price,
+					driver: true
 				});
 
 				sendEmail({
@@ -237,7 +239,8 @@ const sentMailsAfterAccept = (price, requestId, host) => {
 				{
 					data: resultRequest,
 					price,
-          host
+          host,
+					driver: true
 				});
       });
   });
@@ -330,7 +333,8 @@ exports.confirmRequest = (req, res) => {
 						},
 						{
 							data: result,
-							price: result.submitedPrice.value
+							price: result.submitedPrice.value,
+							uniqHash: result.guest.uniqHash
 						});
 
             return res.apiResponse({
@@ -462,7 +466,8 @@ const sentMailAfterRate = (result, host) => {
 			},
 			{
 				data: result,
-				host
+				host,
+				driver: true
 			});
     });
 };

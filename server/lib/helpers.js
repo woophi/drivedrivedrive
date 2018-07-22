@@ -19,7 +19,7 @@ exports.sendEmail = (emailKeys, params) => {
 		subject: emailKeys.subject,
 		moment,
 		...params,
-		unsubLink: unsubLink(params.driver)
+		unsubLink: unsubLink(params.driver, params.uniqHash)
 	}, emailError);
 };
 

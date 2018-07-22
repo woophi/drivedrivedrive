@@ -5,6 +5,7 @@ var async = require('async'),
 	User = keystone.list('User'),
 	Gdpr = keystone.list('Gdpr');
 const { getUserIp, sendEmail } = require('../../../lib/helpers');
+const crypto = require('crypto');
 
 exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
@@ -15,11 +16,7 @@ exports.sendRequest = (req, res) => {
 	let confirmedGDPR;
 	let drivers;
 
-  const callback = (err) => {
-		if (err) {
-			console.error('There was an error sending the notification email:', err);
-		}
-	};
+	const buf = crypto.randomBytes(8).toString('hex');
 
   const guestData = {
     guest: {
@@ -30,7 +27,8 @@ exports.sendRequest = (req, res) => {
       to: req.body.to,
       date: req.body.date,
       time: req.body.time,
-      comment: req.body.comment,
+			comment: req.body.comment,
+			uniqHash: buf
     },
 		created: Date.now(),
 		ip: getUserIp(req)

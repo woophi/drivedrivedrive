@@ -1,14 +1,10 @@
 import { AppState } from 'core/models/app';
 import { createSelector } from 'reselect';
 import { matchPath } from 'react-router';
-import { authInfo } from 'core/shared/reducers';
 
 const getPathName = (state: AppState) => state.router.location.pathname;
 
-
-
 const getAuthInfo = (state: AppState) => state.authInfo;
-
 
 export const getCheckRoles = createSelector(
   getAuthInfo,
