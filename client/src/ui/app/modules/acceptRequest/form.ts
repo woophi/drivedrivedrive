@@ -1,7 +1,7 @@
 import * as data from 'core/models/api';
-import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
+import { FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
 import { api } from 'core/app/api';
-import { getRequestState } from 'ui/app/modules/request/operations';
+import { getRequestState } from './operations';
 
 type SharedProps = {
   requestId: string;
@@ -25,7 +25,7 @@ export const submitRA: FormSubmitHandler<{guestPhone: string}> = async (values: 
       driverId: props.driverId
     };
     await api.request.acceptRequest(payload)
-      .then(() => getRequestState(props.requestId, true));
+      .then(() => getRequestState(props.requestId));
     dispatch(reset('acceptRequest'));
   } catch (e) {
     throw new SubmissionError({  _error: e.error.message });
