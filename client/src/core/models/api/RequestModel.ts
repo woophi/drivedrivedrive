@@ -26,7 +26,7 @@ export interface NewRequest {
   to: string;
   date: any;
   time: string;
-  comment?: string
+  comment?: string;
 }
 
 export interface AssignRequest {

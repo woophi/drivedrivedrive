@@ -10,7 +10,9 @@ const c = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, mo
 export const api = {
   user: {
     getProfile: (data: Partial<models.UserAuthInfo>) => a<apiData.UserProfile>('user/profile', data),
-    updateProfile: (data: apiData.UserProfile) => a<null>('user/profile/update', data)
+    updateProfile: (data: apiData.UserProfile) => a<null>('user/profile/update', data),
+    unsubFromMails: () => a<apiData.StateUnsub>('user/unsub'),
+    subscribeState: () => c<apiData.StateUnsub>('user/subState')
   },
   request: {
     getRequestState: (data: apiData.GetRequest) => c<apiData.StateRequest>('request/get/state', data),
@@ -124,7 +126,8 @@ type DataLoader =
   DLF<'selectedRequest', apiData.DataState['selectedRequest']['result']> &
   DLF<'guestGdpr', apiData.DataState['guestGdpr']['result']> &
   DLF<'userGdpr', apiData.DataState['userGdpr']['result']> &
-  DLF<'cookieGdpr', apiData.DataState['cookieGdpr']['result']>
+  DLF<'cookieGdpr', apiData.DataState['cookieGdpr']['result']> &
+  DLF<'subscribeState', apiData.DataState['subscribeState']['result']>
   ;
 
 export const loadData: DataLoader = loadDataImpl as any;

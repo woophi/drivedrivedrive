@@ -98,7 +98,8 @@ exports.sendRequest = (req, res) => {
 
 				const params = {
 					guestData: requestData,
-					host: req.headers.origin
+					host: req.headers.origin,
+					driver: true
 				};
 
 				sendEmail(emailKeys, params);

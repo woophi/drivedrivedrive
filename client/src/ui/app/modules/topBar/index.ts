@@ -1,3 +1,1 @@
-import TopBar from './components';
-
-export default TopBar;
+export * from './components';

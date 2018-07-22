@@ -7,7 +7,7 @@ import { AppState } from 'core/models/app';
 import { returntypeof } from 'react-redux-typescript';
 import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
-import DroppingMenu from './DroppingMenu';
+import { DroppingMenu } from './DroppingMenu';
 
 const MOBILE_SCREEN_WIDTH = 450;
 const mapStateToProps = (state: AppState) => ({
@@ -43,6 +43,9 @@ class Index extends React.Component<Props> {
       case 'request':
         return 'Трансфер';
 
+      case 'unsubscribe':
+        return 'Отписка от почтовой рассылки';
+
       default:
         return '';
     }
@@ -62,6 +65,6 @@ class Index extends React.Component<Props> {
   }
 }
 
-export default compose(
+export const TopBar = compose(
   ReduxConnect(mapStateToProps)
 )(Index);

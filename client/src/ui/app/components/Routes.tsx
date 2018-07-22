@@ -4,7 +4,7 @@ import { connect as ReduxConnect } from 'react-redux';
 import { Route, RouteComponentProps } from 'react-router';
 import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
-import TopBar from 'ui/app/modules/topBar';
+import { TopBar } from 'ui/app/modules/topBar';
 import { SnackBar } from 'ui/app/modules/snackbar';
 
 export default ReduxConnect((state: AppState) => ({
@@ -118,6 +118,15 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
           visibility={!!match}
           props={{ match }}
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/rateRequest'), 'app.request')}
+        />}
+    </Route>
+
+    <Route exact strict path="/unsubscribe/driver" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/emailsSub'), 'app.emails')}
         />}
     </Route>
 

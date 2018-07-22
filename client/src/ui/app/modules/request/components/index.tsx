@@ -5,7 +5,6 @@ import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
 import Paper from 'material-ui/Paper';
-// import { NavLink } from 'ui/app/components/Links';
 import { getCheckRoles, getRequestId } from '../selectors';
 import { getRequestState, getRequest } from '../operations';
 import { Rstatus } from 'core/models/api';

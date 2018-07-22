@@ -17,6 +17,7 @@ export type DataState = {
   guestGdpr: DataStateItem<data.Gdpr>,
   userGdpr: DataStateItem<data.Gdpr>,
   cookieGdpr: DataStateItem<data.Gdpr>,
+  subscribeState: DataStateItem<data.StateUnsub>,
 };
 
 export type DataStateItem<T> = {

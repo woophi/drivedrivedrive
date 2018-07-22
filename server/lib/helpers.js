@@ -1,7 +1,7 @@
 require('moment/locale/ru');
 const keystone = require('keystone');
 const moment = require('moment');
-const { mailFrom } = require('./staticVars');
+const { mailFrom, unsubLink } = require('./staticVars');
 
 const emailError = (err) => {
 	if (err) {
@@ -18,7 +18,8 @@ exports.sendEmail = (emailKeys, params) => {
 		from: mailFrom,
 		subject: emailKeys.subject,
 		moment,
-		...params
+		...params,
+		unsubLink: unsubLink(params.driver)
 	}, emailError);
 };
 

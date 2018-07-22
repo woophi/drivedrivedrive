@@ -55,6 +55,9 @@ exports = module.exports = (app) => {
 	app.all('/me*', middleware.requireUser);
 	app.all('/me', routes.views.index);
 
+	// Emails
+	app.all('/unsubscribe/*', routes.views.index);
+
 	// // Request
 	app.all('/request/:id', routes.views.index);
 	app.all('/request/:id/accept/:driverId', routes.views.index);
@@ -87,5 +90,9 @@ exports = module.exports = (app) => {
   app.all('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
   app.all('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
   app.all('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
-  app.all('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
+	app.all('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
+
+	app.all('/api/user/unsub', middleware.validateToken, routes.api.app.emails.unsubDriver);
+	app.all('/api/user/subState', routes.api.app.emails.subStateDriver);
+	// app.all('/api/guest/unsub', routes.api.app.mails.unsubUser);
 };

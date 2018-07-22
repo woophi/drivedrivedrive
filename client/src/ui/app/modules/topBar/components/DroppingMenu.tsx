@@ -5,7 +5,6 @@ import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
-import Receipts from 'material-ui/svg-icons/action/receipt';
 import Profile from 'material-ui/svg-icons/social/person';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 import FontIcon from 'material-ui/FontIcon';
@@ -25,7 +24,7 @@ const mapStateToProps = (state: AppState) => ({
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 
-class DroppingMenu extends React.Component<Props> {
+class DroppingMenuComponent extends React.Component<Props> {
 
   changeIconOnPath = (icon: JSX.Element, btnName: string) => {
     if (this.props.slectedPath === btnName) {
@@ -93,6 +92,6 @@ class DroppingMenu extends React.Component<Props> {
   }
 }
 
-export default compose(
+export const DroppingMenu = compose(
   ReduxConnect(mapStateToProps)
-)(DroppingMenu);
+)(DroppingMenuComponent);
