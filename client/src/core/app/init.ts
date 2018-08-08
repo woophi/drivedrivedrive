@@ -3,8 +3,8 @@ import { applicationEpic } from 'ui/app/uiEpic';
 import { injectEpic, injectReducer } from 'core/shared/store';
 import { checkAuth } from './login';
 
-export function init() {
+export const init = async () => {
   injectEpic(applicationEpic);
   injectReducer('form', formReducer);
-  checkAuth();
-}
+  await checkAuth();
+};

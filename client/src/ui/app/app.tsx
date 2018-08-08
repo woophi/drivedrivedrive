@@ -35,14 +35,14 @@ const renderApp = (fela: {
   );
 };
 
-export const entryApplication = (args: AppEntrySettings) => {
+export const entryApplication = async (args: AppEntrySettings) => {
   console.debug('AppEntry args:', args);
   injectReducer('ui', uiReducers);
+  await init();
 
   store.dispatch({ type: 'appInit', isMobile: args.isMobile });
 
   const fela = configureFela('stylesheet');
   renderApp(fela);
 
-  init();
 };
