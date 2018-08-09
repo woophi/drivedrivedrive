@@ -63,29 +63,6 @@ html(lang="ru")
       script(src="//cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.js")
       script(src="//cdn.jsdelivr.net/respond/1.4.2/respond.min.js")
     //-[endif]
-    if env === 'production'
-      //- <!— Global site tag (gtag.js) - Google Analytics —>
-      script(async, src="https://www.googletagmanager.com/gtag/js?id=UA-102626451-2")
-      script(async, src="https://www.googletagmanager.com/gtag/js?id=AW-799829099")
-      script.
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-102626451-2');
-        gtag('config', 'AW-799829099');
-      script.
-        function gtag_report_conversion(url) {
-          var callback = function () {
-            if (typeof(url) != 'undefined') {
-              window.location = url;
-            }
-          };
-          gtag('event', 'conversion', {
-            'send_to': 'AW-799829099/cFMoCMujwocBEOvYsf0C',
-            'event_callback': callback
-          });
-          return false;
-        }
     //- Add any other template-specific HEAD tags by extending the head block
     block head
 
