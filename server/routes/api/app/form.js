@@ -1,9 +1,9 @@
 
 var async = require('async'),
   keystone = require('keystone'),
-		_ = require('lodash'),
 	User = keystone.list('User'),
 	Gdpr = keystone.list('Gdpr');
+const { isEmpty } = require('lodash');
 const { getUserIp, sendEmail } = require('../../../lib/helpers');
 const crypto = require('crypto');
 
@@ -60,7 +60,7 @@ exports.sendRequest = (req, res) => {
         if (err) {
 					return res.apiError({message: 'Системная ошибка.' }, '', err, 500);
         }
-        if (_.isEmpty(users)) {
+        if (isEmpty(users)) {
 					return res.apiError({message: 'Не удалось найти водителей.' }, '', null, 404);
 				}
 
@@ -87,7 +87,7 @@ exports.sendRequest = (req, res) => {
 		},
 
 		(cb) => {
-			if (!_.isEmpty(drivers)) {
+			if (!isEmpty(drivers)) {
 				const emailKeys = {
 					templateName: 'driver-notify',
 					to: drivers,

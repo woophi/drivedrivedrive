@@ -4,6 +4,7 @@ var async = require('async'),
 	Gdpr = keystone.list('Gdpr'),
 	secret = require('../../../lib/staticVars').secret,
 	jwt = require('jsonwebtoken');
+const { isEmpty } = require('lodash');
 const { sendEmail } = require('../../../lib/helpers');
 
 exports.signin = (req, res) => {
@@ -362,18 +363,20 @@ exports.updateProfile = (req, res) => {
     } else {
       return photo;
     }
-  }
+	}
+
+	const carObj = isEmpty(req.body.car) ? {} : req.body.car;
 
   let updatedData = {
     'name.first': req.body.firstName,
     'name.last': req.body.lastName,
     'email': email,
     'phone': req.body.phone,
-    'car.kind': req.body.car.kind,
-    'car.model': req.body.car.model,
-		'car.year': req.body.car.year || null,
+    'car.kind': carObj.kind,
+    'car.model': carObj.model,
+		'car.year': carObj.year,
 		'notifications.email': req.body.notifications.email
-  };
+	};
 
   updatedData = checkPhoto(req.body.driverPhoto) ? { ...updatedData, 'driverPhoto': req.body.driverPhoto } : updatedData;
   updatedData = checkPhoto(req.body.photoInside) ? { ...updatedData, 'photoInside': req.body.photoInside } : updatedData;

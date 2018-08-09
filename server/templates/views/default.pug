@@ -63,14 +63,14 @@ html(lang="ru")
       script(src="//cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.js")
       script(src="//cdn.jsdelivr.net/respond/1.4.2/respond.min.js")
     //-[endif]
-
-    //- <!— Global site tag (gtag.js) - Google Analytics —>
-    script(async, src="https://www.googletagmanager.com/gtag/js?id=UA-102626451-2")
-    script.
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-102626451-2');
+    if env === 'production'
+      //- <!— Global site tag (gtag.js) - Google Analytics —>
+      script(async, src="https://www.googletagmanager.com/gtag/js?id=UA-102626451-2")
+      script.
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-102626451-2');
     //- Add any other template-specific HEAD tags by extending the head block
     block head
 

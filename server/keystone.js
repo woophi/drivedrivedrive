@@ -9,11 +9,11 @@ const keystone = require('keystone');
 // and documentation.
 
 const toCustomLogin = (req, res, next) => {
-	if (!req.user) res.redirect('/signin');
+	if (!req.user) return res.redirect('/signin');
 	if (req.user && (req.user.isAdmin || req.user.isSuperAdmin))
-		next();
+		return next();
 	else
-		res.redirect('/me');
+		return res.redirect('/me');
 }
 
 keystone.init({
@@ -41,7 +41,7 @@ keystone.init({
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
     },
-  },
+	},
 });
 
 // Load your project's Models
@@ -51,11 +51,7 @@ keystone.import('models');
 // bundled templates and layouts. Any runtime locals (that should be set uniquely
 // for each request) should be added to ./routes/middleware.js
 keystone.set('locals', {
-	_: require('lodash'),
 	env: keystone.get('env'),
-	utils: keystone.utils,
-	editable: keystone.content.editable,
-	moment: require('moment'),
 	host: (function() {
 		if (keystone.get('env') === 'production') return 'https://www.vettura.eu';
 		return 'http://localhost:3000';
