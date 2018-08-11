@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "clean": "rimraf node_modules",
-    "start": "webpack --mode development --colors --config=webpack.dll.config.js && webpack-dev-server --mode development --no-inline --output-public-path https://localhost:3001/",
+    "start": "yarn && webpack --mode development --colors --config=webpack.dll.config.js && webpack-dev-server --mode development --no-inline --output-public-path https://localhost:3001/",
     "build": "webpack --mode production -p --bail --colors --config=webpack.dll.config.js && webpack --mode production -p --bail --colors"
   },
   "devDependencies": {
