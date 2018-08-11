@@ -1,8 +1,4 @@
-import { AppState } from 'core/models/app';
-import { connect as ReduxConnect } from 'react-redux';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
-import { returntypeof } from 'react-redux-typescript';
-import { driveTheme } from 'ui/shared/driveUI';
 import * as React from 'react';
 import * as ReactHintFactory from 'react-hint';
 import { compose } from 'redux';
@@ -10,16 +6,10 @@ import 'react-hint/css/index.css';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
 import Routes from './Routes';
-import ScreenMeasurer from '../modules/screenMeasurer';
+import { ScreenMeasurer } from '../modules/screenMeasurer';
 
 const ReactHint = ReactHintFactory(React);
-
-const mapStateToProps = (state: AppState) => ({
-  isMobile: state.localAppState.isMobile
-});
-
-const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = {};
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class Main extends React.Component<Props & FelaProps> {
@@ -52,6 +42,5 @@ const container: FelaRule<Props> = () => ({
 const mapStylesToProps = { container };
 
 export const AppRoot = compose(
-  ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(Main);

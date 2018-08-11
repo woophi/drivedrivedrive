@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@reactivex/rxjs": "5.5.11",
-    "@types/material-ui": "^0.21.2",
+    "@types/material-ui": "^0.21.5",
     "@types/ramda": "types/npm-ramda#dist",
     "@types/react": "^16.1.0",
     "@types/react-dates": "^17.1.1",

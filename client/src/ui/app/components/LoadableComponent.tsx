@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as Loadable from "react-loadable";
-import Animation from 'ui/app/components/preloader/Animation';
+import { LoaderAnimation } from 'ui/app/components/preloader/Animation';
 
 const Loading: React.SFC = () => (
   <div style={{ margin: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
-    <h2 style={{ margin: 'auto' }}><Animation /></h2>
+    <h2 style={{ margin: 'auto' }}><LoaderAnimation /></h2>
   </div>
 );
 

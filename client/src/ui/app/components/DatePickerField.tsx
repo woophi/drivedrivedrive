@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SingleDatePicker, SingleDatePickerShape } from 'react-dates';
+import { SingleDatePicker } from 'react-dates';
 import { WrappedFieldProps } from 'redux-form';
 import * as moment from 'moment';
 import 'moment/locale/ru';

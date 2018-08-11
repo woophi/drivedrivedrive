@@ -5,7 +5,7 @@ import { AutoSizer } from 'react-virtualized';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
-export default reduxConnect(null, (dispatch: DispatchProp<AppDispatch>) =>
+export const ScreenMeasurer = reduxConnect(null, (dispatch: DispatchProp<AppDispatch>) =>
   bindActionCreators({ ...actions }, dispatch as any)
 )(({ setDimestions }) => {
   return (

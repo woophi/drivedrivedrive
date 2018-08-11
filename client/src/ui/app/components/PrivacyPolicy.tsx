@@ -17,7 +17,6 @@ const Container = createComponent(
   'div'
 );
 
-
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class PrivacyPolicyComp extends React.PureComponent<Props & FelaProps> {
   async componentDidMount() {
@@ -46,15 +45,8 @@ const container: FelaRule<Props> = props => ({
     minHeight: '150px',
   })
 });
-const scroller: FelaRule<Props> = props => ({
-  ...props.theme.mobile({
-    height: 'auto !important',
-    minHeight: '150px !important',
-  })
-});
 
 const mapStylesToProps = {
-  container,
-  scroller
+  container
 };
 export const PrivacyPolicy = FelaConnect(mapStylesToProps)(PrivacyPolicyComp);

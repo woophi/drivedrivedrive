@@ -3,7 +3,7 @@
 import * as React from 'react';
 import './assets/loading-animation.css';
 
-const Loader: React.SFC = () =>
+export const LoaderAnimation: React.SFC = () =>
   <div className="sk-cube-grid">
     <div className="sk-cube sk-cube1"></div>
     <div className="sk-cube sk-cube2"></div>
@@ -14,6 +14,4 @@ const Loader: React.SFC = () =>
     <div className="sk-cube sk-cube7"></div>
     <div className="sk-cube sk-cube8"></div>
     <div className="sk-cube sk-cube9"></div>
-  </div>
-
-export default Loader;
+  </div>;

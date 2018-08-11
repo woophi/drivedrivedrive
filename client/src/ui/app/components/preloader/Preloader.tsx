@@ -1,11 +1,11 @@
 import * as React from 'react';
-import Animation from './Animation';
+import { LoaderAnimation } from './Animation';
 
 export default ({ isShow }: { isShow: boolean }) => {
   return (
     isShow && (
       <div style={container}>
-        <Animation />
+        <LoaderAnimation />
       </div>
     )
   );
