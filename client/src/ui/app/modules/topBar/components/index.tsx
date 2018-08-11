@@ -43,6 +43,9 @@ class Index extends React.Component<Props> {
       case 'request':
         return 'Трансфер';
 
+      case 'requests':
+        return 'Списки заявок';
+
       case 'unsubscribe':
         return 'Отписка от почтовой рассылки';
 

@@ -63,12 +63,13 @@ exports = module.exports = (app) => {
 	app.all('/request/:id/accept/:driverId', routes.views.index);
 	app.all('/request/:id/confirm', routes.views.index);
 	app.all('/request/:id/rate?', routes.views.index);
+	app.get('/requests', routes.views.index);
 
   // API
   app.all('/api*', keystone.middleware.api);
   app.all('/api/user/signin', routes.api.app.user.signin);
   app.all('/api/user/auth', routes.api.app.user.auth);
-  app.all('/api/user/check', routes.api.app.user.checkAuth);
+  app.post('/api/user/check', routes.api.app.user.checkAuth);
   app.all('/api/user/join', routes.api.app.user.register);
   app.all('/api/user/signout', middleware.validateToken, routes.api.app.user.signout);
   app.all('/api/user/password/forgot', routes.api.app.user.forgotPassword);
@@ -96,7 +97,7 @@ exports = module.exports = (app) => {
 	app.all('/api/user/subState', routes.api.app.emails.subStateDriver);
 	app.all('/api/guest/unsub', routes.api.app.emails.unsubGuest);
 	app.all('/api/guest/subState', routes.api.app.emails.subStateGuest);
-
+	// TODO: don't forget to add validatetoken
 	app.all('/api/requests/open', routes.api.app.requests.getOpenRequests);
 	app.all('/api/requests/active', routes.api.app.requests.getSubmitedRequests);
 	app.all('/api/requests/history', routes.api.app.requests.getHistoryRequests);
