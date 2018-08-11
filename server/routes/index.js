@@ -29,7 +29,7 @@ keystone.pre('routes', middleware.initLocals);
 
 // Import Route Controllers
 const routes = {
-  api: importRoutes('./api'),
+  api: importRoutes('../api'),
 	views: importRoutes('./views'),
 };
 
@@ -89,10 +89,6 @@ exports = module.exports = (app) => {
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
   app.all('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
 	app.all('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
-
-	app.all('/api/requests/open', routes.api.app.requests.getOpenRequests);
-	app.all('/api/requests/active', routes.api.app.requests.getSubmitedRequests);
-	app.all('/api/requests/history', routes.api.app.requests.getHistoryRequests);
   app.all('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
 	app.all('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
 
@@ -100,4 +96,8 @@ exports = module.exports = (app) => {
 	app.all('/api/user/subState', routes.api.app.emails.subStateDriver);
 	app.all('/api/guest/unsub', routes.api.app.emails.unsubGuest);
 	app.all('/api/guest/subState', routes.api.app.emails.subStateGuest);
+
+	app.all('/api/requests/open', routes.api.app.requests.getOpenRequests);
+	app.all('/api/requests/active', routes.api.app.requests.getSubmitedRequests);
+	app.all('/api/requests/history', routes.api.app.requests.getHistoryRequests);
 };

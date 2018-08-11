@@ -6,7 +6,7 @@ var async = require('async'),
   ObjectID = require("mongodb").ObjectID,
 	Rating = keystone.list('Rating');
 const { isEqual } = require('lodash');
-const { sendEmail } = require('../../../lib/helpers');
+const { sendEmail } = require('../../lib/helpers');
 
 exports.getRequestState = (req, res) => {
   if (!req.user) {

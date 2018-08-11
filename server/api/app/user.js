@@ -2,10 +2,10 @@ var async = require('async'),
 	keystone = require('keystone'),
 	User = keystone.list('User'),
 	Gdpr = keystone.list('Gdpr'),
-	secret = require('../../../lib/staticVars').secret,
+	secret = require('../../lib/staticVars').secret,
 	jwt = require('jsonwebtoken');
 const { isEmpty } = require('lodash');
-const { sendEmail } = require('../../../lib/helpers');
+const { sendEmail } = require('../../lib/helpers');
 
 exports.signin = (req, res) => {
 	const email = req.body.email.toLowerCase();

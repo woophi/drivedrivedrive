@@ -2,9 +2,9 @@ const keystone = require('keystone');
 const Visitor = keystone.list('Visitor');
 const geoip = require('geoip-lite');
 const parser = require('ua-parser-js');
-const secret = require('../../../lib/staticVars').secret;
+const secret = require('../../lib/staticVars').secret;
 const jwt = require('jsonwebtoken');
-const { getUserIp } = require('../../../lib/helpers');
+const { getUserIp } = require('../../lib/helpers');
 
 exports.setUniqVisitor = (req, res) => {
 	const ua = parser(req.headers['user-agent']);

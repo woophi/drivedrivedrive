@@ -4,7 +4,7 @@ var async = require('async'),
 	User = keystone.list('User'),
 	Gdpr = keystone.list('Gdpr');
 const { isEmpty } = require('lodash');
-const { getUserIp, sendEmail } = require('../../../lib/helpers');
+const { getUserIp, sendEmail } = require('../../lib/helpers');
 const crypto = require('crypto');
 
 exports.sendRequest = (req, res) => {
