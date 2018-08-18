@@ -133,9 +133,12 @@ class FormComponent extends React.Component<
   }
 
   handleClick = () => handleTriggerGDPRDialog(true);
-
+  gaClick = () => {
+    return (window as any)
+      .gtag_report_conversion('https://www.vettura.eu//gaSend-request');
+  }
   componentForm = () => {
-    const { styles, handleSubmit, error, pristine, submitting } = this.props;
+    const { styles, handleSubmit, error, submitting } = this.props;
     const submittingButton = submitting ? (
       <i className="fas fa-circle-notch fa-spin" />
     ) : (
@@ -244,7 +247,11 @@ class FormComponent extends React.Component<
             }}
           />
 
-          <button disabled={submitting} className={styles.buttonSt}>
+          <button
+            onClick={this.gaClick}
+            disabled={submitting}
+            className={styles.buttonSt}
+          >
             {submittingButton}
           </button>
         </form>
