@@ -135,8 +135,6 @@ class FormComponent extends React.Component<
   handleClick = () => handleTriggerGDPRDialog(true);
   gaClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     (window as any).gtag_report_conversion();
-    e.preventDefault();
-    e.stopPropagation();
   }
   componentForm = () => {
     const { styles, handleSubmit, error, submitting } = this.props;
