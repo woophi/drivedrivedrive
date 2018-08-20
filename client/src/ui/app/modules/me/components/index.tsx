@@ -64,7 +64,7 @@ class Index extends React.Component<Props & FelaProps> {
     const { styles, authInfo } = this.props;
     return (
       <div className={styles.container}>
-        <Paper zDepth={2}>
+        <Paper zDepth={2} style={{margin: '1rem'}}>
           <div className={styles.headBox}>
             <span className={styles.texts}>
               {this.adminButton}
