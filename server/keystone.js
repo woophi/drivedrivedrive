@@ -7,7 +7,7 @@ const keystone = require('keystone');
 // Initialise Keystone with your project's configuration.
 // See http://keystonejs.com/guide/config for available options
 // and documentation.
-
+const p = keystone.get('env') === 'production';
 const toCustomLogin = (req, res, next) => {
 	if (!req.user) return res.redirect('/signin');
 	if (req.user && (req.user.isAdmin || req.user.isSuperAdmin))
@@ -25,11 +25,11 @@ keystone.init({
 	'views': 'templates/views',
 	'view engine': 'pug',
 
-  'emails':  keystone.get('env') === 'production' ? 'server/templates/emails' : 'templates/emails',
+  'emails':  p ? 'server/templates/emails' : 'templates/emails',
 
   'auto update': true,
 	'session': true,
-	'auth': keystone.get('env') === 'production' ? toCustomLogin : true,
+	'auth': p ? toCustomLogin : true,
 	'user model': 'User',
 	'admin path' : 'admin',
 	'trust proxy': true,
@@ -53,8 +53,8 @@ keystone.import('models');
 keystone.set('locals', {
 	env: keystone.get('env'),
 	host: (function() {
-		if (keystone.get('env') === 'production') return 'https://www.vettura.eu';
-		return 'http://localhost:3000';
+		p ? 'https://www.vettura.eu'
+		: 'http://localhost:3000';
 	})()
 });
 
