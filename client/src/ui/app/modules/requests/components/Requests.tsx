@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Paper from 'material-ui/Paper';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
+import { TabsRequests } from './Tabs';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
@@ -9,9 +10,14 @@ class RequestsComponent extends React.PureComponent<FelaProps> {
     const { styles } = this.props;
     return (
       <div className={styles.container}>
-        <Paper zDepth={2} style={{margin: '1rem', height: '100vh'}} >
-
-        </Paper>
+        {/* <Paper zDepth={2} style={{margin: '1rem'}}>
+          <div style={{margin: '1rem'}}> */}
+            <h2 style={{margin: '1rem'}}>
+              Здесь возможно все
+            </h2>
+          {/* </div>
+        </Paper> */}
+        <TabsRequests />
       </div>
     );
   }
