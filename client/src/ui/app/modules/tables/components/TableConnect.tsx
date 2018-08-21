@@ -1,30 +1,30 @@
 import * as React from 'react';
-import { ApplicationState } from 'core/models/application';
+import { AppState } from 'core/models/app';
 import { connect as ReduxConnect } from 'react-redux';
-import { DataState } from 'core/models/admin';
+import { DataState } from 'core/models/api';
 import { bindActionCreators } from 'redux';
 import { createTableActions, TableActions } from '../actions';
 import { createTableSelectors } from '../selectors';
 import { ComposedTableProps, TablesState } from '../types';
 
 interface TableConnectProps<T> {
-  dataSelector?: (state: ApplicationState) => T[] | string[];
+  dataSelector?: (state: AppState) => T[] | string[];
   dataName?: keyof DataState;
   tableName: keyof TablesState;
   searchFields?: (keyof T)[] | string[];
   filteredOnServer?: boolean;
-  selectedRowIdSelector?: (state: ApplicationState) => any;
+  selectedRowIdSelector?: (state: AppState) => any;
 }
 
 export function tableConnect<T>({ tableName, dataName, dataSelector, searchFields, filteredOnServer, selectedRowIdSelector }: TableConnectProps<T>) {
   return (component: React.ComponentClass<ComposedTableProps<T>> | React.StatelessComponent<ComposedTableProps<T>>) => {
-    const tableDataSelector = dataSelector || ((state: ApplicationState) => state.admin && state.admin.data[dataName].result);
+    const tableDataSelector = dataSelector || ((state: AppState) => state.ui.api && state.ui.api[dataName].result);
 
     const tableActions = createTableActions(tableName);
 
     const tableSelectors = createTableSelectors(tableName, tableDataSelector as () => any[], searchFields);
 
-    const mapStateToProps = (state: ApplicationState) => ({
+    const mapStateToProps = (state: AppState) => ({
       filters: tableSelectors.getFilters(state),
       searchQuery: tableSelectors.getSearchQuery(state),
       sortBy: tableSelectors.getSortBy(state),
@@ -34,7 +34,7 @@ export function tableConnect<T>({ tableName, dataName, dataSelector, searchField
       selectedRowId: selectedRowIdSelector ? selectedRowIdSelector(state) : null
     });
 
-    const mapDispatchToProps = (dispatch: any) => bindActionCreators(tableActions, dispatch) as any; // TODO: upgrade react-redux & d.ts
+    const mapDispatchToProps = (dispatch: any) => bindActionCreators(tableActions, dispatch) as any;
 
     return ReduxConnect(mapStateToProps, mapDispatchToProps)(component);
   };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { LoaderAnimation } from './Animation';
 
-export default ({ isShow }: { isShow: boolean }) => {
+export const Preloader =  ({ isShow }: { isShow: boolean }) => {
   return (
     isShow && (
       <div style={container}>

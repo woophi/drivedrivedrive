@@ -1,15 +1,7 @@
 import * as React from 'react';
 import Scrollbars from 'react-custom-scrollbars';
-import {
-  AutoSizer,
-  Grid,
-  OnScrollParams,
-  ScrollSync
-} from 'react-virtualized';
-import {
-  SortAndFilterState,
-  TableConfig
-} from '../types';
+import { AutoSizer, Grid, OnScrollParams, ScrollSync } from 'react-virtualized';
+import { SortAndFilterState, TableConfig } from '../types';
 import {
   noContentRenderer,
   renderBodyCellsAsRow,
@@ -30,7 +22,7 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
   line = React.createRef<HTMLDivElement>();
 
   setRef = {
-    header: (instance: Grid) => this.header = instance,
+    header: (instance: Grid) => (this.header = instance),
     mainGrid: (instance: Grid) => {
       this.mainGrid = instance;
       if (!!this.props.config.registerChild) {
@@ -39,9 +31,11 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
     }
   };
 
-  onScrollScrollbars = (onScroll: (params: OnScrollParams) => void) => (event: React.UIEvent<HTMLDivElement>) => {
+  onScrollScrollbars = (onScroll: (params: OnScrollParams) => void) => (
+    event: React.UIEvent<HTMLDivElement>
+  ) => {
     return onScroll(event.target as HTMLDivElement);
-  }
+  };
 
   componentDidUpdate(prevProps: FlexGridTableProps<any>) {
     /* Grids use shallowCompare, therefore forceUpdates are needed */
@@ -58,21 +52,17 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
     // console.debug('flextable props:', this.props);
     const rowHeight = constants.ROW_HEIGHT;
 
-    const {
-      config,
-      list,
-      tableState
-    } = this.props;
+    const { config, list, tableState } = this.props;
 
     const REM = 16;
 
     const tableMinWidth = config.model.reduce(
-      (acc, columnModel) => acc += (
-        tableState.columnWidths[columnModel.dataKey as string] ||
-        columnModel.width ||
-        columnModel.minWidth ||
-        constants.DEFAULT_COLUMN_MIN_WIDTH
-      ),
+      (acc, columnModel) =>
+        (acc +=
+          tableState.columnWidths[columnModel.dataKey as string] ||
+          columnModel.width ||
+          columnModel.minWidth ||
+          constants.DEFAULT_COLUMN_MIN_WIDTH),
       REM + (config.showRowArrows ? REM : 0)
     );
 
@@ -83,23 +73,16 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
           const innerWidth = Math.max(tableMinWidth, width);
           return (
             <ScrollSync>
-              {({
-                onScroll,
-                scrollLeft,
-                scrollTop,
-              }) => {
-
+              {({ onScroll, scrollLeft, scrollTop }) => {
                 return (
                   <div style={{ height, width }}>
                     <div ref={this.line} />
                     <Grid
                       style={constants.HEADER_GRID_STYLE}
-
                       model={config.model}
                       config={config}
                       tableState={tableState}
                       lineRef={this.line}
-
                       cellRenderer={renderHeaderCellsAsRow}
                       columnWidth={innerWidth}
                       columnCount={1}
@@ -120,12 +103,10 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
                     >
                       <Grid
                         style={constants.MAIN_GRID_STYLE}
-
                         model={config.model}
                         config={config}
                         tableState={tableState}
                         list={list}
-
                         cellRenderer={renderBodyCellsAsRow}
                         columnWidth={innerWidth}
                         columnCount={1}

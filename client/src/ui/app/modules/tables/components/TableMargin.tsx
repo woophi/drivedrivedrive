@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { createComponent, FelaRule } from 'react-fela';
 
 const style: FelaRule = () => ({

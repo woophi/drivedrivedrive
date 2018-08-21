@@ -5,6 +5,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import Paper from 'material-ui/Paper';
+import { OpenRequestsList } from './open-list/List';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
@@ -50,7 +51,9 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
       <Tabs className={styles.container}>
         <Tab label={requestsOpenLabel}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
-            <div>kek</div>
+            <div>
+              <OpenRequestsList />
+            </div>
           </Paper>
         </Tab>
         <Tab label={requestsProgressLabel}>

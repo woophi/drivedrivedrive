@@ -4,25 +4,37 @@ import * as apiData from 'core/models/api';
 import * as isEmpty from 'ramda/src/isEmpty';
 import { callApi } from 'core/shared/common';
 
-const a = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, model, store.getState().authInfo.token);
-const c = <T>(action: string, model?: object) => callApi<T>(`/api/${action}`, model);
+const a = <T>(action: string, model?: object) =>
+  callApi<T>(`/api/${action}`, model, store.getState().authInfo.token);
+const c = <T>(action: string, model?: object) =>
+  callApi<T>(`/api/${action}`, model);
 
 export const api = {
   user: {
-    getProfile: (data: Partial<models.UserAuthInfo>) => a<apiData.UserProfile>('user/profile', data),
-    updateProfile: (data: apiData.UserProfile) => a<null>('user/profile/update', data),
+    getProfile: (data: Partial<models.UserAuthInfo>) =>
+      a<apiData.UserProfile>('user/profile', data),
+    updateProfile: (data: apiData.UserProfile) =>
+      a<null>('user/profile/update', data),
     unsubFromMails: () => a<apiData.StateUnsub>('user/unsub'),
     subscribeState: () => c<apiData.StateUnsub>('user/subState')
   },
   request: {
-    getRequestState: (data: apiData.GetRequest) => c<apiData.StateRequest>('request/get/state', data),
-    getRequest: (requestId: string) => a<apiData.NewRequest>('request/get', { requestId }),
-    assignRequest: (data: apiData.AssignRequest) => a<boolean>('request/driver/answer', data),
-    acceptRequest: (data: apiData.AcceptRequest) => c<boolean>('request/guest/answer', data),
-    confirmRequest: (requestId: string) => a<apiData.StateRequest>('request/confirm', { requestId }),
-    getRequestToRate: (requestId: string, query: number) => c<apiData.StateRequest>('request/get/rate', { requestId, query }),
-    rateRequest: (data: apiData.RateRequest) => c<boolean>('request/rate', data),
-    getRequestStateToAccept: (data: apiData.GetRequest) => c<apiData.StateRequest>('request/get/accept/state', data),
+    getRequestState: (data: apiData.GetRequest) =>
+      c<apiData.StateRequest>('request/get/state', data),
+    getRequest: (requestId: string) =>
+      a<apiData.NewRequest>('request/get', { requestId }),
+    assignRequest: (data: apiData.AssignRequest) =>
+      a<boolean>('request/driver/answer', data),
+    acceptRequest: (data: apiData.AcceptRequest) =>
+      c<boolean>('request/guest/answer', data),
+    confirmRequest: (requestId: string) =>
+      a<apiData.StateRequest>('request/confirm', { requestId }),
+    getRequestToRate: (requestId: string, query: number) =>
+      c<apiData.StateRequest>('request/get/rate', { requestId, query }),
+    rateRequest: (data: apiData.RateRequest) =>
+      c<boolean>('request/rate', data),
+    getRequestStateToAccept: (data: apiData.GetRequest) =>
+      c<apiData.StateRequest>('request/get/accept/state', data)
   },
   gdrp: {
     getGuestGdpr: () => c<apiData.Gdpr>('gdpr/guest'),
@@ -31,8 +43,14 @@ export const api = {
     setUniqVisitor: () => c<null>('uniq/visitor/cookie')
   },
   guest: {
-    unsubFromMails: (data: { hash: string }) => c<apiData.StateUnsub>('guest/unsub', data),
-    subscribeState: (data: { hash: string }) => c<apiData.StateUnsub>('guest/subState', data)
+    unsubFromMails: (data: { hash: string }) =>
+      c<apiData.StateUnsub>('guest/unsub', data),
+    subscribeState: (data: { hash: string }) =>
+      c<apiData.StateUnsub>('guest/subState', data)
+  },
+  requests: {
+    open: (userId: string) =>
+      a<apiData.OpenRequest[]>('requests/open', { userId })
   }
 };
 
@@ -42,19 +60,38 @@ interface DeliveryParams<A> {
 }
 
 const QUIET_FETCH_TIMEOUT = 500;
-type ResultType = apiData.DataState[keyof apiData.DataState]["result"];
+type ResultType = apiData.DataState[keyof apiData.DataState]['result'];
 
-const loadDataImpl = async (name: keyof apiData.DataState, apiCallerDataDeliverer: () => Promise<ResultType>, config?: DeliveryParams<ResultType>) => {
-  const log = (...args: any[]) => (!!config && config.logging) ? console.debug(`loadData[${name}]>`, ...args) : undefined;
+const loadDataImpl = async (
+  name: keyof apiData.DataState,
+  apiCallerDataDeliverer: () => Promise<ResultType>,
+  config?: DeliveryParams<ResultType>
+) => {
+  const log = (...args: any[]) =>
+    !!config && config.logging
+      ? console.debug(`loadData[${name}]>`, ...args)
+      : undefined;
 
   const checkData = (data: ResultType) => {
     if (config.checker(data)) {
       store.dispatch({ type: 'api/data/setResult', name, payload: data });
-      store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.SUCCESS });
+      store.dispatch({
+        type: 'api/data/setStatus',
+        name,
+        payload: apiData.DataStatus.SUCCESS
+      });
       return data;
     } else {
-      store.dispatch({ type: 'api/data/setError', name, payload: 'Bad data from server ;(' });
-      store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.ERROR });
+      store.dispatch({
+        type: 'api/data/setError',
+        name,
+        payload: 'Bad data from server ;('
+      });
+      store.dispatch({
+        type: 'api/data/setStatus',
+        name,
+        payload: apiData.DataStatus.ERROR
+      });
       return data;
     }
   };
@@ -63,24 +100,36 @@ const loadDataImpl = async (name: keyof apiData.DataState, apiCallerDataDelivere
 
   let timeout: number = null;
   switch (store.getState().ui.api[name].status) {
-    case (apiData.DataStatus.FETCHING || apiData.DataStatus.QUIET_FETCHING): {
+    case apiData.DataStatus.FETCHING || apiData.DataStatus.QUIET_FETCHING: {
       throw new Error('Unable to call: Already fetching data');
     }
 
-    case (apiData.DataStatus.UPDATING): {
+    case apiData.DataStatus.UPDATING: {
       return store.getState().ui.api[name].result;
     }
 
     case apiData.DataStatus.SUCCESS:
     case apiData.DataStatus.EMPTY: {
-      store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.UPDATING });
+      store.dispatch({
+        type: 'api/data/setStatus',
+        name,
+        payload: apiData.DataStatus.UPDATING
+      });
       break;
     }
 
     default: {
-      store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.QUIET_FETCHING });
+      store.dispatch({
+        type: 'api/data/setStatus',
+        name,
+        payload: apiData.DataStatus.QUIET_FETCHING
+      });
       timeout = window.setTimeout(() => {
-        store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.FETCHING });
+        store.dispatch({
+          type: 'api/data/setStatus',
+          name,
+          payload: apiData.DataStatus.FETCHING
+        });
         timeout = null;
       }, QUIET_FETCH_TIMEOUT);
       break;
@@ -101,7 +150,11 @@ const loadDataImpl = async (name: keyof apiData.DataState, apiCallerDataDelivere
 
     if (isEmpty(response)) {
       store.dispatch({ type: 'api/data/setResult', name, payload: response });
-      store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.EMPTY });
+      store.dispatch({
+        type: 'api/data/setStatus',
+        name,
+        payload: apiData.DataStatus.EMPTY
+      });
       log('newState:', store.getState().ui.api[name]);
       return response;
     } else if (!!config && !!config.checker) {
@@ -110,28 +163,41 @@ const loadDataImpl = async (name: keyof apiData.DataState, apiCallerDataDelivere
     }
 
     store.dispatch({ type: 'api/data/setResult', name, payload: response });
-    store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.SUCCESS });
+    store.dispatch({
+      type: 'api/data/setStatus',
+      name,
+      payload: apiData.DataStatus.SUCCESS
+    });
     log('newState:', store.getState().ui.api[name]);
     return response;
-
   } catch (e) {
     clearTimeout(timeout);
     store.dispatch({ type: 'api/data/setError', name, payload: e });
-    store.dispatch({ type: 'api/data/setStatus', name, payload: apiData.DataStatus.ERROR });
+    store.dispatch({
+      type: 'api/data/setStatus',
+      name,
+      payload: apiData.DataStatus.ERROR
+    });
     log('API call error:', e);
     throw e;
   }
 };
 
-type DLF<N extends keyof apiData.DataState, T extends ResultType> = (name: N, apiCallerDataDeliverer: () => Promise<T>, config?: DeliveryParams<T>) => Promise<T>;
-type DataLoader =
-  DLF<'userProfile', apiData.DataState['userProfile']['result']> &
+type DLF<N extends keyof apiData.DataState, T extends ResultType> = (
+  name: N,
+  apiCallerDataDeliverer: () => Promise<T>,
+  config?: DeliveryParams<T>
+) => Promise<T>;
+type DataLoader = DLF<
+  'userProfile',
+  apiData.DataState['userProfile']['result']
+> &
   DLF<'requsetState', apiData.DataState['requsetState']['result']> &
   DLF<'selectedRequest', apiData.DataState['selectedRequest']['result']> &
   DLF<'guestGdpr', apiData.DataState['guestGdpr']['result']> &
   DLF<'userGdpr', apiData.DataState['userGdpr']['result']> &
   DLF<'cookieGdpr', apiData.DataState['cookieGdpr']['result']> &
-  DLF<'subscribeState', apiData.DataState['subscribeState']['result']>
-  ;
+  DLF<'openRequests', apiData.DataState['openRequests']['result']> &
+  DLF<'subscribeState', apiData.DataState['subscribeState']['result']>;
 
 export const loadData: DataLoader = loadDataImpl as any;

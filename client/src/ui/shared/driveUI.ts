@@ -1,12 +1,12 @@
-import { CSSProperties } from 'react'; // better typings for css rules
+import { IStyle } from 'react-fela';
 
-const mobile = (content: CSSProperties, maxWidth?: string) => ({
+const mobile = (content: IStyle, maxWidth?: string) => ({
   [`@media screen and (max-width: ${maxWidth ? maxWidth : '768px'})`]: {
     ...content
   }
 });
 
-const mobileEarly = (content: CSSProperties, maxWidth?: string) => ({
+const mobileEarly = (content: IStyle, maxWidth?: string) => ({
   [`@media screen and (max-width: ${maxWidth ? maxWidth : '973px'})`]: {
     ...content
   }
@@ -32,7 +32,7 @@ const driveColors = {
   lightYellow: '#BDBF37'
 };
 
-const genericButton: CSSProperties = {
+const genericButton: IStyle = {
   outline: 'none !important',
   border: 'none',
   cursor: 'pointer',
@@ -62,14 +62,14 @@ const genericButton: CSSProperties = {
   color: driveColors.text,
 };
 
-const flatButton: CSSProperties = {
+const flatButton: IStyle = {
   ...genericButton,
   ':active': {
     backgroundColor: driveColors.light,
   }
 };
 
-const button: CSSProperties = {
+const button: IStyle = {
   ...genericButton,
   lineHeight: 1,
   boxShadow: '0px 0px 4px 0px rgba(0,0,0,0.4)',
@@ -86,14 +86,14 @@ const button: CSSProperties = {
   }
 };
 
-const primaryButton: CSSProperties = {
+const primaryButton: IStyle = {
   ...button,
   backgroundColor: driveColors.lightYellow,
   color: '#FFFFFF',
   borderRadius: '1rem',
 };
 
-const disabledButton: CSSProperties = {
+const disabledButton: IStyle = {
   ...button,
   backgroundColor: '#FFFFFF',
   color: driveColors.grayText,
@@ -102,7 +102,7 @@ const disabledButton: CSSProperties = {
   ':active': {},
 };
 
-const iconButton: CSSProperties = {
+const iconButton: IStyle = {
   ...button,
   padding: 0,
   userSelect: 'none',
@@ -113,13 +113,13 @@ const iconButton: CSSProperties = {
   '>i:first-child': {},
 };
 
-const primaryIconButton: CSSProperties = {
+const primaryIconButton: IStyle = {
   ...iconButton,
   backgroundColor: driveColors.blue,
   color: '#FFFFFF'
 };
 
-const flatIconButton: CSSProperties = {
+const flatIconButton: IStyle = {
   ...flatButton,
   userSelect: 'none',
   height: '2rem',

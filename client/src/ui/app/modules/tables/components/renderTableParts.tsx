@@ -1,20 +1,28 @@
 import * as React from 'react';
-import { Grid, GridCellRenderer, SortDirection, SortDirectionType } from 'react-virtualized';
+import { GridCellRenderer } from 'react-virtualized';
 import { DefaultTableRow } from './DefaultTableRow';
 import { RowContentRenderer } from './RowContentRenderer';
 import { HeaderRowContentRenderer } from './HeaderRowContentRenderer';
 import { NoContent } from './NoContent';
 import { SortAndFilterState, TableConfig } from '../types';
 
-const renderArrowPlaceholder = (parent: any) => parent.props.config.showRowArrows && <div className="px-1" />;
+const renderArrowPlaceholder = (parent: any) =>
+  parent.props.config.showRowArrows && <div className="px-1" />;
 
-export const noContentRenderer = (width: number, customContent?: () => React.ReactNode) => (): React.ReactNode => (
+export const noContentRenderer = (
+  width: number,
+  customContent?: () => React.ReactNode
+) => (): React.ReactNode => (
   <div style={{ width: `${width}px`, overflow: 'hidden' }}>
     {customContent || <NoContent />}
   </div>
 );
 
-export const renderHeaderCellsAsRow: GridCellRenderer = ({ columnIndex, key, rowIndex, style, parent }) => (
+export const renderHeaderCellsAsRow: GridCellRenderer = ({
+  key,
+  style,
+  parent
+}) =>
   parent.props.config.hideHeader ? null : (
     <DefaultTableRow style={style} key={key} withBorder>
       <HeaderRowContentRenderer
@@ -25,10 +33,14 @@ export const renderHeaderCellsAsRow: GridCellRenderer = ({ columnIndex, key, row
       />
       {renderArrowPlaceholder(parent)}
     </DefaultTableRow>
-  )
-);
+  );
 
-export const renderBodyCellsAsRow: GridCellRenderer = ({ columnIndex, key, rowIndex, style, parent, isVisible, isScrolling }) => {
+export const renderBodyCellsAsRow: GridCellRenderer = ({
+  key,
+  rowIndex,
+  style,
+  parent
+}) => {
   if (rowIndex >= parent.props.list.length) {
     return null;
   }

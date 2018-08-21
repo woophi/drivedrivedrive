@@ -16,15 +16,7 @@ export class RowContentRenderer extends React.PureComponent<RowRendererProps> {
     const { rowData, model, rowIndex, columnWidths } = this.props;
 
     const columns = model.map((columnModel: ColumnModel, index: number) => {
-      const { cellRenderer, dataKey, title } = columnModel;
-
-      // TODO: cell tooltips
-      // const tooltipText = typeof title === 'function' ? title(cellData) :
-      //   (title === undefined && (
-      //     typeof cellData === 'string' ||
-      //     typeof cellData === 'number'
-      //   )) ? cellData :
-      //   title === false ? undefined : cellData;
+      const { cellRenderer, dataKey } = columnModel;
 
       const width = columnWidths[dataKey] || columnModel.width;
 

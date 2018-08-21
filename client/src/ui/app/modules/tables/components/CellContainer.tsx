@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {
-  DEFAULT_COLUMN_MIN_WIDTH,
-  px
-} from '../constants';
+import { DEFAULT_COLUMN_MIN_WIDTH, px } from '../constants';
 
 export interface CellContainerProps {
   title?: string;
-  width?: number; // overrides min and max width
+  width?: number;
   minWidth?: number;
   maxWidth?: number;
   flexGrow?: number;

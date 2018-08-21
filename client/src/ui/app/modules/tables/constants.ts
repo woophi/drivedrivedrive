@@ -1,7 +1,5 @@
 import { SortDirection, SortDirectionType } from 'react-virtualized';
-import { mluviiTheme } from 'ui/mluvii/theme';
-
-export const TABLES_LS_STORE_KEY = 'mluvii-tables';
+import { driveTheme } from 'ui/shared/driveUI';
 
 export const HEADER_GRID_STYLE: React.CSSProperties = {
   overflowX: 'hidden',
@@ -18,7 +16,7 @@ export const ROW_HEIGHT = 32;
 export const DEFAULT_COLUMN_MIN_WIDTH = 90;
 export const OVERSCAN_ROW_COUNT = 5;
 
-export const RESIZER_LINE_STYLE = `1px dashed ${mluviiTheme.palette.grayBg}`;
+export const RESIZER_LINE_STYLE = `1px dashed ${driveTheme.palette.grayBg}`;
 export const RESIZE_MIN_WIDTH = 75;
 
 /**

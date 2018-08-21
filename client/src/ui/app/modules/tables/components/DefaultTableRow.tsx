@@ -8,7 +8,14 @@ export interface DefaultTableRowProps {
   withBorder?: boolean;
 }
 
-export const DefaultTableRow: React.SFC<DefaultTableRowProps> = ({ children, style, onClick, selected, withArrow, withBorder }) => {
+export const DefaultTableRow: React.SFC<DefaultTableRowProps> = ({
+  children,
+  style,
+  onClick,
+  selected,
+  withArrow,
+  withBorder
+}) => {
   const className = 'd-flex px-2'.concat(
     withBorder ? ' border border-left-0 border-top-0 border-right-0' : '',
     withArrow ? ' with-arrow' : '',
@@ -17,11 +24,7 @@ export const DefaultTableRow: React.SFC<DefaultTableRowProps> = ({ children, sty
   );
 
   return (
-    <div
-      className={className}
-      style={style}
-      onClick={onClick}
-    >
+    <div className={className} style={style} onClick={onClick}>
       {children}
     </div>
   );

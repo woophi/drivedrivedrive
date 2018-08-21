@@ -10,9 +10,9 @@ const tableDefaultState: TableState = {
 };
 
 export const tablesDefaultState: TablesState = {
-  onlineOperators: {
+  openRequests: {
     ...tableDefaultState,
-    sortBy: 'firstName',
+    sortBy: 'from',
   }
 };
 

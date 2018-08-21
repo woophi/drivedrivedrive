@@ -16,7 +16,7 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
-import Preloader from 'ui/app/components/preloader';
+import { Preloader } from 'ui/app/components/preloader';
 import Uploader from 'ui/app/components/Uploader';
 import { DataStatus } from 'core/models/api';
 import { Progress } from './Progress';

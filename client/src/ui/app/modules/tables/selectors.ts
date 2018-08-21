@@ -14,49 +14,49 @@ import * as sortWith from 'ramda/src/sortWith';
 import * as compose from 'ramda/src/compose';
 import * as toLower from 'ramda/src/toLower';
 
-export const getTableByName = (tableName: keyof TablesState) => (state: AppState) => state.ui.tables[tableName];
+export const getTableByName = (tableName: keyof TablesState) => (
+  state: AppState
+) => state.ui.tables[tableName];
 
-export const createTableSelectors = <T extends (any[] | object)>(tableName: keyof TablesState, getData: Selector<AppState, T[]>, searchFields?: (keyof T)[]) => {
+export const createTableSelectors = <T extends any[] | object>(
+  tableName: keyof TablesState,
+  getData: Selector<AppState, T[]>,
+  searchFields?: (keyof T)[]
+) => {
   const getTable = getTableByName(tableName);
-  const getFilters = createSelector(
-    getTable,
-    table => table.filters
-  );
+  const getFilters = createSelector(getTable, table => table.filters);
 
-  const getSearchQuery = createSelector(
-    getTable,
-    table => table.search
-  );
+  const getSearchQuery = createSelector(getTable, table => table.search);
 
-  const getSortBy = createSelector(
-    getTable,
-    table => table.sortBy
-  );
+  const getSortBy = createSelector(getTable, table => table.sortBy);
 
   const getSortDirection = createSelector(
     getTable,
     table => table.sortDirection
   );
 
-  const getColumnWidths = createSelector(
-    getTable,
-    table => table.columnWidth
-  );
+  const getColumnWidths = createSelector(getTable, table => table.columnWidth);
 
   const getFilteredList = createSelector(
     getData,
     getFilters,
-    (list, filters) => list ?
-      ((isEmpty(filters) ? list : list.filter(row => filtersObjectParser(row, filters)))) :
-      [] as typeof list
+    (list, filters) =>
+      list
+        ? isEmpty(filters)
+          ? list
+          : list.filter(row => filtersObjectParser(row, filters))
+        : ([] as typeof list)
   );
 
   const getSearchedList = createSelector(
     getFilteredList,
     getSearchQuery,
-    (list, q) => q && searchFields ?
-      list.filter(row => filterByName(searchFields.map(f => row[f]).join(), ...q.split(' '))) :
-      list
+    (list, q) =>
+      q && searchFields
+        ? list.filter(row =>
+            filterByName(searchFields.map(f => row[f]).join(), ...q.split(' '))
+          )
+        : list
   );
 
   const getSortedList = createSelector(
@@ -69,7 +69,12 @@ export const createTableSelectors = <T extends (any[] | object)>(tableName: keyo
       }
 
       if (list.length) {
-        const normalized = propIs(String, sortBy, list[0]) ? compose((a: any) => a ? toLower(a) : '', prop(sortBy)) : prop(sortBy);
+        const normalized = propIs(String, sortBy, list[0])
+          ? compose(
+              (a: any) => (a ? toLower(a) : ''),
+              prop(sortBy)
+            )
+          : prop(sortBy);
         const sortAsc = sortWith([
           ascend(normalized),
           ascend(prop('userId')) // FIXME: userId is not present on all lists, change it
@@ -78,7 +83,9 @@ export const createTableSelectors = <T extends (any[] | object)>(tableName: keyo
           descend(normalized),
           ascend(prop('userId'))
         ]);
-        return sortDirection === SortDirection.ASC ? sortAsc(list) as T[] : sortDesc(list) as T[];
+        return sortDirection === SortDirection.ASC
+          ? (sortAsc(list) as T[])
+          : (sortDesc(list) as T[]);
       }
 
       return [];

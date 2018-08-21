@@ -15,7 +15,7 @@ import { validateProfile, submitProfile } from '../form';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
-import Preloader from 'ui/app/components/preloader';
+import { Preloader } from 'ui/app/components/preloader';
 import { DataStatus } from 'core/models/api';
 import Toggle from 'material-ui/Toggle';
 import { Progress } from './Progress';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Preloader from './preloader';
+import { Preloader } from './preloader';
 import { createComponent, connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import Scrollbar from 'react-custom-scrollbars';
 
