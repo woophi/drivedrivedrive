@@ -18,6 +18,7 @@ exports.sendEmail = (emailKeys, params) => {
 		from: mailFrom,
 		subject: emailKeys.subject,
 		moment,
+		host: keystone.get('locals').host,
 		...params,
 		unsubLink: unsubLink(params.driver, params.uniqHash)
 	}, emailError);

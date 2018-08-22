@@ -203,7 +203,6 @@ exports.driverOnRequest = (req, res) => {
 					driverData: driverForEmail,
 					price: req.body.requestPrice,
 					requestId: req.body.requestId,
-					host: req.headers.origin,
 					uniqHash: result.guest.uniqHash
 				};
 
@@ -224,7 +223,7 @@ exports.driverOnRequest = (req, res) => {
 
 };
 
-const sentMailsAfterAccept = (price, requestId, host) => {
+const sentMailsAfterAccept = (price, requestId) => {
   User.model.find().where('isAdmin', true).exec((err, resultAdmins) => {
     if (err) {
       return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
@@ -257,7 +256,6 @@ const sentMailsAfterAccept = (price, requestId, host) => {
 				{
 					data: resultRequest,
 					price,
-          host,
 					driver: true
 				});
       });
@@ -301,7 +299,7 @@ exports.acceptRequest = (req, res) => {
               if (err) {
 								return res.apiError({message: 'Невозможно выбрать водителя' }, '', err, 500);
               }
-              sentMailsAfterAccept(resultPrice.value, req.body.requestId, req.headers.origin);
+              sentMailsAfterAccept(resultPrice.value, req.body.requestId);
               return res.apiResponse(true);
             });
 
@@ -471,7 +469,7 @@ const rateDriver = (requestId, req, res) => {
       });
 }
 
-const sentMailAfterRate = (result, host) => {
+const sentMailAfterRate = (result) => {
   User.model
     .findOne()
     .where('isAdmin', true)
@@ -484,7 +482,6 @@ const sentMailAfterRate = (result, host) => {
 			},
 			{
 				data: result,
-				host,
 				driver: true
 			});
     });
@@ -544,7 +541,7 @@ exports.rateRequest = (req, res) => {
             if (err) {
 							return res.apiError({message: 'Ошибка в рейтинге' }, '', err, 500);
             }
-            sentMailAfterRate(result, req.headers.origin);
+            sentMailAfterRate(result);
             return cb();
           });
         });

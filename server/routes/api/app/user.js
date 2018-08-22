@@ -413,7 +413,6 @@ exports.updateProfile = (req, res) => {
 				},
 				{
 					user: req.user,
-          host: req.headers.origin,
 					driver: true
 				});
       });

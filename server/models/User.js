@@ -77,7 +77,6 @@ User.schema.methods.resetPassword = function(req, res, next) {
 		{
 			user,
 			link: '/reset-password/' + user.resetPasswordKey,
-			host: req.headers.origin,
 			driver: true
 		});
 		next();

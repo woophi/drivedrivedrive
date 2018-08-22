@@ -96,7 +96,6 @@ exports.sendRequest = (req, res) => {
 
 				const params = {
 					guestData: requestData,
-					host: req.headers.origin,
 					driver: true
 				};
 
