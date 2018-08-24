@@ -1,40 +1,94 @@
 import { AppState } from 'core/models/app';
 import { connect as ReduxConnect } from 'react-redux';
-import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
+import {
+  connect as FelaConnect,
+  FelaRule,
+  FelaStyles,
+  IStyle
+} from 'react-fela';
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
-import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
+import {
+  Field,
+  InjectedFormProps,
+  reduxForm,
+  WrappedFieldProps
+} from 'redux-form';
 import * as data from 'core/models';
 import { validatePR, submitPR } from './form';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'ui/app/components/Links';
-import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 import { checkPasswordKey } from '../operations';
 import { TextFieldProps } from 'ui/formTypes';
 
 const mapStateToProps = (state: AppState) => ({
-  keyState: state.ui.keyPassword.key
+  keyState: state.ui.keyPassword.key,
+  token: state.authInfo && state.authInfo.token,
+  isProfilePath: state.router.location.pathname === '/me'
 });
 
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
-class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.PasswordReset, Props>> {
+class ResetPasswordComponent extends React.Component<
+  Props & FelaProps & InjectedFormProps<data.PasswordReset, Props>
+> {
   async componentDidMount() {
-    await checkPasswordKey();
+    if (!this.props.isProfilePath) {
+      await checkPasswordKey();
+    }
   }
 
   renderForm = () => {
-    const { styles, handleSubmit, error, pristine, submitting } = this.props;
+    const {
+      styles,
+      handleSubmit,
+      error,
+      pristine,
+      submitting,
+      token,
+      isProfilePath,
+      keyState
+    } = this.props;
+
+    const labelBtn = token && isProfilePath ? 'Изменить' : 'Обновить пароль';
+
+    const submitBtn = submitting ? (
+      <i className="fas fa-circle-notch fa-spin" />
+    ) : (
+      <span style={{ margin: 8 }}>{labelBtn}</span>
+    );
+
+    const header =
+      token && isProfilePath ? null : (
+        <h1 className={styles.heading}>Сбросить пароль</h1>
+      );
+
+    const cancelBtn =
+      token && isProfilePath ? null : (
+        <Link to={`/`} className={'mr-1'}>
+          <RaisedButton>{'отмена'}</RaisedButton>
+        </Link>
+      );
+
+    const usefulLink =
+      token && isProfilePath ? null : (
+        <span>
+          В этот раз точно вспомнил, <Link to={'/signin'}>войти</Link>
+        </span>
+      );
+
+    const getError = error ? error : keyState.message;
+
     return (
       <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
-        <h1 className={styles.heading}>Сбросить пароль</h1>
-        {error && <Alert mssg={error} type={'error'} />}
+        {header}
+        {getError && <Alert mssg={getError} type={'error'} />}
         <Field
           name="password"
           component={CustomInputField}
@@ -54,60 +108,97 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<data.P
           }}
         />
         <div className={styles.btnContainer}>
-          <Link to={`/`} className={'mr-1'}>
-            <RaisedButton>{'отмена'}</RaisedButton>
-          </Link>
+          {cancelBtn}
           <RaisedButton type="submit" primary disabled={pristine || submitting}>
-            {submitting ? <i className="fas fa-circle-notch fa-spin" /> : <span style={{margin: 8}}>Обновить пароль</span>}
+            {submitBtn}
           </RaisedButton>
         </div>
-        <div className={styles.subContainer}>
-          <span>В этот раз точно вспомнил, <Link to={'/signin'}>войти</Link></span>
-        </div>
+        <div className={styles.subContainer}>{usefulLink}</div>
       </form>
     );
-  }
+  };
 
   render() {
-    const { styles, keyState } = this.props;
+    const { styles, keyState, token } = this.props;
+    const keyStatus =
+      keyState.status || token ? (
+        this.renderForm()
+      ) : (
+        <Alert mssg={keyState.message} type={'warning'} />
+      );
     return (
       <Paper className={styles.container} zDepth={2}>
-        {keyState.status ? this.renderForm() : <Alert mssg={keyState.message} type={'warning'} />}
+        {keyStatus}
       </Paper>
     );
   }
 }
 
+const CustomInputField: React.SFC<
+  WrappedFieldProps & TextFieldProps
+> = props => (
+  <TextField
+    {...props.input}
+    {...props}
+    errorText={
+      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
+    }
+  />
+);
 
-const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
-    <TextField
-      {...props.input}
-      {...props}
-      errorText={!!(props.meta.touched && props.meta.error) ? props.meta.error : ''}
-    />
-;
+const container: FelaRule<Props> = ({ token, keyState, isProfilePath }) => {
+  const fromProfileSt = (token || isProfilePath) &&
+    !keyState.status &&
+    !keyState.message && {
+      margin: '1rem',
+      width: 'auto',
+      height: '100%'
+    };
+  const routeResetPasswordSt = (keyState.status || keyState.message) &&
+    !isProfilePath && {
+      maxWidth: 650,
+      margin: 'auto',
+      minWidth: 320,
+      width: '100%'
+    };
+  return {
+    ...fromProfileSt,
+    ...routeResetPasswordSt
+  };
+};
 
-const container: FelaRule<Props> = () => ({
-  maxWidth: 650,
-  margin: 'auto',
-  minWidth: 320,
-  width: '100%'
-});
-
-const form: FelaRule<Props> = () => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  padding: '1rem'
-});
+const form: FelaRule<Props> = ({ token, keyState, isProfilePath }) => {
+  const fromProfileSt: IStyle = (token || isProfilePath) &&
+    !keyState.status &&
+    !keyState.message && {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      margin: '0 auto',
+      padding: '1rem',
+      height: '100%',
+      maxWidth: 700
+    };
+  const routeResetPasswordSt: IStyle = (keyState.status || keyState.message) &&
+    !isProfilePath && {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '1rem'
+    };
+  return {
+    ...fromProfileSt,
+    ...routeResetPasswordSt
+  };
+};
 
 const heading: FelaRule<Props> = () => ({
-  alignSelf:  'flex-start'
+  alignSelf: 'flex-start'
 });
 
 const subContainer: FelaRule<Props> = () => ({
-  display:  'flex',
-  width:  '100%',
+  display: 'flex',
+  width: '100%',
   justifyContent: 'space-between'
 });
 
@@ -115,7 +206,7 @@ const btnContainer: FelaRule<Props> = () => ({
   margin: '2rem 0',
   justifyContent: 'center',
   display: 'flex',
-  width: '100%',
+  width: '100%'
 });
 
 const mapStylesToProps = {
@@ -126,7 +217,7 @@ const mapStylesToProps = {
   btnContainer
 };
 
-export default compose (
+export default compose(
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<data.PasswordReset, Props>({
@@ -136,4 +227,4 @@ export default compose (
     validate: validatePR,
     onSubmit: submitPR
   })
-)(Index);
+)(ResetPasswordComponent);

@@ -56,8 +56,6 @@ class ProfileComponent extends React.Component<
       <Paper className={styles.container} zDepth={2}>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
           {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
-
-          <div className={styles.middleTitle}>Данные</div>
           <Field
             name="firstName"
             component={CustomInputField}
@@ -148,12 +146,6 @@ const form: FelaRule<Props> = () => ({
   maxWidth: 700
 });
 
-const middleTitle: FelaRule<Props> = () => ({
-  fontSize: 18,
-  fontWeight: 'bold',
-  margin: '1rem auto'
-});
-
 const btnContainer: FelaRule<Props> = () => ({
   margin: '2rem 0',
   justifyContent: 'center',
@@ -164,7 +156,6 @@ const btnContainer: FelaRule<Props> = () => ({
 const mapStylesToProps = {
   container,
   form,
-  middleTitle,
   btnContainer
 };
 

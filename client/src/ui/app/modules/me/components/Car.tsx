@@ -79,8 +79,6 @@ class CarComponent extends React.Component<
       <Paper className={styles.container} zDepth={2}>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
           {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
-
-          <div className={styles.middleTitle}>Машина</div>
           <Field
             name="photoFront"
             component={this.customImgFieldCarFront as any}
@@ -173,12 +171,6 @@ const form: FelaRule<Props> = () => ({
   maxWidth: 700
 });
 
-const middleTitle: FelaRule<Props> = () => ({
-  fontSize: 18,
-  fontWeight: 'bold',
-  margin: '1rem auto'
-});
-
 const btnContainer: FelaRule<Props> = () => ({
   margin: '2rem 0',
   justifyContent: 'center',
@@ -189,7 +181,6 @@ const btnContainer: FelaRule<Props> = () => ({
 const mapStylesToProps = {
   container,
   form,
-  middleTitle,
   btnContainer
 };
 

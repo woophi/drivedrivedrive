@@ -68,7 +68,6 @@ class NotificationsComponent extends React.Component<
           {(error || getProfileErr) && (
             <Alert mssg={error || getProfileErr} type={'error'} />
           )}
-          <div className={styles.middleTitle}>Рассылка уведомлений</div>
           <Field
             name="notifications.email"
             component={this.customToggleField}
@@ -114,12 +113,6 @@ const form: FelaRule<Props> = () => ({
   maxWidth: 700
 });
 
-const middleTitle: FelaRule<Props> = () => ({
-  fontSize: 18,
-  fontWeight: 'bold',
-  margin: '1rem auto'
-});
-
 const btnContainer: FelaRule<Props> = () => ({
   margin: '2rem 0',
   justifyContent: 'center',
@@ -130,7 +123,6 @@ const btnContainer: FelaRule<Props> = () => ({
 const mapStylesToProps = {
   container,
   form,
-  middleTitle,
   btnContainer
 };
 

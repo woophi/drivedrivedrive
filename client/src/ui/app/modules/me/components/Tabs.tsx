@@ -7,6 +7,7 @@ import { Notifications } from './Notifications';
 import { Car } from './Car';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
+import ResetPassword from 'ui/app/modules/password/reset';
 import { getProfile } from '../operations';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
@@ -44,6 +45,14 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
         Машина
       </div>
     );
+    const resetPasswordLabel = isMobile ? (
+      <i className={'fas fa-key'} />
+    ) : (
+      <div>
+        <i className={'fas fa-key mr-1'} />
+        Изменить пароль
+      </div>
+    );
     return (
       <Tabs className={styles.container}>
         <Tab label={driverLabel}>
@@ -54,6 +63,9 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
         </Tab>
         <Tab label={carLabel}>
           <Car />
+        </Tab>
+        <Tab label={resetPasswordLabel}>
+          <ResetPassword />
         </Tab>
       </Tabs>
     );

@@ -29,7 +29,7 @@ keystone.init({
 
   'auto update': true,
 	'session': true,
-	'auth': toCustomLogin,
+	'auth': keystone.get('env') === 'production' ? toCustomLogin : true,
 	'user model': 'User',
 	'admin path' : 'admin',
 	'trust proxy': true,
