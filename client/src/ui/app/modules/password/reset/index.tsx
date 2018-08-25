@@ -124,10 +124,16 @@ class ResetPasswordComponent extends React.Component<
     const { keyState, isProfilePath } = this.props;
     if (keyState.status && !isProfilePath || isProfilePath) {
       return this.renderForm();
-    } else {
+    } else if (!keyState.status && !isProfilePath && keyState.message) {
       return (
         <h1>
           Ошибка: недействительная ссылка
+        </h1>
+      );
+    } else {
+      return (
+        <h1>
+          Проверка
         </h1>
       );
     }

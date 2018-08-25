@@ -51,11 +51,11 @@ export const submitPR: FormSubmitHandler<data.PasswordReset> = async (
       password_confirm: values.password_confirm
     };
     await resetPassword(payload);
-    await dispatch(reset('resetPassword'));
     if (!props.isProfilePath) {
       await checkAuth();
       changeUrl(`/me`);
     }
+    await dispatch(reset('resetPassword'));
   } catch (e) {
     throw new SubmissionError({ _error: e.message || e.error.message });
   }
