@@ -113,7 +113,7 @@ class DroppingMenuComponent extends React.Component<Props> {
           <MenuItem leftIcon={<ActionHome />} primaryText="Главная" />
         </Link>
         {!authInfo && this.joinLink}
-        {authInfo && this.requestsLink}
+        {/* {authInfo && this.requestsLink} */}
         {authInfo && this.profileLink}
         {this.logInOutBtn}
       </IconMenu>
