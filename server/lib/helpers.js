@@ -10,6 +10,7 @@ const emailError = (err) => {
 };
 
 exports.sendEmail = (emailKeys, params) => {
+	console.error(keystone.get('locals').host, 'alooo');
 	new keystone.Email({
 		templateName: emailKeys.templateName,
 		transport: 'mailgun',
