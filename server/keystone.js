@@ -52,10 +52,10 @@ keystone.import('models');
 // for each request) should be added to ./routes/middleware.js
 keystone.set('locals', {
 	env: keystone.get('env'),
-	host: (function() {
+	host: (
 		p ? 'https://www.vettura.eu'
-		: 'http://localhost:3000';
-	})()
+		: 'http://localhost:3000'
+	)
 });
 
 // Load your project's Routes
