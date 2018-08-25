@@ -6,12 +6,14 @@ import {
   SubmissionError
 } from 'redux-form';
 import { resetPassword } from 'core/app/password';
+import { checkAuth } from 'core/app/login';
 import { changeUrl } from 'ui/app/operations';
 import { match } from 'react-router';
 
 type SharedProps = {
   match?: match<{ key: string }>;
   token: string;
+  isProfilePath: boolean;
 };
 
 export const validatePR = (
@@ -42,7 +44,7 @@ export const submitPR: FormSubmitHandler<data.PasswordReset> = async (
   props: SharedProps
 ) => {
   try {
-    const key = props.match.params.key || props.token;
+    const key = props.token || props.match.params.key;
     const payload: data.PasswordReset = {
       key,
       password: values.password,
@@ -50,8 +52,11 @@ export const submitPR: FormSubmitHandler<data.PasswordReset> = async (
     };
     await resetPassword(payload);
     await dispatch(reset('resetPassword'));
-    changeUrl(`/signin`);
+    if (!props.isProfilePath) {
+      await checkAuth();
+      changeUrl(`/me`);
+    }
   } catch (e) {
-    throw new SubmissionError({ _error: e.error.message });
+    throw new SubmissionError({ _error: e.message || e.error.message });
   }
 };

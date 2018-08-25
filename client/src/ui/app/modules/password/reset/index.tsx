@@ -65,30 +65,32 @@ class ResetPasswordComponent extends React.Component<
     );
 
     const header =
-      token && isProfilePath ? null : (
+      isProfilePath ? null : (
         <h1 className={styles.heading}>Сбросить пароль</h1>
       );
 
     const cancelBtn =
-      token && isProfilePath ? null : (
+      isProfilePath ? null : (
         <Link to={`/`} className={'mr-1'}>
           <RaisedButton>{'отмена'}</RaisedButton>
         </Link>
       );
 
     const usefulLink =
-      token && isProfilePath ? null : (
+      isProfilePath ? null : (
         <span>
           В этот раз точно вспомнил, <Link to={'/signin'}>войти</Link>
         </span>
       );
 
-    const getError = error ? error : keyState.message;
+    const getError = (keyState.message && !isProfilePath || error) && (
+      <Alert mssg={error || keyState.message} type={'error'} />
+    );
 
     return (
       <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
         {header}
-        {getError && <Alert mssg={getError} type={'error'} />}
+        {getError}
         <Field
           name="password"
           component={CustomInputField}
@@ -118,17 +120,23 @@ class ResetPasswordComponent extends React.Component<
     );
   };
 
-  render() {
-    const { styles, keyState, token } = this.props;
-    const keyStatus =
-      keyState.status || token ? (
-        this.renderForm()
-      ) : (
-        <Alert mssg={keyState.message} type={'warning'} />
+  get renderView() {
+    const { keyState, isProfilePath } = this.props;
+    if (keyState.status && !isProfilePath || isProfilePath) {
+      return this.renderForm();
+    } else {
+      return (
+        <h1>
+          Ошибка: недействительная ссылка
+        </h1>
       );
+    }
+  }
+
+  render() {
     return (
-      <Paper className={styles.container} zDepth={2}>
-        {keyStatus}
+      <Paper className={this.props.styles.container} zDepth={2}>
+        {this.renderView}
       </Paper>
     );
   }
@@ -146,20 +154,18 @@ const CustomInputField: React.SFC<
   />
 );
 
-const container: FelaRule<Props> = ({ token, keyState, isProfilePath }) => {
-  const fromProfileSt = (token || isProfilePath) &&
-    !keyState.status &&
-    !keyState.message && {
+const container: FelaRule<Props> = ({ isProfilePath }) => {
+  const fromProfileSt = isProfilePath && {
       margin: '1rem',
       width: 'auto',
       height: '100%'
     };
-  const routeResetPasswordSt = (keyState.status || keyState.message) &&
-    !isProfilePath && {
+  const routeResetPasswordSt = !isProfilePath && {
       maxWidth: 650,
       margin: 'auto',
       minWidth: 320,
-      width: '100%'
+      width: '100%',
+      padding: '1rem'
     };
   return {
     ...fromProfileSt,
@@ -167,10 +173,8 @@ const container: FelaRule<Props> = ({ token, keyState, isProfilePath }) => {
   };
 };
 
-const form: FelaRule<Props> = ({ token, keyState, isProfilePath }) => {
-  const fromProfileSt: IStyle = (token || isProfilePath) &&
-    !keyState.status &&
-    !keyState.message && {
+const form: FelaRule<Props> = ({ isProfilePath }) => {
+  const fromProfileSt: IStyle = isProfilePath && {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -179,8 +183,7 @@ const form: FelaRule<Props> = ({ token, keyState, isProfilePath }) => {
       height: '100%',
       maxWidth: 700
     };
-  const routeResetPasswordSt: IStyle = (keyState.status || keyState.message) &&
-    !isProfilePath && {
+  const routeResetPasswordSt: IStyle = !isProfilePath && {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',

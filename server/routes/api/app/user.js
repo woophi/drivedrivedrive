@@ -277,45 +277,71 @@ exports.forgotPassword = (req, res) => {
 
 };
 
+const authChangePass = (req, res) => {
+	return jwt.verify(req.body.key, secret, (err, decoded) => {
+		let user = req.user;
+    if (err)
+			return res.status(500).send({ message: 'Failed to authenticate token.' });
+
+		if (user._id.toString() !== decoded.id)
+			return res.status(400).send({ message: 'Не удалось изменить пароль' });
+		user.password = req.body.password;
+		user.save((err) => {
+			if (err) {
+				return res.apiError({message: 'Не удалось изменить пароль' }, '', err, 500);
+			}
+			return res.apiResponse(true);
+		});
+	});
+}
+
 exports.resetPassword = (req, res) => {
 
   if (req.body.password !== req.body.password_confirm) {
-		return res.apiError({message: 'Пароли не совпадают' }, '', err, 412);
-  }
-
-  User.model.findOne().where('resetPasswordKey', req.body.key).exec((err, user) => {
-    if (err) {
-			return res.apiError({message: 'Ссылка для сброса пароля недействительна' }, '', err, 400);
-    }
-    if (!user) {
-			return res.apiError({message: 'Ссылка для сброса пароля недействительна' }, '', err, 400);
-    }
-    user.save((err) => {
-      if (err) {
-				return res.apiError({message: 'Не удалось сбросить пароль' }, '', err, 500);
-      }
-      return res.apiResponse(true);
-    });
-
-  })
-    .then(user => {
-      let result = user;
-      result.resetPasswordKey = '';
-      result.save((err) => {
-        if (err) console.error('опустошение ключа не прошло', JSON.stringify(err));
-      });
-    });
-
+		return res.apiError({message: 'Пароли не совпадают' }, {message: 'Пароли не совпадают' }, null, 412);
+	}
+	if (!req.user) {
+		User.model.findOne().where('resetPasswordKey', req.body.key).exec((err, user) => {
+			if (err || !user) {
+				return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err || null, 400);
+			}
+			user.password = req.body.password;
+			const token = jwt.sign({ id: user._id }, secret, {
+				expiresIn: 86400
+			});
+			user.token = token;
+			user.save((err) => {
+				if (err) {
+					return res.apiError({message: 'Не удалось сбросить пароль' }, '', err, 500);
+				}
+				keystone.session.signin({ email: user.email, password: req.body.password }, req, res, () => {
+					return res.apiResponse(true);
+				}, (err) => {
+					return res.apiError({
+						message: 'Извините, не удалось зайти, пожалуйста попробуйте снова.'
+					}, '', err, 400);
+				});
+			})
+				.then(user => {
+					if (!user)
+						return;
+					let result = user;
+					result.resetPasswordKey = '';
+					result.save((err) => {
+						if (err) console.error('опустошение ключа не прошло', JSON.stringify(err));
+					});
+				});
+		});
+	} else {
+		authChangePass(req, res)
+	}
 };
 
 exports.getPasswordKey = (req, res) => {
 
   User.model.findOne().where('resetPasswordKey', req.body.key).exec((err, key) => {
-    if (err) {
-			return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err, 400);
-    }
-    if (!key) {
-			return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', null, 400);
+    if (err || !key) {
+			return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err || null, 400);
     }
     return res.apiResponse({
       status: true
