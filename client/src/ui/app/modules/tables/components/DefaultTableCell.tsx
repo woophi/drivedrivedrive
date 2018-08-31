@@ -1,7 +1,17 @@
 import * as React from 'react';
+import { createComponent } from 'react-fela';
+
+const Container = createComponent(
+  () => ({
+    width: '100%',
+    padding: '0 0.5rem'
+  }),
+  'div',
+  ['className']
+);
 
 export const DefaultTableCell: React.SFC = ({ children }) => (
-  <div className="text-truncate w-100 px-2">
+  <Container className="text-truncate">
     {children}
-  </div>
+  </Container>
 );

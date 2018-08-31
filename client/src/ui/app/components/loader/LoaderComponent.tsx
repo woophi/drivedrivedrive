@@ -62,7 +62,7 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
       };
 
       async componentDidMount() {
-        this.fetchData();
+        await this.fetchData();
         this.createIntervalIfSet();
         if (!!params.onMount) {
           params.onMount();
@@ -133,6 +133,7 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
 
           case api.DataStatus.SUCCESS: {
             const Component = params.component;
+            console.warn('da');
             return <Component data={result} {...props} />;
           }
 

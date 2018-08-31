@@ -25,6 +25,8 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
     header: (instance: Grid) => (this.header = instance),
     mainGrid: (instance: Grid) => {
       this.mainGrid = instance;
+      console.warn('kakogo huja', this.mainGrid);
+
       if (!!this.props.config.registerChild) {
         this.props.config.registerChild(instance);
       }
@@ -53,7 +55,6 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
     const rowHeight = constants.ROW_HEIGHT;
 
     const { config, list, tableState } = this.props;
-
     const REM = 16;
 
     const tableMinWidth = config.model.reduce(
@@ -110,7 +111,7 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
                         cellRenderer={renderBodyCellsAsRow}
                         columnWidth={innerWidth}
                         columnCount={1}
-                        height={height - rowHeight}
+                        height={1000}
                         scrollLeft={scrollLeft}
                         scrollTop={scrollTop}
                         // onScroll={onScroll}

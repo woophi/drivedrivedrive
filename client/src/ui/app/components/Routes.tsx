@@ -139,14 +139,14 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         />}
     </Route>
 
-    {/* <Route exact strict path="/requests" location={location}>
+    <Route exact strict path="/requests" location={location}>
       {({ match }) =>
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/requests'), 'app.requests')}
         />}
-    </Route> */}
+    </Route>
 
   </React.Fragment>
 );

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { compose } from 'redux';
-import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
+import { connect as FelaConnect, FelaRule, FelaStyles, createComponent } from 'react-fela';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
@@ -12,6 +12,16 @@ type FelaProps = FelaStyles<typeof mapStylesToProps>;
 type Props = {
   isMobile: boolean;
 };
+
+const Container = createComponent(
+  () => ({
+    display: 'flex',
+    flex: 1,
+    flexDirection: 'column',
+    height: '79vh'
+  }),
+  'div'
+);
 class TabsComp extends React.PureComponent<FelaProps & Props> {
   render() {
     const { isMobile, styles } = this.props;
@@ -51,9 +61,9 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
       <Tabs className={styles.container}>
         <Tab label={requestsOpenLabel}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
-            <div>
+            <Container>
               <OpenRequestsList />
-            </div>
+            </Container>
           </Paper>
         </Tab>
         <Tab label={requestsProgressLabel}>

@@ -3,6 +3,7 @@ import { composeTable, tableConnect, TableMargin } from 'ui/app/modules/tables';
 import Loader from 'ui/app/components/loader';
 import * as operations from '../../operations';
 import { getOpenRequestsData } from '../../selectors';
+import { createComponent } from 'react-fela';
 import { OpenRequest } from 'core/models/api';
 
 const TC = composeTable<OpenRequest>({
@@ -12,6 +13,12 @@ const TC = composeTable<OpenRequest>({
   }, {
     label: 'В',
     dataKey: 'to'
+  }, {
+    label: 'Дата',
+    dataKey: 'date'
+  }, {
+    label: 'Время',
+    dataKey: 'time'
   }],
   showRowDividers: true,
   showRowArrows: true,
@@ -33,14 +40,14 @@ const OpenRequestsContainer = Loader({
   component: OpenRequestsConnectedList as any
 });
 
+
+
 export const OpenRequestsList: React.SFC = () => {
   return (
-    <div className="d-flex flex-1 flex-column">
-      <div className="flex-1">
-        <TableMargin>
-          <OpenRequestsContainer />
-        </TableMargin>
-      </div>
+    <div className="flex-1">
+      <TableMargin>
+        <OpenRequestsContainer />
+      </TableMargin>
     </div>
   );
 };

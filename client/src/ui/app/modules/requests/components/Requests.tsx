@@ -2,6 +2,7 @@ import * as React from 'react';
 import Paper from 'material-ui/Paper';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { TabsRequests } from './Tabs';
+import 'react-virtualized/styles.css';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 

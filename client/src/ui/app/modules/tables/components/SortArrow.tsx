@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { SortDirection, SortDirectionType } from 'react-virtualized';
+import { createComponent } from 'react-fela';
 
+const IconArrow = createComponent(
+  () => ({
+    margin: 'auto 0 auto auto'
+  }),
+  'i',
+  ['className']
+);
 export const SortArrow: React.SFC<{
   sortDirection: SortDirectionType | null;
 }> = ({ sortDirection }) => {
@@ -8,9 +16,9 @@ export const SortArrow: React.SFC<{
     sortDirection === SortDirection.ASC,
     sortDirection === SortDirection.DESC
   ];
-  const iconClassName = `fa-long-arrow${
+  const iconClassName = `fa-long-arrow-alt${
     isAsc ? '-down' : isDesc ? '-up' : ''
   } ${isAsc ? 'text-muted' : ''}`;
 
-  return <i className={`fa ${iconClassName} my-auto ml-auto`} />;
+  return <IconArrow className={`fas ${iconClassName}`} />;
 };

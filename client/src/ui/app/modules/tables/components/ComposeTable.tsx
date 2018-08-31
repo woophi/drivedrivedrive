@@ -10,7 +10,7 @@ export function composeTable<T = {}>(
 
     render() {
       const { list, data, dispatch, children, ...tableState } = this.props;
-
+      console.warn(list, config, tableState, 'pizda');
       return (
         <FlexGridTable list={list} config={config} tableState={tableState} />
       );

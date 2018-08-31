@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect as fela, FelaRule, FelaStyles } from 'react-fela';
+import { connect as fela, FelaRule, FelaStyles, IStyle } from 'react-fela';
 import { SortDirectionType } from 'react-virtualized';
 import { getNextSortDirection } from '../constants';
 import { SortArrow } from './SortArrow';
@@ -30,7 +30,7 @@ class NamedTableHeaderComponent extends React.Component<
 
   onClick = this.props.disableSort
     ? undefined
-    : (event: React.MouseEvent<HTMLDivElement>) => {
+    : () => {
         const newState = {
           sortBy: this.props.dataKey,
           sortDirection: getNextSortDirection(this.props.sortDirection)
@@ -40,34 +40,19 @@ class NamedTableHeaderComponent extends React.Component<
       };
 
   render() {
-    const {
-      sortDirection,
-      showDivider,
-      showSortArrow,
-      disableSort,
-      styles
-    } = this.props;
+    const { sortDirection, showSortArrow, disableSort, styles } = this.props;
 
-    const className = 'd-flex col p-0 align-items-center '.concat(
-      this.props.showDivider
-        ? 'border border-left-0 border-top-0 border-bottom-0'
-        : ''
-    );
+    const sortArrow = !!sortDirection &&
+      !disableSort &&
+      showSortArrow && <SortArrow sortDirection={sortDirection} />;
 
     return (
-      <div className={className}>
-        <div
-          className={`px-2 text-truncate font-weight-bold ${styles.label}`}
-          onClick={this.onClick}
-        >
+      <div className={styles.container}>
+        <div className={`text-truncate ${styles.label}`} onClick={this.onClick}>
           {this.props.label}
         </div>
-        <div className={'pr-1 curp'}>{this.props.children}</div>
-        <div className="ml-auto">
-          {!!sortDirection &&
-            !disableSort &&
-            showSortArrow && <SortArrow sortDirection={sortDirection} />}
-        </div>
+        <div className={`curp ${styles.childLabel}`}>{this.props.children}</div>
+        <div className={styles.arrow}>{sortArrow}</div>
         {this.props.resizer}
       </div>
     );
@@ -76,11 +61,39 @@ class NamedTableHeaderComponent extends React.Component<
 
 const label: FelaRule<NamedTableHeaderProps> = props => ({
   userSelect: 'none',
-  cursor: props.disableSort ? undefined : 'pointer'
+  cursor: props.disableSort ? undefined : 'pointer',
+  padding: '0 0.5rem',
+  fontWeight: 'bold'
 });
+const childLabel: FelaRule<NamedTableHeaderProps> = () => ({
+  paddingRight: '0.25rem'
+});
+const arrow: FelaRule<NamedTableHeaderProps> = () => ({
+  marginLeft: 'auto'
+});
+const container: FelaRule<NamedTableHeaderProps> = props => {
+  const withDivider: IStyle = props.showDivider && {
+    border: `1px solid ${props.theme.palette.line}`,
+    borderTop: 0,
+    borderBottom: 0,
+    borderLeft: 0
+  };
+  return {
+    display: 'flex',
+    padding: 0,
+    alignItems: 'center',
+    flexBasis: 0,
+    flexGrow: 1,
+    maxWidth: '100%',
+    ...withDivider
+  };
+};
 
 const mapStylesToProps = {
-  label
+  label,
+  container,
+  childLabel,
+  arrow
 };
 
 export const NamedTableHeader = fela(mapStylesToProps)(

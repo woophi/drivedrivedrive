@@ -83,6 +83,11 @@ export function configureFela(mountNodeId: string) {
   renderer.renderStatic({
     textDecoration: 'none'
   }, '.tD-none');
+  renderer.renderStatic({
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  }, '.text-truncate');
 
   return { renderer, mountNode };
 }
