@@ -9,6 +9,7 @@ exports.getOpenRequests = (req, res) => {
 	Request.model
 		.find()
 		.where('accepted', undefined)
+		.where('wasConfirmed', false)
 		.exec((err, results) => {
 			if (err)
 				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
@@ -18,8 +19,8 @@ exports.getOpenRequests = (req, res) => {
 				.filter(r => !r.assignedBy
 					.find(i => isEqual(i, new ObjectID(req.body.userId)))
 				);
-			const data = filterResults.map(r => {
-				const date = moment(r.guest.date).locale('ru').format('LL');
+			const mapResults = filterResults.map(r => {
+				const date = moment(r.guest.date).format('YYYY-MM-DD');
 
 				return ({
 					from: r.guest.from,
@@ -27,7 +28,15 @@ exports.getOpenRequests = (req, res) => {
 					date,
 					time: r.guest.time,
 					id: r._id
-				})
+				});
+			});
+			const data = mapResults.filter(r => {
+				const parsedDate = moment(r.date).format('YYYYMMDD');
+				const today = moment().format('YYYYMMDD');
+				if (parsedDate >= today) {
+					return r;
+				}
+
 			});
 			return res.apiResponse(data);
 		});

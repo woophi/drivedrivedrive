@@ -12,7 +12,8 @@ const tableDefaultState: TableState = {
 export const tablesDefaultState: TablesState = {
   openRequests: {
     ...tableDefaultState,
-    sortBy: 'from',
+    sortBy: 'date',
+    sortDirection: SortDirection.DESC
   }
 };
 

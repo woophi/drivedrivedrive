@@ -13,6 +13,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { AppRoot } from './components/AppRoot';
 import { init } from 'core/app/init';
 import { uiReducers } from 'core/app/reducer';
+import 'moment/locale/ru';
 
 const renderApp = (fela: {
   renderer: FelaRenderer;

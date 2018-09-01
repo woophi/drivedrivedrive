@@ -110,7 +110,7 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
                         cellRenderer={renderBodyCellsAsRow}
                         columnWidth={innerWidth}
                         columnCount={1}
-                        height={1000}
+                        height={height - (config.hideHeader ? 0 : rowHeight)}
                         scrollLeft={scrollLeft}
                         scrollTop={scrollTop}
                         // onScroll={onScroll}

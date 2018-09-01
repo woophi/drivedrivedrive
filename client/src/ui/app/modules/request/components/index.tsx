@@ -38,7 +38,7 @@ class Index extends React.Component<Props & FelaProps> {
   }
 
   render() {
-    const { styles, getRoles, getRequestStatus, request } = this.props;
+    const { styles, getRequestStatus, request } = this.props;
     const openRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN;
     const assignedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED;
     const closedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
@@ -52,7 +52,7 @@ class Index extends React.Component<Props & FelaProps> {
               <h1 className={styles.texts}>Новая заявка</h1>
               <span className={styles.texts}>
                 <p>{`Из ${request.from}, в ${request.to}`}</p>
-                <p>дата {moment(request.date).format('L')}, время {request.time}</p>
+                <p>дата {moment(request.date).locale('ru').format('LL')}, время {request.time}</p>
                 <p>количество человек {request.count}</p>
                 {request.comment && <p>комментарий {request.comment}</p>}
               </span>

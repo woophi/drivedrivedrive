@@ -32,8 +32,7 @@ const TC = composeTable<OpenRequest>({
 
 const OpenRequestsConnectedList = tableConnect({
   dataName: 'openRequests',
-  tableName: 'openRequests',
-  searchFields: ['from']
+  tableName: 'openRequests'
 })(TC);
 
 const OpenRequestsContainer = Loader({
