@@ -8,10 +8,10 @@ import { changeUrl } from 'ui/app/operations';
 
 const TC = composeTable<OpenRequest>({
   model: [{
-    label: 'Из',
+    label: 'Пункт отправления',
     dataKey: 'from'
   }, {
-    label: 'В',
+    label: 'Пункт прибытия',
     dataKey: 'to'
   }, {
     label: 'Дата',
@@ -24,8 +24,7 @@ const TC = composeTable<OpenRequest>({
   showRowArrows: true,
   showHeaderDividers: true,
   showHeaderSortControls: true,
-  onRowClick: ({ event, rowData }) => {
-    // if ((event.target as HTMLElement).nodeName === 'I') { return; }
+  onRowClick: ({ rowData }) => {
     changeUrl(`/request/${rowData.id}`);
   }
 });

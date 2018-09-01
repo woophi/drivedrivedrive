@@ -3,7 +3,6 @@ var async = require('async'),
   User = keystone.list('User'),
   Request = keystone.list('Request'),
   Price = keystone.list('Price'),
-  ObjectID = require("mongodb").ObjectID,
 	Rating = keystone.list('Rating');
 const { isEqual } = require('lodash');
 const { sendEmail } = require('../../lib/helpers');
@@ -38,7 +37,7 @@ exports.getRequestState = (req, res) => {
 			}
 
       const findAssignedDriver = result.assignedBy
-              .find(i => isEqual(i, new ObjectID(req.body.userId)));
+              .find(i => i.toString()  === req.body.userId);
 
       if (result.submitedOn && !result.wasConfirmed) {
         return res.apiResponse({
@@ -280,7 +279,7 @@ exports.acceptRequest = (req, res) => {
             }
 
             const filterAssignedDrivers = result.assignedBy
-              .filter(i => !isEqual(i, new ObjectID(req.body.driverId)));
+              .filter(i => i.toString() === req.body.driverId);
 
             const submitedData = {
               'submitedOn': req.body.driverId,
