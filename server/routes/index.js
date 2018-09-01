@@ -97,8 +97,9 @@ exports = module.exports = (app) => {
 	app.all('/api/user/subState', routes.api.app.emails.subStateDriver);
 	app.all('/api/guest/unsub', routes.api.app.emails.unsubGuest);
 	app.all('/api/guest/subState', routes.api.app.emails.subStateGuest);
-	// TODO: don't forget to add validatetoken
-	app.all('/api/requests/open', routes.api.app.requests.getOpenRequests);
-	app.all('/api/requests/active', routes.api.app.requests.getSubmitedRequests);
-	app.all('/api/requests/history', routes.api.app.requests.getHistoryRequests);
+
+	app.all('/api/requests/open', middleware.validateToken, routes.api.app.requests.getOpenRequests);
+	app.all('/api/requests/active', middleware.validateToken, routes.api.app.requests.getSubmitedRequests);
+	app.all('/api/requests/history', middleware.validateToken, routes.api.app.requests.getHistoryRequests);
+	app.all('/api/requests/process', middleware.validateToken, routes.api.app.requests.getInProcessRequests);
 };

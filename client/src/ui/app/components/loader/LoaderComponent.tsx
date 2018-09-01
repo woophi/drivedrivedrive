@@ -126,7 +126,9 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
 
           case api.DataStatus.ERROR:
             return (
-              <Alert mssg={JSON.stringify(errorInfo)} type={'error'} />
+              <div className="m-auto">
+                <Alert mssg={JSON.stringify(errorInfo)} type={'error'} />
+              </div>
             );
 
           case api.DataStatus.SUCCESS: {

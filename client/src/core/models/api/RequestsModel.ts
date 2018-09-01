@@ -1,4 +1,4 @@
-export interface OpenRequest {
+export interface TableRequest {
   from: string;
   to: string;
   date: string;

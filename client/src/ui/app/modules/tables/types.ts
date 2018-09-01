@@ -47,7 +47,10 @@ export type TableStateWithColumns<T> = TableState & {
 };
 
 export type TablesState = {
-  openRequests: TableState
+  openRequests: TableState,
+  activeRequests: TableState,
+  historyRequests: TableState,
+  inProcessRequests: TableState
 };
 
 export type FilterChangeDispatch = {

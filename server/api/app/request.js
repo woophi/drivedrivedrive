@@ -4,7 +4,6 @@ var async = require('async'),
   Request = keystone.list('Request'),
   Price = keystone.list('Price'),
 	Rating = keystone.list('Rating');
-const { isEqual } = require('lodash');
 const { sendEmail } = require('../../lib/helpers');
 
 exports.getRequestState = (req, res) => {

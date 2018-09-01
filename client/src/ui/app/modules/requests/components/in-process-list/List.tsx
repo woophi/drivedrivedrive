@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { composeTable, tableConnect } from 'ui/app/modules/tables';
 import Loader from 'ui/app/components/loader';
-import { getOpenRequests } from '../../operations';
-import { getOpenRequestsData } from '../../selectors';
+import { getInProcessRequests } from '../../operations';
+import { getInProcessRequestsData } from '../../selectors';
 import { TableRequest } from 'core/models/api';
 import { changeUrl } from 'ui/app/operations';
 
@@ -25,21 +25,21 @@ const TC = composeTable<TableRequest>({
   showHeaderDividers: true,
   showHeaderSortControls: true,
   onRowClick: ({ rowData }) => {
-    changeUrl(`/request/${rowData.id}`);
+    // changeUrl(`/request/${rowData.id}`);
   }
 });
 
-const OpenRequestsConnectedList = tableConnect({
-  dataName: 'openRequests',
-  tableName: 'openRequests'
+const InProcessRequestsConnectedList = tableConnect({
+  dataName: 'inProcessRequests',
+  tableName: 'inProcessRequests'
 })(TC);
 
-const OpenRequestsContainer = Loader({
-  loadData: getOpenRequests,
-  dataSelector: getOpenRequestsData,
-  component: OpenRequestsConnectedList as any
+const InProcessRequestsContainer = Loader({
+  loadData: getInProcessRequests,
+  dataSelector: getInProcessRequestsData,
+  component: InProcessRequestsConnectedList as any
 });
 
-export const OpenRequestsList: React.SFC = () => {
-  return <OpenRequestsContainer />;
+export const InProcessRequestsList: React.SFC = () => {
+  return <InProcessRequestsContainer />;
 };

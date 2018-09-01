@@ -6,9 +6,17 @@ import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import Paper from 'material-ui/Paper';
 import { OpenRequestsList } from './open-list/List';
+import { ActiveRequestsList } from './active-list/List';
+import { HistoryRequestsList } from './history-list/List';
+import { InProcessRequestsList } from './in-process-list/List';
+import { OpenRequestsNumber } from './RefreshRequests';
+import { ViewRequests } from '../types';
+import { setViewOnRequests } from '../operations';
+import 'react-virtualized/styles.css';
 
 type Props = {
   isMobile: boolean;
+  requestsView: ViewRequests;
 };
 
 const Container = createComponent(
@@ -21,16 +29,40 @@ const Container = createComponent(
   'div'
 );
 class TabsComp extends React.PureComponent<Props> {
-  render() {
+  get requestsOpenLabel() {
     const { isMobile } = this.props;
-    const requestsOpenLabel = isMobile ? (
+    const label = isMobile ? (
       <i className={'fas fa-taxi'} />
     ) : (
-      <div>
+      <>
         <i className={'fas fa-taxi mr-1'} />
         Открытые
+      </>
+    );
+
+    return (
+      <div>
+        <OpenRequestsNumber />
+        {label}
       </div>
     );
+  }
+
+  openRsClick = () => {
+    setViewOnRequests('open');
+  }
+  inProcessRsClick = () => {
+    setViewOnRequests('inProcess');
+  }
+  activeRsClick = () => {
+    setViewOnRequests('active');
+  }
+  historyRsClick = () => {
+    setViewOnRequests('history');
+  }
+
+  render() {
+    const { isMobile, requestsView } = this.props;
     const requestsProgressLabel = isMobile ? (
       <i className={'fas fa-users'}  />
     ) : (
@@ -39,7 +71,7 @@ class TabsComp extends React.PureComponent<Props> {
         В обработке
       </div>
     );
-    const requestsSubmitedLabel = isMobile ? (
+    const requestsActiveLabel = isMobile ? (
       <i className={'fas fa-car-side'} />
     ) : (
       <div>
@@ -57,26 +89,32 @@ class TabsComp extends React.PureComponent<Props> {
     );
     return (
       <Tabs>
-        <Tab label={requestsOpenLabel}>
+        <Tab label={this.requestsOpenLabel} onActive={this.openRsClick}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
             <Container>
-              <OpenRequestsList />
+              {requestsView === 'open' && <OpenRequestsList />}
             </Container>
           </Paper>
         </Tab>
-        <Tab label={requestsProgressLabel}>
+        <Tab label={requestsProgressLabel} onActive={this.inProcessRsClick}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
-            <div>kek</div>
+            <Container>
+              {requestsView === 'inProcess' && <InProcessRequestsList />}
+            </Container>
           </Paper>
         </Tab>
-        <Tab label={requestsSubmitedLabel}>
+        <Tab label={requestsActiveLabel} onActive={this.activeRsClick}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
-            <div>kek</div>
+            <Container>
+              {requestsView === 'active' && <ActiveRequestsList />}
+            </Container>
           </Paper>
         </Tab>
-        <Tab label={requestsHistoryLabel}>
+        <Tab label={requestsHistoryLabel} onActive={this.historyRsClick}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
-            <div>kek</div>
+            <Container>
+              {requestsView === 'history' && <HistoryRequestsList />}
+            </Container>
           </Paper>
         </Tab>
       </Tabs>
@@ -88,7 +126,8 @@ export const TabsRequests = compose(
   ReduxConnect((state: AppState) => {
     const MOBILE_SCREEN_WIDTH = 768;
     return ({
-      isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH
+      isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH,
+      requestsView: state.ui.requests.view
     });
   })
 )(TabsComp);

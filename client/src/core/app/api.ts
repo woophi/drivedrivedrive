@@ -50,7 +50,13 @@ export const api = {
   },
   requests: {
     open: (userId: string) =>
-      a<apiData.OpenRequest[]>('requests/open', { userId })
+      a<apiData.TableRequest[]>('requests/open', { userId }),
+    active: (userId: string) =>
+      a<apiData.TableRequest[]>('requests/active', { userId }),
+    history: (userId: string) =>
+      a<apiData.TableRequest[]>('requests/history', { userId }),
+    inProcess: (userId: string) =>
+      a<apiData.TableRequest[]>('requests/process', { userId })
   }
 };
 
@@ -67,10 +73,6 @@ const loadDataImpl = async (
   apiCallerDataDeliverer: () => Promise<ResultType>,
   config?: DeliveryParams<ResultType>
 ) => {
-  const log = (...args: any[]) =>
-    !!config && config.logging
-      ? console.debug(`loadData[${name}]>`, ...args)
-      : undefined;
 
   const checkData = (data: ResultType) => {
     if (config.checker(data)) {
@@ -95,8 +97,6 @@ const loadDataImpl = async (
       return data;
     }
   };
-
-  log('state:', store.getState().ui.api[name]);
 
   let timeout: number = null;
   switch (store.getState().ui.api[name].status) {
@@ -137,12 +137,8 @@ const loadDataImpl = async (
   }
 
   try {
-    log('calling api');
-
     const response = await apiCallerDataDeliverer();
     clearTimeout(timeout);
-
-    log('response:', response);
 
     if (store.getState().ui.api[name].errorInfo) {
       store.dispatch({ type: 'api/data/setError', name, payload: null });
@@ -155,10 +151,8 @@ const loadDataImpl = async (
         name,
         payload: apiData.DataStatus.EMPTY
       });
-      log('newState:', store.getState().ui.api[name]);
       return response;
     } else if (!!config && !!config.checker) {
-      log('newState:', store.getState().ui.api[name]);
       return checkData(response);
     }
 
@@ -168,7 +162,6 @@ const loadDataImpl = async (
       name,
       payload: apiData.DataStatus.SUCCESS
     });
-    log('newState:', store.getState().ui.api[name]);
     return response;
   } catch (e) {
     clearTimeout(timeout);
@@ -178,7 +171,6 @@ const loadDataImpl = async (
       name,
       payload: apiData.DataStatus.ERROR
     });
-    log('API call error:', e);
     throw e;
   }
 };
@@ -198,6 +190,9 @@ type DataLoader = DLF<
   DLF<'userGdpr', apiData.DataState['userGdpr']['result']> &
   DLF<'cookieGdpr', apiData.DataState['cookieGdpr']['result']> &
   DLF<'openRequests', apiData.DataState['openRequests']['result']> &
+  DLF<'activeRequests', apiData.DataState['activeRequests']['result']> &
+  DLF<'historyRequests', apiData.DataState['historyRequests']['result']> &
+  DLF<'inProcessRequests', apiData.DataState['inProcessRequests']['result']> &
   DLF<'subscribeState', apiData.DataState['subscribeState']['result']>;
 
 export const loadData: DataLoader = loadDataImpl as any;

@@ -1,28 +1,67 @@
 import * as React from 'react';
-import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
+import { createComponent } from 'react-fela';
 import { TabsRequests } from './Tabs';
-import 'react-virtualized/styles.css';
+import { compose } from 'redux';
+import { connect as ReduxConnect } from 'react-redux';
+import { AppState } from 'core/models/app';
+import { getCheckRoles } from '../selectors';
+import Paper from 'material-ui/Paper';
 
-type FelaProps = FelaStyles<typeof mapStylesToProps>;
+type Props = {
+  roles: {
+    admin: string,
+    activeDriver: string
+  }
+};
 
-class RequestsComponent extends React.PureComponent<FelaProps> {
+const Container = createComponent(
+  () => ({
+    height: '100%',
+  width: '100%'
+  }),
+  'div',
+  ['className']
+);
+const Wrapper = createComponent(
+  () => ({
+    display: 'flex',
+    justifyContent: 'center',
+    flex: 1
+  }),
+  'div'
+);
+
+class RequestsComponent extends React.PureComponent<Props> {
+
+  get view() {
+    const { roles } = this.props;
+    const { activeDriver, admin } = roles;
+    if (!!activeDriver || !!admin) {
+      return <TabsRequests />;
+    } else {
+      return (
+        <Paper zDepth={2} style={{margin: '1rem'}}>
+          <Wrapper>
+            <h1>Доступ запрещен</h1>
+          </Wrapper>
+        </Paper>
+      )
+    }
+  }
+
   render() {
-    const { styles } = this.props;
     return (
-      <div className={styles.container}>
-        <TabsRequests />
-      </div>
+      <Container>
+        {this.view}
+      </Container>
     );
   }
 }
 
-const container: FelaRule<{}> = () => ({
-  height: '100%',
-  width: '100%'
-});
-
-const mapStylesToProps = {
-  container
-};
-
-export const Requests = FelaConnect(mapStylesToProps)(RequestsComponent);
+export const Requests = compose(
+  ReduxConnect((state: AppState) => {
+    return ({
+      roles: getCheckRoles(state)
+    });
+  })
+)(RequestsComponent);

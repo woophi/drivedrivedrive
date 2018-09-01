@@ -14,6 +14,21 @@ export const tablesDefaultState: TablesState = {
     ...tableDefaultState,
     sortBy: 'date',
     sortDirection: SortDirection.DESC
+  },
+  activeRequests: {
+    ...tableDefaultState,
+    sortBy: 'date',
+    sortDirection: SortDirection.DESC
+  },
+  historyRequests: {
+    ...tableDefaultState,
+    sortBy: 'date',
+    sortDirection: SortDirection.DESC
+  },
+  inProcessRequests: {
+    ...tableDefaultState,
+    sortBy: 'date',
+    sortDirection: SortDirection.DESC
   }
 };
 

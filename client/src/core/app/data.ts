@@ -16,7 +16,10 @@ const defaultState: data.DataState = {
   userGdpr: defaultStateItem<data.Gdpr>(null),
   cookieGdpr: defaultStateItem<data.Gdpr>(null),
   subscribeState: defaultStateItem<data.StateUnsub>(null),
-  openRequests: defaultStateItem<data.OpenRequest[]>([])
+  openRequests: defaultStateItem<data.TableRequest[]>([]),
+  activeRequests: defaultStateItem<data.TableRequest[]>([]),
+  historyRequests: defaultStateItem<data.TableRequest[]>([]),
+  inProcessRequests: defaultStateItem<data.TableRequest[]>([])
 };
 
 export const reducer = (state = defaultState, dispatch: data.DataDispatch): data.DataState => {
