@@ -25,7 +25,6 @@ export function tableConnect<T>({ tableName, dataName, dataSelector, searchField
 
     const mapStateToProps = (state: AppState) => {
 
-      console.warn('??', tableSelectors.getSortedList(state), component);
       return ({
         filters: tableSelectors.getFilters(state),
         searchQuery: tableSelectors.getSearchQuery(state),

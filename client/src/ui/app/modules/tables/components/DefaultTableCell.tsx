@@ -7,11 +7,14 @@ const Container = createComponent(
     padding: '0 0.5rem'
   }),
   'div',
-  ['className']
+  ['className', 'title']
 );
 
-export const DefaultTableCell: React.SFC = ({ children }) => (
-  <Container className="text-truncate">
+export const DefaultTableCell: React.SFC<{ title: string }> = ({
+  children,
+  title
+}) => (
+  <Container className="text-truncate" title={title}>
     {children}
   </Container>
 );

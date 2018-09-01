@@ -9,15 +9,9 @@ export interface DefaultTableRowProps {
   withBorder?: boolean;
 }
 
-export const DefaultTableRowComponent: React.SFC<
+const DefaultTableRowComponent: React.SFC<
   DefaultTableRowProps & FelaStyles<typeof mapStylesToProps>
-> = ({ children, style, onClick, selected, withArrow, withBorder, styles }) => {
-  const className = 'd-flex px-2'.concat(
-    withBorder ? ' border border-left-0 border-top-0 border-right-0' : '',
-    withArrow ? ' with-arrow' : '',
-    !!onClick ? ' list-group-item-action curp' : '',
-    selected ? ' list-group-item active' : ''
-  );
+> = ({ children, style, onClick, styles }) => {
 
   return (
     <div className={styles.container} style={style} onClick={onClick}>
@@ -33,31 +27,16 @@ const container: FelaRule<DefaultTableRowProps> = props => {
     borderBottom: 0,
     borderLeft: 0
   };
-  const withArrow: IStyle = props.withArrow && {
-    position: 'relative',
-
-    '&:before': {
-      content: 'F0DA',
-      font: 'normal normal normal 12px/1 FontAwesome',
-      position: 'absolute',
-      width: 4,
-      height: 4,
-      top: 0,
-      right: 0
-      // width: 6,
-      // height: 12,
-      // top: 'calc(50% - 6px)',
-      // right: 9,
-    }
-  };
   const onClick: IStyle = !!props.onClick && {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    ':hover': {
+      backgroundColor: props.theme.palette.light
+    }
   };
   return {
     display: 'flex',
     padding: '0 0.5rem',
     ...withBorder,
-    ...withArrow,
     ...onClick
   };
 };

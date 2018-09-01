@@ -30,7 +30,7 @@ export class RowContentRenderer extends React.PureComponent<RowRendererProps> {
           flexShrink={columnModel.flexShrink}
           flexGrow={columnModel.flexGrow}
         >
-          <DefaultTableCell>
+          <DefaultTableCell title={rowData[dataKey]}>
             <CellContentRenderer
               rowData={rowData}
               dataKey={dataKey as string}

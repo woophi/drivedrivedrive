@@ -66,6 +66,9 @@ export function configureFela(mountNodeId: string) {
     marginLeft: '1rem'
   }, '.ml-1');
   renderer.renderStatic({
+    marginTop: '1rem'
+  }, '.mt-1');
+  renderer.renderStatic({
     margin: 'auto'
   }, '.m-auto');
   renderer.renderStatic({

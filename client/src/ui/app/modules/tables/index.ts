@@ -1,4 +1,3 @@
-export * from './components/TableMargin';
 export * from './components/TableConnect';
 export * from './types';
 export * from './components/ComposeTable';

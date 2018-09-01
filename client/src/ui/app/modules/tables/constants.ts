@@ -3,16 +3,18 @@ import { driveTheme } from 'ui/shared/driveUI';
 
 export const HEADER_GRID_STYLE: React.CSSProperties = {
   overflowX: 'hidden',
-  overflowY: 'hidden'
+  overflowY: 'hidden',
+  outline: 'none'
 };
 
 export const MAIN_GRID_STYLE: any = {
   overflowX: false,
   overflowY: false,
-  fontSize: 13
+  fontSize: 16,
+  outline: 'none'
 };
 
-export const ROW_HEIGHT = 32;
+export const ROW_HEIGHT = 40;
 export const DEFAULT_COLUMN_MIN_WIDTH = 90;
 export const OVERSCAN_ROW_COUNT = 5;
 

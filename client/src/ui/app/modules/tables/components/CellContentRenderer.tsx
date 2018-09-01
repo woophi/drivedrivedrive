@@ -25,7 +25,7 @@ export class CellContentRenderer extends React.Component<
             rowData,
             cellData,
             columnIndex: 1,
-            isScrolling: false // TODO: deprecate this and do not use TableCellRendererType
+            isScrolling: false
           })
         : cellData;
     } catch (e) {

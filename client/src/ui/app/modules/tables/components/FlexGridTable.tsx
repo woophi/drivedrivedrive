@@ -25,7 +25,6 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
     header: (instance: Grid) => (this.header = instance),
     mainGrid: (instance: Grid) => {
       this.mainGrid = instance;
-      console.warn('kakogo huja', this.mainGrid);
 
       if (!!this.props.config.registerChild) {
         this.props.config.registerChild(instance);

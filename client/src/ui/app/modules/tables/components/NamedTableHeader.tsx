@@ -47,8 +47,8 @@ class NamedTableHeaderComponent extends React.Component<
       showSortArrow && <SortArrow sortDirection={sortDirection} />;
 
     return (
-      <div className={styles.container}>
-        <div className={`text-truncate ${styles.label}`} onClick={this.onClick}>
+      <div className={styles.container} onClick={this.onClick}>
+        <div className={`text-truncate ${styles.label}`}>
           {this.props.label}
         </div>
         <div className={`curp ${styles.childLabel}`}>{this.props.children}</div>
@@ -59,9 +59,8 @@ class NamedTableHeaderComponent extends React.Component<
   }
 }
 
-const label: FelaRule<NamedTableHeaderProps> = props => ({
+const label: FelaRule<NamedTableHeaderProps> = () => ({
   userSelect: 'none',
-  cursor: props.disableSort ? undefined : 'pointer',
   padding: '0 0.5rem',
   fontWeight: 'bold'
 });
@@ -85,6 +84,8 @@ const container: FelaRule<NamedTableHeaderProps> = props => {
     flexBasis: 0,
     flexGrow: 1,
     maxWidth: '100%',
+    cursor: props.disableSort ? undefined : 'pointer',
+    fontSize: '1.25rem',
     ...withDivider
   };
 };

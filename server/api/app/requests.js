@@ -3,7 +3,7 @@ const { isEmpty, isEqual } = require('lodash');
 const User = keystone.list('User');
 const { ObjectID } = require('mongodb');
 const Request = keystone.list('Request');
-
+const moment = require('moment');
 
 exports.getOpenRequests = (req, res) => {
 	Request.model
@@ -18,14 +18,17 @@ exports.getOpenRequests = (req, res) => {
 				.filter(r => !r.assignedBy
 					.find(i => isEqual(i, new ObjectID(req.body.userId)))
 				);
+			const data = filterResults.map(r => {
+				const date = moment(r.guest.date).locale('ru').format('LL');
 
-			const data = filterResults.map(r => ({
-				from: r.guest.from,
-				to: r.guest.to,
-				date: r.guest.date,
-				time: r.guest.time,
-				id: r._id
-			}))
+				return ({
+					from: r.guest.from,
+					to: r.guest.to,
+					date,
+					time: r.guest.time,
+					id: r._id
+				})
+			});
 			return res.apiResponse(data);
 		});
 };

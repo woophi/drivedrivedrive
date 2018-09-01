@@ -5,9 +5,17 @@ import { RowContentRenderer } from './RowContentRenderer';
 import { HeaderRowContentRenderer } from './HeaderRowContentRenderer';
 import { NoContent } from './NoContent';
 import { SortAndFilterState, TableConfig } from '../types';
+import { createComponent } from 'react-fela';
+
+const ArrowPlaceholder = createComponent(
+  () => ({
+    padding: '0 .25rem'
+  }),
+  'div'
+);
 
 const renderArrowPlaceholder = (parent: any) =>
-  parent.props.config.showRowArrows && <div className="px-1" />;
+  parent.props.config.showRowArrows && <ArrowPlaceholder />;
 
 export const noContentRenderer = (
   width: number,

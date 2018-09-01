@@ -126,14 +126,11 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
 
           case api.DataStatus.ERROR:
             return (
-              <div className="container mt-3">
-                <Alert mssg={JSON.stringify(errorInfo)} type={'error'} />
-              </div>
+              <Alert mssg={JSON.stringify(errorInfo)} type={'error'} />
             );
 
           case api.DataStatus.SUCCESS: {
             const Component = params.component;
-            console.warn('da');
             return <Component data={result} {...props} />;
           }
 

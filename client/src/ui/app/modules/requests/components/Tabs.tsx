@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { compose } from 'redux';
-import { connect as FelaConnect, FelaRule, FelaStyles, createComponent } from 'react-fela';
+import { createComponent } from 'react-fela';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import Paper from 'material-ui/Paper';
 import { OpenRequestsList } from './open-list/List';
-
-type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 type Props = {
   isMobile: boolean;
@@ -18,13 +16,13 @@ const Container = createComponent(
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    height: '79vh'
+    height: '75vh'
   }),
   'div'
 );
-class TabsComp extends React.PureComponent<FelaProps & Props> {
+class TabsComp extends React.PureComponent<Props> {
   render() {
-    const { isMobile, styles } = this.props;
+    const { isMobile } = this.props;
     const requestsOpenLabel = isMobile ? (
       <i className={'fas fa-taxi'} />
     ) : (
@@ -58,7 +56,7 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
       </div>
     );
     return (
-      <Tabs className={styles.container}>
+      <Tabs>
         <Tab label={requestsOpenLabel}>
           <Paper zDepth={2} style={{margin: '1rem'}}>
             <Container>
@@ -86,17 +84,7 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
   }
 }
 
-const container: FelaRule = () => ({
-  width: '100%',
-  height: 500
-});
-
-const mapStylesToProps = {
-  container
-};
-
 export const TabsRequests = compose(
-  FelaConnect(mapStylesToProps),
   ReduxConnect((state: AppState) => {
     const MOBILE_SCREEN_WIDTH = 768;
     return ({
