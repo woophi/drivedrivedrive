@@ -278,7 +278,7 @@ exports.acceptRequest = (req, res) => {
             }
 
             const filterAssignedDrivers = result.assignedBy
-              .filter(i => i.toString() === req.body.driverId);
+              .filter(i => i.toString() !== req.body.driverId);
 
             const submitedData = {
               'submitedOn': req.body.driverId,
