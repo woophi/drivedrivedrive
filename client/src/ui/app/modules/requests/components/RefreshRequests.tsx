@@ -9,6 +9,7 @@ import { createComponent, FelaThemeProps } from 'react-fela';
 type Props = {
   openRequestsPrevNumber: number;
   updatingOpenRequests: boolean;
+  tabViewOpenRs: boolean;
 };
 
 type LocalState = {
@@ -70,11 +71,11 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
     this.removeInterval();
   }
 
-  updateOpenRequests = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    getOpenRequests();
-  };
+  updateOpenRequests = () => {
+    if (this.props.tabViewOpenRs) {
+      getOpenRequests();
+    }
+  }
 
   render() {
     const { openRequestsPrevNumber, updatingOpenRequests } = this.props;
@@ -87,6 +88,12 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
     const spin = updatingOpenRequests ? 'fa-spin' : '';
     const click = updatingOpenRequests ? undefined : this.updateOpenRequests;
 
+    const showIndicator = diffOpenRequests > 0 && (
+      <Indicator data-rh={'Новые заявки'} data-rh-at="top">
+        {diffOpenRequests}
+      </Indicator>
+    )
+
     const getView = !!diffOpenRequests && (
       <Container>
         <i
@@ -95,9 +102,7 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
           className={`fas fa-sync ${spin}`}
           onClick={click}
         />
-        <Indicator data-rh={'Новые заявки'} data-rh-at="top">
-          {diffOpenRequests}
-        </Indicator>
+        {showIndicator}
       </Container>
     );
 
@@ -111,6 +116,7 @@ export const OpenRequestsNumber = ReduxConnect((state: AppState) => {
     updatingOpenRequests:
       getOpenRequestsData(state).status === DataStatus.UPDATING ||
       getOpenRequestsData(state).status === DataStatus.QUIET_FETCHING ||
-      getOpenRequestsData(state).status === DataStatus.FETCHING
+      getOpenRequestsData(state).status === DataStatus.FETCHING,
+    tabViewOpenRs: state.ui.requests.view === 'open'
   };
 })(OpenRequestsNumberComponent);

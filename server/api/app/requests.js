@@ -49,7 +49,12 @@ exports.getInProcessRequests = (req, res) => {
 			if (err)
 				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
 
-			const mapResults = results.map(r => {
+			const filterResults = results
+				.filter(r => r.assignedBy
+					.find(i => i.toString() === req.body.userId)
+				);
+
+			const mapResults = filterResults.map(r => {
 				const date = moment(r.guest.date).format('YYYY-MM-DD');
 
 				return ({
