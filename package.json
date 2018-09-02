@@ -3,11 +3,9 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "heroku-prebuild": "yarn build:client && yarn build:server",
-    "build:client": "cd client && yarn && yarn build",
-    "build:server": "cd server && yarn",
-    "start:client": "cd client && yarn start",
-    "start:server": "cd server && yarn start"
+    "heroku-prebuild": "npm run-script build:client && npm run-script build:server",
+    "build:client": "cd client && npm -i && rimraf yarn.lock && npm run-script build",
+    "build:server": "cd server && npm -i"
   },
   "repository": {
     "type": "git",
