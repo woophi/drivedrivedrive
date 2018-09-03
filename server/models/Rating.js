@@ -18,8 +18,8 @@ Rating.add({
 		car: { type: Number, label: 'Машина' }
 	},
 	comment: { type: String, noedit: true, label: 'Комментарий' },
-	open: { type: Types.Datetime, label: 'Рейтинг отправлен' },
-	closed: { type: Types.Datetime, label: 'Рейтинг назначен' },
+	open: { type: Types.Datetime, label: 'Рейтинг отправлен', noedit: true, },
+	closed: { type: Types.Datetime, label: 'Рейтинг назначен', noedit: true, },
 	assignedRequest: { type: Types.Relationship, ref: 'Request', index: true, label: 'Оцененная заявка' }
 });
 

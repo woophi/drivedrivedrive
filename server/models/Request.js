@@ -15,7 +15,7 @@ Request.add({
 		count: { type: Number, label: 'Количество человек' },
 		from: { type: String, label: 'Из' },
 		to: { type: String, label: 'В' },
-		date: { type: Date, label: 'Дата' },
+		date: { type: Types.Date, label: 'Дата' },
 		time: { type: String, label: 'Время' },
 		comment: { type: String, label: 'Комментарий' },
 		phone: { type: String, label: 'Телефон' },
