@@ -2450,9 +2450,9 @@ exposify@~0.5.0:
     through2 "~0.4.0"
     transformify "~0.1.1"
 
-express-rate-limit@^2.12.2:
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-2.12.2.tgz#bb4a04e8dc246340610824dd987c648cdef04ce1"
+express-rate-limit@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-3.1.0.tgz#d00ace41fd0ae1173ed3fc76812bf59035aeda2e"
   dependencies:
     defaults "^1.0.3"
 
@@ -2781,9 +2781,9 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-geoip-lite@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/geoip-lite/-/geoip-lite-1.3.1.tgz#4d81c1b4d1961de1b6bcdeef5fbaca547e07c4b0"
+geoip-lite@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/geoip-lite/-/geoip-lite-1.3.2.tgz#2d2cb6cb5a1cba0017d058d2ac3e67e368c415ba"
   dependencies:
     async "^2.1.1"
     colors "^1.1.2"

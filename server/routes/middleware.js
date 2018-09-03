@@ -73,21 +73,16 @@ exports.validateToken = (req, res, next) => {
 }
 const getApiLimiter = () => new RateLimit({
 	windowMs: 60*60*1000,
-	delayAfter: 499,
-	delayMs: 1000,
 	max: 500,
 	message: 'Вы привысили лимит запросов на сервер, попробуйте позже через час'
 });
 const postApiLimiter = () => new RateLimit({
 	windowMs: 60*60*1000,
-	delayAfter: 99,
-	delayMs: 1000,
 	max: 100,
 	message: 'Вы привысили лимит запросов на сервер, попробуйте позже через час'
 });
 const requestFromGuestLimit = () => new RateLimit({
 	windowMs: 60*1000,
-	delayMs: 0,
 	max: 1,
 	message: 'Вы привысили лимит запросов на сервер'
 });
