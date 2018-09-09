@@ -11,6 +11,7 @@ var Mail = new keystone.List('Mail');
 
 Mail.add({
 	domain: { type: String, label: 'Mail domain'  },
+	reason: { type: String, label: 'Причина'}
 });
 
 Mail.register();

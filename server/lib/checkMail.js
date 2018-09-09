@@ -117,7 +117,8 @@ exports.checkMails = (mail, res) => {
 						return res.apiResponse(true);
 
 					mailDomainModel = new MailDomain({
-						domain
+						domain,
+						reason: error
 					});
 					mailDomainModel.save((err) => {
 						if (err) {
