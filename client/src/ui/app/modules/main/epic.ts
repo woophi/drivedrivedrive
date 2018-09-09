@@ -42,15 +42,14 @@ const checkGuestClickShit: Epic<AppDispatch, AppState> = (action$, store) => act
   .ignoreElements();
 
 const checkGuestEmail: Epic<AppDispatch, AppState> = (action$, store) => action$
-  .filter(d => d.type === '@@redux-form/CHANGE')
-  .debounceTime(5000)
+  .filter((d: any) => d.type === '@@redux-form/CHANGE' && d.meta.field === 'email')
+  .debounceTime(3000)
   .do(async (dispatch: FormAction) => {
     const payload = dispatch.payload;
     const meta = dispatch.meta;
     const state = store.getState();
     if (
       meta.form === 'newRequest' &&
-      meta.field === 'email' &&
       state.form.newRequest &&
       !state.form.newRequest.syncErrors.email &&
       state.form.newRequest.fields &&
@@ -62,7 +61,7 @@ const checkGuestEmail: Epic<AppDispatch, AppState> = (action$, store) => action$
     }
   });
 
-export const requestEpic =  combineEpics(
+export const guestEpic =  combineEpics(
   checkGuestClickShit,
   checkGuestEmail
 );

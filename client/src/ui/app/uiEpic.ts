@@ -5,11 +5,11 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/debounceTime';
 
 import RequestEpic from 'ui/app/modules/request/epic';
-import { requestEpic } from 'ui/app/modules/main/epic';
+import { guestEpic } from 'ui/app/modules/main/epic';
 import { emailsSubEpics } from 'ui/app/modules/emailsSub/epic';
 
 export const applicationEpic = combineEpics(
+  guestEpic,
   RequestEpic,
-  requestEpic,
   emailsSubEpics
 );
