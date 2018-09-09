@@ -10,6 +10,7 @@ import PriceInfo from './priceInfo';
 import { Contacts } from './Contacts';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
+import { GuestRequestComponent } from './GuestRequest';
 
 const MOBILE_SCREEN_WIDTH = 834;
 
@@ -149,6 +150,7 @@ class Index extends React.Component<Props & FelaProps> {
             <Contacts />
           </Parallax.Layer>
         </Parallax>
+        {/* <GuestRequestComponent /> */}
       </div>
     );
   }
