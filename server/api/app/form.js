@@ -6,10 +6,11 @@ var async = require('async'),
 const { isEmpty } = require('lodash');
 const { getUserIp, sendEmail } = require('../../lib/helpers');
 const crypto = require('crypto');
+const { checkMails } = require('../../lib/checkMail');
 
 exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
-		return res.apiError({message: 'Без gdpr нельзя' }, '', err, 400);
+		return res.apiError({message: 'Без gdpr нельзя' }, {message: 'Без gdpr нельзя' }, null, 400);
 	}
 
 	let	requestData;
@@ -115,3 +116,9 @@ exports.sendRequest = (req, res) => {
 
   });
 };
+
+exports.checkEmailAddress = (req, res) => {
+	if (!req.body.email)
+		return res.apiResponse();
+	return checkMails(req.body.email, res)
+}

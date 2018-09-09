@@ -18,3 +18,6 @@ export const handlePoints = (payload: HandlePoints) =>
 
 export const handleTriggerGDPRDialog = (payload: boolean) =>
   store.dispatch({ type: 'guest/openModalDialog', payload } as GuestDispatch);
+
+export const triggerCheckEmail = (payload: boolean) =>
+  store.dispatch({ type: 'guest/checkForEmail', payload } as GuestDispatch);

@@ -2,6 +2,7 @@ export type GuestState = {
   guestSubmitForm: boolean;
   handlePoint: HandlePoints;
   openPrivacyPolicy: boolean;
+  validEmail: boolean;
 };
 
 export const enum HandlePoints {
@@ -13,6 +14,7 @@ export const enum HandlePoints {
 
 export type GuestDispatch =
   | { type: 'guest/changeFormState'; payload: boolean }
+  | { type: 'guest/checkForEmail'; payload: boolean }
   | HandlePointAction
   | { type: 'guest/openModalDialog'; payload: boolean };
 

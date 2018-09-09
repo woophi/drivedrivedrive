@@ -88,6 +88,7 @@ exports = module.exports = (app) => {
   app.all('/api/request/get/accept/state', routes.api.app.request.getRequestToAcceptStatus);
 
   app.all('/api/sendRequest', routes.api.app.form.sendRequest);
+  app.all('/api/checkEmail', routes.api.app.form.checkEmailAddress);
   app.all('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
 	app.all('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
   app.all('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);

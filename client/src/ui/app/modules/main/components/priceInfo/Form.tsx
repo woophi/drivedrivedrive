@@ -293,7 +293,7 @@ class FormComponent extends React.Component<
   handleCloseModalGDPR = () => handleTriggerGDPRDialog(false);
 
   render() {
-    const { styles, formState, isOpenGDPR } = this.props;
+    const { styles, isOpenGDPR } = this.props;
     const actionButtons = [
       <RaisedButton
         label={'Закрыть'}

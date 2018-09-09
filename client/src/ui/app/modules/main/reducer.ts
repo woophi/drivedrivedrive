@@ -3,7 +3,8 @@ import { GuestDispatch, GuestState, HandlePoints } from './types';
 const defaultState: GuestState = {
   guestSubmitForm: false,
   handlePoint: HandlePoints.none,
-  openPrivacyPolicy: false
+  openPrivacyPolicy: false,
+  validEmail: true
 };
 
 export const reducer = (
@@ -25,6 +26,11 @@ export const reducer = (
       return {
         ...state,
         openPrivacyPolicy: dispatch.payload
+      };
+    case 'guest/checkForEmail':
+      return {
+        ...state,
+        validEmail: dispatch.payload
       };
 
     default:

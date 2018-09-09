@@ -1,6 +1,9 @@
 import { AppDispatch, AppState } from 'core/models/app';
+import { validateEmail } from 'core/app/request';
 import { combineEpics, Epic } from 'redux-observable';
+import { FormAction } from 'redux-form';
 import { HandlePointAction, HandlePoints } from './types';
+import { triggerCheckEmail } from './operations';
 
 const checkGuestClickShit: Epic<AppDispatch, AppState> = (action$, store) => action$
   .filter(d => d.type === 'guest/handlePoint')
@@ -38,6 +41,28 @@ const checkGuestClickShit: Epic<AppDispatch, AppState> = (action$, store) => act
   })
   .ignoreElements();
 
-export default combineEpics(
-  checkGuestClickShit
+const checkGuestEmail: Epic<AppDispatch, AppState> = (action$, store) => action$
+  .filter(d => d.type === '@@redux-form/CHANGE')
+  .debounceTime(5000)
+  .do(async (dispatch: FormAction) => {
+    const payload = dispatch.payload;
+    const meta = dispatch.meta;
+    const state = store.getState();
+    if (
+      meta.form === 'newRequest' &&
+      meta.field === 'email' &&
+      state.form.newRequest &&
+      !state.form.newRequest.syncErrors.email &&
+      state.form.newRequest.fields &&
+      state.form.newRequest.fields.email.visited &&
+      !!payload
+    ) {
+      const validation = await validateEmail(payload);
+      triggerCheckEmail(validation);
+    }
+  });
+
+export const requestEpic =  combineEpics(
+  checkGuestClickShit,
+  checkGuestEmail
 );
