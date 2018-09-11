@@ -6,7 +6,6 @@ const moment = require('moment');
 exports.getOpenRequests = (req, res) => {
 	Request.model
 		.find()
-		.where('accepted', undefined)
 		.where('wasConfirmed', false)
 		.exec((err, results) => {
 			if (err)
@@ -42,7 +41,6 @@ exports.getOpenRequests = (req, res) => {
 exports.getInProcessRequests = (req, res) => {
 	Request.model
 		.find()
-		.where('accepted', undefined)
 		.where('wasConfirmed', false)
 		.$where('this.assignedBy.length > 0')
 		.exec((err, results) => {
