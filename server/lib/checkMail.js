@@ -1,8 +1,7 @@
 var dns = require('dns'),
 		net = require('net'),
 		keystone = require('keystone'),
-		MailDomain = keystone.list('Mail'),
-	async = require('async');
+		async = require('async');
 
 const checkMailonPing = async (email, callback, timeout, from_email) => {
 	timeout = timeout || 5000;
@@ -104,8 +103,9 @@ exports.checkMails = (mail, res) => {
 		if (validMail) {
 			return res.apiResponse(true);
 		} else {
+			const MailDomainModel = keystone.list('Mail').model;
 
-			MailDomain.model
+			MailDomainModel
 				.findOne()
 				.where('domain', domain)
 				.exec((err, result) => {
@@ -116,11 +116,11 @@ exports.checkMails = (mail, res) => {
 					if (!!result)
 						return res.apiResponse(true);
 
-					mailDomainModel = new MailDomain({
+					newMailDomain = new MailDomainModel({
 						domain,
 						reason: error
 					});
-					mailDomainModel.save((err) => {
+					newMailDomain.save((err) => {
 						if (err) {
 							return res.apiError({message: 'Проблема сохранить новый почтовый домен' }, '', err, 500);
 						}
