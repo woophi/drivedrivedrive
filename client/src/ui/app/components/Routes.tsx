@@ -6,13 +6,19 @@ import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
 import { TopBar } from 'ui/app/modules/topBar';
 import { SnackBar } from 'ui/app/modules/snackbar';
+import { IStyle } from 'fela';
 
-export default ReduxConnect((state: AppState) => ({
+type IRouter = {
+  location: Location;
+  isCookieConfirmed: boolean;
+}
+
+export const Router =  ReduxConnect((state: AppState) => ({
   location: state.router.location as Location,
   isCookieConfirmed: state.ui.cookie.confirmed,
 }))(
-  ({ location, isCookieConfirmed }) => (
-    <div style={styles(location)}>
+  ({ location, isCookieConfirmed }: IRouter) => (
+    <div style={styles}>
       {location.pathname !== '/' && <TopBar />}
       <Route component={AppRoutes} location={location} />
       {location.pathname === '/admin' && window.location.reload()}
@@ -21,7 +27,7 @@ export default ReduxConnect((state: AppState) => ({
   )
 );
 
-const styles = (location: Location): React.CSSProperties => ({
+const styles: IStyle = ({
   height: '100%',
   width: '100%',
   position: 'relative',

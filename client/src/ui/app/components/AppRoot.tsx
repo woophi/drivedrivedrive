@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import 'react-hint/css/index.css';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
-import Routes from './Routes';
+import { Router } from './Routes';
 import { ScreenMeasurer } from '../modules/screenMeasurer';
 
 const ReactHint = ReactHintFactory(React);
@@ -18,7 +18,7 @@ class Main extends React.Component<Props & FelaProps> {
     return (
         <div className={styles.container}>
           <ScreenMeasurer />
-          <Routes />
+          <Router />
           <div id="user_confirmation_modal_container" />
           <ReactHint events delay={0} />
         </div>
