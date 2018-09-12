@@ -1,13 +1,11 @@
 const keystone = require('keystone');
 const moment = require('moment');
 const async = require('async');
-const RequestModel = keystone.list('Request').model;
-const RatingModel = keystone.list('Rating').model;
-const host =  keystone.get('locals').host;
 const { sendEmail } = require('./helpers');
 
-const getConfirmedRequests = () =>
-	RequestModel
+const getConfirmedRequests = () => {
+	const RequestModel = keystone.list('Request').model;
+	return RequestModel
 		.find()
 		.where('rated', false)
 		.where('wasConfirmed', true)
@@ -19,8 +17,12 @@ const getConfirmedRequests = () =>
 			}
 			return results;
 		});
+}
 
 exports.sendEmailToPastRequests = async () => {
+	const RequestModel = keystone.list('Request').model;
+	const RatingModel = keystone.list('Rating').model;
+	const host =  keystone.get('locals').host;
 	await getConfirmedRequests()
 		.then((requests) => {
 			if (requests.length) {

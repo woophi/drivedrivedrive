@@ -1,9 +1,7 @@
-var async = require('async'),
-	keystone = require('keystone'),
-	User = keystone.list('User'),
-	Gdpr = keystone.list('Gdpr'),
-	secret = require('../../lib/staticVars').secret,
-	jwt = require('jsonwebtoken');
+const async = require('async');
+const	keystone = require('keystone');
+const { secret } = require('../../lib/staticVars');
+const jwt = require('jsonwebtoken');
 const { isEmpty } = require('lodash');
 const { sendEmail } = require('../../lib/helpers');
 
@@ -17,7 +15,9 @@ exports.signin = (req, res) => {
   async.series([
 
     (cb) => {
-      User.model.findOne().where('email', email).exec((err, user) => {
+			const User = keystone.list('User').model;
+
+      User.findOne().where('email', email).exec((err, user) => {
         if (err) {
           return res.apiError({message: "Извините, пользователь не найден" }, '', err, 500);
         }
@@ -60,11 +60,12 @@ exports.signin = (req, res) => {
 exports.auth = (req, res) => {
 
 	if (!req.body.token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+	const User = keystone.list('User').model;
 
   jwt.verify(req.body.token, secret, (err, decoded) => {
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
 
-		User.model.findById(decoded.id).exec((err, user) => {
+		User.findById(decoded.id).exec((err, user) => {
 
 			if (err || !user) {
 				return res.apiError({
@@ -143,8 +144,8 @@ exports.register = (req, res) => {
 		},
 
     (cb) => {
-
-      Gdpr.model.findOne()
+			const Gdpr = keystone.list('Gdpr').model;
+      Gdpr.findOne()
 				.where('keyName', 'gdpr_2')
 				.exec((err, result) => {
 					if (err) {
@@ -159,8 +160,9 @@ exports.register = (req, res) => {
     },
 
     (cb) => {
+			const User = keystone.list('User').model;
 
-      User.model.findOne({ email }, (err, user) => {
+      User.findOne({ email }, (err, user) => {
 
         if (err) {
           return res.apiError({
@@ -192,9 +194,8 @@ exports.register = (req, res) => {
 				phone: req.body.phone,
 				confirmedGDPR
       };
-
-      var User = keystone.list('User').model,
-        newUser = new User(userData);
+			const User = keystone.list('User').model;
+      const newUser = new User(userData);
 
       newUser.save((err) => {
         if (err) {
@@ -209,7 +210,9 @@ exports.register = (req, res) => {
 		},
 
 		(cb) => {
-      User.model.findOne().where('email', email).exec((err, user) => {
+			const User = keystone.list('User').model;
+
+      User.findOne().where('email', email).exec((err, user) => {
         if (err || !user) {
           return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
         }
@@ -255,8 +258,10 @@ exports.signout = (req, res) => {
 };
 
 exports.forgotPassword = (req, res) => {
-  const email = req.body.email.toLowerCase();
-  User.model.findOne().where('email', email).exec((err, user) => {
+	const email = req.body.email.toLowerCase();
+	const User = keystone.list('User').model;
+
+  User.findOne().where('email', email).exec((err, user) => {
     if (err) {
 			return res.apiError({message: 'Пользователь с таким email не существует' }, '', err, 404);
     }
@@ -301,7 +306,9 @@ exports.resetPassword = (req, res) => {
 		return res.apiError({message: 'Пароли не совпадают' }, {message: 'Пароли не совпадают' }, null, 412);
 	}
 	if (!req.user) {
-		User.model.findOne().where('resetPasswordKey', req.body.key).exec((err, user) => {
+		const User = keystone.list('User').model;
+
+		User.findOne().where('resetPasswordKey', req.body.key).exec((err, user) => {
 			if (err || !user) {
 				return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err || null, 400);
 			}
@@ -338,8 +345,9 @@ exports.resetPassword = (req, res) => {
 };
 
 exports.getPasswordKey = (req, res) => {
+	const User = keystone.list('User').model;
 
-  User.model.findOne().where('resetPasswordKey', req.body.key).exec((err, key) => {
+  User.findOne().where('resetPasswordKey', req.body.key).exec((err, key) => {
     if (err || !key) {
 			return res.apiError({message: 'Ссылка для сброса пароля недействительна', status: false }, '', err || null, 400);
     }
@@ -351,8 +359,9 @@ exports.getPasswordKey = (req, res) => {
 };
 
 exports.getProfile = (req, res) => {
+	const User = keystone.list('User').model;
 
-  User.model.findById(req.body.userId).exec((err, user) => {
+  User.findById(req.body.userId).exec((err, user) => {
     if (err) {
 			return res.apiError({message: 'Невозможно получить данные' }, '', err, 500);
     }
@@ -428,7 +437,9 @@ exports.updateProfile = (req, res) => {
     );
 
     if (requiredUser) {
-      keystone.list('User').model.find().where('isAdmin', true).exec((err, admins) => {
+			const User = keystone.list('User').model;
+
+      User.find().where('isAdmin', true).exec((err, admins) => {
         if (err) {
 					return res.apiError({message: 'Не удалось получить данные' }, '', err, 500);
 				}

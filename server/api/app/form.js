@@ -1,8 +1,6 @@
 
-var async = require('async'),
-  keystone = require('keystone'),
-	User = keystone.list('User'),
-	Gdpr = keystone.list('Gdpr');
+const async = require('async');
+const keystone = require('keystone');
 const { isEmpty } = require('lodash');
 const { getUserIp, sendEmail } = require('../../lib/helpers');
 const crypto = require('crypto');
@@ -34,11 +32,14 @@ exports.sendRequest = (req, res) => {
 		created: Date.now(),
 		ip: getUserIp(req)
   };
-  const Request = keystone.list('Request').model;
+	const RequestModel = keystone.list('Request').model;
+	const UserModel = keystone.list('User').model;
+	const GdprModel = keystone.list('Gdpr').model;
   async.series([
 
 		(cb) => {
-      Gdpr.model.findOne()
+			GdprModel
+				.findOne()
 				.where('keyName', 'gdpr_1')
 				.exec((err, result) => {
 					if (err) {
@@ -54,7 +55,8 @@ exports.sendRequest = (req, res) => {
 
     (cb) => {
 
-			User.model.find()
+			UserModel
+				.find()
 				.where('isActive', true)
 				.where('notifications.email', true)
 				.exec((err, users) => {
@@ -74,7 +76,7 @@ exports.sendRequest = (req, res) => {
 		},
 
 		(cb) => {
-			requestData = new Request({
+			requestData = new RequestModel({
 				...guestData,
 				confirmedGDPR
 			});

@@ -1,7 +1,5 @@
 const async = require('async');
 const keystone = require('keystone');
-const User = keystone.list('User');
-const Request = keystone.list('Request');
 
 exports.subStateDriver = (req, res) => {
 
@@ -10,8 +8,9 @@ exports.subStateDriver = (req, res) => {
       SubStatus: -1
     });
 	}
+	const UserModel = keystone.list('User').model;
 
-	User.model.findById(req.user._id).exec((err, user) => {
+	UserModel.findById(req.user._id).exec((err, user) => {
 
 		if (err || !user) {
 			return res.apiError({
@@ -43,7 +42,9 @@ exports.unsubDriver = (req, res) => {
 	async.series([
 
 		(cb) => {
-			User.model.findById(req.user._id).exec((err, user) => {
+			const UserModel = keystone.list('User').model;
+
+			UserModel.findById(req.user._id).exec((err, user) => {
 
 				if (err || !user) {
 					return res.apiError({
@@ -88,8 +89,10 @@ exports.subStateGuest = (req, res) => {
       SubStatus: -2
     });
 	}
+	const RequestModel = keystone.list('Request').model;
 
-	Request.model.findOne()
+	RequestModel
+		.findOne()
 		.where('guest.uniqHash', req.body.hash)
 		.exec((err, result) => {
 
@@ -129,7 +132,10 @@ exports.unsubGuest = (req, res) => {
 	async.series([
 
 		(cb) => {
-			Request.model.findOne()
+			const RequestModel = keystone.list('Request').model;
+
+			RequestModel
+				.findOne()
 				.where('guest.uniqHash', req.body.hash)
 				.exec((err, result) => {
 
