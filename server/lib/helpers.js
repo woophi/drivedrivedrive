@@ -37,5 +37,5 @@ exports.apiError = (res, err = { message: 'forgot to set mssg' }, code) => {
 		err: err.message,
 		code
 	};
-	return res.apiError(err, '', details, code);
+	return res.apiError(err, details, null, code);
 }
