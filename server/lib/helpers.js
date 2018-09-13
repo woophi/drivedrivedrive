@@ -31,3 +31,11 @@ exports.getUserIp = (req) => {
 		(req.connection.socket ? req.connection.socket.remoteAddress : null);
 	return ip;
 };
+
+exports.apiError = (res, err = { message: 'forgot to set mssg' }, code) => {
+	const details = {
+		err: err.message,
+		code
+	};
+	return res.apiError(err, '', details, code);
+}
