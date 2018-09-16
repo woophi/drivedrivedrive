@@ -2,12 +2,12 @@ import { store } from 'core/shared/store';
 import * as models from 'core/models';
 import * as apiData from 'core/models/api';
 import * as isEmpty from 'ramda/src/isEmpty';
-import { callApi } from 'core/shared/common';
+import { callApi, HTTPMethod } from 'core/shared/common';
 
-const a = <T>(action: string, model?: object) =>
-  callApi<T>(`/api/${action}`, model, store.getState().authInfo.token);
-const c = <T>(action: string, model?: object) =>
-  callApi<T>(`/api/${action}`, model);
+const a = <T>(action: string, model?: object, method: HTTPMethod = 'post') =>
+  callApi<T>(method, `/api/${action}`, model, store.getState().authInfo.token);
+const c = <T>(action: string, model?: object, method: HTTPMethod = 'post') =>
+  callApi<T>(method, `/api/${action}`, model);
 
 export const api = {
   user: {

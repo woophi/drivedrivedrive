@@ -16,12 +16,13 @@ export async function login(token: string) {
 
   store.dispatch({ type: 'setLoginProcessStep', step: 1 });
 
-  const authResult = await common.callApi<models.UserAuthInfo>('/api/user/auth', postData).then(re => re, err => {
-    const msg = 'fail';
+  const authResult = await common.callApi<models.UserAuthInfo>('post', '/api/user/auth', postData)
+    .then(re => re, err => {
+      const msg = 'fail';
 
-    store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: msg });
-    return Promise.reject(err);
-  });
+      store.dispatch({ type: 'setLoginProcessStep', step: 2, failMsg: msg });
+      return Promise.reject(err);
+    });
 
   store.dispatch({ type: 'setAuthInfo', payload: authResult });
 
@@ -29,14 +30,14 @@ export async function login(token: string) {
 }
 
 function issueLoginTokenFromSecret(secretParams: LoginParams): Promise<string> {
-  return common.callApi<any>('/api/user/signin', secretParams)
+  return common.callApi<any>('post', '/api/user/signin', secretParams)
     .then(result => {
       return result.token;
     });
 }
 
 export async function signOut() {
-  await common.callApi<any>('/api/user/signout', {}, store.getState().authInfo.token)
+  await common.callApi<any>('post', '/api/user/signout', {}, store.getState().authInfo.token)
     .then(() => store.dispatch({ type: 'setAuthInfo', payload: null }))
     .then(() => changeUrl('/signin'));
   return true;
@@ -57,7 +58,7 @@ function loginFailed(e: any) {
 }
 
 export function checkAuth() {
-  return common.callApi<any>('/api/user/check', {})
+  return common.callApi<any>('post', '/api/user/check', {})
     .then(result => {
       store.dispatch({ type: 'setAuthInfo', payload: result });
     });

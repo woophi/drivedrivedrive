@@ -43,67 +43,67 @@ exports = module.exports = (app) => {
 	app.use('/api/user/join', middleware.apiLimits.post);
 	app.use('/api/sendRequest', middleware.apiLimits.request);
 	// Views
-  app.all('/', routes.views.index);
+  app.get('/', routes.views.index);
 
 	// Session
-	app.all('/join', routes.views.index);
-	app.all('/signin', routes.views.index);
-	app.all('/forgot-password', routes.views.index);
-	app.all('/reset-password/:key', routes.views.index);
+	app.get('/join', routes.views.index);
+	app.get('/signin', routes.views.index);
+	app.get('/forgot-password', routes.views.index);
+	app.get('/reset-password/:key', routes.views.index);
 
 	// // User
-	app.all('/me*', middleware.requireUser);
-	app.all('/me', routes.views.index);
+	app.get('/me*', middleware.requireUser);
+	app.get('/me', routes.views.index);
 
 	// Emails
-	app.all('/unsubscribe/*', routes.views.index);
+	app.get('/unsubscribe/*', routes.views.index);
 
 	// // Request
-	app.all('/request/:id', routes.views.index);
-	app.all('/request/:id/accept/:driverId', routes.views.index);
-	app.all('/request/:id/confirm', routes.views.index);
-	app.all('/request/:id/rate?', routes.views.index);
+	app.get('/request/:id', routes.views.index);
+	app.get('/request/:id/accept/:driverId', routes.views.index);
+	app.get('/request/:id/confirm', routes.views.index);
+	app.get('/request/:id/rate?', routes.views.index);
 	app.get('/requests', routes.views.index);
 
   // API
   app.all('/api*', keystone.middleware.api);
-  app.all('/api/user/signin', routes.api.app.user.signin);
-  app.all('/api/user/auth', routes.api.app.user.auth);
+  app.post('/api/user/signin', routes.api.app.user.signin);
+  app.post('/api/user/auth', routes.api.app.user.auth);
   app.post('/api/user/check', routes.api.app.user.checkAuth);
-  app.all('/api/user/join', routes.api.app.user.register);
-  app.all('/api/user/signout', middleware.validateToken, routes.api.app.user.signout);
-  app.all('/api/user/password/forgot', routes.api.app.user.forgotPassword);
-  app.all('/api/user/password/reset', routes.api.app.user.resetPassword);
-  app.all('/api/user/password/key', routes.api.app.user.getPasswordKey);
-  app.all('/api/user/profile', middleware.validateToken, routes.api.app.user.getProfile);
-  app.all('/api/user/profile/update', middleware.validateToken, routes.api.app.user.updateProfile);
+  app.post('/api/user/join', routes.api.app.user.register);
+  app.post('/api/user/signout', middleware.validateToken, routes.api.app.user.signout);
+  app.post('/api/user/password/forgot', routes.api.app.user.forgotPassword);
+  app.post('/api/user/password/reset', routes.api.app.user.resetPassword);
+  app.post('/api/user/password/key', routes.api.app.user.getPasswordKey);
+  app.post('/api/user/profile', middleware.validateToken, routes.api.app.user.getProfile);
+  app.post('/api/user/profile/update', middleware.validateToken, routes.api.app.user.updateProfile);
 
-  app.all('/api/request/get/state', routes.api.app.request.getRequestState);
-  app.all('/api/request/get', middleware.validateToken, routes.api.app.request.getRequest);
-  app.all('/api/request/driver/answer', middleware.validateToken, routes.api.app.request.driverOnRequest);
-  app.all('/api/request/guest/answer', routes.api.app.request.acceptRequest);
-  app.all('/api/request/confirm', middleware.validateToken, routes.api.app.request.confirmRequest);
-  app.all('/api/request/rate', routes.api.app.request.rateRequest);
-  app.all('/api/request/get/rate', routes.api.app.request.getRequestToRate);
-  app.all('/api/request/get/accept/state', routes.api.app.request.getRequestToAcceptStatus);
+  app.post('/api/request/get/state', routes.api.app.request.getRequestState);
+  app.post('/api/request/get', middleware.validateToken, routes.api.app.request.getRequest);
+  app.post('/api/request/driver/answer', middleware.validateToken, routes.api.app.request.driverOnRequest);
+  app.post('/api/request/guest/answer', routes.api.app.request.acceptRequest);
+  app.post('/api/request/confirm', middleware.validateToken, routes.api.app.request.confirmRequest);
+  app.post('/api/request/rate', routes.api.app.request.rateRequest);
+  app.post('/api/request/get/rate', routes.api.app.request.getRequestToRate);
+  app.post('/api/request/get/accept/state', routes.api.app.request.getRequestToAcceptStatus);
 
-  app.all('/api/sendRequest', routes.api.app.form.sendRequest);
-  app.all('/api/checkEmail', routes.api.app.form.checkEmailAddress);
-  app.all('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
-	app.all('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
-  app.all('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
-	app.all('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
+  app.post('/api/sendRequest', routes.api.app.form.sendRequest);
+  app.post('/api/checkEmail', routes.api.app.form.checkEmailAddress);
+  app.post('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
+	app.post('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
+  app.post('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
+	app.post('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
 
-	app.all('/api/user/unsub', middleware.validateToken, routes.api.app.emails.unsubDriver);
-	app.all('/api/user/subState', routes.api.app.emails.subStateDriver);
-	app.all('/api/guest/unsub', routes.api.app.emails.unsubGuest);
-	app.all('/api/guest/subState', routes.api.app.emails.subStateGuest);
+	app.post('/api/user/unsub', middleware.validateToken, routes.api.app.emails.unsubDriver);
+	app.post('/api/user/subState', routes.api.app.emails.subStateDriver);
+	app.post('/api/guest/unsub', routes.api.app.emails.unsubGuest);
+	app.post('/api/guest/subState', routes.api.app.emails.subStateGuest);
 
-	app.all('/api/requests/open', middleware.validateToken, routes.api.app.requests.getOpenRequests);
-	app.all('/api/requests/active', middleware.validateToken, routes.api.app.requests.getSubmitedRequests);
-	app.all('/api/requests/history', middleware.validateToken, routes.api.app.requests.getHistoryRequests);
-	app.all('/api/requests/process', middleware.validateToken, routes.api.app.requests.getInProcessRequests);
+	app.post('/api/requests/open', middleware.validateToken, routes.api.app.requests.getOpenRequests);
+	app.post('/api/requests/active', middleware.validateToken, routes.api.app.requests.getSubmitedRequests);
+	app.post('/api/requests/history', middleware.validateToken, routes.api.app.requests.getHistoryRequests);
+	app.post('/api/requests/process', middleware.validateToken, routes.api.app.requests.getInProcessRequests);
 
-	app.all('/api/guest/get/request', routes.api.app.guest.getGuestRequest);
-	app.all('/api/guest/update/request', routes.api.app.guest.updateGuestRequest);
+	app.post('/api/guest/get/request', routes.api.app.guest.getGuestRequest);
+	app.post('/api/guest/update/request', routes.api.app.guest.updateGuestRequest);
 };
