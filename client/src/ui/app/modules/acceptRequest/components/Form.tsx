@@ -8,15 +8,14 @@ import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-fo
 import { validateRA, submitRA } from '../form';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Link } from 'ui/app/components/Links';
-import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 import { getRequestId, getDriverId } from '../selectors';
 import { TextFieldProps } from 'ui/formTypes';
 
 const mapStateToProps = (state: AppState) => ({
   requestId: getRequestId(state),
-  driverId: getDriverId(state)
+  driverId: getDriverId(state),
+  hashId: state.ui.guests.hashId
 });
 
 const StateProps = returntypeof(mapStateToProps);

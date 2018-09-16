@@ -1,0 +1,15 @@
+extends layouts/basecard
+block content
+	div.padding1rem
+		-const date = moment(guestData.guest.date).format('L')
+		h1 Клиент изменил данные в заявке
+		p#cardP Добрый день, %recipient.firstName%, клиент внес изменения в свою заявку
+		div#bodyCard.padding1rem
+			h2 Новые данные
+			p#cardP Клиент - #{guestData.guest.name}
+			p#cardP поедет из #{guestData.guest.from} в #{guestData.guest.to}
+			p#cardP количество пассажиров #{guestData.guest.count}
+			p#cardP дата #{date}, время #{guestData.guest.time}
+			if guestData.guest.comment
+				p#cardP Комментарий: #{guestData.guest.comment}
+			p#cardP Номер телефона: #{guestData.guest.phone}

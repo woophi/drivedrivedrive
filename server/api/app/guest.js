@@ -1,6 +1,10 @@
 const async = require('async');
 const keystone = require('keystone');
-const { apiError, compareGuestTimeWithToday } = require('../../lib/helpers');
+const {
+	apiError,
+	compareGuestTimeWithToday,
+	sendEmail
+} = require('../../lib/helpers');
 
 exports.getGuestRequest = (req, res) => {
 	const RequestModel = keystone.list('Request').model;
@@ -37,6 +41,7 @@ exports.updateGuestRequest = (req, res) => {
 	RequestModel
 		.findOne()
 		.where('guest.uniqHash', req.body.hash)
+		.populate('submitedOn')
 		.exec((err, result) => {
 			if (err || !result)
 				return apiError(res, { message: 'Ошибка сервера' }, 500);
@@ -64,6 +69,18 @@ exports.updateGuestRequest = (req, res) => {
 				.save((err, updatedResult) => {
 					if (err)
 						return apiError(res, { message: 'Не удалось обновить данные' }, 400);
+
+					if (result.submitedOn) {
+						sendEmail({
+							templateName: 'driver-update-request-notify',
+							to: [result.submitedOn],
+							subject: `Трансфер ${updatedResult.guest.from} - ${updatedResult.guest.to}`
+						},
+						{
+							guestData: updatedResult,
+							driver: true
+						});
+					}
 
 					return res.apiResponse();
 				});
