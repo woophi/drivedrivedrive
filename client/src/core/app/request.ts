@@ -4,7 +4,7 @@ import { checkAuth } from './login';
 
 const sendRequestParams = (
   requestParams: models.RequestInfo
-): Promise<boolean> => {
+): Promise<string> => {
   return common.callApi<any>('/api/sendRequest', requestParams).then(result => {
     return result;
   });
@@ -12,7 +12,7 @@ const sendRequestParams = (
 
 export const newTransferRequest = async (requestParams: models.RequestInfo) => {
   try {
-    await sendRequestParams(requestParams);
+    return await sendRequestParams(requestParams);
   } catch (error) {
     console.error(error);
     throw error;

@@ -3,6 +3,7 @@ export type GuestState = {
   handlePoint: HandlePoints;
   openPrivacyPolicy: boolean;
   validEmail: boolean;
+  hashId: string;
 };
 
 export const enum HandlePoints {
@@ -15,6 +16,7 @@ export const enum HandlePoints {
 export type GuestDispatch =
   | { type: 'guest/changeFormState'; payload: boolean }
   | { type: 'guest/checkForEmail'; payload: boolean }
+  | { type: 'guest/setHashId'; payload: string }
   | HandlePointAction
   | { type: 'guest/openModalDialog'; payload: boolean };
 

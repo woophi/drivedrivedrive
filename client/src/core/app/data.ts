@@ -1,4 +1,5 @@
 import * as data from 'core/models/api';
+import { RequestInfo } from 'core/models';
 
 export function defaultStateItem<T>(result: T) {
   return {
@@ -19,7 +20,8 @@ const defaultState: data.DataState = {
   openRequests: defaultStateItem<data.TableRequest[]>([]),
   activeRequests: defaultStateItem<data.TableRequest[]>([]),
   historyRequests: defaultStateItem<data.TableRequest[]>([]),
-  inProcessRequests: defaultStateItem<data.TableRequest[]>([])
+  inProcessRequests: defaultStateItem<data.TableRequest[]>([]),
+  guestRequest: defaultStateItem<RequestInfo>(null)
 };
 
 export const reducer = (state = defaultState, dispatch: data.DataDispatch): data.DataState => {

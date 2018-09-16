@@ -1,4 +1,5 @@
 import * as data from '.';
+import { RequestInfo } from 'core/models/Request';
 
 export const enum DataStatus {
   INITIAL = 'initial',
@@ -22,6 +23,7 @@ export type DataState = {
   activeRequests: DataStateItem<data.TableRequest[]>,
   historyRequests: DataStateItem<data.TableRequest[]>,
   inProcessRequests: DataStateItem<data.TableRequest[]>,
+  guestRequest: DataStateItem<RequestInfo>,
 };
 
 export type DataStateItem<T> = {
@@ -31,8 +33,11 @@ export type DataStateItem<T> = {
 };
 
 export type DataDispatch =
-  | { type: 'api/data/setResult', name: keyof DataState, payload: DataState[keyof DataState]["result"] }
+  | DataResultDispatch
   | { type: 'api/data/setStatus', name: keyof DataState, payload: DataStatus }
   | { type: 'api/data/setError', name: keyof DataState, payload: any }
   | { type: 'api/data/reset', name: keyof DataState }
 ;
+
+export type DataResultDispatch =
+  { type: 'api/data/setResult', name: keyof DataState, payload: DataState[keyof DataState]["result"] };

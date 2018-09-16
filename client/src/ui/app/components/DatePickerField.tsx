@@ -16,19 +16,24 @@ export class DatePickerComponent extends React.PureComponent<
   Props,
   LocalState
 > {
+  initialDate = () => {
+    const { input } = this.props;
+    return input.value
+      ? moment(input.value)
+      : null;
+  }
   state: LocalState = {
-    date: null,
+    date: this.initialDate(),
     focus: false
   };
 
+
   handleFocus = (arg?: any) => {
     this.setState({ focus: !this.state.focus });
-
-    const nothing: any = '';
     if (this.state.focus) {
-      this.props.input.onFocus(nothing);
+      this.props.input.onFocus(arg);
     } else {
-      this.props.input.onBlur(nothing);
+      this.props.input.onBlur(arg);
     }
   }
 

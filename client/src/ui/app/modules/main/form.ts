@@ -6,7 +6,11 @@ import {
   SubmissionError
 } from 'redux-form';
 import { newTransferRequest } from 'core/app/request';
-import { triggerForm } from './operations';
+import { triggerForm, setHashId, updateGuestRequest, getGuestRequest } from './operations';
+
+type SharedProps = {
+  hashId: string;
+};
 
 export const validateRequest = (
   values: Partial<data.RequestInfo>
@@ -35,8 +39,11 @@ export const validateRequest = (
   if (!values.count) {
     errors.count = 'Пожалуйста, заполните это поле';
   }
-  if (!values.gdpr) {
+  if (values.gdpr !== 'undefined' && !values.gdpr) {
     errors.gdpr = 'Согласие обязательно';
+  }
+  if (values.phone !== 'undefined' && !values.phone) {
+    errors.phone = 'Пожалуйста, заполните это поле';
   }
   return errors;
 };
@@ -46,9 +53,26 @@ export const submitRequest: FormSubmitHandler<data.RequestInfo> = async (
   dispatch
 ) => {
   try {
-    await newTransferRequest(values);
+    const hashId = await newTransferRequest(values);
+    await setHashId(hashId);
     triggerForm(true);
     await dispatch(reset('newRequest'));
+  } catch (e) {
+    throw new SubmissionError({ _error: e.error.message });
+  }
+};
+export const submitEditRequest: FormSubmitHandler<data.RequestInfo> = async (
+  values: data.RequestInfo,
+  _,
+  props: SharedProps
+) => {
+  try {
+    const payload: data.UpdateRequestInfo = {
+      ...values,
+      hash: props.hashId
+    };
+    await updateGuestRequest(payload);
+    await getGuestRequest(props.hashId);
   } catch (e) {
     throw new SubmissionError({ _error: e.error.message });
   }

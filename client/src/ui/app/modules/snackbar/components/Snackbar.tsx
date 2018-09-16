@@ -21,7 +21,8 @@ const mapStateToProps = (state: AppState) => ({
     getGdprCookieData(state).status === DataStatus.FETCHING ||
     getGdprCookieData(state).status === DataStatus.QUIET_FETCHING,
   cookieResult:
-    (getGdprCookieResult(state) && getGdprCookieResult(state).text) || ''
+    (getGdprCookieResult(state) && getGdprCookieResult(state).text) || '',
+  isCookieConfirmed: state.ui.cookie.confirmed
 });
 
 const StateProps = returntypeof(mapStateToProps);
@@ -44,7 +45,7 @@ class SnackbarComponent extends React.PureComponent<Props & FelaProps> {
   handleOpen = () => handleTriggerCookieModal(true);
 
   render() {
-    const { styles, isOpenCookie } = this.props;
+    const { styles, isOpenCookie, isCookieConfirmed } = this.props;
     const actionButtons = [
       <RaisedButton
         key={'a-1'}
@@ -58,6 +59,9 @@ class SnackbarComponent extends React.PureComponent<Props & FelaProps> {
         Подробнее здесь
       </a>
     );
+    if (isCookieConfirmed) {
+      return null;
+    }
     return (
       <>
         <div className={styles.container}>

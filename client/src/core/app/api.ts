@@ -46,7 +46,11 @@ export const api = {
     unsubFromMails: (data: { hash: string }) =>
       c<apiData.StateUnsub>('guest/unsub', data),
     subscribeState: (data: { hash: string }) =>
-      c<apiData.StateUnsub>('guest/subState', data)
+      c<apiData.StateUnsub>('guest/subState', data),
+    updateRequest: (data: models.UpdateRequestInfo) =>
+      c<null>('guest/update/request', data),
+    getRequest: (data: { hash: string }) =>
+      c<models.RequestInfo>('guest/get/request', data),
   },
   requests: {
     open: (userId: string) =>
@@ -193,6 +197,7 @@ type DataLoader = DLF<
   DLF<'activeRequests', apiData.DataState['activeRequests']['result']> &
   DLF<'historyRequests', apiData.DataState['historyRequests']['result']> &
   DLF<'inProcessRequests', apiData.DataState['inProcessRequests']['result']> &
+  DLF<'guestRequest', apiData.DataState['guestRequest']['result']> &
   DLF<'subscribeState', apiData.DataState['subscribeState']['result']>;
 
 export const loadData: DataLoader = loadDataImpl as any;

@@ -87,6 +87,9 @@ export function configureFela(mountNodeId: string) {
     textDecoration: 'none'
   }, '.tD-none');
   renderer.renderStatic({
+    zIndex: 667
+  }, '.SingleDatePicker_picker');
+  renderer.renderStatic({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',

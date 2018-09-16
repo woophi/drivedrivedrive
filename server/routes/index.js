@@ -103,4 +103,7 @@ exports = module.exports = (app) => {
 	app.all('/api/requests/active', middleware.validateToken, routes.api.app.requests.getSubmitedRequests);
 	app.all('/api/requests/history', middleware.validateToken, routes.api.app.requests.getHistoryRequests);
 	app.all('/api/requests/process', middleware.validateToken, routes.api.app.requests.getInProcessRequests);
+
+	app.all('/api/guest/get/request', routes.api.app.guest.getGuestRequest);
+	app.all('/api/guest/update/request', routes.api.app.guest.updateGuestRequest);
 };

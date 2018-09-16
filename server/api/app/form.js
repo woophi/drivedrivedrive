@@ -1,4 +1,3 @@
-
 const async = require('async');
 const keystone = require('keystone');
 const { isEmpty } = require('lodash');
@@ -15,7 +14,7 @@ exports.sendRequest = (req, res) => {
 	let confirmedGDPR;
 	let drivers;
 
-	const buf = crypto.randomBytes(8).toString('hex');
+	const buf = crypto.randomBytes(128).toString('hex');
 
   const guestData = {
     guest: {
@@ -114,7 +113,7 @@ exports.sendRequest = (req, res) => {
 			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
     }
 
-    return res.apiResponse(true);
+    return res.apiResponse(buf);
 
   });
 };

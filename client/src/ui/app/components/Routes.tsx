@@ -7,22 +7,22 @@ import LoadableComponent from './LoadableComponent';
 import { TopBar } from 'ui/app/modules/topBar';
 import { SnackBar } from 'ui/app/modules/snackbar';
 import { IStyle } from 'fela';
+import { GuestRequest } from 'ui/app/modules/main/components/guest-request/GuestRequest';
 
 type IRouter = {
   location: Location;
-  isCookieConfirmed: boolean;
-}
+};
 
 export const Router =  ReduxConnect((state: AppState) => ({
   location: state.router.location as Location,
-  isCookieConfirmed: state.ui.cookie.confirmed,
 }))(
-  ({ location, isCookieConfirmed }: IRouter) => (
+  ({ location }: IRouter) => (
     <div style={styles}>
       {location.pathname !== '/' && <TopBar />}
       <Route component={AppRoutes} location={location} />
       {location.pathname === '/admin' && window.location.reload()}
-      {!isCookieConfirmed && <SnackBar />}
+      <SnackBar />
+      <GuestRequest />
     </div>
   )
 );

@@ -24,7 +24,7 @@ const driveColors = {
   darkHover: '#24282B',
 
   blue: '#71b8be',
-  brand: '#76ABDC',
+  brand: 'rgb(0, 188, 212)',
   green: '#8cc643',
   yellow: '#fbd105',
   red: '#FF5A32',
@@ -64,9 +64,14 @@ const genericButton: IStyle = {
 
 const flatButton: IStyle = {
   ...genericButton,
+  ':disabled': {
+    backgroundColor: driveColors.disabled,
+    color: '#FFFFFF',
+    cursor: 'not-allowed'
+  },
   ':active': {
     backgroundColor: driveColors.light,
-  }
+  },
 };
 
 const button: IStyle = {
