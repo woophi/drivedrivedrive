@@ -51,8 +51,8 @@ class Index extends React.Component<Props & FelaProps> {
             <div className={styles.headBox}>
               <h1 className={styles.texts}>Новая заявка</h1>
               <span className={styles.texts}>
-                <p>{`Из ${request.from}, в ${request.to}`}</p>
-                <p>дата {moment(request.date).locale('ru').format('LL')}, время {request.time}</p>
+                <p>Из <b>{request.from}</b>, в <b>{request.to}</b></p>
+                <p>дата <b>{moment(request.date).locale('ru').format('LL')}</b>, время <b>{request.time}</b></p>
                 <p>количество человек {request.count}</p>
                 {request.comment && <p>комментарий {request.comment}</p>}
               </span>
