@@ -39,3 +39,22 @@ exports.apiError = (res, err = { message: 'forgot to set mssg' }, code) => {
 	};
 	return res.apiError(err, details, null, code);
 }
+
+exports.compareGuestTimeWithToday = (guestDate, guestTime, condition) => {
+	const date = moment(guestDate).format('YYYY-MM-DD');
+	const parsedDateTime = moment(`${date} ${guestTime}`, 'YYYYMMDD, HH:mm').format('YYYY-MM-DD, HH:mm');
+	const today = moment().format('YYYY-MM-DD, HH:mm');
+
+	switch (condition) {
+		case 'less':
+			return parsedDateTime < today;
+		case 'greater':
+			return parsedDateTime > today;
+		case 'le':
+			return parsedDateTime <= today;
+		case 'ge':
+			return parsedDateTime >= today;
+		default:
+			return null;
+	}
+}

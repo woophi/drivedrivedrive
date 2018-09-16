@@ -1,6 +1,6 @@
 const async = require('async');
 const keystone = require('keystone');
-const { apiError } = require('../../lib/helpers');
+const { apiError, compareGuestTimeWithToday } = require('../../lib/helpers');
 
 exports.getGuestRequest = (req, res) => {
 	const RequestModel = keystone.list('Request').model;
@@ -12,7 +12,9 @@ exports.getGuestRequest = (req, res) => {
 			if (err || !result)
 				return apiError(res, { message: 'Невозможно получить данные заявки' }, 400);
 
-			if (Date.parse(result.guest.date) < Date.now()) {
+
+
+			if (compareGuestTimeWithToday(result.guest.date, result.guest.time, 'less')) {
 				return res.apiResponse(null);
 			}
 
@@ -39,7 +41,7 @@ exports.updateGuestRequest = (req, res) => {
 			if (err || !result)
 				return apiError(res, { message: 'Ошибка сервера' }, 500);
 
-			if (Date.parse(result.guest.date) < Date.now()) {
+			if (compareGuestTimeWithToday(result.guest.date, result.guest.time, 'less')) {
 				return res.apiResponse(null);
 			}
 
