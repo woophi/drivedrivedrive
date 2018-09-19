@@ -43,7 +43,7 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<RateRe
         />
         {props.meta.touched && props.meta.error && <span style={{fontSize: 11, color: '#cc0000'}}>{props.meta.error}</span>}
       </div>
-    )
+    );
   }
 
   render() {
@@ -94,7 +94,6 @@ class Index extends React.Component<Props & FelaProps & InjectedFormProps<RateRe
     );
   }
 }
-
 
 const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
     <TextField

@@ -10,7 +10,6 @@ import { getRequestToRate } from '../operations';
 import { Rstatus } from 'core/models/api';
 import Form from './Form';
 
-
 const mapStateToProps = (state: AppState) => ({
   requestId: getRequestId(state),
   query: getRequestQuery(state),

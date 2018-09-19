@@ -123,7 +123,7 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
-          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/rateRequest'), 'app.request')}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/rateRequest'), 'app.requestRate')}
         />}
     </Route>
 
