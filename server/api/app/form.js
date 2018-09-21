@@ -26,7 +26,8 @@ exports.sendRequest = (req, res) => {
       date: req.body.date,
       time: req.body.time,
 			comment: req.body.comment,
-			uniqHash: buf
+			uniqHash: buf,
+			phone: req.body.phone
     },
 		created: Date.now(),
 		ip: getUserIp(req)

@@ -22,7 +22,7 @@ import {
   getGdprGuest
 } from '../../operations';
 import { getGdprGuestData, getGdprGuestResult } from '../../selectors';
-import { RequestFields } from './RequestFields';
+import { RequestFields } from 'ui/app/components/RequestFields';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
@@ -61,6 +61,7 @@ class FormComponent extends React.Component<
           <RequestFields
             clickOnGdpr={this.handleClick}
             withGdpr
+            withPhone
           />
 
           <button
@@ -145,6 +146,7 @@ const container: FelaRule<Props> = ({ theme }) => ({
   marginLeft: '3rem',
   height: 600,
   position: 'relative',
+  justifyContent: 'center',
   ...theme.mobileEarly({
     margin: '0 1rem'
   })

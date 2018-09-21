@@ -2,7 +2,6 @@ import * as data from 'core/models/api';
 import { FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
 import { api } from 'core/app/api';
 import { getRequestState } from './operations';
-import { getGuestRequest } from 'ui/app/modules/main/operations';
 
 type SharedProps = {
   requestId: string;
@@ -29,9 +28,6 @@ export const submitRA: FormSubmitHandler<{guestPhone: string}> = async (values: 
     await api.request.acceptRequest(payload)
       .then(() => getRequestState(props.requestId));
     dispatch(reset('acceptRequest'));
-    if (props.hashId) {
-      getGuestRequest(props.hashId);
-    }
   } catch (e) {
     throw new SubmissionError({  _error: e.error.message });
   }

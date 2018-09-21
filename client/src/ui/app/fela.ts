@@ -57,9 +57,6 @@ export function configureFela(mountNodeId: string) {
     borderRightColor: driveTheme.palette.darkHover
   }, '.react-hint--right:after');
   renderer.renderStatic({
-    flex: 1
-  }, '.flex-1');
-  renderer.renderStatic({
     marginRight: '1rem'
   }, '.mr-1');
   renderer.renderStatic({
@@ -75,15 +72,6 @@ export function configureFela(mountNodeId: string) {
     cursor: 'pointer'
   }, '.curp');
   renderer.renderStatic({
-    cursor: 'text'
-  }, '.curt');
-  renderer.renderStatic({
-    pointerEvents: 'none'
-  }, '.disabledLink');
-  renderer.renderStatic({
-    overflow: 'hidden'
-  }, '.ovh');
-  renderer.renderStatic({
     textDecoration: 'none'
   }, '.tD-none');
   renderer.renderStatic({
@@ -94,6 +82,9 @@ export function configureFela(mountNodeId: string) {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   }, '.text-truncate');
+  renderer.renderStatic({
+    display: 'flex'
+  }, '.d-flex');
 
   return { renderer, mountNode };
 }

@@ -3,12 +3,11 @@ import { createSelector } from 'reselect';
 
 const getApiData = (state: AppState) => state.ui.api;
 
-export const getGdprGuestData = createSelector(
+export const getGuestRequestData = createSelector(
   getApiData,
-  data => data.guestGdpr
+  data => data.guestRequest
 );
-
-export const getGdprGuestResult = createSelector(
+export const getGuestRequestResult = createSelector(
   getApiData,
-  data => data.guestGdpr.result
+  data => data.guestRequest.result
 );

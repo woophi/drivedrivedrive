@@ -143,16 +143,31 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
     const { styles } = this.props;
     return (
       <>
-        <Field
-          name="name"
-          component={this.componentInput}
-          type="text"
-          label={'Имя'}
-          {...{
-            required: true,
-            id: 'guest_name_input'
-          }}
-        />
+        <div className={styles.flexWrapper}>
+          <Field
+            name="name"
+            component={this.componentInput}
+            type="text"
+            label={'Имя'}
+            {...{
+              required: true,
+              id: 'guest_name_input'
+            }}
+          />
+          <Field
+            name="count"
+            component={this.componentInput}
+            type="number"
+            parse={parseToInt}
+            label={'Количество пассажиров'}
+            {...{
+              styleInput: {
+                maxWidth: 150
+              },
+              required: true
+            }}
+          />
+        </div>
         <Field
           name="email"
           component={this.componentInput}
@@ -162,19 +177,7 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
             required: true
           }}
         />
-        <Field
-          name="count"
-          component={this.componentInput}
-          type="number"
-          parse={parseToInt}
-          label={'Количество пассажиров'}
-          {...{
-            styleInput: {
-              maxWidth: 150
-            },
-            required: true
-          }}
-        />
+        {this.phoneField}
         <Field
           name="from"
           component={this.componentInput}
@@ -193,26 +196,28 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
             required: true
           }}
         />
-        <Field
-          name="date"
-          component={this.componentInputDate}
-          label={'Дата трансфера'}
-          type={'date'}
-          {...{
-            required: true,
-            id: 'datePcikerRequest'
-          }}
-        />
+        <div className={'d-flex'}>
+          <Field
+            name="date"
+            component={this.componentInputDate}
+            label={'Дата трансфера'}
+            type={'date'}
+            {...{
+              required: true,
+              id: 'datePcikerRequest'
+            }}
+          />
 
-        <Field
-          name="time"
-          component={this.componentInput}
-          type="time"
-          label={'Время трансфера'}
-          {...{
-            required: true
-          }}
-        />
+          <Field
+            name="time"
+            component={this.componentInput}
+            type="time"
+            label={'Время трансфера'}
+            {...{
+              required: true
+            }}
+          />
+        </div>
 
         <Field
           name="comment"
@@ -226,7 +231,6 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
         />
 
        {this.gdprField}
-       {this.phoneField}
       </>
     )
   }
@@ -259,6 +263,7 @@ const fieldSt: FelaRule<Props> = () => ({
 });
 
 const inputSt: FelaRule<Props> = () => ({
+  height: 35,
   padding: '6px 12px',
   borderColor: 'rgba(186,218,85,1)',
   borderRadius: 7,
@@ -280,15 +285,16 @@ const errInputSt: FelaRule<Props> = () => ({
 
 const dateSt: FelaRule<Props> = () => ({
   '>div': {
-    height: 33,
+    height: 35,
     '>div': {
       display: 'flex',
       borderRadius: 7,
       borderColor: 'rgba(186,218,85,1)',
       borderWidth: 1,
       borderStyle: 'solid',
-      height: 33,
+      height: 35,
       boxSizing: 'border-box',
+      padding: '2px 12px',
       '>button': {
         padding: '0px 10px 4px'
       },
@@ -300,15 +306,16 @@ const dateSt: FelaRule<Props> = () => ({
 });
 const dateStInvalid: FelaRule<Props> = () => ({
   '>div': {
-    height: 33,
+    height: 35,
     '>div': {
       display: 'flex',
       borderRadius: 7,
       borderColor: '#cc0000',
       borderWidth: 1,
       borderStyle: 'solid',
-      height: 33,
+      height: 35,
       boxSizing: 'border-box',
+      padding: '2px 12px',
       '>button': {
         padding: '0px 10px 4px'
       },
@@ -379,6 +386,11 @@ const flexContainer: FelaRule = () => ({
   position: 'relative'
 });
 
+const flexWrapper: FelaRule = () => ({
+  display: 'flex',
+  alignItems: 'flex-end'
+});
+
 const mapStylesToProps = {
   labelSt,
   fieldSt,
@@ -391,7 +403,8 @@ const mapStylesToProps = {
   flexContainer,
   checkboxLabelErr,
   dateSt,
-  dateStInvalid
+  dateStInvalid,
+  flexWrapper
 };
 
 export const RequestFields = FelaConnect(mapStylesToProps)(RequestFieldsComponent);

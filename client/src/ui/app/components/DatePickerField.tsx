@@ -59,8 +59,6 @@ export class DatePickerComponent extends React.PureComponent<
         focused={focus}
         onFocusChange={this.handleFocus}
         numberOfMonths={1}
-        showClearDate
-        showDefaultInputIcon
         noBorder
         withPortal
         hideKeyboardShortcutsPanel

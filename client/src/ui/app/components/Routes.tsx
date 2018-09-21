@@ -7,7 +7,7 @@ import LoadableComponent from './LoadableComponent';
 import { TopBar } from 'ui/app/modules/topBar';
 import { SnackBar } from 'ui/app/modules/snackbar';
 import { IStyle } from 'fela';
-import { GuestRequest } from 'ui/app/modules/main/components/guest-request/GuestRequest';
+import { GuestRequest } from 'ui/app/modules/guest-request/components/GuestRequest';
 
 type IRouter = {
   location: Location;

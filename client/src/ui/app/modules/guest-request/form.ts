@@ -2,11 +2,9 @@ import * as data from 'core/models';
 import {
   FormErrors,
   FormSubmitHandler,
-  reset,
   SubmissionError
 } from 'redux-form';
-import { newTransferRequest } from 'core/app/request';
-import { triggerForm, setHashId } from './operations';
+import { updateGuestRequest, getGuestRequest } from './operations';
 
 type SharedProps = {
   hashId: string;
@@ -48,15 +46,18 @@ export const validateRequest = (
   return errors;
 };
 
-export const submitRequest: FormSubmitHandler<data.RequestInfo> = async (
+export const submitEditRequest: FormSubmitHandler<data.RequestInfo> = async (
   values: data.RequestInfo,
-  dispatch
+  _,
+  props: SharedProps
 ) => {
   try {
-    const hashId = await newTransferRequest(values);
-    await setHashId(hashId);
-    triggerForm(true);
-    await dispatch(reset('newRequest'));
+    const payload: data.UpdateRequestInfo = {
+      ...values,
+      hash: props.hashId
+    };
+    await updateGuestRequest(payload);
+    await getGuestRequest(props.hashId);
   } catch (e) {
     throw new SubmissionError({ _error: e.error.message });
   }
