@@ -1,12 +1,20 @@
-import { GetRequest } from 'core/models/api';
+import { GetRequest, AcceptRequest } from 'core/models/api';
 import { api, loadData } from 'core/app/api';
 
-export const getRequestState = async (requestId: string) => {
+export const acceptDriverAndGetRequestState = async (requestId: string, driverId: string) => {
   try {
-    const payload: GetRequest = {
+    const payloadGet: GetRequest = {
       requestId
     };
-    await loadData('requsetState', () => api.request.getRequestStateToAccept(payload));
+    const payloadAccept: AcceptRequest = {
+      requestId,
+      driverId
+    };
+    await loadData('requsetState', () => {
+      return api.request.acceptRequest(payloadAccept)
+        .then(() =>
+          api.request.getRequestStateToAccept(payloadGet))
+    });
   } catch (error) {
     throw error;
   }

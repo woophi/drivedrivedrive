@@ -1,22 +1,17 @@
 const keystone = require('keystone');
 const GDPR = keystone.list('Gdpr');
+const { apiError } = require('../../lib/helpers');
 
 exports.getGuestGdpr = (req, res) => {
 
 	GDPR.model.findOne()
 		.where('keyName', 'gdpr_1')
     .exec((err, result) => {
-      if (err) {
-        console.error(err);
-        return res.apiResponse({
-          Rstatus: 4
-        });
-			}
 			if (err) {
-				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+				return apiError(res, {message: 'Системная ошибка' }, 500);
 			}
 			if (!result) {
-				return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
+				return apiError(res, {message: 'Извините, согласие не найдено' }, 404);
 			}
 
       return res.apiResponse({
@@ -31,17 +26,11 @@ exports.getUserGdpr = (req, res) => {
 	GDPR.model.findOne()
 		.where('keyName', 'gdpr_2')
     .exec((err, result) => {
-      if (err) {
-        console.error(err);
-        return res.apiResponse({
-          Rstatus: 4
-        });
-			}
 			if (err) {
-				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+				return apiError(res, {message: 'Системная ошибка' }, 500);
 			}
 			if (!result) {
-				return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
+				return apiError(res, {message: 'Извините, согласие не найдено' }, 404);
 			}
 
       return res.apiResponse({
@@ -56,17 +45,11 @@ exports.getCookieGdpr = (req, res) => {
 	GDPR.model.findOne()
 		.where('keyName', 'gdpr_3')
     .exec((err, result) => {
-      if (err) {
-        console.error(err);
-        return res.apiResponse({
-          Rstatus: 4
-        });
-			}
 			if (err) {
-				return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+				return apiError(res, {message: 'Системная ошибка' }, 500);
 			}
 			if (!result) {
-				return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
+				return apiError(res, {message: 'Извините, согласие не найдено' }, 404);
 			}
 
       return res.apiResponse({

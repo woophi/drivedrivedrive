@@ -5,57 +5,65 @@ import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
 import Paper from 'material-ui/Paper';
-import { getRequestId } from '../selectors';
-import { getRequestState, } from '../operations';
-import { Rstatus } from 'core/models/api';
-import Form from './Form';
+import { getRequestId, getDriverId } from '../selectors';
+import { acceptDriverAndGetRequestState } from '../operations';
+import { Rstatus, DataStatus } from 'core/models/api';
+import { Preloader } from 'ui/app/components/preloader';
 
 const mapStateToProps = (state: AppState) => ({
+  driverId: getDriverId(state),
   requestId: getRequestId(state),
   getRequestStatus: state.ui.api.requsetState.result,
+  loading:
+    state.ui.api.requsetState.status === DataStatus.FETCHING ||
+    state.ui.api.requsetState.status === DataStatus.QUIET_FETCHING
 });
 
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class Index extends React.Component<Props & FelaProps> {
-
-  async componentDidMount() {
+  componentDidMount() {
     if (this.props.requestId) {
-      await getRequestState(this.props.requestId);
+      acceptDriverAndGetRequestState(
+        this.props.requestId,
+        this.props.driverId
+      );
     }
   }
 
   render() {
-    const { styles, getRequestStatus } = this.props;
-    const processRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.PROCESS;
-    const closedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
-    const invalidRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
+    const { styles, getRequestStatus, loading } = this.props;
+    const closedRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
+    const invalidRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
 
     return (
-        <div className={styles.container}>
-          <Paper style={{margin: '1rem'}} zDepth={2}>
-            {processRequest &&
+      <div className={styles.container}>
+        <Paper style={{ margin: '1rem' }} zDepth={2}>
+          {closedRequest && (
             <div className={styles.headBox}>
-              <h1 className={styles.texts}>Поехали!</h1>
-              <span className={styles.texts}>
-                <p>Пожалуйста, укажите контактный номер телефона, чтобы водитель мог связаться с Вами в день поездки</p>
-              </span>
-              <Form />
-            </div>}
-            {closedRequest && <div className={styles.headBox}>
               <h1 className={styles.texts}>Спасибо!</h1>
               <span className={styles.texts}>
                 <p>Ваш отклик отправлен водителю.</p>
-                <p>В ближайшее время Вам на почту придет подтверждение трансфера с деталями.</p>
+                <p>
+                  В ближайшее время Вам на почту придет подтверждение трансфера
+                  с деталями.
+                </p>
               </span>
-            </div>}
-            {invalidRequest &&
-              <div className={styles.headBox}>
-                <h1 className={styles.texts}>Ошибка: недействительная ссылка или заявка была закрыта</h1>
-              </div>}
-          </Paper>
-        </div>
+            </div>
+          )}
+          {invalidRequest && (
+            <div className={styles.headBox}>
+              <h1 className={styles.texts}>
+                Ошибка: недействительная ссылка
+              </h1>
+            </div>
+          )}
+        </Paper>
+        <Preloader isShow={loading} />
+      </div>
     );
   }
 }
@@ -82,7 +90,7 @@ const mapStylesToProps = {
   texts
 };
 
-export default compose (
+export default compose(
   ReduxConnect(mapStateToProps),
-  FelaConnect(mapStylesToProps),
+  FelaConnect(mapStylesToProps)
 )(Index);

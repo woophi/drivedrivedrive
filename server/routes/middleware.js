@@ -8,7 +8,7 @@
  * modules in your project's /lib directory.
  */
 const keystone = require('keystone');
-const secret = require('../lib/staticVars').secret;
+const { secret, Rstatus } = require('../lib/staticVars');
 const jwt = require('jsonwebtoken');
 const RateLimit = require('express-rate-limit');
 
@@ -54,19 +54,19 @@ exports.enforceHttps = (req, res, next) => {
 exports.validateToken = (req, res, next) => {
 	if (!req.user) {
 		return res.apiResponse({
-      Rstatus: -1
+      Rstatus: Rstatus.UNAUTHORIZED
     });
 	}
 	const userId = req.body.userId;
 	const token = req.headers.authorization;
 	if (!token)
-		return res.status(403).send({ auth: false, message: 'No token provided.', Rstatus: -2 });
+		return res.status(403).send({ auth: false, message: 'No token provided.', Rstatus: Rstatus.FORBIDDEN });
   jwt.verify(token, secret, (err, decoded) => {
     if (err)
-			return res.status(500).send({ auth: false, message: 'Failed to authenticate token.', Rstatus: -2 });
+			return res.status(500).send({ auth: false, message: 'Failed to authenticate token.', Rstatus: Rstatus.FORBIDDEN });
 
 		if (userId && userId !== decoded.id)
-			return res.status(400).send({ auth: false, message: 'Unable to get data.', Rstatus: -2 });
+			return res.status(400).send({ auth: false, message: 'Unable to get data.', Rstatus: Rstatus.FORBIDDEN });
 		// if everything good, save to request for use in other routes
 		next();
 	});

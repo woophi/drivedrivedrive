@@ -35,7 +35,6 @@ export interface AssignRequest {
 }
 
 export interface AcceptRequest {
-  guestPhone: string;
   requestId: string;
   driverId: string;
 }

@@ -5,18 +5,19 @@ var async = require('async'),
   Price = keystone.list('Price'),
 	Rating = keystone.list('Rating');
 const { sendEmail } = require('../../lib/helpers');
+const { Rstatus } = require('../../lib/staticVars');
 
 exports.getRequestState = (req, res) => {
   if (!req.user) {
 		return res.apiResponse({
-      Rstatus: -1
+      Rstatus: Rstatus.UNAUTHORIZED
     });
 	} else if (
 			req.user && !req.user.isActive &&
 			(!req.user.isAdmin || !req.user.isSuperAdmin)
 		) {
 		return res.apiResponse({
-      Rstatus: -2
+      Rstatus: Rstatus.FORBIDDEN
     });
   }
 
@@ -25,13 +26,13 @@ exports.getRequestState = (req, res) => {
       if (err || !result) {
         console.error(err);
         return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
 			}
 
 			if (!result.guest.notify) {
 				return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
 			}
 
@@ -40,19 +41,19 @@ exports.getRequestState = (req, res) => {
 
       if (result.submitedOn && !result.wasConfirmed) {
         return res.apiResponse({
-          Rstatus: 2
+          Rstatus: Rstatus.CLOSED
         });
       } else if (findAssignedDriver) {
         return res.apiResponse({
-          Rstatus: 1
+          Rstatus: Rstatus.ASSIGNED
         });
       } else if (result.wasConfirmed) {
         return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
       } else {
         return res.apiResponse({
-          Rstatus: 0
+          Rstatus: Rstatus.OPEN
         });
       }
     });
@@ -66,20 +67,20 @@ exports.getRequestToAcceptStatus = (req, res) => {
       if (err || !result) {
         console.error(err);
         return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
       }
       if (result.submitedOn && !result.wasConfirmed) {
         return res.apiResponse({
-          Rstatus: 2
+          Rstatus: Rstatus.CLOSED
         });
       } else if (!result.accepted && result.assignedBy && result.assignedBy.length) {
         return res.apiResponse({
-          Rstatus: 3
+          Rstatus: Rstatus.PROCESS
         });
       } else {
         return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
       }
     });
@@ -285,13 +286,12 @@ exports.acceptRequest = (req, res) => {
               'submitedPrice': resultPrice._id,
               'assignedBy': [],
               'accepted': Date.now(),
-              'guest.phone': req.body.guestPhone,
               'wasAssignedOn': [...filterAssignedDrivers]
             };
 
             result.getUpdateHandler(req).process(submitedData, {
               fields: 'submitedOn, submitedPrice, assignedBy, ' +
-              'accepted, guest.phone, wasAssignedOn,',
+              'accepted, wasAssignedOn,',
               flashErrors: true
             }, (err) => {
               if (err) {
@@ -302,7 +302,9 @@ exports.acceptRequest = (req, res) => {
             });
 
           });
-      }
+      } else {
+				return res.apiResponse({ Rstatus: Rstatus.INVALID })
+			}
 		});
 
 };
@@ -310,11 +312,11 @@ exports.acceptRequest = (req, res) => {
 exports.confirmRequest = (req, res) => {
   if (!req.user) {
 		return res.apiResponse({
-      Rstatus: -1
+      Rstatus: Rstatus.UNAUTHORIZED
     });
 	} else if (req.user && (!req.user.isAdmin || !req.user.isSuperAdmin)) {
 		return res.apiResponse({
-      Rstatus: -2
+      Rstatus: Rstatus.FORBIDDEN
     });
   }
     Request.model.findById(req.body.requestId)
@@ -352,16 +354,16 @@ exports.confirmRequest = (req, res) => {
 						});
 
             return res.apiResponse({
-              Rstatus: 2
+              Rstatus: Rstatus.CLOSED
             });
 					});
 				} else if (result && result.wasConfirmed) {
 					return res.apiResponse({
-            Rstatus: 5
+            Rstatus: Rstatus.CONFIRMED
           });
 				} else {
 					return res.apiResponse({
-            Rstatus: 4
+            Rstatus: Rstatus.INVALID
           });
 				}
 			});
@@ -372,7 +374,7 @@ exports.getRequestToRate = (req, res) => {
 
   if (!req.body.query) {
     return res.apiResponse({
-      Rstatus: -2
+      Rstatus: Rstatus.FORBIDDEN
     });
   }
 
@@ -383,21 +385,21 @@ exports.getRequestToRate = (req, res) => {
       if (err || !result) {
         console.error(err);
         return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
       }
 
       if (result.assignedRating && !result.assignedRating.closed) {
         return res.apiResponse({
-          Rstatus: 7
+          Rstatus: Rstatus.RATING
         });
       } else if (result.assignedRating && result.assignedRating.closed) {
         return res.apiResponse({
-          Rstatus: 6
+          Rstatus: Rstatus.RATED
         });
       } else {
         return res.apiResponse({
-          Rstatus: 4
+          Rstatus: Rstatus.INVALID
         });
       }
     });
