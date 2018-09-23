@@ -14,4 +14,5 @@ block content
 			p#cardP дата #{date}, время #{guestData.guest.time}
 			if guestData.guest.comment
 				p#cardP Комментарий: #{guestData.guest.comment}
-			p#cardP Номер телефона: #{guestData.guest.phone}
+			if guestData.guest.phone
+				p#cardP Номер телефона: #{guestData.guest.phone}

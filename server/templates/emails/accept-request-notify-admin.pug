@@ -12,7 +12,8 @@ block content
 			p#cardP дата #{date}, время #{data.guest.time}
 			if data.guest.comment
 				p#cardP Комментарий: #{data.guest.comment}
-			p#cardP Номер телефона: #{data.guest.phone}
+			if data.guest.phone
+				p#cardP Номер телефона: #{data.guest.phone}
 		div#bodyCard.padding1rem
 			h2 Выбранный водитель
 			p#cardP #{data.submitedOn.name.first} #{data.submitedOn.name.last}

@@ -29,7 +29,6 @@ class FormComponent extends React.Component<
       handleSubmit,
       error
     } = this.props;
-    const phone = initialValues && initialValues.phone;
     const submittingButton = submitting ? (
       <i className="fas fa-circle-notch fa-spin" />
     ) : (
@@ -39,7 +38,7 @@ class FormComponent extends React.Component<
       <Form style={style} onSubmit={handleSubmit}>
         <div>
           {error && <Alert mssg={error} type={'error'} />}
-          <RequestFields withPhone={!!phone} />
+          <RequestFields withPhone />
           <Button disabled={submitting || pristine}>{submittingButton}</Button>
         </div>
       </Form>
