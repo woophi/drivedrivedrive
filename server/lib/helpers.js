@@ -58,3 +58,10 @@ exports.compareGuestTimeWithToday = (guestDate, guestTime, condition) => {
 			return null;
 	}
 }
+
+exports.parseDateForWix = (date) => {
+	if (date.length > 10) {
+		return moment(Date.parse(date)).format('YYYY-MM-DD');
+	}
+	return date;
+}

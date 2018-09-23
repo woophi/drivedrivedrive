@@ -1,7 +1,7 @@
 const async = require('async');
 const keystone = require('keystone');
 const { isEmpty } = require('lodash');
-const { getUserIp, sendEmail } = require('../../lib/helpers');
+const { getUserIp, sendEmail, parseDateForWix } = require('../../lib/helpers');
 const crypto = require('crypto');
 const { checkMails } = require('../../lib/checkMail');
 
@@ -20,10 +20,10 @@ exports.sendRequest = (req, res) => {
     guest: {
       name: req.body.name,
       email: req.body.email,
-      count: req.body.count,
+      count: Number(req.body.count),
       from: req.body.from,
       to: req.body.to,
-      date: req.body.date,
+      date: parseDateForWix(req.body.date),
       time: req.body.time,
 			comment: req.body.comment,
 			uniqHash: buf,
@@ -31,7 +31,8 @@ exports.sendRequest = (req, res) => {
     },
 		created: Date.now(),
 		ip: getUserIp(req)
-  };
+	};
+
 	const RequestModel = keystone.list('Request').model;
 	const UserModel = keystone.list('User').model;
 	const GdprModel = keystone.list('Gdpr').model;
