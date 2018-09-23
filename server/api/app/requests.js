@@ -8,6 +8,7 @@ exports.getOpenRequests = (req, res) => {
 	Request.model
 		.find()
 		.where('wasConfirmed', false)
+		.where('guest.notify', true)
 		.exec((err, results) => {
 			if (err)
 				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
