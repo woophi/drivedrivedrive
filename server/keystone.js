@@ -53,7 +53,7 @@ keystone.import('models');
 keystone.set('locals', {
 	env: keystone.get('env'),
 	host: (
-		p ? 'https://www.vettura.eu'
+		p ? 'https://app.vettura.eu'
 		: 'http://localhost:3000'
 	)
 });
