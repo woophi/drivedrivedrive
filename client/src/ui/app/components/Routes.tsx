@@ -1,7 +1,7 @@
 import { AppState } from 'core/models/app';
 import * as React from "react";
 import { connect as ReduxConnect } from 'react-redux';
-import { Route, RouteComponentProps } from 'react-router';
+import { Route, RouteComponentProps, Redirect } from 'react-router';
 import { Location } from 'history';
 import LoadableComponent from './LoadableComponent';
 import { TopBar } from 'ui/app/modules/topBar';
@@ -13,12 +13,15 @@ type IRouter = {
   location: Location;
 };
 
+const redirect = () => <Redirect exact strict from="/" to={`/signin`} />;
+
 export const Router =  ReduxConnect((state: AppState) => ({
   location: state.router.location as Location,
 }))(
   ({ location }: IRouter) => (
     <div style={styles}>
       {location.pathname !== '/' && <TopBar />}
+      <Route exact strict path="/" location={location} render={redirect} />
       <Route component={AppRoutes} location={location} />
       {location.pathname === '/admin' && window.location.reload()}
       <SnackBar />
@@ -37,14 +40,14 @@ const styles: IStyle = ({
 
 const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
   <React.Fragment>
-    <Route exact strict path="/" location={location}>
+    {/* <Route exact strict path="/" location={location}>
       {({ match }) =>
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/main'), 'app.index')}
         />}
-    </Route>
+    </Route> */}
 
     <Route exact strict path="/signin" location={location}>
       {({ match }) =>
