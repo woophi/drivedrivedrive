@@ -1,7 +1,7 @@
 const async = require('async');
 const keystone = require('keystone');
 const { isEmpty } = require('lodash');
-const { getUserIp, sendEmail, parseDateForWix } = require('../../lib/helpers');
+const { getUserIp, sendEmail, parseDateForWix, trimSpaces, parseTimeForWix } = require('../../lib/helpers');
 const crypto = require('crypto');
 const { checkMails } = require('../../lib/checkMail');
 
@@ -15,16 +15,15 @@ exports.sendRequest = (req, res) => {
 	let drivers;
 
 	const buf = crypto.randomBytes(128).toString('hex');
-
   const guestData = {
     guest: {
       name: req.body.name,
-      email: req.body.email,
+      email: trimSpaces(req.body.email.toLowerCase()),
       count: Number(req.body.count),
       from: req.body.from,
       to: req.body.to,
       date: parseDateForWix(req.body.date),
-      time: req.body.time,
+      time: parseTimeForWix(req.body.time),
 			comment: req.body.comment,
 			uniqHash: buf,
 			phone: req.body.phone

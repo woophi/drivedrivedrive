@@ -3,7 +3,7 @@ const	keystone = require('keystone');
 const { secret } = require('../../lib/staticVars');
 const jwt = require('jsonwebtoken');
 const { isEmpty } = require('lodash');
-const { sendEmail, apiError } = require('../../lib/helpers');
+const { sendEmail, apiError, trimSpaces } = require('../../lib/helpers');
 
 exports.signin = (req, res) => {
 	const email = req.body.email.toLowerCase();
@@ -110,7 +110,7 @@ exports.checkAuth = (req, res) => {
 
 exports.register = (req, res) => {
   const user = req.user;
-  const email = req.body.email.toLowerCase();
+  const email = trimSpaces(req.body.email.toLowerCase());
 
   if (req.user) {
 		return res.redirect(req.cookies.target || '/me');

@@ -60,8 +60,30 @@ exports.compareGuestTimeWithToday = (guestDate, guestTime, condition) => {
 }
 
 exports.parseDateForWix = (date) => {
-	if (date.length > 10) {
+	if (date && date.length > 10) {
 		return moment(Date.parse(date)).format('YYYY-MM-DD');
 	}
 	return date;
+}
+const trimSpaces = (str) => {
+	if (str) {
+		return str.replace(/\s/g, '');
+	}
+	return str;
+}
+exports.trimSpaces = trimSpaces;
+
+exports.parseTimeForWix = (time) => {
+	if (time) {
+
+		const findNumbers = trimSpaces(time).split('').filter(element => {
+			if (!isNaN(Number(element))) {
+				return element;
+			}
+		});
+		findNumbers.splice(2, 0, ':');
+		const filterNumbers = findNumbers.filter((numb, index) => index <= 4);
+		return filterNumbers.join('');
+	}
+	return time;
 }
