@@ -81,7 +81,9 @@ exports.parseTimeForWix = (time) => {
 				return element;
 			}
 		});
-		findNumbers.splice(2, 0, ':');
+		findNumbers.length > 3
+			? findNumbers.splice(2, 0, ':')
+			: findNumbers.splice(1, 0, ':');
 		const filterNumbers = findNumbers.filter((numb, index) => index <= 4);
 		return filterNumbers.join('');
 	}

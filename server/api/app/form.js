@@ -94,7 +94,7 @@ exports.sendRequest = (req, res) => {
 				const emailKeys = {
 					templateName: 'driver-notify',
 					to: drivers,
-					subject: 'Новая заявка на трансфер'
+					subject: `Новая заявка на трансфер из ${requestData.guest.from} в ${requestData.guest.to}`
 				};
 
 				const params = {
