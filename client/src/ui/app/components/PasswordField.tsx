@@ -25,12 +25,12 @@ class PassFieldComponent extends React.PureComponent<Props, LocalState> {
   };
 
   handleMask = () =>
-    this.setState({ passwordIsMasked: !this.state.passwordIsMasked });
+    this.setState({ passwordIsMasked: !this.state.passwordIsMasked })
 
   render() {
-    const { meta, input, floatingLabelText, fullWidth, hintText } = this.props;
+    const { meta, floatingLabelText, fullWidth, hintText } = this.props;
     const typeField = this.state.passwordIsMasked ? 'password' : 'text';
-    const eyeIcon = this.state.passwordIsMasked
+    const eyeIcon = !this.state.passwordIsMasked
       ? 'fas fa-eye'
       : 'fas fa-eye-slash';
     return (
