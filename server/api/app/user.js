@@ -425,7 +425,7 @@ exports.updateProfile = (req, res) => {
 					return apiError(res, {message: 'Не удалось получить данные' }, 500);
 				}
 				sendEmail({
-					templateName: 'admin-notify',
+					templateName: 'admin-notify-new-driver',
 					to: admins,
 					subject: `Новый водитель`
 				},

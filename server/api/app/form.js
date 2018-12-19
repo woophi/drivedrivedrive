@@ -1,18 +1,24 @@
 const async = require('async');
 const keystone = require('keystone');
 const { isEmpty } = require('lodash');
-const { getUserIp, sendEmail, parseDateForWix, trimSpaces, parseTimeForWix } = require('../../lib/helpers');
+const {
+	getUserIp,
+	sendEmail,
+	parseDateForWix,
+	trimSpaces,
+	apiError
+} = require('../../lib/helpers');
 const crypto = require('crypto');
 const { checkMails } = require('../../lib/checkMail');
 
 exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
-		return res.apiError({message: 'Без gdpr нельзя' }, {message: 'Без gdpr нельзя' }, null, 400);
+		return apiError(res, {message: 'Без gdpr нельзя' }, 400);
 	}
 
 	let	requestData;
 	let confirmedGDPR;
-	let drivers;
+	let admins;
 
 	const buf = crypto.randomBytes(128).toString('hex');
   const guestData = {
@@ -23,7 +29,7 @@ exports.sendRequest = (req, res) => {
       from: req.body.from,
       to: req.body.to,
       date: parseDateForWix(req.body.date),
-      time: parseTimeForWix(req.body.time),
+      time: req.body.time,
 			comment: req.body.comment,
 			uniqHash: buf,
 			phone: req.body.phone
@@ -43,10 +49,10 @@ exports.sendRequest = (req, res) => {
 				.where('keyName', 'gdpr_1')
 				.exec((err, result) => {
 					if (err) {
-						return res.apiError({message: 'Системная ошибка' }, '', err, 500);
+						return apiError(res, {message: 'Системная ошибка' }, 500);
 					}
 					if (!result) {
-						return res.apiError({message: 'Извините, согласие не найдено' }, '', null, 404);
+						return apiError(res, {message: 'Извините, согласие не найдено' }, 404);
 					}
 					confirmedGDPR = result._id;
 					return cb();
@@ -57,17 +63,17 @@ exports.sendRequest = (req, res) => {
 
 			UserModel
 				.find()
-				.where('isActive', true)
 				.where('notifications.email', true)
+				.$where('this.isAdmin || this.isSuperAdmin')
 				.exec((err, users) => {
         if (err) {
-					return res.apiError({message: 'Системная ошибка.' }, '', err, 500);
+					return apiError(res, {message: 'Системная ошибка' }, 500);
         }
         if (isEmpty(users)) {
-					return res.apiError({message: 'Не удалось найти водителей.' }, '', null, 404);
+					return apiError(res, {message: 'Не удалось найти админов.' }, 404);
 				}
 
-				drivers = users;
+				admins = users;
 
         return cb();
 
@@ -82,7 +88,7 @@ exports.sendRequest = (req, res) => {
 			});
       requestData.save((err) => {
         if (err) {
-					return res.apiError({message: 'Проблема создать новый запрос.' }, '', err, 500);
+					return apiError(res, {message: 'Проблема создать новый запрос.' }, 500);
         }
         return cb();
       });
@@ -90,31 +96,28 @@ exports.sendRequest = (req, res) => {
 		},
 
 		(cb) => {
-			if (!isEmpty(drivers)) {
-				const emailKeys = {
-					templateName: 'driver-notify',
-					to: drivers,
-					subject: `Новая заявка на трансфер из ${requestData.guest.from} в ${requestData.guest.to}`
-				};
+			const emailKeys = {
+				templateName: 'admin-notify-new-request',
+				to: admins,
+				subject: `Новая заявка на трансфер из ${requestData.guest.from} в ${requestData.guest.to}`
+			};
 
-				const params = {
-					guestData: requestData,
-					driver: true
-				};
+			const params = {
+				guestData: requestData,
+				driver: true
+			};
 
-				sendEmail(emailKeys, params);
-				return cb();
-			}
+			sendEmail(emailKeys, params);
 			return cb();
 		}
 
   ], (err) => {
 
     if (err) {
-			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
+			return apiError(res, {message: 'Что-то пошло не так... попробуйте еще раз' }, 500);
     }
 
-    return res.apiResponse(buf);
+    return res.apiResponse();
 
   });
 };
