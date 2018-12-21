@@ -6,4 +6,4 @@ block content
 	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
 	if guestData.guest.comment
 		p Комментарий: #{guestData.guest.comment}
-	p: a(href=host + '/request/edit/' + guestData._id) Ссылка на новую заявку
+	p: a(href=host + '/requests/edit/request' + guestData._id) Ссылка на новую заявку
