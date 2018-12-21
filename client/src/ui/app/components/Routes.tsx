@@ -157,5 +157,14 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
         />}
     </Route>
 
+    <Route path="/adm" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/admin'), 'app.admin')}
+        />}
+    </Route>
+
   </React.Fragment>
 );

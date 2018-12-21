@@ -7,7 +7,6 @@ import ActionHome from 'material-ui/svg-icons/action/home';
 import PersonAdd from 'material-ui/svg-icons/social/person-add';
 import Profile from 'material-ui/svg-icons/social/person';
 import Receipts from 'material-ui/svg-icons/action/receipt';
-import EditIcon from 'material-ui/svg-icons/image/edit';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import FontIcon from 'material-ui/FontIcon';
 import { blue500 } from 'material-ui/styles/colors';
@@ -32,13 +31,12 @@ type Props = typeof StateProps;
 class DroppingMenuComponent extends React.Component<Props> {
   changeIconOnPath = (icon: JSX.Element, btnName: string) => {
     const { currentPath, subPath } = this.props;
-    console.warn(currentPath, subPath,   btnName);
-    if (`${currentPath}/${subPath}` === btnName) {
+    if (`${currentPath}/${subPath}` === `${btnName}/`) {
       return <ArrowRight color={blue500} />;
     } else {
       return icon;
     }
-  }
+  };
 
   get logInOutBtn() {
     if (this.props.authInfo) {
@@ -57,7 +55,7 @@ class DroppingMenuComponent extends React.Component<Props> {
             disabled={this.props.currentPath === 'signin'}
             leftIcon={this.changeIconOnPath(
               <FontIcon className="fas fa-sign-in-alt" />,
-              'signin/'
+              'signin'
             )}
             primaryText="Войти"
           />
@@ -78,7 +76,7 @@ class DroppingMenuComponent extends React.Component<Props> {
     return (
       <Link className={'tD-none'} to={'/join'}>
         <MenuItem
-          leftIcon={this.changeIconOnPath(<PersonAdd />, 'join/')}
+          leftIcon={this.changeIconOnPath(<PersonAdd />, 'join')}
           primaryText="Регистрация"
         />
       </Link>
@@ -89,7 +87,7 @@ class DroppingMenuComponent extends React.Component<Props> {
     return (
       <Link className={'tD-none'} to={'/requests'}>
         <MenuItem
-          leftIcon={this.changeIconOnPath(<Receipts />, 'requests/')}
+          leftIcon={this.changeIconOnPath(<Receipts />, 'requests')}
           primaryText="Заявки"
         />
       </Link>
@@ -100,7 +98,7 @@ class DroppingMenuComponent extends React.Component<Props> {
     return (
       <Link className={'tD-none'} to={'/me'}>
         <MenuItem
-          leftIcon={this.changeIconOnPath(<Profile />, 'me/')}
+          leftIcon={this.changeIconOnPath(<Profile />, 'me')}
           primaryText="Профиль"
         />
       </Link>
@@ -110,14 +108,19 @@ class DroppingMenuComponent extends React.Component<Props> {
   get manageLinks() {
     const { admin } = this.props.getRoles;
 
-    return (admin &&
-      <Link className={'tD-none'} to={'/requests/edit'}>
-        <MenuItem
-          leftIcon={this.changeIconOnPath(<EditIcon />, 'requests/edit')}
-          primaryText="Управление заявками"
-        />
-      </Link>
-    )
+    return (
+      admin && (
+        <Link className={'tD-none'} to={'/adm'}>
+          <MenuItem
+            leftIcon={this.changeIconOnPath(
+              <FontIcon className={'fas fa-cogs'} />,
+              'adm'
+            )}
+            primaryText="Управление"
+          />
+        </Link>
+      )
+    );
   }
 
   render() {
