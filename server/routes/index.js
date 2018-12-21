@@ -23,6 +23,7 @@ const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
 const { schedulerWorker } = require('../lib/scheduler');
 const helmet = require('helmet');
+const { identity: { validateToken } } = require('../identity');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -65,24 +66,27 @@ exports = module.exports = (app) => {
 	app.get('/request/:id/rate?', routes.views.index);
 	app.get('/requests', routes.views.index);
 
+	// new admin
+	app.get('/adm*', validateToken, routes.views.index);
+
   // API
   app.all('/api*', keystone.middleware.api);
   app.post('/api/user/signin', routes.api.app.user.signin);
   app.post('/api/user/auth', routes.api.app.user.auth);
   app.post('/api/user/check', routes.api.app.user.checkAuth);
   app.post('/api/user/join', routes.api.app.user.register);
-  app.post('/api/user/signout', middleware.validateToken, routes.api.app.user.signout);
+  app.post('/api/user/signout', validateToken, routes.api.app.user.signout);
   app.post('/api/user/password/forgot', routes.api.app.user.forgotPassword);
   app.post('/api/user/password/reset', routes.api.app.user.resetPassword);
   app.post('/api/user/password/key', routes.api.app.user.getPasswordKey);
-  app.post('/api/user/profile', middleware.validateToken, routes.api.app.user.getProfile);
-  app.post('/api/user/profile/update', middleware.validateToken, routes.api.app.user.updateProfile);
+  app.post('/api/user/profile', validateToken, routes.api.app.user.getProfile);
+  app.post('/api/user/profile/update', validateToken, routes.api.app.user.updateProfile);
 
   app.post('/api/request/get/state', routes.api.app.request.getRequestState);
-  app.post('/api/request/get', middleware.validateToken, routes.api.app.request.getRequest);
-  app.post('/api/request/driver/answer', middleware.validateToken, routes.api.app.request.driverOnRequest);
+  app.post('/api/request/get', validateToken, routes.api.app.request.getRequest);
+  app.post('/api/request/driver/answer', validateToken, routes.api.app.request.driverOnRequest);
   app.post('/api/request/guest/answer', routes.api.app.request.acceptRequest);
-  app.post('/api/request/confirm', middleware.validateToken, routes.api.app.request.confirmRequest);
+  app.post('/api/request/confirm', validateToken, routes.api.app.request.confirmRequest);
   app.post('/api/request/rate', routes.api.app.request.rateRequest);
   app.post('/api/request/get/rate', routes.api.app.request.getRequestToRate);
   app.post('/api/request/get/accept/state', routes.api.app.request.getRequestToAcceptStatus);
@@ -94,15 +98,15 @@ exports = module.exports = (app) => {
   app.post('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
 	app.post('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
 
-	app.post('/api/user/unsub', middleware.validateToken, routes.api.app.emails.unsubDriver);
+	app.post('/api/user/unsub', validateToken, routes.api.app.emails.unsubDriver);
 	app.post('/api/user/subState', routes.api.app.emails.subStateDriver);
 	app.post('/api/guest/unsub', routes.api.app.emails.unsubGuest);
 	app.post('/api/guest/subState', routes.api.app.emails.subStateGuest);
 
-	app.post('/api/requests/open', middleware.validateToken, routes.api.app.requests.getOpenRequests);
-	app.post('/api/requests/active', middleware.validateToken, routes.api.app.requests.getSubmitedRequests);
-	app.post('/api/requests/history', middleware.validateToken, routes.api.app.requests.getHistoryRequests);
-	app.post('/api/requests/process', middleware.validateToken, routes.api.app.requests.getInProcessRequests);
+	app.post('/api/requests/open', validateToken, routes.api.app.requests.getOpenRequests);
+	app.post('/api/requests/active', validateToken, routes.api.app.requests.getSubmitedRequests);
+	app.post('/api/requests/history', validateToken, routes.api.app.requests.getHistoryRequests);
+	app.post('/api/requests/process', validateToken, routes.api.app.requests.getInProcessRequests);
 
 	app.post('/api/guest/get/request', routes.api.app.guest.getGuestRequest);
 	app.post('/api/guest/update/request', routes.api.app.guest.updateGuestRequest);
