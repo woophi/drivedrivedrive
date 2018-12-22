@@ -23,7 +23,7 @@ const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
 const { schedulerWorker } = require('../lib/scheduler');
 const helmet = require('helmet');
-const { identity: { validateToken } } = require('../identity');
+const { identity: { validateToken, authorizedForAdmin } } = require('../identity');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -67,7 +67,7 @@ exports = module.exports = (app) => {
 	app.get('/requests', routes.views.index);
 
 	// new admin
-	app.get('/adm*', validateToken, routes.views.index);
+	app.get('/adm*', authorizedForAdmin, routes.views.index);
 
   // API
   app.all('/api*', keystone.middleware.api);

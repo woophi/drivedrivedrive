@@ -1,7 +1,6 @@
 const async = require('async');
 const	keystone = require('keystone');
-const { secret } = require('../../lib/staticVars');
-const jwt = require('jsonwebtoken');
+const { identity } = require('../../identity/index');
 const { isEmpty } = require('lodash');
 const { sendEmail, apiError, trimSpaces } = require('../../lib/helpers');
 
@@ -17,14 +16,12 @@ exports.signin = (req, res) => {
     (cb) => {
 			const User = keystone.list('User').model;
 
-      User.findOne().where('email', email).exec((err, user) => {
+      User.findOne().where('email', email).exec(async (err, user) => {
         if (!user || err) {
 					return apiError(res, {message: "Извините, ошибка входа" }, 400);
         } else {
-					const token = jwt.sign({ id: user._id }, secret, {
-						expiresIn: 86400
-					});
-					user.token = token;
+					const roles = await identity.getRoles(user._id);
+					user.token = identity.setNewToken({ id: user._id, roles });
 					if (user.resetPasswordKey) {
 						user.resetPasswordKey = '';
 					}
@@ -58,32 +55,27 @@ exports.auth = (req, res) => {
 	if (!req.body.token) return res.status(401).send({ auth: false, message: 'No token provided.' });
 	const User = keystone.list('User').model;
 
-  jwt.verify(req.body.token, secret, (err, decoded) => {
-    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+	const { verificaitionError, claims } = identity.verifyToken(req.body.token);
+	console.warn(verificaitionError, claims);
+	if (verificaitionError)
+		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });
 
-		User.findById(decoded.id).exec((err, user) => {
+	User.findById(claims.id).exec((err, user) => {
 
-			if (err || !user) {
-				return apiError(res, {
-					message: 'Авторизация не удалась'
-				}, 401);
-			} else {
-				let roles = [];
+		if (err || !user) {
+			return apiError(res, {
+				message: 'Авторизация не удалась'
+			}, 401);
+		} else {
+			return res.apiResponse({
+				userId: user.id || user._id,
+				fullName: user.name,
+				userName: user.email,
+				roles: claims.roles,
+				token: req.body.token
+			});
+		}
 
-				roles = user.isAdmin ? ['Admin'] : [];
-				roles = user.isSuperAdmin ? [...roles, 'Godlike'] : [...roles];
-				roles = user.isActive ? [...roles, 'Driver'] : [...roles];
-
-				return res.apiResponse({
-					userId: user.id || user._id,
-					fullName: user.name,
-					userName: user.email,
-					roles,
-					token: req.body.token
-				});
-			}
-
-		});
 	});
 };
 
@@ -112,7 +104,7 @@ exports.register = (req, res) => {
   const user = req.user;
   const email = trimSpaces(req.body.email.toLowerCase());
 
-  if (req.user) {
+  if (user) {
 		return res.redirect(req.cookies.target || '/me');
 	}
 
@@ -197,14 +189,12 @@ exports.register = (req, res) => {
 		(cb) => {
 			const User = keystone.list('User').model;
 
-      User.findOne().where('email', email).exec((err, user) => {
+      User.findOne().where('email', email).exec(async (err, user) => {
         if (err || !user) {
 					return apiError(res, {message: 'Ошибка сервера' }, 500);
-        }
-				const token = jwt.sign({ id: user._id }, secret, {
-					expiresIn: 86400 // expires in 24 hours
-				});
-				user.token = token;
+				}
+				const roles = await identity.getRoles(user._id);
+				user.token = identity.setNewToken({ id: user._id, roles });
 				user.save((err) => {
 					if (err) {
 						return cb(err);
@@ -264,20 +254,19 @@ exports.forgotPassword = (req, res) => {
 };
 
 const authChangePass = (req, res) => {
-	return jwt.verify(req.body.key, secret, (err, decoded) => {
-		let user = req.user;
-    if (err)
-			return res.status(500).send({ message: 'Failed to authenticate token.' });
+	const { claims, verificaitionError } = identity.verifyToken(req.body.key);
+	let user = req.user;
+	if (verificaitionError)
+		return res.status(403).send({ message: 'Failed to authenticate token.' });
 
-		if (user._id.toString() !== decoded.id)
-			return res.status(400).send({ message: 'Не удалось изменить пароль' });
-		user.password = req.body.password;
-		user.save((err) => {
-			if (err) {
-				return apiError(res, {message: 'Не удалось изменить пароль' }, 500);
-			}
-			return res.apiResponse(true);
-		});
+	if (user._id.toString() !== claims.id)
+		return res.status(400).send({ message: 'Не удалось изменить пароль' });
+	user.password = req.body.password;
+	user.save((err) => {
+		if (err) {
+			return apiError(res, {message: 'Не удалось изменить пароль' }, 500);
+		}
+		return res.apiResponse(true);
 	});
 }
 
@@ -289,15 +278,13 @@ exports.resetPassword = (req, res) => {
 	if (!req.user) {
 		const User = keystone.list('User').model;
 
-		User.findOne().where('resetPasswordKey', req.body.key).exec((err, user) => {
+		User.findOne().where('resetPasswordKey', req.body.key).exec(async (err, user) => {
 			if (err || !user) {
 				return apiError(res, {message: 'Ссылка для сброса пароля недействительна', status: false }, 400);
 			}
 			user.password = req.body.password;
-			const token = jwt.sign({ id: user._id }, secret, {
-				expiresIn: 86400
-			});
-			user.token = token;
+			const roles = await identity.getRoles(user._id);
+			user.token = identity.setNewToken({ id: user._id, roles });
 			user.save((err) => {
 				if (err) {
 					return apiError(res, {message: 'Не удалось сбросить пароль' }, 500);
