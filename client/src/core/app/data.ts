@@ -22,7 +22,7 @@ const defaultState: data.DataState = {
   historyRequests: defaultStateItem<data.TableRequest[]>([]),
   inProcessRequests: defaultStateItem<data.TableRequest[]>([]),
   guestRequest: defaultStateItem<RequestInfo>(null),
-  pendingRequests: defaultStateItem<data.TableRequest[]>([])
+  allRequests: defaultStateItem<data.TableRequest[]>([])
 };
 
 export const reducer = (state = defaultState, dispatch: data.DataDispatch): data.DataState => {

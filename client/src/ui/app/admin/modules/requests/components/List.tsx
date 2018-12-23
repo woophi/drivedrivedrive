@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { composeTable, tableConnect } from 'ui/app/modules/tables';
 import Loader from 'ui/app/components/loader';
-import { getPendingRequests } from '../operations';
-import { getPendingRequestsData } from '../selectors';
+import { getRequests } from '../operations';
+import { getRequestsData } from '../selectors';
 import { TableRequest } from 'core/models/api';
 import { changeUrl } from 'ui/app/operations';
 
@@ -29,17 +29,17 @@ const TC = composeTable<TableRequest>({
   }
 });
 
-const PendingRequestsConnectedList = tableConnect({
-  dataName: 'pendingRequests',
-  tableName: 'pendingRequests'
+const RequestsConnectedList = tableConnect({
+  dataName: 'allRequests',
+  tableName: 'allRequests'
 })(TC);
 
-const PendingRequestsContainer = Loader({
-  loadData: getPendingRequests,
-  dataSelector: getPendingRequestsData,
-  component: PendingRequestsConnectedList as any
+const RequestsContainer = Loader({
+  loadData: getRequests,
+  dataSelector: getRequestsData,
+  component: RequestsConnectedList as any
 });
 
-export const PendingRequestsList: React.SFC = () => {
-  return <PendingRequestsContainer />;
+export const RequestsList: React.SFC = () => {
+  return <RequestsContainer />;
 };

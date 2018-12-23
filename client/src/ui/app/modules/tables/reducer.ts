@@ -30,7 +30,7 @@ export const tablesDefaultState: TablesState = {
     sortBy: 'date',
     sortDirection: SortDirection.DESC
   },
-  pendingRequests: {
+  allRequests: {
     ...tableDefaultState,
     sortBy: 'date',
     sortDirection: SortDirection.DESC
