@@ -36,7 +36,7 @@ class RequestsComponent extends React.PureComponent<Props> {
   get view() {
     const { roles } = this.props;
     const { activeDriver, admin } = roles;
-    if (!!activeDriver || !!admin) {
+    if (activeDriver || admin) {
       return <TabsRequests />;
     } else {
       return (

@@ -56,7 +56,6 @@ exports.auth = (req, res) => {
 	const User = keystone.list('User').model;
 
 	const { verificaitionError, claims } = identity.verifyToken(req.body.token);
-	console.warn(verificaitionError, claims);
 	if (verificaitionError)
 		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });
 

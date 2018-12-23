@@ -12,3 +12,10 @@ export const getCheckRoles = createSelector(getAuthInfo, info => {
     info && info.roles && !!info.roles.find(r => r === 'Driver');
   return { admin, activeDriver };
 });
+
+const getRouter = (state: AppState) => state.router;
+
+export const getLocation = createSelector(
+  getRouter,
+  router => router && router.location
+);

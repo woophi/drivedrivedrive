@@ -47,7 +47,7 @@ exports.authorizedForSuperAdmin = (req, res, next) => {
 	if (verificaitionError)
 		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });
 
-	if (!claims.roles.find(r => r === ROLES.GODLIKE || r === ROLES.DRVIER))
+	if (!claims.roles.find(r => r === ROLES.GODLIKE))
 		return res.status(400).send({ auth: false, message: 'Unable to get data.' });
 	next();
 }

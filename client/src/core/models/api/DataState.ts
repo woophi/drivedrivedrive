@@ -24,6 +24,7 @@ export type DataState = {
   historyRequests: DataStateItem<data.TableRequest[]>,
   inProcessRequests: DataStateItem<data.TableRequest[]>,
   guestRequest: DataStateItem<RequestInfo>,
+  pendingRequests: DataStateItem<data.TableRequest[]>,
 };
 
 export type DataStateItem<T> = {

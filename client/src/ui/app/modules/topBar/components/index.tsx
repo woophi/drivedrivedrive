@@ -44,13 +44,13 @@ class Index extends React.Component<Props> {
         return 'Трансфер';
 
       case 'requests':
-        if (splitPath[2] === 'edit') {
-          return 'Управление';
-        }
         return 'Списки заявок';
 
       case 'unsubscribe':
         return 'Отписка от почтовой рассылки';
+
+      case 'adm':
+        return 'Управление';
 
       default:
         return '';
