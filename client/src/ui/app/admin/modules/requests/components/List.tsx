@@ -5,6 +5,7 @@ import { getRequests } from '../operations';
 import { getRequestsData } from '../selectors';
 import { TableRequest } from 'core/models/api';
 import { changeUrl } from 'ui/app/operations';
+import { Paper } from 'material-ui';
 
 const TC = composeTable<TableRequest>({
   model: [{
@@ -25,7 +26,7 @@ const TC = composeTable<TableRequest>({
   showHeaderDividers: true,
   showHeaderSortControls: true,
   onRowClick: ({ rowData }) => {
-    changeUrl(`/requests/edit/${rowData.id}`);
+    changeUrl(`/adm/requests/edit/${rowData.id}`);
   }
 });
 
@@ -41,5 +42,9 @@ const RequestsContainer = Loader({
 });
 
 export const RequestsList: React.SFC = () => {
-  return <RequestsContainer />;
+  return (
+    <Paper zDepth={2} style={{ height: 'calc(100% - 140px)', margin: '0 1rem 1rem'}}>
+      <RequestsContainer />
+    </Paper>
+  );
 };

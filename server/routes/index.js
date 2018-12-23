@@ -108,6 +108,9 @@ exports = module.exports = (app) => {
 	app.post('/api/requests/history', validateToken, routes.api.app.requests.getHistoryRequests);
 	app.post('/api/requests/process', validateToken, routes.api.app.requests.getInProcessRequests);
 
+	// adm
+	app.post('/api/requests/all', authorizedForAdmin, routes.api.admin.requests.getAll);
+
 	app.post('/api/guest/get/request', routes.api.app.guest.getGuestRequest);
 	app.post('/api/guest/update/request', routes.api.app.guest.updateGuestRequest);
 };

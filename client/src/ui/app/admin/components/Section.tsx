@@ -19,6 +19,8 @@ class SectionComponent extends React.PureComponent<Props> {
     const { location, path, children } = this.props;
     return(
       <Route
+        exact
+        strict
         location={location}
         path={`/adm/${path}`}
       >
