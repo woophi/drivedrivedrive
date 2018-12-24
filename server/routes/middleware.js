@@ -7,7 +7,6 @@
  * you have more middleware you may want to group it as separate
  * modules in your project's /lib directory.
  */
-const keystone = require('keystone');
 const RateLimit = require('express-rate-limit');
 
 /**
@@ -26,17 +25,6 @@ exports.initLocals = (req, res, next) => {
 
 	if (req.cookies.target && req.cookies.target == locals.page.path) res.clearCookie('target');
 	next();
-};
-
-/**
-	Prevents people from accessing protected pages when they're not signed in
- */
-exports.requireUser = (req, res, next) => {
-	if (!req.user) {
-		res.redirect('/signin');
-	} else {
-		next();
-	}
 };
 
 exports.enforceHttps = (req, res, next) => {

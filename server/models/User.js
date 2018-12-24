@@ -61,7 +61,6 @@ User.schema.virtual('canAccessKeystone').get(function () {
 User.relationship({ ref: 'Request', path: 'submited', refPath: 'submitedOn' });
 User.relationship({ ref: 'Request', path: 'was assigned', refPath: 'wasAssignedOn' });
 User.relationship({ ref: 'Price', path: 'prices', refPath: 'submitedBy' });
-// TODO: relation with guests requests
 
 User.schema.methods.resetPassword = function(req, res, next) {
 	var user = this;

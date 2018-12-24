@@ -10,3 +10,11 @@ exports.getRoles = async (userId) => {
 	roles = user.isActive ? [...roles, ROLES.DRVIER] : [...roles];
 	return roles;
 }
+
+exports.requireUser = (req, res, next = null) => {
+	if (!req.user) {
+		res.redirect('/signin');
+		return false;
+	}
+	return true;
+};

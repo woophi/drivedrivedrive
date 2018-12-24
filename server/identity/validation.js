@@ -1,12 +1,9 @@
 const { Rstatus, ROLES } = require('../lib/staticVars');
 const { verifyToken } = require('./verify');
+const { requireUser } = require('./claims');
 
 exports.validateToken = (req, res, next) => {
-	if (!req.user) {
-		return res.apiResponse({
-      Rstatus: Rstatus.UNAUTHORIZED
-    });
-	}
+	requireUser(req, res, next);
 	const userId = req.body.userId;
 	const token = req.headers.authorization || req.user.token;
 	if (!token)
@@ -22,6 +19,7 @@ exports.validateToken = (req, res, next) => {
 }
 
 exports.authorizedForAdmin = (req, res, next) => {
+	if (!requireUser(req, res)) return;
 	const token = req.user && req.user.token || '';
 	const { claims, verificaitionError } = verifyToken(token);
 	if (verificaitionError)
@@ -32,6 +30,7 @@ exports.authorizedForAdmin = (req, res, next) => {
 	next();
 }
 exports.authorizedForDriver = (req, res, next) => {
+	if (!requireUser(req, res)) return;
 	const token = req.user && req.user.token || '';
 	const { claims, verificaitionError } = verifyToken(token);
 	if (verificaitionError)
@@ -42,6 +41,7 @@ exports.authorizedForDriver = (req, res, next) => {
 	next();
 }
 exports.authorizedForSuperAdmin = (req, res, next) => {
+	if (!requireUser(req, res)) return;
 	const token = req.user && req.user.token || '';
 	const { claims, verificaitionError } = verifyToken(token);
 	if (verificaitionError)

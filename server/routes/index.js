@@ -23,7 +23,7 @@ const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
 const { schedulerWorker } = require('../lib/scheduler');
 const helmet = require('helmet');
-const { identity: { validateToken, authorizedForAdmin } } = require('../identity');
+const { identity: { validateToken, authorizedForAdmin, requireUser } } = require('../identity');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -53,7 +53,7 @@ exports = module.exports = (app) => {
 	app.get('/reset-password/:key', routes.views.index);
 
 	// // User
-	app.get('/me*', middleware.requireUser);
+	app.get('/me*', requireUser);
 	app.get('/me', routes.views.index);
 
 	// Emails
