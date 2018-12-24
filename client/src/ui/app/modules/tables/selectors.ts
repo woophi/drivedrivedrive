@@ -77,7 +77,7 @@ export const createTableSelectors = <T extends any[] | object>(
           : prop(sortBy);
         const sortAsc = sortWith([
           ascend(normalized),
-          ascend(prop('userId')) // FIXME: userId is not present on all lists, change it
+          ascend(prop('userId'))
         ]);
         const sortDesc = sortWith([
           descend(normalized),

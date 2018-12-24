@@ -60,9 +60,17 @@ export const api = {
     history: (userId: string) =>
       a<apiData.TableRequest[]>('requests/history', { userId }),
     inProcess: (userId: string) =>
-      a<apiData.TableRequest[]>('requests/process', { userId }),
-    all: (userId: string) =>
-      a<apiData.TableRequest[]>('requests/all', { userId })
+      a<apiData.TableRequest[]>('requests/process', { userId })
+  },
+  admin: {
+    requests: {
+      all: () =>
+        a<apiData.TableRequest[]>('adm/requests/all')
+    },
+    request: {
+      get: (requestId: string) =>
+        a<any>('adm/request/get', { requestId })
+    }
   }
 };
 
@@ -201,6 +209,7 @@ type DataLoader = DLF<
   DLF<'inProcessRequests', apiData.DataState['inProcessRequests']['result']> &
   DLF<'guestRequest', apiData.DataState['guestRequest']['result']> &
   DLF<'allRequests', apiData.DataState['allRequests']['result']> &
+  DLF<'adminRequest', apiData.DataState['adminRequest']['result']> &
   DLF<'subscribeState', apiData.DataState['subscribeState']['result']>;
 
 export const loadData: DataLoader = loadDataImpl as any;

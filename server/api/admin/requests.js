@@ -3,8 +3,7 @@ const { apiError } = require('../../lib/helpers');
 const moment = require('moment');
 
 exports.getAll = (_, res) => {
-	const Request = keystone.list('Request');
-	Request.model
+	keystone.list('Request').model
 		.find()
 		.exec((err, results) => {
 			if (err)

@@ -3,7 +3,8 @@ import { store } from 'core/shared/store';
 
 const state = store.getState();
 
-export const getRequests = () => {
-  const userId = (state.authInfo && state.authInfo.userId) || '';
-  return loadData('allRequests', () => api.requests.all(userId));
-};
+export const getRequests = () =>
+  loadData('allRequests', () => api.admin.requests.all());
+
+export const getRequest = (requestId: string) =>
+  loadData('adminRequest', () => api.admin.request.get(requestId));

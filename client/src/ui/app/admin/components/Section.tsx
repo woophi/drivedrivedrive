@@ -4,13 +4,14 @@ import { Route } from 'react-router';
 import { getLocation } from 'core/app/selectors';
 import { Location } from 'history';
 import { AppState } from 'core/models/app';
+import { SectionChild } from './SectionChild';
 
 type OwnProps = {
   path: string
 };
 
 type Props = {
-  location: Location
+  location: Location;
 } & OwnProps;
 
 class SectionComponent extends React.PureComponent<Props> {
@@ -25,7 +26,14 @@ class SectionComponent extends React.PureComponent<Props> {
         path={`/adm/${path}`}
       >
         {({ match }) =>
-          !!match ? children : null }
+          !!match ?
+            <SectionChild
+              match={match}
+            >
+              {children}
+            </SectionChild>
+          : null
+        }
       </Route>
     )
   }

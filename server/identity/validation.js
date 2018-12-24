@@ -22,7 +22,7 @@ exports.validateToken = (req, res, next) => {
 }
 
 exports.authorizedForAdmin = (req, res, next) => {
-	const token = req.user.token;
+	const token = req.user && req.user.token || '';
 	const { claims, verificaitionError } = verifyToken(token);
 	if (verificaitionError)
 		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });
@@ -32,7 +32,7 @@ exports.authorizedForAdmin = (req, res, next) => {
 	next();
 }
 exports.authorizedForDriver = (req, res, next) => {
-	const token = req.user.token;
+	const token = req.user && req.user.token || '';
 	const { claims, verificaitionError } = verifyToken(token);
 	if (verificaitionError)
 		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });
@@ -42,7 +42,7 @@ exports.authorizedForDriver = (req, res, next) => {
 	next();
 }
 exports.authorizedForSuperAdmin = (req, res, next) => {
-	const token = req.user.token;
+	const token = req.user && req.user.token || '';
 	const { claims, verificaitionError } = verifyToken(token);
 	if (verificaitionError)
 		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });

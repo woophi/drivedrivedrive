@@ -26,7 +26,7 @@ const TC = composeTable<TableRequest>({
   showHeaderDividers: true,
   showHeaderSortControls: true,
   onRowClick: ({ rowData }) => {
-    changeUrl(`/adm/requests/edit/${rowData.id}`);
+    changeUrl(`/adm/requests/edit/request/${rowData.id}`);
   }
 });
 
