@@ -13,6 +13,7 @@ exports.getRoles = async (userId) => {
 
 exports.requireUser = (req, res, next = null) => {
 	if (!req.user) {
+		keystone.set('prevUrl', req.url);
 		res.redirect('/signin');
 		return false;
 	}

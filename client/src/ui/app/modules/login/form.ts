@@ -1,8 +1,9 @@
 import * as data from 'core/models';
-import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
+import { FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
 import { loginSecret } from 'core/app/login';
 import { changeUrl } from 'ui/app/operations';
 import { saveUnauthPath } from 'ui/app/modules/me/operations';
+import { store } from 'core/shared/store';
 
 type SharedProps = {
   unauthPath: string
@@ -27,8 +28,9 @@ export const submitLogin: FormSubmitHandler<data.LoginInfo> = async (values: dat
   try {
     await loginSecret(values);
     await dispatch(reset('login'));
-    if (props.unauthPath) {
-      changeUrl(props.unauthPath);
+    const savePath = props.unauthPath || store.getState().authInfo.prevUrl;
+    if (savePath) {
+      changeUrl(savePath);
       saveUnauthPath('');
     } else {
       changeUrl(`/me`);

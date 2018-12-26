@@ -53,7 +53,6 @@ exports = module.exports = (app) => {
 	app.get('/reset-password/:key', routes.views.index);
 
 	// // User
-	app.get('/me*', requireUser);
 	app.get('/me', routes.views.index);
 
 	// Emails
@@ -113,10 +112,6 @@ exports = module.exports = (app) => {
 	app.post('/api/adm/request/get', authorizedForAdmin, routes.api.admin.request.getRequest);
 	app.post('/api/adm/request/update', authorizedForAdmin, routes.api.admin.request.updateRequest);
 	app.post('/api/adm/request/approve', authorizedForAdmin, routes.api.admin.request.approveRequest);
-	// adm notifications
-	// app.post('/api/adm/notification/guest', authorizedForAdmin, routes.api.admin.request.updateRequest);
-	// app.post('/api/adm/notification/driver', authorizedForAdmin, routes.api.admin.request.updateRequest);
-	// app.post('/api/adm/notification/drivers', authorizedForAdmin, routes.api.admin.request.updateRequest);
 
 	// dead code
 	app.post('/api/guest/get/request', routes.api.app.guest.getGuestRequest);

@@ -1,6 +1,7 @@
 import { store } from 'core/shared/store';
 import * as models from 'core/models';
 import * as apiData from 'core/models/api';
+import * as adminData from 'core/models/admin';
 import * as isEmpty from 'ramda/src/isEmpty';
 import { callApi, HTTPMethod } from 'core/shared/common';
 
@@ -69,7 +70,11 @@ export const api = {
     },
     request: {
       get: (requestId: string) =>
-        a<any>('adm/request/get', { requestId })
+        a<adminData.Request>('adm/request/get', { requestId }),
+      update: (requestId: string, data: adminData.GuestRequest) =>
+        a<void>('adm/request/update', { requestId, data }),
+      approve: (requestId: string) =>
+        a<void>('adm/request/approve', { requestId })
     }
   }
 };

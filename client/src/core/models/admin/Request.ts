@@ -1,7 +1,9 @@
 export type Request = {
+  _id: string,
   guest: GuestRequest,
 	created: string,
-	accepted: string,
+  accepted: string,
+  approved: string,
 	assignedBy: string[],
 	assignedPrices: string[],
 	wasAssignedOn: string[],

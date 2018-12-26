@@ -27,20 +27,22 @@ export class DatePickerComponent extends React.PureComponent<
     focus: false
   };
 
-
-  handleFocus = (arg?: any) => {
-    this.setState({ focus: !this.state.focus });
-    if (this.state.focus) {
-      this.props.input.onFocus(arg);
-    } else {
-      this.props.input.onBlur(arg);
+  componentDidUpdate() {
+    const { meta: { pristine, initial } } = this.props;
+    if (!!this.state.date && pristine && initial !== this.state.date.toISOString()) {
+      this.handleDate(this.initialDate())
     }
+  }
+
+
+  handleFocus = () => {
+    this.setState({ focus: !this.state.focus });
   }
 
   handleDate = (dateObj: moment.Moment) => {
     this.setState({ date: dateObj });
     if (dateObj) {
-      this.props.input.onChange(dateObj.format('YYYY-MM-DD'));
+      this.props.input.onChange(dateObj.format('YYYY-MM-DD') + 'T00:00:00.000Z');
     } else {
       this.props.input.onChange('');
     }

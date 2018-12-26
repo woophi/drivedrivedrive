@@ -66,12 +66,15 @@ exports.auth = (req, res) => {
 				message: 'Авторизация не удалась'
 			}, 401);
 		} else {
+			const prevUrl = keystone.get('prevUrl');
+			keystone.set('prevUrl', null);
 			return res.apiResponse({
 				userId: user.id || user._id,
 				fullName: user.name,
 				userName: user.email,
 				roles: claims.roles,
-				token: req.body.token
+				token: req.body.token,
+				prevUrl
 			});
 		}
 

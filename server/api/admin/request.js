@@ -18,7 +18,7 @@ exports.getRequest = (req, res) => {
 exports.updateRequest = (req, res) => {
 	const { requestId, ...body } = req.body;
 	const payload = {
-		...body
+		guest: body.data
 	};
 	keystone.list('Request').model
 		.findById(requestId)
