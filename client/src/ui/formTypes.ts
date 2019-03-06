@@ -5,4 +5,6 @@ export type TextFieldProps = {
   type?: string;
   fullWidth?: boolean;
   className?: string;
+  disabled?: boolean;
+  id?: string;
 };

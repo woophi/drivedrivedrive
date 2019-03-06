@@ -1,5 +1,4 @@
 const keystone = require('keystone');
-const User = keystone.list('User');
 const Request = keystone.list('Request');
 const { compareGuestTimeWithToday } = require('../../lib/helpers');
 const moment = require('moment');

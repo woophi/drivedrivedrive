@@ -5,14 +5,13 @@ import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
 import Paper from 'material-ui/Paper';
-import { getCheckRoles, getRequestId } from '../selectors';
+import { getRequestId } from '../selectors';
 import { getRequestState, getRequest } from '../operations';
 import { Rstatus } from 'core/models/api';
 import * as moment from 'moment';
 import Form from './Form';
 
 const mapStateToProps = (state: AppState) => ({
-  getRoles: getCheckRoles(state),
   requestId: getRequestId(state),
   getRequestStatus: state.ui.api.requsetState.result,
   request: state.ui.api.selectedRequest.result

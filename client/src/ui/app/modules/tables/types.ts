@@ -50,7 +50,8 @@ export type TablesState = {
   openRequests: TableState,
   activeRequests: TableState,
   historyRequests: TableState,
-  inProcessRequests: TableState
+  inProcessRequests: TableState,
+  allRequests: TableState,
 };
 
 export type FilterChangeDispatch = {

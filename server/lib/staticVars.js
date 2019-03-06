@@ -21,3 +21,8 @@ exports.Rstatus = Object.freeze({
   UNAUTHORIZED: -1,
   FORBIDDEN: -2
 });
+exports.ROLES = Object.freeze({
+	GODLIKE: 'Godlike',
+	ADMIN: 'Admin',
+	DRVIER: 'Driver'
+});

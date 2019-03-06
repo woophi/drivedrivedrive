@@ -2,9 +2,8 @@ const keystone = require('keystone');
 const Visitor = keystone.list('Visitor');
 const geoip = require('geoip-lite');
 const parser = require('ua-parser-js');
-const secret = require('../../lib/staticVars').secret;
-const jwt = require('jsonwebtoken');
-const { getUserIp } = require('../../lib/helpers');
+const { getUserIp, apiError } = require('../../lib/helpers');
+const { identity: { setNewToken } } = require('../../identity');
 
 exports.setUniqVisitor = (req, res) => {
 	const ua = parser(req.headers['user-agent']);
@@ -15,7 +14,7 @@ exports.setUniqVisitor = (req, res) => {
 	const browser = ua.browser;
 	const os = ua.os;
 	const device = ua.device;
-	const uniqVisitorDataHash = jwt.sign(
+	const uniqVisitorDataHash = setNewToken(
 		{
 			language: lang,
 			ip: getUserIp(req),
@@ -24,15 +23,14 @@ exports.setUniqVisitor = (req, res) => {
 			browser,
 			os,
 			device
-		},
-		secret
+		}
 	);
 	uniqVisitor = new Visitor.model({
 		'value': uniqVisitorDataHash
 	});
 	uniqVisitor.save(err => {
 		if (err) {
-			return res.apiError({message: 'Проблема сохранить tracked data' }, '', err, 500);
+			return apiError(res, {message: 'Проблема сохранить tracked data' }, 500);
 		}
 		return res.apiResponse();
 	});

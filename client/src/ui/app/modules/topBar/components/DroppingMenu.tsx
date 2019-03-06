@@ -16,23 +16,27 @@ import { signOut } from 'core/app/login';
 import { returntypeof } from 'react-redux-typescript';
 import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
-import { getSelectedPath } from '../selectors';
+import { getSelectedPath, getSelectedSubPath } from '../selectors';
+import { getCheckRoles } from 'core/app/selectors';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
-  slectedPath: getSelectedPath(state)
+  currentPath: getSelectedPath(state),
+  subPath: getSelectedSubPath(state),
+  getRoles: getCheckRoles(state)
 });
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps;
 
 class DroppingMenuComponent extends React.Component<Props> {
   changeIconOnPath = (icon: JSX.Element, btnName: string) => {
-    if (this.props.slectedPath === btnName) {
+    const { currentPath, subPath } = this.props;
+    if (`${currentPath}/${subPath}` === `${btnName}/`) {
       return <ArrowRight color={blue500} />;
     } else {
       return icon;
     }
-  }
+  };
 
   get logInOutBtn() {
     if (this.props.authInfo) {
@@ -48,7 +52,7 @@ class DroppingMenuComponent extends React.Component<Props> {
       return (
         <Link className={'tD-none'} to={'/signin'}>
           <MenuItem
-            disabled={this.props.slectedPath === 'signin'}
+            disabled={this.props.currentPath === 'signin'}
             leftIcon={this.changeIconOnPath(
               <FontIcon className="fas fa-sign-in-alt" />,
               'signin'
@@ -101,6 +105,24 @@ class DroppingMenuComponent extends React.Component<Props> {
     );
   }
 
+  get manageLinks() {
+    const { admin } = this.props.getRoles;
+
+    return (
+      admin && (
+        <Link className={'tD-none'} to={'/adm'}>
+          <MenuItem
+            leftIcon={this.changeIconOnPath(
+              <FontIcon className={'fas fa-cogs'} />,
+              'adm'
+            )}
+            primaryText="Управление"
+          />
+        </Link>
+      )
+    );
+  }
+
   render() {
     const { authInfo } = this.props;
     return (
@@ -112,6 +134,7 @@ class DroppingMenuComponent extends React.Component<Props> {
         <Link className={'tD-none'} to={'/'}>
           <MenuItem leftIcon={<ActionHome />} primaryText="Главная" />
         </Link>
+        {this.manageLinks}
         {!authInfo && this.joinLink}
         {authInfo && this.requestsLink}
         {authInfo && this.profileLink}

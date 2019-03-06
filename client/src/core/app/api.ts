@@ -1,6 +1,7 @@
 import { store } from 'core/shared/store';
 import * as models from 'core/models';
 import * as apiData from 'core/models/api';
+import * as adminData from 'core/models/admin';
 import * as isEmpty from 'ramda/src/isEmpty';
 import { callApi, HTTPMethod } from 'core/shared/common';
 
@@ -61,6 +62,20 @@ export const api = {
       a<apiData.TableRequest[]>('requests/history', { userId }),
     inProcess: (userId: string) =>
       a<apiData.TableRequest[]>('requests/process', { userId })
+  },
+  admin: {
+    requests: {
+      all: () =>
+        a<apiData.TableRequest[]>('adm/requests/all')
+    },
+    request: {
+      get: (requestId: string) =>
+        a<adminData.Request>('adm/request/get', { requestId }),
+      update: (requestId: string, data: adminData.GuestRequest) =>
+        a<void>('adm/request/update', { requestId, data }),
+      approve: (requestId: string) =>
+        a<void>('adm/request/approve', { requestId })
+    }
   }
 };
 
@@ -198,6 +213,8 @@ type DataLoader = DLF<
   DLF<'historyRequests', apiData.DataState['historyRequests']['result']> &
   DLF<'inProcessRequests', apiData.DataState['inProcessRequests']['result']> &
   DLF<'guestRequest', apiData.DataState['guestRequest']['result']> &
+  DLF<'allRequests', apiData.DataState['allRequests']['result']> &
+  DLF<'adminRequest', apiData.DataState['adminRequest']['result']> &
   DLF<'subscribeState', apiData.DataState['subscribeState']['result']>;
 
 export const loadData: DataLoader = loadDataImpl as any;

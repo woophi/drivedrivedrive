@@ -7,9 +7,6 @@
  * you have more middleware you may want to group it as separate
  * modules in your project's /lib directory.
  */
-const keystone = require('keystone');
-const { secret, Rstatus } = require('../lib/staticVars');
-const jwt = require('jsonwebtoken');
 const RateLimit = require('express-rate-limit');
 
 /**
@@ -30,17 +27,6 @@ exports.initLocals = (req, res, next) => {
 	next();
 };
 
-/**
-	Prevents people from accessing protected pages when they're not signed in
- */
-exports.requireUser = (req, res, next) => {
-	if (!req.user) {
-		res.redirect('/signin');
-	} else {
-		next();
-	}
-};
-
 exports.enforceHttps = (req, res, next) => {
   if (!req.secure &&
     req.get('x-forwarded-proto') !== 'https' &&
@@ -49,27 +35,6 @@ exports.enforceHttps = (req, res, next) => {
   } else {
     next();
   }
-}
-
-exports.validateToken = (req, res, next) => {
-	if (!req.user) {
-		return res.apiResponse({
-      Rstatus: Rstatus.UNAUTHORIZED
-    });
-	}
-	const userId = req.body.userId;
-	const token = req.headers.authorization;
-	if (!token)
-		return res.status(403).send({ auth: false, message: 'No token provided.', Rstatus: Rstatus.FORBIDDEN });
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err)
-			return res.status(500).send({ auth: false, message: 'Failed to authenticate token.', Rstatus: Rstatus.FORBIDDEN });
-
-		if (userId && userId !== decoded.id)
-			return res.status(400).send({ auth: false, message: 'Unable to get data.', Rstatus: Rstatus.FORBIDDEN });
-		// if everything good, save to request for use in other routes
-		next();
-	});
 }
 const getApiLimiter = () => new RateLimit({
 	windowMs: 60*60*1000,

@@ -4,13 +4,13 @@ import { TabsRequests } from './Tabs';
 import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
-import { getCheckRoles } from '../selectors';
+import { getCheckRoles } from 'core/app/selectors';
 import Paper from 'material-ui/Paper';
 
 type Props = {
   roles: {
-    admin: string,
-    activeDriver: string
+    admin: boolean,
+    activeDriver: boolean
   }
 };
 
@@ -36,7 +36,7 @@ class RequestsComponent extends React.PureComponent<Props> {
   get view() {
     const { roles } = this.props;
     const { activeDriver, admin } = roles;
-    if (!!activeDriver || !!admin) {
+    if (activeDriver || admin) {
       return <TabsRequests />;
     } else {
       return (

@@ -49,6 +49,9 @@ class Index extends React.Component<Props> {
       case 'unsubscribe':
         return 'Отписка от почтовой рассылки';
 
+      case 'adm':
+        return 'Управление';
+
       default:
         return '';
     }
@@ -61,7 +64,7 @@ class Index extends React.Component<Props> {
         style={{minHeight: 60}}
         titleStyle={{maxWidth: isMobile ? 200 : 'unset'}}
         title={this.titleChange}
-        iconElementLeft={<IconButton><NavigationLogo onClick={this.handleHome} /></IconButton>}
+        iconElementLeft={<IconButton><NavigationLogo /></IconButton>}
         iconElementRight={<DroppingMenu />}
       />
     )

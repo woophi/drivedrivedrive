@@ -36,7 +36,8 @@ Request.add({
 	rated: { type: Boolean, default: false, noedit: true, label: 'Заявка оценена' },
 	notified: { type: Date, noedit: true, label: 'Отправлено уведомление' },
 	confirmedGDPR: { type: Types.Relationship, ref: 'Gdpr', index: true, noedit: true, label: 'GDPR'},
-	ip: { type: String,  noedit: true, hidden: true }
+	ip: { type: String, noedit: true, hidden: true },
+	approved: { type: Types.Relationship, ref: 'Approval', index: true, noedit: true, label: 'Одобрено' }
 });
 
 Request.relationship({ ref: 'Price', path: 'prices', refPath: 'assignedRequest' });

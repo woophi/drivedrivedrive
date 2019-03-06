@@ -8,7 +8,8 @@ import { TabsProfile } from './Tabs';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import { NavLink } from 'ui/app/components/Links';
-import { getCheckRoles, getRating } from '../selectors';
+import { getRating } from '../selectors';
+import { getCheckRoles } from 'core/app/selectors';
 
 const mapStateToProps = (state: AppState) => ({
   getRoles: getCheckRoles(state),
