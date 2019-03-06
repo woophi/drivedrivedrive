@@ -1,16 +1,14 @@
 const keystone = require('keystone');
 const Visitor = keystone.list('Visitor');
-const geoip = require('geoip-lite');
 const parser = require('ua-parser-js');
-const { getUserIp, apiError } = require('../../lib/helpers');
+const { apiError } = require('../../lib/helpers');
+const { getGeoData } = require('../../lib/tracking');
 const { identity: { setNewToken } } = require('../../identity');
 
 exports.setUniqVisitor = (req, res) => {
 	const ua = parser(req.headers['user-agent']);
 	const lang = req.headers['accept-language'];
-	const geo = geoip.lookup(getUserIp(req));
-	const city = geo && geo.city;
-	const country = geo && geo.country;
+	const geoData = getGeoData(req);
 	const browser = ua.browser;
 	const os = ua.os;
 	const device = ua.device;
@@ -18,8 +16,8 @@ exports.setUniqVisitor = (req, res) => {
 		{
 			language: lang,
 			ip: getUserIp(req),
-			city,
-			country,
+			city: geoData.city,
+			country: geoData.country,
 			browser,
 			os,
 			device

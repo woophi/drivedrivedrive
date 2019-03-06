@@ -8,6 +8,7 @@ const {
 	trimSpaces,
 	apiError
 } = require('../../lib/helpers');
+const { getGeoData } = require('../../lib/tracking');
 const crypto = require('crypto');
 const { checkMails } = require('../../lib/checkMail');
 
@@ -19,6 +20,7 @@ exports.sendRequest = (req, res) => {
 	let	requestData;
 	let confirmedGDPR;
 	let admins;
+	let auditId;
 
 	const buf = crypto.randomBytes(128).toString('hex');
   const guestData = {
@@ -34,11 +36,11 @@ exports.sendRequest = (req, res) => {
 			uniqHash: buf,
 			phone: req.body.phone
     },
-		created: Date.now(),
-		ip: getUserIp(req)
+		created: Date.now()
 	};
 
 	const RequestModel = keystone.list('Request').model;
+	const AuditModel = keystone.list('Audit').model;
 	const UserModel = keystone.list('User').model;
 	const GdprModel = keystone.list('Gdpr').model;
   async.series([
@@ -93,6 +95,37 @@ exports.sendRequest = (req, res) => {
         return cb();
       });
 
+		},
+		(cb) => {
+			const geoData = getGeoData(req);
+			const newAudit = new AuditModel({
+				ip: getUserIp(req),
+				country: geoData.country,
+				city: geoData.city,
+				language: req.body.lang,
+				auditRequest: requestData._id
+			});
+      newAudit.save((err, audit) => {
+        if (err) {
+					return apiError(res, {message: 'Проблема создать аудит.' }, 500);
+				}
+				auditId = audit._id;
+        return cb();
+      });
+
+		},
+
+		(cb) => {
+			requestData
+				.set({
+					audit: auditId
+				})
+				.save((err) => {
+					if (err) {
+						return apiError(res, {message: 'Проблема добавить аудит к заявке' }, 500);
+					}
+					return cb();
+				});
 		},
 
 		(cb) => {
