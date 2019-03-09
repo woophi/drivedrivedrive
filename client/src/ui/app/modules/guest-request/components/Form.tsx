@@ -5,29 +5,25 @@ import { connect as ReduxConnect } from 'react-redux';
 import { IStyle, createComponent } from 'react-fela';
 import { AppState } from 'core/models/app';
 import { RequestInfo } from 'core/models';
-import { getGuestRequestResult } from '../selectors';
+import { getGuestRequestResult, getGuestRequestData } from '../selectors';
 import { validateRequest, submitEditRequest } from '../form';
 import { Alert } from 'ui/app/components/Alert';
 import { Preloader } from 'ui/app/components/preloader';
 import { CustomInputField, CustomDateField } from 'ui/atoms/fields';
 import { parseToInt } from 'ui/shared/transforms';
 import { FormButtonsRow } from 'ui/atoms/buttons';
-import { resetForm } from 'ui/app/operations';
 
 type OwnProps = {
   style?: IStyle;
 };
 
-type Props = {} & OwnProps;
+type Props = {
+  getRequestErr: string;
+} & OwnProps;
 
 class FormComponent extends React.Component<
   Props & InjectedFormProps<RequestInfo, Props>
 > {
-
-  handleResetForm = () => {
-    resetForm('guestRequest');
-  }
-
   render() {
     const {
       style,
@@ -35,12 +31,15 @@ class FormComponent extends React.Component<
       pristine,
       handleSubmit,
       error,
-      initialValues
+      initialValues,
+      getRequestErr
     } = this.props;
     return (
       <>
         <Form style={style} onSubmit={handleSubmit} autoComplete={''}>
-          {error && <Alert mssg={error} type={'error'} />}
+          {(error || getRequestErr) && (
+            <Alert mssg={error || getRequestErr} type={'error'} />
+          )}
           <Field
             name="name"
             component={CustomInputField}
@@ -130,11 +129,11 @@ class FormComponent extends React.Component<
             labelCancel={'Сбросить изменения'}
             labelSubmit={'Обновить'}
             pristine={pristine}
-            resetForm={this.handleResetForm}
+            resetForm={'guestRequest'}
             submitting={submitting}
           />
         </Form>
-        <Preloader isShow={!initialValues} />
+        <Preloader isShow={!initialValues && !getRequestErr} />
       </>
     );
   }
@@ -143,7 +142,10 @@ class FormComponent extends React.Component<
 export const FormEdit = compose(
   ReduxConnect((state: AppState, props: OwnProps) => ({
     initialValues: getGuestRequestResult(state),
-    hashId: state.ui.guests.hashId
+    hashId: state.ui.guests.hashId,
+    getRequestErr:
+      getGuestRequestData(state).errorInfo &&
+      JSON.stringify((getGuestRequestData(state).errorInfo))
   })),
   reduxForm<RequestInfo, Props>({
     form: 'guestRequest',
@@ -154,12 +156,16 @@ export const FormEdit = compose(
   })
 )(FormComponent);
 
-const Form = createComponent(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  margin: '0 auto',
-  padding: '1rem',
-  height: '100%',
-  maxWidth: 700
-}), 'form', ['onSubmit','autoComplete', 'style']);
+const Form = createComponent(
+  () => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: '0 auto',
+    padding: '1rem',
+    height: '100%',
+    maxWidth: 700
+  }),
+  'form',
+  ['onSubmit', 'autoComplete', 'style']
+);

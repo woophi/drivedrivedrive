@@ -52,6 +52,9 @@ class Index extends React.Component<Props> {
       case 'adm':
         return 'Управление';
 
+      case 'guest':
+        return 'Ваш трансфер';
+
       default:
         return '';
     }

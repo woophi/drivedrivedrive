@@ -18,7 +18,6 @@ import { DataStatus } from 'core/models/api';
 import { createComponent, IStyle } from 'react-fela';
 import { updateRequest } from '../form';
 import { parseToInt } from 'ui/shared/transforms';
-import { resetForm } from 'ui/app/operations';
 import { CustomInputField, CustomCheckBoxField, CustomDateField } from 'ui/atoms/fields';
 import { FormButtonsRow } from 'ui/atoms/buttons';
 
@@ -40,10 +39,6 @@ class EditRequestComponent extends React.Component<
     const { match } = this.props;
     approveRequest(match.params.id);
   }
-  handleResetForm = () => {
-    resetForm('editRequest')
-  }
-
   get fields() {
     const {
       pristine,
@@ -148,7 +143,7 @@ class EditRequestComponent extends React.Component<
           labelCancel={'Сбросить изменения'}
           labelSubmit={'Обновить'}
           pristine={pristine}
-          resetForm={this.handleResetForm}
+          resetForm={'editRequest'}
           submitting={submitting}
         />
       </>

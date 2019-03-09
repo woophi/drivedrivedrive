@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { createComponent } from 'react-fela';
 import { RaisedButton } from 'material-ui';
+import { resetForm } from 'ui/app/operations';
 
 type Props = {
   pristine: boolean;
   submitting: boolean;
-  resetForm: () => void;
+  resetForm: string;
   labelSubmit: string;
   labelCancel: string;
 }
@@ -13,16 +14,18 @@ type Props = {
 export class FormButtonsRow extends React.PureComponent<Props> {
   static defaultProps: Partial<Props> = {
     labelCancel: 'Сбросить',
-    labelSubmit: 'Сохранить'
+    labelSubmit: 'Сохранить',
+    resetForm: ''
   }
 
+  handleResetForm = () => resetForm(this.props.resetForm);
+
   render() {
-    const { pristine, submitting, resetForm, labelSubmit, labelCancel } = this.props;
+    const { pristine, submitting, labelSubmit, labelCancel } = this.props;
     return (
       <BtnContainer>
         <RaisedButton
-          disabled={pristine || submitting}
-          onClick={resetForm}
+          onClick={this.handleResetForm}
           style={{ marginRight: '1rem' }}
           buttonStyle={{ padding: '0' }}
         >
