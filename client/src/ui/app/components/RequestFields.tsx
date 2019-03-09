@@ -7,7 +7,7 @@ import { DatePickerComponent } from 'ui/app/components/DatePickerField';
 type TextFieldProps = {
   type: string;
   label: any;
-  placeHodler?: string;
+  placeholder?: string;
   styleInput?: React.CSSProperties;
   styleLable?: React.CSSProperties;
   additionalClassName?: string;
@@ -47,7 +47,7 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
           {...props.input}
           className={labelClassName}
           type={props.type}
-          placeholder={props.placeHodler || ''}
+          placeholder={props.placeholder || ''}
           style={props.styleInput || {}}
           required={props.required || false}
           id={props.id || ''}
@@ -225,7 +225,7 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
           type="text"
           label={'Ваш комментарий'}
           {...{
-            placeHodler: 'ваши пожелания или номер рейса',
+            placeholder: 'ваши пожелания или номер рейса',
             additionalClassName: styles.hideRequired
           }}
         />

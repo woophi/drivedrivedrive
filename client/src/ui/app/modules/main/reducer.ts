@@ -1,14 +1,11 @@
 import { GuestDispatch, GuestState, HandlePoints } from './types';
-import { LocalStorageManager } from 'core/localStorageManager';
-
-const savedRequestHashId = LocalStorageManager.get('uniqGuest', 'hashId');
 
 const defaultState: GuestState = {
   guestSubmitForm: false,
   handlePoint: HandlePoints.none,
   openPrivacyPolicy: false,
   validEmail: true,
-  hashId: savedRequestHashId ? savedRequestHashId : ''
+  hashId: ''
 };
 
 export const reducer = (

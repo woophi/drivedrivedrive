@@ -142,6 +142,22 @@ exports.sendRequest = (req, res) => {
 
 			sendEmail(emailKeys, params);
 			return cb();
+		},
+
+		(cb) => {
+			const emailKeys = {
+				templateName: 'guest-notify-new-request',
+				to: trimSpaces(req.body.email.toLowerCase()),
+				subject: `Ваше путешествие из ${requestData.guest.from} в ${requestData.guest.to}`
+			};
+
+			const params = {
+				guestData: requestData,
+				uniqHash: requestData.guest.uniqHash
+			};
+
+			sendEmail(emailKeys, params);
+			return cb();
 		}
 
   ], (err) => {

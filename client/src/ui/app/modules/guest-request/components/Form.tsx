@@ -100,7 +100,7 @@ class FormComponent extends React.Component<
             name="date"
             component={CustomDateField}
             type="date"
-            id={'adm_request_date'}
+            id={'guest_request_date'}
             {...{
               floatingLabelText: 'Дата',
               fullWidth: true
@@ -122,7 +122,7 @@ class FormComponent extends React.Component<
             {...{
               floatingLabelText: 'Комментарий',
               fullWidth: true,
-              placeHodler: 'ваши пожелания или номер рейса'
+              hintText: 'ваши пожелания или номер рейса'
             }}
           />
 

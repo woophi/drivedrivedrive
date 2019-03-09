@@ -1,0 +1,11 @@
+extends layouts/base
+block content
+	-const date = moment(guestData.guest.date).locale('ru').format('LL')
+	p Здравствуйте #{guestData.guest.name}!
+	p Спасибо, что выбрали нас!
+	p Ваша заявка
+	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
+	if guestData.guest.comment
+		p Комментарий: #{guestData.guest.comment}
+	p Вы можете редактировать заявку и отслеживать ее статус перейдя по ссылке ниже.
+	p: a(href=host + '/guest/' + guestData._id + '/' + guestData.guest.uniqHash) Ссылка на заявку

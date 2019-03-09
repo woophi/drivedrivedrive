@@ -16,11 +16,13 @@ export const CustomDateField: React.SFC<
     <>
       <DateLabel>{props.floatingLabelText}</DateLabel>
       <DateWrapper>
-        <DatePickerComponent
-          input={props.input}
-          meta={props.meta}
-          uniqId={props.id}
-        />
+        {!!props.input.value &&
+          <DatePickerComponent
+            input={props.input}
+            meta={props.meta}
+            uniqId={props.id}
+          /> || null
+        }
       </DateWrapper>
     </>
   </TextField>

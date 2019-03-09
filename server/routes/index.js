@@ -23,7 +23,7 @@ const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
 const { schedulerWorker } = require('../lib/scheduler');
 const helmet = require('helmet');
-const { identity: { validateToken, authorizedForAdmin, requireUser } } = require('../identity');
+const { identity: { validateToken, authorizedForAdmin } } = require('../identity');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -64,6 +64,10 @@ exports = module.exports = (app) => {
 	app.get('/request/:id/confirm', routes.views.index);
 	app.get('/request/:id/rate?', routes.views.index);
 	app.get('/requests', routes.views.index);
+
+	// guest
+  app.get('/guest/:id/:hash', routes.views.index);
+  app.get('/guest', routes.views.index);
 
 	// new admin
 	app.get('/adm*', authorizedForAdmin, routes.views.index);
@@ -113,7 +117,7 @@ exports = module.exports = (app) => {
 	app.post('/api/adm/request/update', authorizedForAdmin, routes.api.admin.request.updateRequest);
 	app.post('/api/adm/request/approve', authorizedForAdmin, routes.api.admin.request.approveRequest);
 
-	// dead code
+	// guest api
 	app.post('/api/guest/get/request', routes.api.app.guest.getGuestRequest);
 	app.post('/api/guest/update/request', routes.api.app.guest.updateGuestRequest);
 };
