@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { compose } from 'redux';
-import { InjectedFormProps, reduxForm } from 'redux-form';
+import { InjectedFormProps, reduxForm, Field } from 'redux-form';
 import { connect as ReduxConnect } from 'react-redux';
-import { IStyle, FelaThemeProps, createComponent } from 'react-fela';
-import { RequestFields } from 'ui/app/components/RequestFields';
+import { IStyle, createComponent } from 'react-fela';
 import { AppState } from 'core/models/app';
 import { RequestInfo } from 'core/models';
 import { getGuestRequestResult } from '../selectors';
 import { validateRequest, submitEditRequest } from '../form';
 import { Alert } from 'ui/app/components/Alert';
+import { Preloader } from 'ui/app/components/preloader';
+import { CustomInputField, CustomDateField } from 'ui/atoms/fields';
+import { parseToInt } from 'ui/shared/transforms';
+import { FormButtonsRow } from 'ui/atoms/buttons';
+import { resetForm } from 'ui/app/operations';
 
 type OwnProps = {
-  style: IStyle;
-  handleClose?: () => void;
+  style?: IStyle;
 };
 
 type Props = {} & OwnProps;
@@ -20,28 +23,119 @@ type Props = {} & OwnProps;
 class FormComponent extends React.Component<
   Props & InjectedFormProps<RequestInfo, Props>
 > {
+
+  handleResetForm = () => {
+    resetForm('guestRequest');
+  }
+
   render() {
     const {
       style,
-      initialValues,
       submitting,
       pristine,
       handleSubmit,
-      error
+      error,
+      initialValues
     } = this.props;
-    const submittingButton = submitting ? (
-      <i className="fas fa-circle-notch fa-spin" />
-    ) : (
-      'Обновить'
-    );
     return (
-      <Form style={style} onSubmit={handleSubmit}>
-        <div>
+      <>
+        <Form style={style} onSubmit={handleSubmit} autoComplete={''}>
           {error && <Alert mssg={error} type={'error'} />}
-          <RequestFields withPhone />
-          <Button disabled={submitting || pristine}>{submittingButton}</Button>
-        </div>
-      </Form>
+          <Field
+            name="name"
+            component={CustomInputField}
+            type="text"
+            {...{
+              floatingLabelText: 'Имя',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="phone"
+            component={CustomInputField}
+            type="tel"
+            {...{
+              floatingLabelText: 'Номер телефона',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="email"
+            component={CustomInputField}
+            type="text"
+            {...{
+              floatingLabelText: 'E-mail',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="count"
+            component={CustomInputField}
+            type="number"
+            parse={parseToInt}
+            {...{
+              floatingLabelText: 'Количество человек',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="from"
+            component={CustomInputField}
+            type="text"
+            {...{
+              floatingLabelText: 'Пункт отправления',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="to"
+            component={CustomInputField}
+            type="text"
+            {...{
+              floatingLabelText: 'Пункт назначения',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="date"
+            component={CustomDateField}
+            type="date"
+            id={'adm_request_date'}
+            {...{
+              floatingLabelText: 'Дата',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="time"
+            component={CustomInputField}
+            type="time"
+            {...{
+              floatingLabelText: 'Время',
+              fullWidth: true
+            }}
+          />
+          <Field
+            name="comment"
+            component={CustomInputField}
+            type="text"
+            {...{
+              floatingLabelText: 'Комментарий',
+              fullWidth: true,
+              placeHodler: 'ваши пожелания или номер рейса'
+            }}
+          />
+
+          <FormButtonsRow
+            labelCancel={'Сбросить изменения'}
+            labelSubmit={'Обновить'}
+            pristine={pristine}
+            resetForm={this.handleResetForm}
+            submitting={submitting}
+          />
+        </Form>
+        <Preloader isShow={!initialValues} />
+      </>
     );
   }
 }
@@ -60,35 +154,12 @@ export const FormEdit = compose(
   })
 )(FormComponent);
 
-const Form = createComponent<{} & Partial<FelaThemeProps>>(
-  () => ({
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: 'rgba(85, 85, 85, 0.7)',
-    width: 281,
-    right: -40,
-    height: 540,
-    position: 'relative',
-    bottom: 80,
-    color: '#fff',
-    cursor: 'default',
-    justifyContent: 'center',
-    '>div': {
-      display: 'flex',
-      flexDirection: 'column',
-      margin: '1rem'
-    }
-  }),
-  'form',
-  ['style', 'onSubmit']
-);
-const Button = createComponent<{} & Partial<FelaThemeProps>>(
-  ({ theme }) => ({
-    ...theme.items.flatButton,
-    margin: '5px 5px 0',
-    backgroundColor: theme.palette.lightYellow,
-    color: '#fff'
-  }),
-  'button',
-  ['disabled']
-);
+const Form = createComponent(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  margin: '0 auto',
+  padding: '1rem',
+  height: '100%',
+  maxWidth: 700
+}), 'form', ['onSubmit','autoComplete', 'style']);

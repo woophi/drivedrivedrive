@@ -7,7 +7,6 @@ import LoadableComponent from './LoadableComponent';
 import { TopBar } from 'ui/app/modules/topBar';
 import { SnackBar } from 'ui/app/modules/snackbar';
 import { IStyle } from 'fela';
-import { GuestRequest } from 'ui/app/modules/guest-request/components/GuestRequest';
 
 type IRouter = {
   location: Location;
@@ -25,7 +24,6 @@ export const Router =  ReduxConnect((state: AppState) => ({
       <Route component={AppRoutes} location={location} />
       {location.pathname === '/admin' && window.location.reload()}
       <SnackBar />
-      <GuestRequest />
     </div>
   )
 );
@@ -40,14 +38,14 @@ const styles: IStyle = ({
 
 const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
   <React.Fragment>
-    {/* <Route exact strict path="/" location={location}>
+    <Route path="/guest" location={location}>
       {({ match }) =>
         <LoadableComponent
           visibility={!!match}
           props={{ match }}
-          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/main'), 'app.index')}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/guest-request'), 'app.guest')}
         />}
-    </Route> */}
+    </Route>
 
     <Route exact strict path="/signin" location={location}>
       {({ match }) =>

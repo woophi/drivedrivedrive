@@ -1,28 +1,26 @@
 import * as React from 'react';
 import { SectionChildProps } from 'ui/SectionChildType';
-import { getRequest, approveRequest, resetForm } from '../operations';
+import { getRequest, approveRequest } from '../operations';
 import { compose } from 'redux';
 import { Request } from 'core/models/admin';
 import { AppState } from 'core/models/app';
 import {
   Field,
   InjectedFormProps,
-  reduxForm,
-  WrappedFieldProps
+  reduxForm
 } from 'redux-form';
 import { connect as redux } from 'react-redux';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
 import { Preloader } from 'ui/app/components/preloader';
-import { TextFieldProps } from 'ui/formTypes';
 import { DataStatus } from 'core/models/api';
 import { createComponent, IStyle } from 'react-fela';
 import { updateRequest } from '../form';
-import Checkbox from 'material-ui/Checkbox';
-import { DatePickerComponent } from 'ui/app/components/DatePickerField';
 import { parseToInt } from 'ui/shared/transforms';
+import { resetForm } from 'ui/app/operations';
+import { CustomInputField, CustomCheckBoxField, CustomDateField } from 'ui/atoms/fields';
+import { FormButtonsRow } from 'ui/atoms/buttons';
 
 type Props = {
   fetchingRequest: boolean;
@@ -50,8 +48,7 @@ class EditRequestComponent extends React.Component<
     const {
       pristine,
       submitting,
-      initialValues,
-      dirty
+      initialValues
     } = this.props;
     return (initialValues &&
       <>
@@ -147,27 +144,13 @@ class EditRequestComponent extends React.Component<
             disabled: true
           }}
         />
-        <BtnContainer>
-          <RaisedButton
-            disabled={pristine || submitting}
-            onClick={this.handleResetForm}
-            style={{ marginRight: '1rem' }}
-            buttonStyle={{ padding: '0' }}
-          >
-            {'Сбросить изменения'}
-          </RaisedButton>
-          <RaisedButton
-            type="submit"
-            primary
-            disabled={pristine || submitting}
-          >
-            {submitting ? (
-              <i className="fas fa-circle-notch fa-spin" />
-            ) : (
-              'Обновить'
-            )}
-          </RaisedButton>
-        </BtnContainer>
+        <FormButtonsRow
+          labelCancel={'Сбросить изменения'}
+          labelSubmit={'Обновить'}
+          pristine={pristine}
+          resetForm={this.handleResetForm}
+          submitting={submitting}
+        />
       </>
     )
   }
@@ -218,78 +201,15 @@ class EditRequestComponent extends React.Component<
   }
 }
 
-const CustomInputField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <TextField
-    {...props.input}
-    {...props}
-    errorText={
-      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
-    }
-  />
-);
-const CustomCheckBoxField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <Checkbox
-    checked={props.input.checked}
-    disabled={props.disabled}
-    label={props.floatingLabelText}
-    {...props.input}
-  />
-);
-const CustomDateField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <TextField
-    fullWidth
-    style={{ height: 72 }}
-    {...props.input}
-  >
-    <>
-      <DateLabel>{props.floatingLabelText}</DateLabel>
-      <DateWrapper>
-        <DatePickerComponent
-          input={props.input}
-          meta={props.meta}
-          uniqId={props.id}
-          />
-      </DateWrapper>
-    </>
-  </TextField>
-);
 
 const Container = createComponent(() => ({
   '>div': {
-    margin: '1rem',
+    margin: '0 1rem 1rem',
     width: 'auto',
     height: '100%'
   }
 }) as IStyle, 'div');
-const DateWrapper = createComponent(() => ({
-  '>div': {
-    marginTop: 23,
-    '>div>div>input': {
-      color: 'rgba(0, 0, 0, 0.87)',
-      paddingLeft: 0,
-      paddingRight: 0,
-      paddingBottom: 4,
-      fontWeight: 400
-    }
-  }
-}) as IStyle, 'div');
-const DateLabel = createComponent(() => ({
-  position: 'absolute',
-  height: 22,
-  lineHeight: '22px',
-  zIndex: 1,
-  pointerEvents: 'none',
-  userSelect: 'none',
-  color: 'rgba(0, 0, 0, 0.3)',
-  fontSize: 12,
-  marginTop: 6
-}), 'label');
+
 const Form = createComponent(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -299,18 +219,7 @@ const Form = createComponent(() => ({
   height: '100%',
   maxWidth: 700
 }), 'form', ['onSubmit','autoComplete']);
-const BtnContainer = createComponent(() => ({
-  margin: '2rem 0',
-  justifyContent: 'center',
-  display: 'flex',
-  width: '100%',
-  '>div>button>div>div': {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    padding: '0 .5rem'
-  }
-}), 'div');
+
 const ApprovedContainer = createComponent(() => ({
   '>i': {
     color: '#43A047',
