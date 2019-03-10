@@ -3,6 +3,11 @@ const { apiError } = require('../../lib/helpers');
 const moment = require('moment');
 
 exports.getAll = (_, res) => {
+	const RequestModel = keystone.list('Request').model;
+	console.warn(RequestModel);
+	if (!RequestModel) {
+		return res.apiResponse([]);
+	}
 	keystone.list('Request').model
 		.find()
 		.exec((err, results) => {
