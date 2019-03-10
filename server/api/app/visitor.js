@@ -15,7 +15,6 @@ exports.setUniqVisitor = (req, res) => {
 	const uniqVisitorDataHash = setNewToken(
 		{
 			language: lang,
-			ip: getUserIp(req),
 			city: geoData.city,
 			country: geoData.country,
 			browser,

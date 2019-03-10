@@ -52,9 +52,8 @@ keystone.import('models');
 // for each request) should be added to ./routes/middleware.js
 keystone.set('locals', {
 	env: keystone.get('env'),
-	// TODO: CHANGE app.vettura.eu
 	host: (
-		p ? 'https://app-dich.com'
+		p ? 'https://app.vettura.eu'
 		: 'http://localhost:3000'
 	)
 });
