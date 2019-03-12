@@ -1,9 +1,11 @@
 extends layouts/base
 block content
 	-const date = moment(guestData.guest.date).locale('ru').format('LL')
+	-const link = host + '/adm/requests/edit/request/' + guestData._id
 	p Здравствуйте %recipient.firstName%,
-	p Новая заявка
+	p На сайте появилась новая заявка
 	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
 	if guestData.guest.comment
 		p Комментарий: #{guestData.guest.comment}
-	p: a(href=host + '/adm/requests/edit/request/' + guestData._id) Ссылка на новую заявку
+	p.
+		Пожалуйста, для валидации, пройдите по #[a(href=link) ссылке]

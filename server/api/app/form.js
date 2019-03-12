@@ -132,7 +132,7 @@ exports.sendRequest = (req, res) => {
 			const emailKeys = {
 				templateName: 'admin-notify-new-request',
 				to: admins,
-				subject: `Новая заявка на трансфер из ${requestData.guest.from} в ${requestData.guest.to}`
+				subject: `Новая заявка на сайте из ${requestData.guest.from} в ${requestData.guest.to}`
 			};
 
 			const params = {
@@ -145,6 +145,7 @@ exports.sendRequest = (req, res) => {
 		},
 
 		(cb) => {
+			// TODO: enum of template names, ease of use of subjects
 			const emailKeys = {
 				templateName: 'guest-notify-new-request',
 				to: trimSpaces(req.body.email.toLowerCase()),
