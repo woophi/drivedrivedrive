@@ -1,5 +1,8 @@
+const keystone = require('keystone');
+
 exports = module.exports = (req, res) => {
-	res.render('default', {}, (e, html) => {
-		res.send(html);
-	})
+	const view = new keystone.View(req, res);
+	const locals = res.locals;
+	locals.language = 'ru';
+	view.render('default');
 };

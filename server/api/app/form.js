@@ -66,7 +66,7 @@ exports.sendRequest = (req, res) => {
 			UserModel
 				.find()
 				.where('notifications.email', true)
-				.$where('this.isAdmin || this.isSuperAdmin')
+				.$where('this.isAdmin')
 				.exec((err, users) => {
         if (err) {
 					return apiError(res, {message: 'Системная ошибка' }, 500);

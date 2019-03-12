@@ -13,7 +13,8 @@ export const localAppState = (state = defaultState.localAppState, dispatch: Shar
     case 'appInit':
       return {
         ...state,
-        isMobile: dispatch.isMobile
+        isMobile: dispatch.isMobile,
+        lang: dispatch.lang
       };
     case 'setLoginProcessStep':
       return {

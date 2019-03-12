@@ -15,7 +15,8 @@ export type AppState = {
 };
 
 export type AppEntrySettings = {
-  isMobile: boolean
+  isMobile: boolean,
+  language: string
 };
 
 export type AppDispatch =

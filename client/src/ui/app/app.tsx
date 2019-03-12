@@ -40,9 +40,12 @@ export const entryApplication = async (args: AppEntrySettings) => {
   injectReducer('ui', uiReducers);
   await init();
 
-  store.dispatch({ type: 'appInit', isMobile: args.isMobile });
+  store.dispatch({
+    type: 'appInit',
+    isMobile: args.isMobile,
+    lang: args.language
+  });
 
   const fela = configureFela('stylesheet');
   renderApp(fela);
-
 };

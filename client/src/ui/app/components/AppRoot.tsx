@@ -9,10 +9,9 @@ import { Router } from './Routes';
 import { ScreenMeasurer } from '../modules/screenMeasurer';
 
 const ReactHint = ReactHintFactory(React);
-type Props = {};
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
-class Main extends React.Component<Props & FelaProps> {
+class Main extends React.Component<FelaProps> {
   render() {
     const { styles } = this.props;
     return (
@@ -26,7 +25,7 @@ class Main extends React.Component<Props & FelaProps> {
   }
 }
 
-const container: FelaRule<Props> = () => ({
+const container: FelaRule = () => ({
   display: 'flex',
   flexDirection: 'row',
   boxSizing: 'border-box',
