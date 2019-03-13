@@ -66,8 +66,7 @@ keystone.set('nav', {
 	users: 'users',
 	requests: ['requests', 'prices'],
 	ratings: 'ratings',
-	gdpr: 'gdprs',
-	visitors: 'visitors'
+	gdpr: 'gdprs'
 });
 
 // Start Keystone to connect to your database and initialise the web server

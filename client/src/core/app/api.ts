@@ -40,8 +40,7 @@ export const api = {
   gdrp: {
     getGuestGdpr: () => c<apiData.Gdpr>('gdpr/guest'),
     getUserGdpr: () => c<apiData.Gdpr>('gdpr/user'),
-    getCookieGdpr: () => c<apiData.Gdpr>('gdpr/cookie'),
-    setUniqVisitor: () => c<null>('uniq/visitor/cookie')
+    getCookieGdpr: () => c<apiData.Gdpr>('gdpr/cookie')
   },
   guest: {
     unsubFromMails: (data: { hash: string }) =>

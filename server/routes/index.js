@@ -99,7 +99,6 @@ exports = module.exports = (app) => {
   app.post('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
 	app.post('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
   app.post('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
-	app.post('/api/uniq/visitor/cookie', routes.api.app.visitor.setUniqVisitor);
 
 	app.post('/api/user/unsub', validateToken, routes.api.app.emails.unsubDriver);
 	app.post('/api/user/subState', routes.api.app.emails.subStateDriver);

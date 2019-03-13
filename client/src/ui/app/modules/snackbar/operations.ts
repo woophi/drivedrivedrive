@@ -1,7 +1,7 @@
 import { store } from 'core/shared/store';
 import { CookieDispatch } from './types';
 import { api, loadData } from 'core/app/api';
-import { LocalStorageManager } from 'core/localStorageManager';
+import { setCookie } from 'core/cookieManager';
 
 export const getGdprCookie = async () => {
   try {
@@ -16,11 +16,8 @@ export const handleTriggerCookieModal = (payload: boolean) =>
 
 export const confirmCookie = async () => {
   try {
-    await api.gdrp.setUniqVisitor()
-      .then(() => {
-        LocalStorageManager.set('uniqGuest', 'cookiesConfirmed', true);
-        store.dispatch({ type: 'cookie/confirmed', payload: true } as CookieDispatch);
-      });
+    setCookie('uniqGuest', 'cookiesConfirmed', 128);
+    store.dispatch({ type: 'cookie/confirmed', payload: true } as CookieDispatch);
   } catch (error) {
     throw error;
   }

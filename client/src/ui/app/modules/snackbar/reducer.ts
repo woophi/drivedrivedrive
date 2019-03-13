@@ -1,11 +1,11 @@
 import { CookieState, CookieDispatch } from './types';
-import { LocalStorageManager } from 'core/localStorageManager';
+import { getCookie } from 'core/cookieManager';
 
-const isSaveConfirmed =  LocalStorageManager.get('uniqGuest', 'cookiesConfirmed');
+const isSaveConfirmed =  getCookie('uniqGuest');
 
 const defaultState: CookieState = {
   open: false,
-  confirmed: isSaveConfirmed ? isSaveConfirmed : false
+  confirmed: !!isSaveConfirmed ? !!isSaveConfirmed : false
 };
 
 export const reducer = (
