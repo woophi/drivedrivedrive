@@ -72,7 +72,7 @@ exports.sendRequest = (req, res) => {
 					return apiError(res, {message: 'Системная ошибка' }, 500);
         }
         if (isEmpty(users)) {
-					return apiError(res, {message: 'Не удалось найти админов.' }, 404);
+					return apiError(res, {message: 'Не удалось найти админов' }, 404);
 				}
 
 				admins = users;
@@ -90,7 +90,7 @@ exports.sendRequest = (req, res) => {
 			});
       requestData.save((err) => {
         if (err) {
-					return apiError(res, {message: 'Проблема создать новый запрос.' }, 500);
+					return apiError(res, {message: 'Проблема создать новую заявку' }, 500);
         }
         return cb();
       });
