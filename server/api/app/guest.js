@@ -36,6 +36,7 @@ exports.getGuestRequest = (req, res) => {
 }
 exports.updateGuestRequest = (req, res) => {
 	const RequestModel = keystone.list('Request').model;
+	const UserModel = keystone.list('User').model;
 
 	RequestModel
 		.findOne()
@@ -69,19 +70,26 @@ exports.updateGuestRequest = (req, res) => {
 					if (err)
 						return apiError(res, { message: 'Не удалось обновить данные' }, 400);
 
-					if (result.submitedOn) {
-						sendEmail({
-							templateName: 'driver-update-request-notify',
-							to: [result.submitedOn],
-							subject: `Трансфер ${updatedResult.guest.from} - ${updatedResult.guest.to}`
-						},
-						{
-							guestData: updatedResult,
-							driver: true
-						});
-					}
-
-					return res.apiResponse();
+					UserModel
+						.find()
+						.where('isAdmin', true)
+						.exec((err, users) => {
+							if (err)
+								console.error('Не удалось найти админов', err);
+							let notifiers = result.submitedOn
+								? [...users, result.submitedOn]
+								: users;
+							sendEmail({
+								templateName: 'driver-update-request-notify',
+								to: notifiers,
+								subject: `Трансфер ${updatedResult.guest.from} - ${updatedResult.guest.to}`
+							},
+							{
+								guestData: updatedResult,
+								driver: true
+							});
+							return res.apiResponse();
+						})
 				});
 		});
 }
