@@ -1,11 +1,13 @@
 const async = require('async');
 const keystone = require('keystone');
+const { apiError } = require('../../lib/helpers');
+const { SubStatus } = require('../../lib/staticVars');
 
 exports.subStateDriver = (req, res) => {
 
 	if (!req.user) {
 		return res.apiResponse({
-      SubStatus: -1
+      SubStatus: SubStatus.UNAUTHORIZED
     });
 	}
 	const UserModel = keystone.list('User').model;
@@ -13,20 +15,18 @@ exports.subStateDriver = (req, res) => {
 	UserModel.findById(req.user._id).exec((err, user) => {
 
 		if (err || !user) {
-			return res.apiError({
-				message: 'Ошибка сервера'
-			}, '', err ? err : null, 500);
+			return apiError(res, {message: 'Ошибка сервера' }, 500);
 		}
 
 		if (!user.notifications.email) {
 			return res.apiResponse({
 				message: 'Водитель уже отписался от почтовой рассылки',
-				SubStatus: 0
+				SubStatus: SubStatus.INVALID
 			});
 		}
 
 		return res.apiResponse({
-			SubStatus: 2
+			SubStatus: SubStatus.PROCESS
 		});
 	});
 
@@ -35,7 +35,7 @@ exports.subStateDriver = (req, res) => {
 exports.unsubDriver = (req, res) => {
 	if (!req.user) {
 		return res.apiResponse({
-      SubStatus: -1
+      SubStatus: SubStatus.UNAUTHORIZED
     });
 	}
 
@@ -47,15 +47,13 @@ exports.unsubDriver = (req, res) => {
 			UserModel.findById(req.user._id).exec((err, user) => {
 
 				if (err || !user) {
-					return res.apiError({
-						message: 'Ошибка сервера'
-					}, '', err ? err : null, 500);
+					return apiError(res, {message: 'Ошибка сервера' }, 500);
 				}
 
 				if (!user.notifications.email) {
 					return res.apiResponse({
 						message: 'Водитель уже отписался от почтовой рассылки',
-						SubStatus: 0
+						SubStatus: SubStatus.INVALID
 					});
 				}
 
@@ -71,13 +69,11 @@ exports.unsubDriver = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return res.apiError({
-        message: 'Не удалось обновить статус почтовой рассылки'
-      }, '', err, 500);
+			return apiError(res, {message: 'Не удалось обновить статус почтовой рассылки' }, 500);
 		}
 
 		return res.apiResponse({
-      SubStatus: 1
+      SubStatus: SubStatus.DONE
     });
   });
 
@@ -86,7 +82,7 @@ exports.subStateGuest = (req, res) => {
 
 	if (!req.body.hash) {
 		return res.apiResponse({
-      SubStatus: -2
+      SubStatus: SubStatus.FORBIDDEN
     });
 	}
 	const RequestModel = keystone.list('Request').model;
@@ -97,26 +93,24 @@ exports.subStateGuest = (req, res) => {
 		.exec((err, result) => {
 
 			if (err) {
-				return res.apiError({
-					message: 'Ошибка сервера'
-				}, '', err, 500);
+				return apiError(res, {message: 'Ошибка сервера' }, 500);
 			}
 
 			if (!result) {
 				return res.apiResponse({
-					SubStatus: -2
+					SubStatus: SubStatus.FORBIDDEN
 				});
 			}
 
 			if (!result.guest.notify) {
 				return res.apiResponse({
 					message: 'Пользователь уже отписался от почтовой рассылки',
-					SubStatus: 0
+					SubStatus: SubStatus.INVALID
 				});
 			}
 
 			return res.apiResponse({
-				SubStatus: 2
+				SubStatus: SubStatus.PROCESS
 			});
 		});
 
@@ -125,7 +119,7 @@ exports.subStateGuest = (req, res) => {
 exports.unsubGuest = (req, res) => {
 	if (!req.body.hash) {
 		return res.apiResponse({
-      SubStatus: -2
+      SubStatus: SubStatus.UNAUTHORIZED
     });
 	}
 
@@ -140,21 +134,19 @@ exports.unsubGuest = (req, res) => {
 				.exec((err, result) => {
 
 					if (err) {
-						return res.apiError({
-							message: 'Ошибка сервера'
-						}, '', err, 500);
+						return apiError(res, {message: 'Ошибка сервера' }, 500);
 					}
 
 					if (!result) {
 						return res.apiResponse({
-							SubStatus: -2
+							SubStatus: SubStatus.FORBIDDEN
 						});
 					}
 
 					if (!result.guest.notify) {
 						return res.apiResponse({
 							message: 'Пользователь уже отписался от почтовой рассылки',
-							SubStatus: 0
+							SubStatus: SubStatus.INVALID
 						});
 					}
 
@@ -170,13 +162,11 @@ exports.unsubGuest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return res.apiError({
-        message: 'Не удалось обновить статус почтовой рассылки'
-      }, '', err, 500);
+			return apiError(res, {message: 'Не удалось обновить статус почтовой рассылки' }, 500);
 		}
 
 		return res.apiResponse({
-      SubStatus: 1
+      SubStatus: SubStatus.DONE
     });
   });
 

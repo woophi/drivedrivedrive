@@ -26,3 +26,10 @@ exports.ROLES = Object.freeze({
 	ADMIN: 'Admin',
 	DRVIER: 'Driver'
 });
+exports.SubStatus = Object.freeze({
+	INVALID: 0,
+  DONE: 1,
+  PROCESS: 2,
+  UNAUTHORIZED: -1,
+  FORBIDDEN: -2
+});

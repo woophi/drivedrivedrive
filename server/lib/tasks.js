@@ -153,7 +153,7 @@ exports.notifyBeforeTransfer = async () => {
 
 								(cb) => {
 									sendEmail({
-										templateName: 'feature-request-notify-guest',
+										templateName: 'future-request-notify-guest',
 										to: request.guest.email,
 										subject: `Важное`
 									},
@@ -166,7 +166,7 @@ exports.notifyBeforeTransfer = async () => {
 
 								(cb) => {
 									sendEmail({
-										templateName: 'feature-request-notify-driver',
+										templateName: 'future-request-notify-driver',
 										to: request.submitedOn.email,
 										subject: `Важное`
 									},
