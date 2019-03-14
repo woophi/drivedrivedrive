@@ -1,6 +1,6 @@
 const keystone = require('keystone');
 const Request = keystone.list('Request');
-const { compareGuestTimeWithToday } = require('../../lib/helpers');
+const { compareGuestTimeWithToday, apiError } = require('../../lib/helpers');
 const moment = require('moment');
 
 exports.getOpenRequests = (req, res) => {
@@ -10,7 +10,7 @@ exports.getOpenRequests = (req, res) => {
 		.where('guest.notify', true)
 		.exec((err, results) => {
 			if (err)
-				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
+				return apiError(res, {message: 'Невозможно получить данные' }, 500);
 
 			const filterResults = results
 				.filter(r => !r.assignedBy
@@ -34,7 +34,7 @@ exports.getInProcessRequests = (req, res) => {
 		.$where('this.assignedBy.length > 0')
 		.exec((err, results) => {
 			if (err)
-				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
+				return apiError(res, {message: 'Невозможно получить данные' }, 500);
 
 			const filterResults = results
 				.filter(r => r.assignedBy
@@ -58,7 +58,7 @@ exports.getSubmitedRequests = (req, res) => {
 		.where('submitedOn', req.body.userId)
 		.exec((err, results) => {
 			if (err)
-				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
+				return apiError(res, {message: 'Невозможно получить данные' }, 500);
 
 			const filterResults = results
 				.filter(r => compareGuestTimeWithToday(r.guest.date, r.guest.time, 'ge'));
@@ -84,7 +84,7 @@ exports.getHistoryRequests = (req, res) => {
 		.where('submitedOn', req.body.userId)
 		.exec((err, results) => {
 			if (err)
-				return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
+				return apiError(res, {message: 'Невозможно получить данные' }, 500);
 
 			const filterResults = results
 				.filter(r => compareGuestTimeWithToday(r.guest.date, r.guest.time, 'less'));

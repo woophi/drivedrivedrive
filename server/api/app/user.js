@@ -18,7 +18,7 @@ exports.signin = (req, res) => {
 
       User.findOne().where('email', email).exec(async (err, user) => {
         if (!user || err) {
-					return apiError(res, {message: "Извините, ошибка входа" }, 400);
+					return apiError(res, {message: 'Извините, ошибка входа' }, 400);
         } else {
 					const roles = await identity.getRoles(user._id);
 					user.token = identity.setNewToken({ id: user._id, roles });
@@ -52,12 +52,17 @@ exports.signin = (req, res) => {
 
 exports.auth = (req, res) => {
 
-	if (!req.body.token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+	if (!req.body.token)
+		return apiError(res, {
+			message: 'Без токена нельзя'
+		}, 401);
 	const User = keystone.list('User').model;
 
 	const { verificaitionError, claims } = identity.verifyToken(req.body.token);
 	if (verificaitionError)
-		return res.status(403).send({ auth: false, message: 'Failed to authenticate token.' });
+		return apiError(res, {
+			message: 'Ошбика при авторизации токена'
+		}, 403);
 
 	User.findById(claims.id).exec((err, user) => {
 
@@ -259,10 +264,14 @@ const authChangePass = (req, res) => {
 	const { claims, verificaitionError } = identity.verifyToken(req.body.key);
 	let user = req.user;
 	if (verificaitionError)
-		return res.status(403).send({ message: 'Failed to authenticate token.' });
+		return apiError(res, {
+			message: 'Ошбика при авторизации токена'
+		}, 403);
 
 	if (user._id.toString() !== claims.id)
-		return res.status(400).send({ message: 'Не удалось изменить пароль' });
+		return apiError(res, {
+			message: 'Не удалось изменить пароль'
+		}, 400);
 	user.password = req.body.password;
 	user.save((err) => {
 		if (err) {

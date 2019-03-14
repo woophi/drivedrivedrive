@@ -4,7 +4,7 @@ var async = require('async'),
   Request = keystone.list('Request'),
   Price = keystone.list('Price'),
 	Rating = keystone.list('Rating');
-const { sendEmail } = require('../../lib/helpers');
+const { sendEmail, apiError } = require('../../lib/helpers');
 const { Rstatus } = require('../../lib/staticVars');
 
 exports.getRequestState = (req, res) => {
@@ -89,7 +89,7 @@ exports.getRequestToAcceptStatus = (req, res) => {
 exports.getRequest = (req, res) => {
   Request.model.findById(req.body.requestId).exec((err, result) => {
     if (err || !result) {
-			return res.apiError({message: 'Невозможно получить данные' }, null, err, 500);
+			return apiError(res, {message: 'Невозможно получить данные' }, 500);
     }
 
     return res.apiResponse({
@@ -106,23 +106,20 @@ exports.getRequest = (req, res) => {
 
 exports.driverOnRequest = (req, res) => {
   if (!req.user) {
-		return res.apiError({
-      message: 'Неавторизованный пользователь'
-		});
-		return res.apiError({message: 'Неавторизованный пользователь' }, '', null, 401);
+		return apiError(res, {message: 'Неавторизованный пользователь' }, 401);
 	} else if (req.user && !req.user.isActive) {
-		return res.apiError({message: 'Неавторизованный пользователь' }, '', null, 403);
+		return apiError(res, {message: 'Неавторизованный пользователь' }, 403);
 	}
 
   async.series([
 		(cb) => {
       Request.model.findById(req.body.requestId).exec((err, result) => {
         if (err) {
-					return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+					return apiError(res, {message: 'Ошибка сервера' }, 500);
 				}
 
 				if (!result.guest.notify) {
-					return res.apiError({message: 'Невозможно отправить уведомление клиенту' }, '', null, 401);
+					return apiError(res, {message: 'Невозможно отправить уведомление клиенту' }, 401);
 				}
 				return cb();
       });
@@ -138,7 +135,7 @@ exports.driverOnRequest = (req, res) => {
 
       newPrice.save((err) => {
         if (err) {
-					return res.apiError({message: 'Невозможно добавить цену' }, '', err, 400);
+					return apiError(res, {message: 'Невозможно добавить цену' }, 400);
         }
 
         return cb();
@@ -148,12 +145,12 @@ exports.driverOnRequest = (req, res) => {
 
     (cb) => {
       Request.model.findById(req.body.requestId).exec((err, resultRequest) => {
-				if (err) return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+				if (err) return apiError(res, {message: 'Ошибка сервера' }, 500);
         Price.model.findOne()
           .where('submitedBy', req.user)
           .where('assignedRequest', resultRequest._id)
           .exec((err, resultPrice) => {
-						if (err) return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+						if (err) return apiError(res, {message: 'Ошибка сервера' }, 500);
 
             const assignedData = {
               'assignedBy': [...resultRequest.assignedBy, req.user._id],
@@ -165,7 +162,7 @@ exports.driverOnRequest = (req, res) => {
               flashErrors: true
             }, (err) => {
               if (err) {
-								return res.apiError({message: 'Не удалось обновить заявку' }, '', err, 400);
+								return apiError(res, {message: 'Не удалось обновить заявку' }, 400);
               }
               return cb();
             });
@@ -176,11 +173,11 @@ exports.driverOnRequest = (req, res) => {
     (cb) => {
       Request.model.findById(req.body.requestId).exec((err, result) => {
         if (err) {
-					return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+					return apiError(res, {message: 'Ошибка сервера' }, 500);
 				}
 
 				if (!result.guest.notify) {
-					return res.apiError({message: 'Невозможно отправить уведомление клиенту' }, '', null, 401);
+					return apiError(res, {message: 'Невозможно отправить уведомление клиенту' }, 401);
 				}
         const driverForEmail = {
           specialPhoto: req.user._.specialPhoto.src(),
@@ -213,7 +210,7 @@ exports.driverOnRequest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
+			return apiError(res, {message: 'Что-то пошло не так... попробуйте еще раз' }, 500);
     }
 
     return res.apiResponse(true);
@@ -222,16 +219,16 @@ exports.driverOnRequest = (req, res) => {
 
 };
 
-const sentMailsAfterAccept = (price, requestId) => {
+const sentMailsAfterAccept = (price, requestId, res) => {
   User.model.find().where('isAdmin', true).exec((err, resultAdmins) => {
     if (err) {
-      return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+			return apiError(res, {message: 'Ошибка сервера' }, 500);
     }
     Request.model.findById(requestId)
       .populate('submitedOn')
       .exec((err, resultRequest) => {
         if (err) {
-          return res.apiError({message: 'Ошибка сервера' }, '', err, 500);
+          return apiError(res, {message: 'Ошибка сервера' }, 500);
         }
 
 				const addresses = [resultRequest.submitedOn];
@@ -267,7 +264,7 @@ exports.acceptRequest = (req, res) => {
     .where('assignedBy', req.body.driverId)
     .exec((err, result) => {
       if (err) {
-				return res.apiError({message: 'Невозможно получить данные' }, '', err, 500);
+				return apiError(res, {message: 'Невозможно получить данные' }, 500);
       }
       if (result && !result.accepted) {
         Price.model.findOne()
@@ -275,7 +272,7 @@ exports.acceptRequest = (req, res) => {
           .where('assignedRequest', result._id)
           .exec((err, resultPrice) => {
             if (err) {
-							return res.apiError({message: 'Невозможно найти цену' }, '', err, 500);
+							return apiError(res, {message: 'Невозможно найти цену' }, 500);
             }
 
             const filterAssignedDrivers = result.assignedBy
@@ -295,9 +292,9 @@ exports.acceptRequest = (req, res) => {
               flashErrors: true
             }, (err) => {
               if (err) {
-								return res.apiError({message: 'Невозможно выбрать водителя' }, '', err, 500);
+								return apiError(res, {message: 'Невозможно выбрать водителя' }, 500);
               }
-              sentMailsAfterAccept(resultPrice.value, req.body.requestId);
+              sentMailsAfterAccept(resultPrice.value, req.body.requestId, res);
               return res.apiResponse(true);
             });
 
@@ -324,7 +321,7 @@ exports.confirmRequest = (req, res) => {
 			.populate('submitedPrice')
 			.exec((err, result) => {
         if (err) {
-					return res.apiError({message: 'Невозможно получить данные' }, '', err, 500);
+					return apiError(res, {message: 'Невозможно получить данные' }, 500);
         }
 
 				if (result && !result.wasConfirmed) {
@@ -339,7 +336,7 @@ exports.confirmRequest = (req, res) => {
 						flashErrors: true
           }, (err) => {
             if (err) {
-							return res.apiError({message: 'Невозможно обновить данные' }, '', err, 500);
+							return apiError(res, {message: 'Невозможно обновить данные' }, 500);
             }
 
 						sendEmail({
@@ -431,13 +428,13 @@ const rateDriver = (requestId, req, res) => {
     .populate('submitedOn')
     .exec((err, result) => {
       if (err) {
-				return res.apiError({message: 'Невозможно найти заявку' }, '', err, 404);
+				return apiError(res, {message: 'Невозможно найти заявку' }, 404);
       }
       User.model
         .findById(result.submitedOn._id)
         .exec(async (err, userResult) => {
           if (err) {
-						return res.apiError({message: 'Невозможно найти водителя' }, '', err, 404);
+						return apiError(res, {message: 'Невозможно найти водителя' }, 404);
           }
 
           const assignedRatingsConc = userResult.rating.assignedRatings ?
@@ -460,7 +457,7 @@ const rateDriver = (requestId, req, res) => {
             flashErrors: true
           }, (err) => {
             if (err) {
-							return res.apiError({message: 'Невозможно оценить водителя' }, '', err, 500);
+							return apiError(res, {message: 'Невозможно оценить водителя' }, 500);
             }
 
             return res.apiResponse(true);
@@ -497,7 +494,7 @@ exports.rateRequest = (req, res) => {
         .where('assignedRequest', req.body.requestId)
         .exec((err, resultRating) => {
           if (err) {
-						return res.apiError({message: 'Невозможно найти рейтинг' }, '', err, 404);
+						return apiError(res, {message: 'Невозможно найти рейтинг' }, 404);
           }
 
           const updateData = {
@@ -513,7 +510,7 @@ exports.rateRequest = (req, res) => {
             flashErrors: true
           }, (err) => {
             if (err) {
-							return res.apiError({message: 'Невозможно обновить рейтинг' }, '', err, 500);
+							return apiError(res, {message: 'Невозможно обновить рейтинг' }, 500);
             }
             return cb();
           });
@@ -527,7 +524,7 @@ exports.rateRequest = (req, res) => {
         .populate('submitedOn')
         .exec((err, result) => {
           if (err) {
-						return res.apiError({message: 'Невозможно найти заявку' }, '', err, 404);
+						return apiError(res, {message: 'Невозможно найти заявку' }, 404);
           }
 
           const updateData = {
@@ -539,7 +536,7 @@ exports.rateRequest = (req, res) => {
             flashErrors: true
           }, (err) => {
             if (err) {
-							return res.apiError({message: 'Ошибка в рейтинге' }, '', err, 500);
+							return apiError(res, {message: 'Ошибка в рейтинге' }, 500);
             }
             sentMailAfterRate(result);
             return cb();
@@ -550,7 +547,7 @@ exports.rateRequest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return res.apiError({message: 'Что-то пошло не так... попробуйте еще раз' }, '', err, 500);
+			return apiError(res, {message: 'Что-то пошло не так... попробуйте еще раз' }, 500);
     }
 
     rateDriver(req.body.requestId, req, res);
