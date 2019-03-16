@@ -13,11 +13,12 @@ import { OpenRequestsNumber } from './RefreshRequests';
 import { ViewRequests } from '../types';
 import { setViewOnRequests } from '../operations';
 import 'react-virtualized/styles.css';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 type Props = {
   isMobile: boolean;
   requestsView: ViewRequests;
-};
+} & WithTranslation;
 
 const Container = createComponent(
   () => ({
@@ -30,13 +31,13 @@ const Container = createComponent(
 );
 class TabsComp extends React.PureComponent<Props> {
   get requestsOpenLabel() {
-    const { isMobile } = this.props;
+    const { isMobile, t } = this.props;
     const label = isMobile ? (
       <i className={'fas fa-taxi'} />
     ) : (
       <>
         <i className={'fas fa-taxi mr-1'} />
-        Открытые
+        {t('requests:tab:open')}
       </>
     );
 
@@ -62,13 +63,13 @@ class TabsComp extends React.PureComponent<Props> {
   }
 
   render() {
-    const { isMobile, requestsView } = this.props;
+    const { isMobile, requestsView, t } = this.props;
     const requestsProgressLabel = isMobile ? (
       <i className={'fas fa-users'}  />
     ) : (
       <div>
         <i className={'fas fa-users mr-1'} />
-        В обработке
+        {t('requests:tab:progress')}
       </div>
     );
     const requestsActiveLabel = isMobile ? (
@@ -76,7 +77,7 @@ class TabsComp extends React.PureComponent<Props> {
     ) : (
       <div>
         <i className={'fas fa-car-side mr-1'} />
-        Предстоящие
+        {t('requests:tab:active')}
       </div>
     );
     const requestsHistoryLabel = isMobile ? (
@@ -84,7 +85,7 @@ class TabsComp extends React.PureComponent<Props> {
     ) : (
       <div>
         <i className={'fas fa-history mr-1'} />
-        История
+        {t('requests:tab:history')}
       </div>
     );
     return (
@@ -123,6 +124,7 @@ class TabsComp extends React.PureComponent<Props> {
 }
 
 export const TabsRequests = compose(
+  withTranslation('app'),
   ReduxConnect((state: AppState) => {
     const MOBILE_SCREEN_WIDTH = 768;
     return ({

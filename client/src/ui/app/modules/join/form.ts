@@ -1,36 +1,37 @@
 import * as data from 'core/models';
-import { change, FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
+import { FormErrors, FormSubmitHandler, reset, SubmissionError } from 'redux-form';
 import { registerNewUser } from 'core/app/request';
 import { changeUrl } from 'ui/app/operations';
+import { i18n } from 'ui/app/components/i18n-proxy';
 
 export const validateNewUser = (values: Partial<data.NewUser>): FormErrors<data.NewUser> => {
   const errors = {} as FormErrors<data.NewUser>;
   if (!values.email) {
-    errors.email = 'Поле обязательно к заполнению';
+    errors.email = i18n.required;
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Недействительный e-mail';
+    errors.email = i18n.invalidEmail;
   }
 
   if (!values.firstname) {
-    errors.firstname = 'Поле обязательно к заполнению';
+    errors.firstname = i18n.required;
   }
 
   if (!values.lastname) {
-    errors.lastname = 'Поле обязательно к заполнению';
+    errors.lastname = i18n.required;
   }
 
   if (!values.password) {
-    errors.password = 'Поле обязательно к заполнению';
+    errors.password = i18n.required;
   } else if (!/^(?=.*[A-Za-z])[A-Za-z\d]{8,16}$/g.test(values.password)) {
-    errors.password = 'Пароль должен быть не менее 8 символов и не более 16';
+    errors.password = i18n.invalidPassword;
   }
 
   if (!values.phone) {
-    errors.phone = 'Поле обязательно к заполнению';
+    errors.phone = i18n.required;
   }
 
   if (!values.gdpr) {
-    errors.gdpr = 'Поле обязательно к заполнению';
+    errors.gdpr = i18n.required;
   }
 
   return errors;

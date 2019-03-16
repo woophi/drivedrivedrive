@@ -10,26 +10,27 @@ import { getRequestState, getRequest } from '../operations';
 import { Rstatus } from 'core/models/api';
 import * as moment from 'moment';
 import Form from './Form';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   requestId: getRequestId(state),
   getRequestStatus: state.ui.api.requsetState.result,
-  request: state.ui.api.selectedRequest.result
+  request: state.ui.api.selectedRequest.result,
+  locale: state.localAppState.lang
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class Index extends React.Component<Props & FelaProps> {
-
   async componentDidMount() {
     if (this.props.requestId) {
-      await getRequestState(this.props.requestId)
-      .then(() => {
+      await getRequestState(this.props.requestId).then(() => {
         const { getRequestStatus } = this.props;
-        if (getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN ||
-          getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED
-          ) {
+        if (
+          (getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN) ||
+          (getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED)
+        ) {
           getRequest(this.props.requestId);
         }
       });
@@ -37,46 +38,72 @@ class Index extends React.Component<Props & FelaProps> {
   }
 
   render() {
-    const { styles, getRequestStatus, request } = this.props;
-    const openRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN;
-    const assignedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED;
-    const closedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
-    const invalidRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
+    const { styles, getRequestStatus, request, t, locale } = this.props;
+    const openRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.OPEN;
+    const assignedRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.ASSIGNED;
+    const closedRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
+    const invalidRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
 
     return (
-        <div className={styles.container}>
-          <Paper style={{margin: '1rem'}} zDepth={2}>
-            {request && (openRequest || assignedRequest) &&
+      <div className={styles.container}>
+        <Paper style={{ margin: '1rem' }} zDepth={2}>
+          {request && (openRequest || assignedRequest) && (
             <div className={styles.headBox}>
-              <h1 className={styles.texts}>Новая заявка</h1>
+              <h1 className={styles.texts}>{t('newRequest')}</h1>
               <span className={styles.texts}>
-                <p>Из <b>{request.from}</b>, в <b>{request.to}</b></p>
-                <p>дата <b>{moment(request.date).locale('ru').format('LL')}</b>, время <b>{request.time}</b></p>
-                <p>количество человек {request.count}</p>
-                {request.comment && <p>комментарий {request.comment}</p>}
+                <p>
+                  {t('common:from')} <b>{request.from}</b>, {t('common:to')}{' '}
+                  <b>{request.to}</b>
+                </p>
+                <p>
+                  {t('common:date')}{' '}
+                  <b>
+                    {moment(request.date)
+                      .locale(locale)
+                      .format('LL')}
+                  </b>
+                  , {t('common:time')} <b>{request.time}</b>
+                </p>
+                <p>
+                  {t('common:count')} {request.count}
+                </p>
+                {request.comment && (
+                  <p>
+                    {t('common:comment')} {request.comment}
+                  </p>
+                )}
               </span>
-            </div>}
-            {closedRequest && <div className={styles.headBox}>
-              <h1 className={styles.texts}>заявка была закрыта</h1>
-            </div>}
-            {invalidRequest && <div className={styles.headBox}>
-              <h1 className={styles.texts}>Ошибка: недействительная ссылка</h1>
-            </div>}
+            </div>
+          )}
+          {closedRequest && (
+            <div className={styles.headBox}>
+              <h1 className={styles.texts}>{t('requestClosed')}</h1>
+            </div>
+          )}
+          {invalidRequest && (
+            <div className={styles.headBox}>
+              <h1 className={styles.texts}>{t('errors:invalidLink')}</h1>
+            </div>
+          )}
+        </Paper>
+        {(openRequest || assignedRequest) && (
+          <Paper style={{ margin: '1rem' }} zDepth={2}>
+            {!assignedRequest && <Form />}
+            {assignedRequest && (
+              <div className={styles.headBox}>
+                <h1 className={styles.texts}>{t('answerReq:offerSent')}</h1>
+                <span className={styles.texts}>
+                  <p>{t('answerReq:offerSuc')}</p>
+                </span>
+              </div>
+            )}
           </Paper>
-          {(openRequest || assignedRequest) &&
-            <Paper style={{margin: '1rem'}} zDepth={2}>
-              {!assignedRequest && <Form />}
-              {assignedRequest &&
-                <div className={styles.headBox}>
-                  <h1 className={styles.texts}>Ценовое предложение отправлено</h1>
-                  <span className={styles.texts}>
-                    <p>В случае заинтересованности клиента Вам на почту придет отклик</p>
-                  </span>
-                </div>
-              }
-            </Paper>
-          }
-        </div>
+        )}
+      </div>
     );
   }
 }
@@ -103,7 +130,8 @@ const mapStylesToProps = {
   texts
 };
 
-export default compose (
+export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
-  FelaConnect(mapStylesToProps),
+  FelaConnect(mapStylesToProps)
 )(Index);

@@ -3,7 +3,7 @@ import { WrappedFieldProps } from 'redux-form';
 import { TextFieldProps } from 'ui/formTypes';
 import { TextField } from 'material-ui';
 import { IStyle, createComponent } from 'react-fela';
-import { DatePickerComponent } from 'ui/app/components/DatePickerField';
+import { DatePicker } from 'ui/app/components/DatePickerField';
 
 export const CustomDateField: React.SFC<
   WrappedFieldProps & TextFieldProps
@@ -16,8 +16,8 @@ export const CustomDateField: React.SFC<
     <>
       <DateLabel>{props.floatingLabelText}</DateLabel>
       <DateWrapper>
-        {!!props.input.value &&
-          <DatePickerComponent
+        {(props.input.value !== undefined || props.input.value !== null) &&
+          <DatePicker
             input={props.input}
             meta={props.meta}
             uniqId={props.id}

@@ -18,6 +18,7 @@ import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
 import { getSelectedPath, getSelectedSubPath } from '../selectors';
 import { getCheckRoles } from 'core/app/selectors';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
@@ -26,7 +27,7 @@ const mapStateToProps = (state: AppState) => ({
   getRoles: getCheckRoles(state)
 });
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 
 class DroppingMenuComponent extends React.Component<Props> {
   changeIconOnPath = (icon: JSX.Element, btnName: string) => {
@@ -45,7 +46,7 @@ class DroppingMenuComponent extends React.Component<Props> {
           onClick={signOut}
           className={'tD-none'}
           leftIcon={<FontIcon className="fas fa-sign-out-alt" />}
-          primaryText="Выйти"
+          primaryText={this.props.t('common:button:out')}
         />
       );
     } else {
@@ -57,7 +58,7 @@ class DroppingMenuComponent extends React.Component<Props> {
               <FontIcon className="fas fa-sign-in-alt" />,
               'signin'
             )}
-            primaryText="Войти"
+            primaryText={this.props.t('common:button:in')}
           />
         </Link>
       );
@@ -77,7 +78,7 @@ class DroppingMenuComponent extends React.Component<Props> {
       <Link className={'tD-none'} to={'/join'}>
         <MenuItem
           leftIcon={this.changeIconOnPath(<PersonAdd />, 'join')}
-          primaryText="Регистрация"
+          primaryText={this.props.t('common:button:registerSyn')}
         />
       </Link>
     );
@@ -88,7 +89,7 @@ class DroppingMenuComponent extends React.Component<Props> {
       <Link className={'tD-none'} to={'/requests'}>
         <MenuItem
           leftIcon={this.changeIconOnPath(<Receipts />, 'requests')}
-          primaryText="Заявки"
+          primaryText={this.props.t('admin:requests:title')}
         />
       </Link>
     );
@@ -99,7 +100,7 @@ class DroppingMenuComponent extends React.Component<Props> {
       <Link className={'tD-none'} to={'/me'}>
         <MenuItem
           leftIcon={this.changeIconOnPath(<Profile />, 'me')}
-          primaryText="Профиль"
+          primaryText={this.props.t('common:button:profile')}
         />
       </Link>
     );
@@ -116,7 +117,7 @@ class DroppingMenuComponent extends React.Component<Props> {
               <FontIcon className={'fas fa-cogs'} />,
               'adm'
             )}
-            primaryText="Управление"
+            primaryText={this.props.t('common:button:manage')}
           />
         </Link>
       )
@@ -132,7 +133,7 @@ class DroppingMenuComponent extends React.Component<Props> {
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
         <Link className={'tD-none'} to={'/'}>
-          <MenuItem leftIcon={<ActionHome />} primaryText="Главная" />
+          <MenuItem leftIcon={<ActionHome />} primaryText={this.props.t('common:button:home')} />
         </Link>
         {this.manageLinks}
         {!authInfo && this.joinLink}
@@ -144,6 +145,7 @@ class DroppingMenuComponent extends React.Component<Props> {
   }
 }
 
-export const DroppingMenu = compose(ReduxConnect(mapStateToProps))(
-  DroppingMenuComponent
-);
+export const DroppingMenu = compose(
+  withTranslation('app'),
+  ReduxConnect(mapStateToProps)
+)(DroppingMenuComponent);

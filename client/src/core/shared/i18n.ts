@@ -21,3 +21,17 @@ const i18n = i18next
 
 export default i18n;
 
+type Shortcuts = { [key: string]: string | ((...args: any[]) => string)};
+
+export const proxyI18n = <T extends Shortcuts>(getShortcuts: (t: i18next.TFunction) => T) => {
+  const shortcuts = getShortcuts(i18next.t) as Shortcuts;
+  const result = { ...shortcuts };
+
+  for (const key of Object.keys(result)) {
+    if (typeof result[key] === 'string') {
+      result[key] = i18next.t(result[key] as string);
+    }
+  }
+
+  return result as T;
+};

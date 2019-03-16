@@ -8,6 +8,7 @@ import { returntypeof } from 'react-redux-typescript';
 import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
 import { DroppingMenu } from './DroppingMenu';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const MOBILE_SCREEN_WIDTH = 450;
 const mapStateToProps = (state: AppState) => ({
@@ -15,7 +16,7 @@ const mapStateToProps = (state: AppState) => ({
   isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH
 });
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 
 class Index extends React.Component<Props> {
 
@@ -26,34 +27,34 @@ class Index extends React.Component<Props> {
     const splitPath = path.split('/');
     switch (splitPath[1]) {
       case 'signin':
-        return 'Вход в профиль';
+        return 'topBar:signin';
 
       case 'join':
-        return 'Регистрация';
+        return 'common:button:registerSyn';
 
       case 'forgot-password':
-        return 'Восстановление пароля';
+        return 'topBar:passwordRecovery';
 
       case 'reset-password':
-        return 'Восстановление пароля';
+        return 'topBar:passwordRecovery';
 
       case 'me':
-        return 'Профиль';
+        return 'common:button:profile';
 
       case 'request':
-        return 'Трансфер';
+        return 'topBar:transfer';
 
       case 'requests':
-        return 'Списки заявок';
+        return 'topBar:requests';
 
       case 'unsubscribe':
-        return 'Отписка от почтовой рассылки';
+        return 'topBar:unsub';
 
       case 'adm':
-        return 'Управление';
+        return 'common:button:manage';
 
       case 'guest':
-        return 'Ваш трансфер';
+        return 'topBar:guest';
 
       default:
         return '';
@@ -61,12 +62,12 @@ class Index extends React.Component<Props> {
   }
 
   render() {
-    const { isMobile } = this.props;
+    const { isMobile, t } = this.props;
     return (
       <AppBar
         style={{minHeight: 60}}
         titleStyle={{maxWidth: isMobile ? 200 : 'unset'}}
-        title={this.titleChange}
+        title={t(this.titleChange)}
         iconElementLeft={<IconButton><NavigationLogo /></IconButton>}
         iconElementRight={<DroppingMenu />}
       />
@@ -75,5 +76,6 @@ class Index extends React.Component<Props> {
 }
 
 export const TopBar = compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps)
 )(Index);

@@ -2,8 +2,12 @@ import * as React from 'react';
 import { SingleDatePicker } from 'react-dates';
 import { WrappedFieldProps } from 'redux-form';
 import * as moment from 'moment';
+import { compose } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { connect as redux } from 'react-redux';
+import { AppState } from 'core/models/app';
 
-type Props = {
+type OwnProps = {
   uniqId: string;
 } & WrappedFieldProps;
 
@@ -12,7 +16,11 @@ type LocalState = {
   date: moment.Moment;
 };
 
-export class DatePickerComponent extends React.PureComponent<
+type Props = {
+  lang: string;
+} & OwnProps & WithTranslation;
+
+class DatePickerComponent extends React.PureComponent<
   Props,
   LocalState
 > {
@@ -30,7 +38,10 @@ export class DatePickerComponent extends React.PureComponent<
   componentDidUpdate() {
     const { meta: { pristine, initial } } = this.props;
     if (!!this.state.date && pristine && initial !== this.state.date.toISOString()) {
-      this.handleDate(this.initialDate())
+      this.handleDate(this.initialDate());
+    }
+    if (!this.state.date && pristine && initial) {
+      this.handleDate(this.initialDate());
     }
   }
 
@@ -48,7 +59,7 @@ export class DatePickerComponent extends React.PureComponent<
     }
   }
 
-  localeDate = (day: moment.Moment) => day.locale('ru').format('DD');
+  localeDate = (day: moment.Moment) => day.locale(this.props.lang).format('DD');
 
   render() {
     const { focus, date } = this.state;
@@ -64,7 +75,7 @@ export class DatePickerComponent extends React.PureComponent<
         noBorder
         withPortal
         hideKeyboardShortcutsPanel
-        placeholder={'дд/мм/гггг'}
+        placeholder={this.props.t('datePicker:placeholder')}
         block
         required
         renderDayContents={this.localeDate}
@@ -72,3 +83,10 @@ export class DatePickerComponent extends React.PureComponent<
     );
   }
 }
+
+export const DatePicker = compose<React.ComponentClass<OwnProps>>(
+  withTranslation('app'),
+  redux((state: AppState) => ({
+    lang: state.localAppState.lang
+  }))
+)(DatePickerComponent);

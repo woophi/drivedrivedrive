@@ -4,6 +4,7 @@ import { loginSecret } from 'core/app/login';
 import { changeUrl } from 'ui/app/operations';
 import { saveUnauthPath } from 'ui/app/modules/me/operations';
 import { store } from 'core/shared/store';
+import { i18n } from 'ui/app/components/i18n-proxy';
 
 type SharedProps = {
   unauthPath: string
@@ -12,13 +13,13 @@ type SharedProps = {
 export const validateLogin = (values: Partial<data.LoginInfo>): FormErrors<data.LoginInfo> => {
   const errors = {} as FormErrors<data.LoginInfo>;
   if (!values.email) {
-    errors.email = 'Поле обязательно к заполнению';
+    errors.email = i18n.required;
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Недействительный e-mail';
+    errors.email = i18n.invalidEmail;
   }
 
   if (!values.secret) {
-    errors.secret = 'Поле обязательно к заполнению';
+    errors.secret = i18n.required;
   }
 
   return errors;
@@ -36,7 +37,6 @@ export const submitLogin: FormSubmitHandler<data.LoginInfo> = async (values: dat
       changeUrl(`/me`);
     }
   } catch (e) {
-    console.debug('wtf', e);
     throw new SubmissionError({  _error: e.error.message });
   }
 };

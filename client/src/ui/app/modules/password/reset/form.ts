@@ -9,6 +9,7 @@ import { resetPassword } from 'core/app/password';
 import { checkAuth } from 'core/app/login';
 import { changeUrl } from 'ui/app/operations';
 import { match } from 'react-router';
+import { i18n } from 'ui/app/components/i18n-proxy';
 
 type SharedProps = {
   match?: match<{ key: string }>;
@@ -21,18 +22,18 @@ export const validatePR = (
 ): FormErrors<data.PasswordReset> => {
   const errors = {} as FormErrors<data.PasswordReset>;
   if (!values.password) {
-    errors.password = 'Поле обязательно к заполнению';
+    errors.password = i18n.required;
   } else if (!/^(?=.*[A-Za-z])[A-Za-z\d]{8,16}$/g.test(values.password)) {
-    errors.password = 'Пароль должен быть не менее 8 символов и не более 16';
+    errors.password = i18n.invalidPassword;
   }
 
   if (!values.password_confirm) {
-    errors.password_confirm = 'Поле обязательно к заполнению';
+    errors.password_confirm = i18n.required;
   } else if (
     !/^(?=.*[A-Za-z])[A-Za-z\d]{8,16}$/g.test(values.password_confirm)
   ) {
     errors.password_confirm =
-      'Пароль должен быть не менее 8 символов и не более 16';
+      i18n.invalidPassword;
   }
 
   return errors;

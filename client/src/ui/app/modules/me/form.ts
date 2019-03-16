@@ -2,27 +2,28 @@ import * as data from 'core/models/api';
 import { FormErrors, FormSubmitHandler, SubmissionError } from 'redux-form';
 import * as operations from './operations';
 import { store } from 'core/shared/store';
+import { i18n } from 'ui/app/components/i18n-proxy';
 
 const state = () => store.getState();
 
 export const validateProfile = (values: Partial<data.UserProfile>): FormErrors<data.UserProfile> => {
   const errors = {} as FormErrors<data.UserProfile>;
   if (!values.email) {
-    errors.email = 'Поле обязательно к заполнению';
+    errors.email = i18n.required;
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Недействительный e-mail';
+    errors.email = i18n.invalidEmail;
   }
 
   if (!values.firstName) {
-    errors.firstName = 'Поле обязательно к заполнению';
+    errors.firstName = i18n.required;
   }
 
   if (!values.lastName) {
-    errors.lastName = 'Поле обязательно к заполнению';
+    errors.lastName = i18n.required;
   }
 
   if (!values.phone) {
-    errors.phone = 'Поле обязательно к заполнению';
+    errors.phone = i18n.required;
   }
 
   return errors;

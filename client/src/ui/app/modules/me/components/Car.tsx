@@ -13,15 +13,15 @@ import {
 import { UserProfile } from 'core/models/api';
 import { validateProfile, submitProfile } from '../form';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
 import { Preloader } from 'ui/app/components/preloader';
-import Uploader from 'ui/app/components/Uploader';
+import { FileUploader } from 'ui/app/components/Uploader';
 import { DataStatus } from 'core/models/api';
 import { parseToInt } from 'ui/shared/transforms';
 import { Progress } from './Progress';
-import { TextFieldProps } from 'ui/formTypes';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { CustomInputField } from 'ui/atoms/fields';
+import { FormButtonsRow } from 'ui/atoms/buttons';
 
 const CarSide = require('../../../../assets/side.jpg');
 const CarFront = require('../../../../assets/front.jpg');
@@ -36,31 +36,31 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class CarComponent extends React.Component<
   Props & FelaProps & InjectedFormProps<UserProfile, Props>
 > {
   customImgFieldCarFront = (props: WrappedFieldProps) => (
-    <Uploader
+    <FileUploader
       filedProps={props}
       exampleFile={CarFront}
-      labelName={'Фото спереди'}
+      labelName={this.props.t('profile:front')}
     />
   )
   customImgFieldCarSide = (props: WrappedFieldProps) => (
-    <Uploader
+    <FileUploader
       filedProps={props}
       exampleFile={CarSide}
-      labelName={'Фото сбоку'}
+      labelName={this.props.t('profile:side')}
     />
   )
   customImgFieldCarInside = (props: WrappedFieldProps) => (
-    <Uploader
+    <FileUploader
       filedProps={props}
       exampleFile={CarInside}
-      labelName={'Фото внутри'}
+      labelName={this.props.t('profile:inside')}
     />
   )
 
@@ -73,7 +73,8 @@ class CarComponent extends React.Component<
       submitting,
       fetchProfile,
       handleSubmitting,
-      getProfileErr
+      getProfileErr,
+      t
     } = this.props;
     return (
       <Paper className={styles.container} zDepth={2}>
@@ -99,7 +100,7 @@ class CarComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Марка',
+              floatingLabelText: t('profile:kind'),
               fullWidth: true
             }}
           />
@@ -108,7 +109,7 @@ class CarComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Модель',
+              floatingLabelText: t('profile:model'),
               fullWidth: true
             }}
           />
@@ -117,44 +118,25 @@ class CarComponent extends React.Component<
             component={CustomInputField}
             type="number"
             {...{
-              floatingLabelText: 'Год',
+              floatingLabelText: t('profile:year'),
               fullWidth: true
             }}
             parse={parseToInt}
           />
           <Progress />
-          <div className={styles.btnContainer}>
-            <RaisedButton
-              type="submit"
-              primary
-              disabled={handleSubmitting || pristine || submitting}
-            >
-              {submitting || handleSubmitting ? (
-                <i className="fas fa-circle-notch fa-spin" />
-              ) : (
-                'Сохранить'
-              )}
-            </RaisedButton>
-          </div>
+          <FormButtonsRow
+            labelSubmit={'app::common:button:save'}
+            labelCancel={'app::common:button:resetChanges'}
+            pristine={pristine}
+            resetForm={'userProfile'}
+            submitting={submitting || handleSubmitting}
+          />
         </form>
         <Preloader isShow={fetchProfile} />
       </Paper>
     );
   }
 }
-
-const CustomInputField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <TextField
-    {...props.input}
-    {...props}
-    errorText={
-      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
-    }
-  />
-);
-
 const container: FelaRule<Props> = () => ({
   margin: '1rem',
   width: 'auto',
@@ -171,20 +153,13 @@ const form: FelaRule<Props> = () => ({
   maxWidth: 700
 });
 
-const btnContainer: FelaRule<Props> = () => ({
-  margin: '2rem 0',
-  justifyContent: 'center',
-  display: 'flex',
-  width: '100%'
-});
-
 const mapStylesToProps = {
   container,
-  form,
-  btnContainer
+  form
 };
 
 export const Car = compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<UserProfile, Props>({

@@ -12,6 +12,7 @@ import { Preloader } from 'ui/app/components/preloader';
 import { CustomInputField, CustomDateField } from 'ui/atoms/fields';
 import { parseToInt } from 'ui/shared/transforms';
 import { FormButtonsRow } from 'ui/atoms/buttons';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 type OwnProps = {
   style?: IStyle;
@@ -19,7 +20,7 @@ type OwnProps = {
 
 type Props = {
   getRequestErr: string;
-} & OwnProps;
+} & OwnProps & WithTranslation;
 
 class FormComponent extends React.Component<
   Props & InjectedFormProps<RequestInfo, Props>
@@ -32,7 +33,8 @@ class FormComponent extends React.Component<
       handleSubmit,
       error,
       initialValues,
-      getRequestErr
+      getRequestErr,
+      t
     } = this.props;
     return (
       <>
@@ -45,7 +47,7 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Имя',
+              floatingLabelText: t('common:name'),
               fullWidth: true
             }}
           />
@@ -54,7 +56,7 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="tel"
             {...{
-              floatingLabelText: 'Номер телефона',
+              floatingLabelText: t('common:phone'),
               fullWidth: true
             }}
           />
@@ -63,7 +65,7 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'E-mail',
+              floatingLabelText: t('common:email'),
               fullWidth: true
             }}
           />
@@ -73,7 +75,7 @@ class FormComponent extends React.Component<
             type="number"
             parse={parseToInt}
             {...{
-              floatingLabelText: 'Количество человек',
+              floatingLabelText: t('common:count'),
               fullWidth: true
             }}
           />
@@ -82,7 +84,7 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Пункт отправления',
+              floatingLabelText: t('common:from'),
               fullWidth: true
             }}
           />
@@ -91,7 +93,7 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Пункт назначения',
+              floatingLabelText: t('common:to'),
               fullWidth: true
             }}
           />
@@ -101,7 +103,7 @@ class FormComponent extends React.Component<
             type="date"
             id={'guest_request_date'}
             {...{
-              floatingLabelText: 'Дата',
+              floatingLabelText: t('common:date'),
               fullWidth: true
             }}
           />
@@ -110,7 +112,7 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="time"
             {...{
-              floatingLabelText: 'Время',
+              floatingLabelText: t('common:time'),
               fullWidth: true
             }}
           />
@@ -119,15 +121,15 @@ class FormComponent extends React.Component<
             component={CustomInputField}
             type="text"
             {...{
-              floatingLabelText: 'Комментарий',
+              floatingLabelText: t('common:comment'),
               fullWidth: true,
-              hintText: 'ваши пожелания или номер рейса'
+              hintText: t('common:commentHint')
             }}
           />
 
           <FormButtonsRow
-            labelCancel={'Сбросить изменения'}
-            labelSubmit={'Обновить'}
+            labelCancel={'app::common:button:resetChanges'}
+            labelSubmit={'app::common:button:update'}
             pristine={pristine}
             resetForm={'guestRequest'}
             submitting={submitting}
@@ -139,8 +141,9 @@ class FormComponent extends React.Component<
   }
 }
 
-export const FormEdit = compose(
-  ReduxConnect((state: AppState, props: OwnProps) => ({
+export const FormEdit = compose<React.ComponentClass<OwnProps>>(
+  withTranslation('app'),
+  ReduxConnect((state: AppState, _: OwnProps) => ({
     initialValues: getGuestRequestResult(state),
     hashId: state.ui.guests.hashId,
     getRequestErr:

@@ -9,16 +9,16 @@ import { Paper } from 'material-ui';
 
 const TC = composeTable<TableRequest>({
   model: [{
-    label: 'Пункт отправления',
+    label: 'app::common:from',
     dataKey: 'from'
   }, {
-    label: 'Пункт прибытия',
+    label: 'app::common:to',
     dataKey: 'to'
   }, {
-    label: 'Дата',
+    label: 'app::common:date',
     dataKey: 'date'
   }, {
-    label: 'Время',
+    label: 'app::common:time',
     dataKey: 'time'
   }],
   showRowDividers: true,

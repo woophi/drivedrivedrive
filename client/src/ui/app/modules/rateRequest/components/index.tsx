@@ -9,18 +9,18 @@ import { getRequestId, getRequestQuery } from '../selectors';
 import { getRequestToRate } from '../operations';
 import { Rstatus } from 'core/models/api';
 import Form from './Form';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   requestId: getRequestId(state),
   query: getRequestQuery(state),
-  getRequestStatus: state.ui.api.requsetState.result,
+  getRequestStatus: state.ui.api.requsetState.result
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class Index extends React.Component<Props & FelaProps> {
-
   async componentDidMount() {
     if (this.props.requestId) {
       await getRequestToRate(this.props.requestId, this.props.query);
@@ -28,30 +28,35 @@ class Index extends React.Component<Props & FelaProps> {
   }
 
   render() {
-    const { styles, getRequestStatus } = this.props;
-    const ratingRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.RATING;
-    const invalidRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
-    const ratedRequest = getRequestStatus && getRequestStatus.Rstatus === Rstatus.RATED;
+    const { styles, getRequestStatus, t } = this.props;
+    const ratingRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.RATING;
+    const invalidRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.INVALID;
+    const ratedRequest =
+      getRequestStatus && getRequestStatus.Rstatus === Rstatus.RATED;
 
     return (
-        <div className={styles.container}>
-          <Paper style={{margin: '1rem'}} zDepth={2}>
-            {ratingRequest &&
+      <div className={styles.container}>
+        <Paper style={{ margin: '1rem' }} zDepth={2}>
+          {ratingRequest && (
             <div className={styles.headBox}>
-              <h1 className={styles.texts}>Оцените Вашу поездку!</h1>
+              <h1 className={styles.texts}>{t('rateReq:title')}</h1>
               <Form />
-            </div>}
-            {ratedRequest &&
-              <div className={styles.headBox}>
-                <h1 className={styles.texts}>Спасибо за Вашу оценку</h1>
-              </div>
-            }
-            {invalidRequest &&
+            </div>
+          )}
+          {ratedRequest && (
             <div className={styles.headBox}>
-              <h1 className={styles.texts}>Ошибка: недействительная ссылка</h1>
-            </div>}
-          </Paper>
-        </div>
+              <h1 className={styles.texts}>{t('rateReq:title')}</h1>
+            </div>
+          )}
+          {invalidRequest && (
+            <div className={styles.headBox}>
+              <h1 className={styles.texts}>{t('errors:invalidLink')}</h1>
+            </div>
+          )}
+        </Paper>
+      </div>
     );
   }
 }
@@ -78,7 +83,8 @@ const mapStylesToProps = {
   texts
 };
 
-export default compose (
+export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
-  FelaConnect(mapStylesToProps),
+  FelaConnect(mapStylesToProps)
 )(Index);

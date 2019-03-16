@@ -8,6 +8,7 @@ import { getSubStateDataResult } from '../../selectors';
 import Paper from 'material-ui/Paper';
 import { SubStatus } from 'core/models/api';
 import { Form } from './Form';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   SubStateCode: getSubStateDataResult(state),
@@ -15,37 +16,37 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class SubStateComponent extends React.PureComponent<Props & FelaProps> {
 
   get processUnsub() {
-    const { styles, SubStateCode, userName } = this.props;
+    const { styles, SubStateCode, userName, t } = this.props;
     return(SubStatus.PROCESS === SubStateCode &&
       <>
         <div className={styles.headBox}>
-          <h1 className={styles.texts}>Уважаемый {userName}!</h1>
-          <p>Вы уверены, что хотите отписаться от почтовой рассылки?</p>
-          <p>Отключая рассылку уведомлений, Вы отказываетесь от использования сервиса.</p>
+          <h1 className={styles.texts}>{t('subState:driver:dear', {userName})}</h1>
+          <p>{t('subState:driver:uSure')}</p>
+          <p>{t('subState:driver:noService')}</p>
         </div>
         <Form />
       </>
     );
   }
   get doneUnsub() {
-    const { styles, SubStateCode, userName } = this.props;
+    const { styles, SubStateCode, t } = this.props;
     return(SubStatus.DONE === SubStateCode &&
       <div className={styles.headBox}>
-        <h1 className={styles.texts}>{userName}, Вы отписались от почтовой рассылки уведомлений.</h1>
+        <h1 className={styles.texts}>{t('subState:unsubSuc')}</h1>
       </div>
     );
   }
   get invalidUnsub() {
-    const { styles, SubStateCode } = this.props;
+    const { styles, SubStateCode, t } = this.props;
     return(SubStatus.INVALID === SubStateCode &&
       <div className={styles.headBox}>
-        <h1 className={styles.texts}>Ошибка: недействительная ссылка</h1>
+        <h1 className={styles.texts}>{t('errors:invalidLink')}</h1>
       </div>
     );
   }
@@ -88,6 +89,7 @@ const mapStylesToProps = {
 };
 
 export const SubState = compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
 )(SubStateComponent);

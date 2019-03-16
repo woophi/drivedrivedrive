@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createComponent } from 'react-fela';
 import { RaisedButton } from 'material-ui';
 import { resetForm } from 'ui/app/operations';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 type Props = {
   pristine: boolean;
@@ -9,19 +10,19 @@ type Props = {
   resetForm: string;
   labelSubmit: string;
   labelCancel: string;
-}
+} & WithTranslation
 
-export class FormButtonsRow extends React.PureComponent<Props> {
+class FormButtonsRowComponent extends React.PureComponent<Props> {
   static defaultProps: Partial<Props> = {
-    labelCancel: 'Сбросить',
-    labelSubmit: 'Сохранить',
+    labelCancel: 'app::common:button:reset',
+    labelSubmit: 'app::common:button:save',
     resetForm: ''
   }
 
   handleResetForm = () => resetForm(this.props.resetForm);
 
   render() {
-    const { pristine, submitting, labelSubmit, labelCancel } = this.props;
+    const { pristine, submitting, labelSubmit, labelCancel, t } = this.props;
     return (
       <BtnContainer>
         <RaisedButton
@@ -29,7 +30,7 @@ export class FormButtonsRow extends React.PureComponent<Props> {
           style={{ marginRight: '1rem' }}
           buttonStyle={{ padding: '0' }}
         >
-          {labelCancel}
+          {t(labelCancel)}
         </RaisedButton>
         <RaisedButton
           type="submit"
@@ -39,13 +40,17 @@ export class FormButtonsRow extends React.PureComponent<Props> {
           {submitting ? (
             <i className="fas fa-circle-notch fa-spin" />
           ) : (
-            labelSubmit
+            <span style={{margin: 8}}>
+              {t(labelSubmit)}
+            </span>
           )}
         </RaisedButton>
       </BtnContainer>
     )
   }
 }
+
+export const FormButtonsRow = withTranslation()(FormButtonsRowComponent);
 
 const BtnContainer = createComponent(() => ({
   margin: '2rem 0',

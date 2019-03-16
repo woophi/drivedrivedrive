@@ -13,9 +13,7 @@ import {
 import { connect as ReduxConnect } from 'react-redux';
 import { submitNewUser, validateNewUser } from './form';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Link } from 'ui/app/components/Links';
 import { changeUrl } from 'ui/app/operations';
 import { Alert } from 'ui/app/components/Alert';
 import Checkbox from 'material-ui/Checkbox';
@@ -25,6 +23,9 @@ import { handleTriggerGDPRDialog, getGdprUser } from './operations';
 import { DataStatus } from 'core/models/api';
 import { getGdprUserData, getGdprUserResult } from './selectors';
 import { TextFieldProps } from 'ui/formTypes';
+import { CustomInputField } from 'ui/atoms/fields';
+import { FormButtonsRow } from 'ui/atoms/buttons';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   authInfo: state.authInfo,
@@ -36,7 +37,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class Index extends React.Component<
@@ -71,11 +72,12 @@ class Index extends React.Component<
       error,
       pristine,
       submitting,
-      isOpenGDPR
+      isOpenGDPR,
+      t
     } = this.props;
     const actionButtons = [
       <RaisedButton
-        label={'Закрыть'}
+        label={t('common:button:close')}
         primary
         onClick={this.handleCloseModalGDPR}
       />
@@ -87,7 +89,7 @@ class Index extends React.Component<
         style={{ textDecoration: 'underline' }}
         onClick={this.handleClick}
       >
-        Согласие на обработку персональных данных
+        {t('register:gdpr')}
       </a>
     );
     return (
@@ -98,14 +100,14 @@ class Index extends React.Component<
             onSubmit={handleSubmit}
             autoComplete={''}
           >
-            <h1 className={styles.heading}>Регистрация нового водителя</h1>
+            <h1 className={styles.heading}>{t('register:title')}</h1>
             {error && <Alert mssg={error} type={'error'} />}
             <Field
               name="email"
               component={CustomInputField}
               type="text"
               {...{
-                floatingLabelText: 'E-mail',
+                floatingLabelText: t('common:email'),
                 fullWidth: true
               }}
             />
@@ -114,7 +116,7 @@ class Index extends React.Component<
               component={CustomInputField}
               type="text"
               {...{
-                floatingLabelText: 'Имя',
+                floatingLabelText: t('common:name'),
                 fullWidth: true
               }}
             />
@@ -123,7 +125,7 @@ class Index extends React.Component<
               component={CustomInputField}
               type="text"
               {...{
-                floatingLabelText: 'Фамилия',
+                floatingLabelText: t('common:surname'),
                 fullWidth: true
               }}
             />
@@ -132,7 +134,7 @@ class Index extends React.Component<
               component={CustomInputField}
               type="password"
               {...{
-                floatingLabelText: 'Пароль',
+                floatingLabelText: t('common:password'),
                 fullWidth: true
               }}
             />
@@ -141,7 +143,7 @@ class Index extends React.Component<
               component={CustomInputField}
               type="tel"
               {...{
-                floatingLabelText: 'Номер телефона',
+                floatingLabelText: t('common:phone'),
                 fullWidth: true
               }}
             />
@@ -154,18 +156,13 @@ class Index extends React.Component<
                 className: styles.gdprCheckbox
               }}
             />
-            <div className={styles.btnContainer}>
-              <Link to={`/`} className={'mr-1'}>
-                <RaisedButton>{'отмена'}</RaisedButton>
-              </Link>
-              <RaisedButton type="submit" primary disabled={submitting}>
-                {submitting ? (
-                  <i className="fas fa-circle-notch fa-spin" />
-                ) : (
-                  <span style={{ margin: 8 }}>Зарегистрироваться</span>
-                )}
-              </RaisedButton>
-            </div>
+            <FormButtonsRow
+              labelCancel={'app::common:button:cancel'}
+              labelSubmit={'app::common:button:register'}
+              pristine={pristine}
+              resetForm={'newUser'}
+              submitting={submitting}
+            />
           </form>
         </Paper>
         <Modal
@@ -173,24 +170,12 @@ class Index extends React.Component<
           body={this.gdprComponent}
           handleClose={this.handleCloseModalGDPR}
           open={isOpenGDPR}
-          title={'Пользовательское соглашение'}
+          title={t('gdpr')}
         />
       </>
     );
   }
 }
-
-const CustomInputField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <TextField
-    {...props.input}
-    {...props}
-    errorText={
-      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
-    }
-  />
-);
 const CustomCheckbox: React.SFC<WrappedFieldProps & TextFieldProps> = props => (
   <div className={props.className}>
     <Checkbox
@@ -224,12 +209,6 @@ const heading: FelaRule<Props> = () => ({
   alignSelf: 'flex-start'
 });
 
-const btnContainer: FelaRule<Props> = () => ({
-  margin: '2rem 0',
-  justifyContent: 'center',
-  display: 'flex',
-  width: '100%'
-});
 
 const gdprCheckbox: FelaRule = () => ({
   display: 'flex',
@@ -249,11 +228,11 @@ const mapStylesToProps = {
   container,
   heading,
   form,
-  btnContainer,
   gdprCheckbox
 };
 
 export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<data.NewUser, Props>({

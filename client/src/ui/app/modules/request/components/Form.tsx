@@ -4,58 +4,51 @@ import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
-import { Field, InjectedFormProps, reduxForm, WrappedFieldProps } from 'redux-form';
+import { Field, InjectedFormProps, reduxForm } from 'redux-form';
 import { validatePrice, submitPrice } from '../form';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
 import { getRequestId } from '../selectors';
-import { TextFieldProps } from 'ui/formTypes';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { CustomInputField } from 'ui/atoms/fields';
+import { FormButtonsRow } from 'ui/atoms/buttons';
 
 const mapStateToProps = (state: AppState) => ({
-  requestId: getRequestId(state),
+  requestId: getRequestId(state)
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
-class Index extends React.Component<Props & FelaProps & InjectedFormProps<{requestPrice: number}, Props>> {
-
+class Index extends React.Component<
+  Props & FelaProps & InjectedFormProps<{ requestPrice: number }, Props>
+> {
   render() {
-    const { styles, handleSubmit, error, pristine, submitting } = this.props;
+    const { styles, handleSubmit, error, pristine, submitting, t } = this.props;
     return (
       <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
-        <h1 className={styles.heading}>Предложить цену</h1>
+        <h1 className={styles.heading}>{t('answerReq:offerPrice')}</h1>
         {error && <Alert mssg={error} type={'error'} />}
         <Field
           name="requestPrice"
           component={CustomInputField}
           type="number"
           {...{
-            floatingLabelText: 'Цена в €(евро)',
+            floatingLabelText: t('common:price'),
             fullWidth: true
           }}
         />
-        <div className={styles.btnContainer}>
-          <RaisedButton type="submit" primary disabled={pristine || submitting}>
-            {submitting ? <i className="fas fa-circle-notch fa-spin" /> : <span style={{margin: 8}}>Откликнуться</span>}
-          </RaisedButton>
-        </div>
+        <FormButtonsRow
+          labelSubmit={'app::common:button:answer'}
+          labelCancel={'app::common:button:cancel'}
+          pristine={pristine}
+          resetForm={'assignRequest'}
+          submitting={submitting}
+        />
       </form>
     );
   }
 }
-
-
-const CustomInputField: React.SFC<WrappedFieldProps & TextFieldProps> = props =>
-    <TextField
-      {...props.input}
-      {...props}
-      min={0}
-      errorText={!!(props.meta.touched && props.meta.error) ? props.meta.error : ''}
-    />
-;
 
 const container: FelaRule<Props> = () => ({
   maxWidth: 650,
@@ -72,34 +65,27 @@ const form: FelaRule<Props> = () => ({
 });
 
 const heading: FelaRule<Props> = () => ({
-  alignSelf:  'flex-start'
+  alignSelf: 'flex-start'
 });
 
 const subContainer: FelaRule<Props> = () => ({
-  display:  'flex',
-  width:  '100%',
-  justifyContent: 'space-between'
-});
-
-const btnContainer: FelaRule<Props> = () => ({
-  margin: '2rem 0',
-  justifyContent: 'center',
   display: 'flex',
   width: '100%',
+  justifyContent: 'space-between'
 });
 
 const mapStylesToProps = {
   container,
   heading,
   form,
-  subContainer,
-  btnContainer
+  subContainer
 };
 
-export default compose (
+export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
-  reduxForm<{requestPrice: number}, Props>({
+  reduxForm<{ requestPrice: number }, Props>({
     form: 'assignRequest',
     enableReinitialize: true,
     destroyOnUnmount: true,

@@ -27,7 +27,9 @@ const renderApp = (fela: {
         <ThemeProvider theme={driveTheme}>
           <MuiThemeProvider>
             <ConnectedRouter history={history}>
-              <AppRoot />
+              {/* <I18nextProvider i18n={i18n.}> */}
+                <AppRoot />
+              {/* </I18nextProvider> */}
             </ConnectedRouter>
           </MuiThemeProvider>
         </ThemeProvider>
@@ -39,6 +41,7 @@ const renderApp = (fela: {
 
 export const entryApplication = async (args: AppEntrySettings) => {
   console.debug('AppEntry args:', args);
+  await common.setLocale(args.language);
   injectReducer('ui', uiReducers);
   await init();
 
@@ -48,7 +51,6 @@ export const entryApplication = async (args: AppEntrySettings) => {
     lang: args.language
   });
 
-  await common.setLocale(args.language);
 
   moment.locale(store.getState().localAppState.lang);
 

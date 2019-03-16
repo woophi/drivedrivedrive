@@ -9,24 +9,25 @@ import { connect as ReduxConnect } from 'react-redux';
 import { AppState } from 'core/models/app';
 import ResetPassword from 'ui/app/modules/password/reset';
 import { getProfile } from '../operations';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 const MOBILE_SCREEN_WIDTH = 768;
 type Props = {
   isMobile: boolean;
-};
+} & WithTranslation;
 class TabsComp extends React.PureComponent<FelaProps & Props> {
   async componentDidMount() {
     await getProfile();
   }
   render() {
-    const { isMobile, styles } = this.props;
+    const { isMobile, styles, t } = this.props;
     const driverLabel = isMobile ? (
       <i className={'fas fa-user-edit'} />
     ) : (
       <div>
         <i className={'fas fa-user-edit mr-1'} />
-        Данные водителя
+        {t('profile:tab:driver')}
       </div>
     );
     const notifyLabel = isMobile ? (
@@ -34,7 +35,7 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
     ) : (
       <div>
         <i className={'fas fa-bell mr-1'} />
-        Рассылка уведомлений
+        {t('profile:tab:notifications')}
       </div>
     );
     const carLabel = isMobile ? (
@@ -42,7 +43,7 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
     ) : (
       <div>
         <i className={'fas fa-car mr-1'} />
-        Машина
+        {t('profile:tab:car')}
       </div>
     );
     const resetPasswordLabel = isMobile ? (
@@ -50,7 +51,7 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
     ) : (
       <div>
         <i className={'fas fa-key mr-1'} />
-        Изменить пароль
+        {t('profile:tab:password')}
       </div>
     );
     return (
@@ -82,6 +83,7 @@ const mapStylesToProps = {
 };
 
 export const TabsProfile = compose(
+  withTranslation('app'),
   FelaConnect(mapStylesToProps),
   ReduxConnect((state: AppState) => ({
     isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH

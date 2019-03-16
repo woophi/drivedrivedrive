@@ -10,6 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { NavLink } from 'ui/app/components/Links';
 import { getRating } from '../selectors';
 import { getCheckRoles } from 'core/app/selectors';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   getRoles: getCheckRoles(state),
@@ -18,7 +19,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class Index extends React.Component<Props & FelaProps> {
   get adminButton() {
@@ -27,7 +28,7 @@ class Index extends React.Component<Props & FelaProps> {
       admin && (
         <NavLink to={`/admin`} className={'mr-1'}>
           <RaisedButton primary>
-            <span style={{ margin: 8 }}>Админ кабинет</span>
+            <span style={{ margin: 8 }}>{this.props.t('profile:adminCab')}</span>
           </RaisedButton>
         </NavLink>
       )
@@ -39,9 +40,7 @@ class Index extends React.Component<Props & FelaProps> {
     return (
       !activeDriver && (
         <span className={this.props.styles.texts}>
-          Ваш профиль до сих пор не активен. Необходимо заполнить все поля и
-          фото, получить разрешение от администратора, выбрать способ рассылки
-          уведомлений.
+          {this.props.t('profile:notActive')}
         </span>
       )
     );
@@ -49,12 +48,12 @@ class Index extends React.Component<Props & FelaProps> {
 
   get ratingDriver() {
     const { activeDriver } = this.props.getRoles;
-    const { styles, rating } = this.props;
+    const { styles, rating, t } = this.props;
     return (
       rating &&
       activeDriver && (
         <span className={styles.texts}>
-          Ваш рейтинг {rating.toFixed(1)}
+          {t('profile:rating')} {rating.toFixed(1)}
           <i className={'fas fa-star'} />
         </span>
       )
@@ -62,7 +61,7 @@ class Index extends React.Component<Props & FelaProps> {
   }
 
   render() {
-    const { styles, authInfo } = this.props;
+    const { styles, authInfo, t } = this.props;
     return (
       <div className={styles.container}>
         <Paper zDepth={2} style={{margin: '1rem'}}>
@@ -70,7 +69,7 @@ class Index extends React.Component<Props & FelaProps> {
             <span className={styles.texts}>
               {this.adminButton}
               <span>
-                Привет {authInfo && authInfo.fullName.first}, это ваш профиль!
+                {t('profile:username', {name: authInfo && authInfo.fullName.first})}
               </span>
             </span>
             {this.activeDriver}
@@ -110,6 +109,7 @@ const mapStylesToProps = {
 };
 
 export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(Index);

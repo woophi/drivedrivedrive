@@ -5,12 +5,14 @@ import { AppState } from 'core/models/app';
 import { getOpenRequestsData } from '../selectors';
 import { DataStatus } from 'core/models/api';
 import { createComponent, FelaThemeProps } from 'react-fela';
+import { compose } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 type Props = {
   openRequestsPrevNumber: number;
   updatingOpenRequests: boolean;
   tabViewOpenRs: boolean;
-};
+} & WithTranslation;
 
 type LocalState = {
   openRequestsNumber: number;
@@ -78,7 +80,7 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
   }
 
   render() {
-    const { openRequestsPrevNumber, updatingOpenRequests } = this.props;
+    const { openRequestsPrevNumber, updatingOpenRequests, t } = this.props;
     const { openRequestsNumber } = this.state;
 
     const diffOpenRequests =
@@ -89,7 +91,7 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
     const click = updatingOpenRequests ? undefined : this.updateOpenRequests;
 
     const showIndicator = diffOpenRequests > 0 && (
-      <Indicator data-rh={'Новые заявки'} data-rh-at="top">
+      <Indicator data-rh={t('newRequests')} data-rh-at="top">
         {diffOpenRequests}
       </Indicator>
     )
@@ -97,7 +99,7 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
     const getView = !!diffOpenRequests && (
       <Container>
         <i
-          data-rh={'Обновить'}
+          data-rh={t('refresh')}
           data-rh-at="bottom"
           className={`fas fa-sync ${spin}`}
           onClick={click}
@@ -110,13 +112,16 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
   }
 }
 
-export const OpenRequestsNumber = ReduxConnect((state: AppState) => {
-  return {
-    openRequestsPrevNumber: getOpenRequestsData(state).result.length,
-    updatingOpenRequests:
-      getOpenRequestsData(state).status === DataStatus.UPDATING ||
-      getOpenRequestsData(state).status === DataStatus.QUIET_FETCHING ||
-      getOpenRequestsData(state).status === DataStatus.FETCHING,
-    tabViewOpenRs: state.ui.requests.view === 'open'
-  };
-})(OpenRequestsNumberComponent);
+export const OpenRequestsNumber = compose(
+  withTranslation('app'),
+  ReduxConnect((state: AppState) => {
+    return {
+      openRequestsPrevNumber: getOpenRequestsData(state).result.length,
+      updatingOpenRequests:
+        getOpenRequestsData(state).status === DataStatus.UPDATING ||
+        getOpenRequestsData(state).status === DataStatus.QUIET_FETCHING ||
+        getOpenRequestsData(state).status === DataStatus.FETCHING,
+      tabViewOpenRs: state.ui.requests.view === 'open'
+    };
+  })
+)(OpenRequestsNumberComponent);

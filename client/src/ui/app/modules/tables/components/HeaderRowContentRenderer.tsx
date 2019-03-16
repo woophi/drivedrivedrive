@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { CellContainer } from './CellContainer';
 import { NamedTableHeader } from './NamedTableHeader';
-import { SortAndFilterState, TableConfig, TableModel, ColumnModel } from '../types';
+import { SortAndFilterState, TableConfig, ColumnModel } from '../types';
 import { ResizeHandle } from './ResizeHandle';
+import i18n from 'i18next';
 
 function renderLabel<T>(label: string, fallback?: Extract<keyof T, string>) {
   return (label === '' ? label :
     !label ? fallback :
-      // label.indexOf('::') !== -1 ? i18n.t(label) : label
-      label.indexOf('::') !== -1 ? label : label
+      label.indexOf('::') !== -1 ? i18n.t(label) : label
   );
 }
 

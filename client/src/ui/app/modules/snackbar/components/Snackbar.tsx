@@ -14,6 +14,7 @@ import {
   handleTriggerCookieModal,
   confirmCookie
 } from '../operations';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   isOpenCookie: state.ui.cookie.open,
@@ -26,7 +27,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 const COOKIE = require('../../../../assets/cookie.png');
@@ -45,18 +46,18 @@ class SnackbarComponent extends React.PureComponent<Props & FelaProps> {
   handleOpen = () => handleTriggerCookieModal(true);
 
   render() {
-    const { styles, isOpenCookie, isCookieConfirmed } = this.props;
+    const { styles, isOpenCookie, isCookieConfirmed, t } = this.props;
     const actionButtons = [
       <RaisedButton
         key={'a-1'}
-        label={'Закрыть'}
+        label={t('common:button:close')}
         primary
         onClick={this.handleClose}
       />
     ];
     const policy = (
       <a onClick={this.handleOpen} className={'curp'}>
-        Подробнее здесь
+        {t('moreInfoHere')}
       </a>
     );
     if (isCookieConfirmed) {
@@ -67,8 +68,7 @@ class SnackbarComponent extends React.PureComponent<Props & FelaProps> {
         <div className={styles.container}>
           <div className={styles.innerContainer}>
             <span>
-              При предоставлении услуг на сайте нам помогают файлы cookies,
-              продолжая пользоваться сайтом вы принимаете политику cookies.{' '}
+              {t('cookie')}{' '}
               {policy}
               <img src={COOKIE} alt={'cookie'} onClick={this.handleOpen} />
             </span>
@@ -80,7 +80,7 @@ class SnackbarComponent extends React.PureComponent<Props & FelaProps> {
           body={this.gdprComponent}
           handleClose={this.handleClose}
           open={isOpenCookie}
-          title={'Информация об использовании Cookies'}
+          title={t('cookieTitle')}
         />
       </>
     );
@@ -134,6 +134,7 @@ const mapStylesToProps = {
 };
 
 export const SnackBar = compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(SnackbarComponent);

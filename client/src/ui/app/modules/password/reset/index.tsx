@@ -9,21 +9,16 @@ import {
 import { returntypeof } from 'react-redux-typescript';
 import * as React from 'react';
 import { compose } from 'redux';
-import {
-  Field,
-  InjectedFormProps,
-  reduxForm,
-  WrappedFieldProps
-} from 'redux-form';
+import { Field, InjectedFormProps, reduxForm } from 'redux-form';
 import * as data from 'core/models';
 import { validatePR, submitPR } from './form';
 import Paper from 'material-ui/Paper';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
 import { Link } from 'ui/app/components/Links';
 import { Alert } from 'ui/app/components/Alert';
 import { checkPasswordKey } from '../operations';
-import { TextFieldProps } from 'ui/formTypes';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { CustomInputField } from 'ui/atoms/fields';
+import { FormButtonsRow } from 'ui/atoms/buttons';
 
 const mapStateToProps = (state: AppState) => ({
   keyState: state.ui.keyPassword.key,
@@ -32,7 +27,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class ResetPasswordComponent extends React.Component<
@@ -53,37 +48,27 @@ class ResetPasswordComponent extends React.Component<
       submitting,
       token,
       isProfilePath,
-      keyState
+      keyState,
+      t
     } = this.props;
 
-    const labelBtn = token && isProfilePath ? 'Изменить' : 'Обновить пароль';
+    const labelBtn =
+      token && isProfilePath
+        ? 'app::common:button:change'
+        : 'app::common:button:changePassword';
 
-    const submitBtn = submitting ? (
-      <i className="fas fa-circle-notch fa-spin" />
-    ) : (
-      <span style={{ margin: 8 }}>{labelBtn}</span>
+    const header = isProfilePath ? null : (
+      <h1 className={styles.heading}>{t('common:button:resetPassword')}</h1>
     );
 
-    const header =
-      isProfilePath ? null : (
-        <h1 className={styles.heading}>Сбросить пароль</h1>
-      );
+    const usefulLink = isProfilePath ? null : (
+      <span>
+        {t('login:actuallyRemember')},{' '}
+        <Link to={'/signin'}>{t('common:button:enter')}</Link>
+      </span>
+    );
 
-    const cancelBtn =
-      isProfilePath ? null : (
-        <Link to={`/`} className={'mr-1'}>
-          <RaisedButton>{'отмена'}</RaisedButton>
-        </Link>
-      );
-
-    const usefulLink =
-      isProfilePath ? null : (
-        <span>
-          В этот раз точно вспомнил, <Link to={'/signin'}>войти</Link>
-        </span>
-      );
-
-    const getError = (keyState.message && !isProfilePath || error) && (
+    const getError = ((keyState.message && !isProfilePath) || error) && (
       <Alert mssg={error || keyState.message} type={'error'} />
     );
 
@@ -97,7 +82,7 @@ class ResetPasswordComponent extends React.Component<
           type="password"
           autoComplete={'new-password'}
           {...{
-            floatingLabelText: 'Новый пароль',
+            floatingLabelText: t('login:newPassword'),
             fullWidth: true
           }}
         />
@@ -107,16 +92,17 @@ class ResetPasswordComponent extends React.Component<
           type="password"
           autoComplete={'new-password'}
           {...{
-            floatingLabelText: 'Подтвердить пароль',
+            floatingLabelText: t('login:againPassword'),
             fullWidth: true
           }}
         />
-        <div className={styles.btnContainer}>
-          {cancelBtn}
-          <RaisedButton type="submit" primary disabled={pristine || submitting}>
-            {submitBtn}
-          </RaisedButton>
-        </div>
+        <FormButtonsRow
+          labelSubmit={labelBtn}
+          labelCancel={'app::common:button:cancel'}
+          pristine={pristine}
+          resetForm={'resetPassword'}
+          submitting={submitting}
+        />
         <div className={styles.subContainer}>{usefulLink}</div>
       </form>
     );
@@ -124,20 +110,12 @@ class ResetPasswordComponent extends React.Component<
 
   get renderView() {
     const { keyState, isProfilePath } = this.props;
-    if (keyState.status && !isProfilePath || isProfilePath) {
+    if ((keyState.status && !isProfilePath) || isProfilePath) {
       return this.renderForm();
     } else if (!keyState.status && !isProfilePath && keyState.message) {
-      return (
-        <h1>
-          Ошибка: недействительная ссылка
-        </h1>
-      );
+      return <h1>Ошибка: недействительная ссылка</h1>;
     } else {
-      return (
-        <h1>
-          Проверка
-        </h1>
-      );
+      return <h1>Проверка</h1>;
     }
   }
 
@@ -150,31 +128,19 @@ class ResetPasswordComponent extends React.Component<
   }
 }
 
-const CustomInputField: React.SFC<
-  WrappedFieldProps & TextFieldProps
-> = props => (
-  <TextField
-    {...props.input}
-    {...props}
-    errorText={
-      !!(props.meta.touched && props.meta.error) ? props.meta.error : ''
-    }
-  />
-);
-
 const container: FelaRule<Props> = ({ isProfilePath }) => {
   const fromProfileSt = isProfilePath && {
-      margin: '1rem',
-      width: 'auto',
-      height: '100%'
-    };
+    margin: '1rem',
+    width: 'auto',
+    height: '100%'
+  };
   const routeResetPasswordSt = !isProfilePath && {
-      maxWidth: 650,
-      margin: 'auto',
-      minWidth: 320,
-      width: '100%',
-      padding: '1rem'
-    };
+    maxWidth: 650,
+    margin: 'auto',
+    minWidth: 320,
+    width: '100%',
+    padding: '1rem'
+  };
   return {
     ...fromProfileSt,
     ...routeResetPasswordSt
@@ -183,20 +149,20 @@ const container: FelaRule<Props> = ({ isProfilePath }) => {
 
 const form: FelaRule<Props> = ({ isProfilePath }) => {
   const fromProfileSt: IStyle = isProfilePath && {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      margin: '0 auto',
-      padding: '1rem',
-      height: '100%',
-      maxWidth: 700
-    };
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: '0 auto',
+    padding: '1rem',
+    height: '100%',
+    maxWidth: 700
+  };
   const routeResetPasswordSt: IStyle = !isProfilePath && {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '1rem'
-    };
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '1rem'
+  };
   return {
     ...fromProfileSt,
     ...routeResetPasswordSt
@@ -213,22 +179,15 @@ const subContainer: FelaRule<Props> = () => ({
   justifyContent: 'space-between'
 });
 
-const btnContainer: FelaRule<Props> = () => ({
-  margin: '2rem 0',
-  justifyContent: 'center',
-  display: 'flex',
-  width: '100%'
-});
-
 const mapStylesToProps = {
   container,
   heading,
   form,
-  subContainer,
-  btnContainer
+  subContainer
 };
 
 export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<data.PasswordReset, Props>({

@@ -3,18 +3,22 @@ import Dropzone from 'react-dropzone';
 import { WrappedFieldProps } from 'redux-form';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import IconButton  from 'material-ui/IconButton';
+import { compose } from 'redux';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-type Props = {
+type OwnProps = {
   filedProps: WrappedFieldProps;
   labelName: string;
   exampleFile?: string;
-}
+};
 
 type LocalState = {
   files: File[];
   filePreviewUrl: string;
   err: any;
 }
+
+type Props = {} & OwnProps & WithTranslation;
 
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
@@ -37,8 +41,9 @@ class UploadComponent extends React.Component<Props & FelaProps, LocalState> {
   }
 
   onDrop(files: File[]) {
+    const textErr = this.props.t('dropzone:maxFile');
     if (!files.length) {
-      this.setState({err: 'Максимальный размер файла 2 Мб, допускаются форматы .png,.jpg,.jpeg'})
+      this.setState({err: textErr})
     } else {
       this.props.filedProps.input.onChange(files[0]);
       this.setState({
@@ -189,4 +194,7 @@ const mapStylesToProps = {
   dropzoneReject
 };
 
-export default FelaConnect(mapStylesToProps)(UploadComponent)
+export const FileUploader = compose<React.ComponentClass<OwnProps>>(
+  withTranslation('app'),
+  FelaConnect(mapStylesToProps)
+)(UploadComponent);

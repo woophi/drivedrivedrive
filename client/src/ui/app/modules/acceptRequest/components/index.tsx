@@ -9,6 +9,7 @@ import { getRequestId, getDriverId } from '../selectors';
 import { acceptDriverAndGetRequestState } from '../operations';
 import { Rstatus, DataStatus } from 'core/models/api';
 import { Preloader } from 'ui/app/components/preloader';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 const mapStateToProps = (state: AppState) => ({
   driverId: getDriverId(state),
@@ -20,7 +21,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & WithTranslation;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 class Index extends React.Component<Props & FelaProps> {
   componentDidMount() {
@@ -33,7 +34,7 @@ class Index extends React.Component<Props & FelaProps> {
   }
 
   render() {
-    const { styles, getRequestStatus, loading } = this.props;
+    const { styles, getRequestStatus, loading, t } = this.props;
     const closedRequest =
       getRequestStatus && getRequestStatus.Rstatus === Rstatus.CLOSED;
     const invalidRequest =
@@ -44,20 +45,17 @@ class Index extends React.Component<Props & FelaProps> {
         <Paper style={{ margin: '1rem' }} zDepth={2}>
           {closedRequest && (
             <div className={styles.headBox}>
-              <h1 className={styles.texts}>Спасибо!</h1>
+              <h1 className={styles.texts}>{t('acceptReq:thx')}</h1>
               <span className={styles.texts}>
-                <p>Ваш отклик отправлен водителю.</p>
-                <p>
-                  В ближайшее время Вам на почту придет подтверждение трансфера
-                  с деталями.
-                </p>
+                <p>{t('acceptReq:respToDriver')}</p>
+                <p>{t('acceptReq:detailsWillCome')}</p>
               </span>
             </div>
           )}
           {invalidRequest && (
             <div className={styles.headBox}>
               <h1 className={styles.texts}>
-                Ошибка: недействительная ссылка
+                {t('errors:invalidLink')}
               </h1>
             </div>
           )}
@@ -91,6 +89,7 @@ const mapStylesToProps = {
 };
 
 export default compose(
+  withTranslation('app'),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps)
 )(Index);

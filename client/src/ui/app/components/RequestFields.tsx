@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Field, WrappedFieldProps } from 'redux-form';
 import { connect as FelaConnect, FelaRule, FelaStyles } from 'react-fela';
 import { parseToInt } from 'ui/shared/transforms';
-import { DatePickerComponent } from 'ui/app/components/DatePickerField';
+import { DatePicker } from 'ui/app/components/DatePickerField';
 
 type TextFieldProps = {
   type: string;
@@ -72,7 +72,7 @@ class RequestFieldsComponent extends React.Component<Props & FelaProps> {
           {props.label}
         </label>
         <div className={labelClassName}>
-          <DatePickerComponent
+          <DatePicker
             uniqId={props.id}
             input={props.input}
             meta={props.meta}

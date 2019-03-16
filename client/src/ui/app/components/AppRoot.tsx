@@ -10,6 +10,10 @@ import { ScreenMeasurer } from '../modules/screenMeasurer';
 const ReactHint = ReactHintFactory(React);
 
 export class AppRoot extends React.Component {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('AppRoot component ->', error, errorInfo);
+  }
+
   render() {
     return (
         <Container>

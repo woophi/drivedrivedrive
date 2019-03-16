@@ -20,12 +20,13 @@ import { updateRequest } from '../form';
 import { parseToInt } from 'ui/shared/transforms';
 import { CustomInputField, CustomCheckBoxField, CustomDateField } from 'ui/atoms/fields';
 import { FormButtonsRow } from 'ui/atoms/buttons';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
 type Props = {
   fetchingRequest: boolean;
   initialValues: Request;
   getRequestErr: any;
-} & SectionChildProps;
+} & SectionChildProps & WithTranslation;
 
 class EditRequestComponent extends React.Component<
   Props & InjectedFormProps<Request, Props>
@@ -43,7 +44,8 @@ class EditRequestComponent extends React.Component<
     const {
       pristine,
       submitting,
-      initialValues
+      initialValues,
+      t
     } = this.props;
     return (initialValues &&
       <>
@@ -52,7 +54,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="text"
           {...{
-            floatingLabelText: 'Имя',
+            floatingLabelText: t('common:name'),
             fullWidth: true
           }}
         />
@@ -61,7 +63,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="text"
           {...{
-            floatingLabelText: 'E-mail',
+            floatingLabelText: t('common:email'),
             fullWidth: true
           }}
         />
@@ -71,7 +73,7 @@ class EditRequestComponent extends React.Component<
           type="number"
           parse={parseToInt}
           {...{
-            floatingLabelText: 'Количество человек',
+            floatingLabelText: t('common:count'),
             fullWidth: true
           }}
         />
@@ -80,7 +82,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="text"
           {...{
-            floatingLabelText: 'Пункт отправления',
+            floatingLabelText: t('common:from'),
             fullWidth: true
           }}
         />
@@ -89,7 +91,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="text"
           {...{
-            floatingLabelText: 'Пункт назначения',
+            floatingLabelText: t('common:to'),
             fullWidth: true
           }}
         />
@@ -99,7 +101,7 @@ class EditRequestComponent extends React.Component<
           type="date"
           id={'adm_request_date'}
           {...{
-            floatingLabelText: 'Дата',
+            floatingLabelText: t('common:date'),
             fullWidth: true
           }}
         />
@@ -108,7 +110,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="time"
           {...{
-            floatingLabelText: 'Время',
+            floatingLabelText: t('common:time'),
             fullWidth: true
           }}
         />
@@ -117,7 +119,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="text"
           {...{
-            floatingLabelText: 'Комментарий',
+            floatingLabelText: t('common:comment'),
             fullWidth: true
           }}
         />
@@ -126,7 +128,7 @@ class EditRequestComponent extends React.Component<
           component={CustomInputField}
           type="tel"
           {...{
-            floatingLabelText: 'Номер телефона',
+            floatingLabelText: t('common:phone'),
             fullWidth: true
           }}
         />
@@ -135,13 +137,13 @@ class EditRequestComponent extends React.Component<
           component={CustomCheckBoxField}
           type="checkbox"
           {...{
-            floatingLabelText: 'Подписка на рассылку сообщений',
+            floatingLabelText: t('common:notify'),
             disabled: true
           }}
         />
         <FormButtonsRow
-          labelCancel={'Сбросить изменения'}
-          labelSubmit={'Обновить'}
+          labelCancel={'app::common:button:resetChanges'}
+          labelSubmit={'app::common:button:update'}
           pristine={pristine}
           resetForm={'editRequest'}
           submitting={submitting}
@@ -151,22 +153,22 @@ class EditRequestComponent extends React.Component<
   }
 
   get approveBtn() {
-    const { initialValues } = this.props;
+    const { initialValues, t } = this.props;
     return (initialValues && !initialValues.approved &&
       <RaisedButton
         onClick={this.handleApproveRequest}
         disabled={!!initialValues.approved}
       >
-        Одобрить
+        {t('common:button:approve')}
       </RaisedButton>
     )
   }
   get approved() {
-    const { initialValues } = this.props;
+    const { initialValues, t } = this.props;
     return (initialValues && initialValues.approved &&
       <ApprovedContainer>
         <i className="far fa-check-circle" />
-        Успешно одобрено
+        {t('admin:requests:sucApproved')}
       </ApprovedContainer>
     )
   }
@@ -225,6 +227,7 @@ const ApprovedContainer = createComponent(() => ({
 }) as IStyle, 'p');
 
 export const EditRequest = compose(
+  withTranslation('app'),
   redux((state: AppState) => ({
     fetchingRequest: state.ui.api.adminRequest.status === DataStatus.QUIET_FETCHING,
     initialValues: state.ui.api.adminRequest.result,

@@ -1,11 +1,12 @@
-import { RateRequest } from "core/models/api";
+import { RateRequest } from 'core/models/api';
 import {
   FormErrors,
   FormSubmitHandler,
   reset,
   SubmissionError
-} from "redux-form";
-import { getRequestToRate, rateRequest } from "./operations";
+} from 'redux-form';
+import { getRequestToRate, rateRequest } from './operations';
+import { i18n } from 'ui/app/components/i18n-proxy';
 
 type SharedProps = {
   requestId: string;
@@ -17,13 +18,13 @@ export const validateRR = (
 ): FormErrors<RateRequest> => {
   const errors = {} as FormErrors<RateRequest>;
   if (!values.ratingCar) {
-    errors.ratingCar = "Пожалуйста, поставьте оценку";
+    errors.ratingCar = i18n.rateIt;
   }
   if (!values.ratingDriver) {
-    errors.ratingDriver = "Пожалуйста, поставьте оценку";
+    errors.ratingDriver = i18n.rateIt;
   }
   if (!values.ratingTrip) {
-    errors.ratingTrip = "Пожалуйста, поставьте оценку";
+    errors.ratingTrip = i18n.rateIt;
   }
 
   if (
@@ -33,7 +34,7 @@ export const validateRR = (
       values.ratingCar <= 4) &&
     !values.ratingComment
   ) {
-    errors.ratingComment = "Пожалуйста, напишите, что Вам не понравилось";
+    errors.ratingComment = i18n.commentRating;
   }
 
   return errors;
@@ -52,7 +53,7 @@ export const submitRR: FormSubmitHandler<RateRequest> = async (
     await rateRequest(payload).then(() =>
       getRequestToRate(props.requestId, props.query)
     );
-    dispatch(reset("assignRequest"));
+    dispatch(reset('assignRequest'));
   } catch (e) {
     throw new SubmissionError({ _error: e.error.message });
   }
