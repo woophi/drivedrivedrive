@@ -37,7 +37,7 @@ const InProcessRequestsConnectedList = tableConnect({
 const InProcessRequestsContainer = Loader({
   loadData: getInProcessRequests,
   dataSelector: getInProcessRequestsData,
-  component: InProcessRequestsConnectedList as any
+  component: InProcessRequestsConnectedList
 });
 
 export const InProcessRequestsList: React.SFC = () => {

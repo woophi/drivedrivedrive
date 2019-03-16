@@ -37,7 +37,7 @@ const ActiveRequestsConnectedList = tableConnect({
 const ActiveRequestsContainer = Loader({
   loadData: getActiveRequests,
   dataSelector: getActiveRequestsData,
-  component: ActiveRequestsConnectedList as any
+  component: ActiveRequestsConnectedList
 });
 
 export const ActiveRequestsList: React.SFC = () => {

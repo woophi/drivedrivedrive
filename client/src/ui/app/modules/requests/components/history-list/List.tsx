@@ -37,7 +37,7 @@ const HistoryRequestsConnectedList = tableConnect({
 const HistoryRequestsContainer = Loader({
   loadData: getHistoryRequests,
   dataSelector: getHistoryRequestsData,
-  component: HistoryRequestsConnectedList as any
+  component: HistoryRequestsConnectedList
 });
 
 export const HistoryRequestsList: React.SFC = () => {
