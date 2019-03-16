@@ -5,7 +5,7 @@ import { Provider as Fela, ThemeProvider } from 'react-fela';
 import { IRenderer as FelaRenderer } from 'fela';
 import { configureFela } from './fela';
 import { driveTheme } from 'ui/shared/driveUI';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import { injectReducer, store } from 'core/shared/store';
 import { history } from 'ui/app/history';
 import { AppEntrySettings } from 'core/models/app';

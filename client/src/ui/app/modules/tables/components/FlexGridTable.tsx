@@ -10,16 +10,35 @@ import {
 import * as constants from '../constants';
 import * as equals from 'ramda/src/equals';
 
-export interface FlexGridTableProps<T> {
+export interface FlexGridTableProps<T = {}, TP = {}, RP = {}> {
   list: T[];
-  config: TableConfig<T>;
+  config: TableConfig<T, TP, RP>;
   tableState: SortAndFilterState;
 }
 
-export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
+
+interface FlexGridTableState<TP = {}> {
+  tableProps: TP;
+}
+export class FlexGridTable<T, TP, RP> extends React.Component<FlexGridTableProps<T, TP, RP>, FlexGridTableState<TP>> {
+  static getDerivedStateFromProps(props: FlexGridTableProps, state: FlexGridTableState) {
+    const { list, config, tableState, ...restProps } = props;
+
+    if (!equals(state.tableProps, restProps)) {
+      return { tableProps: restProps };
+    }
+    return null;
+  }
+
+
   header: Grid = null;
   mainGrid: Grid = null;
+  table: HTMLDivElement = null;
   line = React.createRef<HTMLDivElement>();
+
+  state: FlexGridTableState<TP> = {
+    tableProps: null
+  };
 
   setRef = {
     header: (instance: Grid) => (this.header = instance),
@@ -38,35 +57,31 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
     return onScroll(event.target as HTMLDivElement);
   };
 
-  componentDidUpdate(prevProps: FlexGridTableProps<any>) {
-    /* Grids use shallowCompare, therefore forceUpdates are needed */
+  componentDidUpdate() {
     this.header.forceUpdate();
-    if (
-      !equals(this.props.list, prevProps.list) ||
-      !equals(this.props.tableState, prevProps.tableState)
-    ) {
-      this.mainGrid.forceUpdate();
-    }
+    this.mainGrid.forceUpdate();
+  }
+
+  get configModel() {
+    const { model } = this.props.config;
+    return typeof model === 'function' ? model(this.state.tableProps) : model;
   }
 
   render() {
-    // console.debug('flextable props:', this.props);
+    const { list, config,  tableState } = this.props;
     const rowHeight = constants.ROW_HEIGHT;
-
-    const { config, list, tableState } = this.props;
     const REM = 16;
 
-    const tableMinWidth = config.model.reduce(
-      (acc, columnModel) =>
-        (acc +=
-          tableState.columnWidths[columnModel.dataKey as string] ||
-          columnModel.width ||
-          columnModel.minWidth ||
-          constants.DEFAULT_COLUMN_MIN_WIDTH),
-      REM + (config.showRowArrows ? REM : 0)
+    const tableMinWidth = this.configModel.reduce(
+      (acc, columnModel) => acc += (
+        tableState.columnWidths[columnModel.dataKey] ||
+        columnModel.width ||
+        columnModel.minWidth ||
+        constants.DEFAULT_COLUMN_MIN_WIDTH
+      ),
+      REM
     );
 
-    /* tslint:disable:jsx-no-multiline-js */
     return (
       <AutoSizer>
         {({ height, width }) => {
@@ -113,7 +128,6 @@ export class FlexGridTable<T> extends React.Component<FlexGridTableProps<T>> {
                         height={height - (config.hideHeader ? 0 : rowHeight)}
                         scrollLeft={scrollLeft}
                         scrollTop={scrollTop}
-                        // onScroll={onScroll}
                         overscanColumnCount={1}
                         overscanRowCount={constants.OVERSCAN_ROW_COUNT}
                         noContentRenderer={noContentRenderer(innerWidth)}

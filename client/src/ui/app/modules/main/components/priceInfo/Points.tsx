@@ -125,6 +125,6 @@ const mapStylesToProps = {
   icon
 };
 
-export default compose(
+export default compose<React.ComponentClass>(
   FelaConnect(mapStylesToProps)
 )(Points);

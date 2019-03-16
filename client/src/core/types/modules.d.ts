@@ -1,7 +1,7 @@
 declare module 'react-spring';
 declare module 'react-visibility-sensor';
-
-
+declare module 'react-hint';
+declare module 'fela-plugin-embedded';
 declare module 'react-fela' {
   import { Omit } from 'ramda';
   import { DriveTheme } from 'ui/shared/driveUI';

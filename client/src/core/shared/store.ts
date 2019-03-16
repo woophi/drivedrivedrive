@@ -1,7 +1,7 @@
 import { combineEpics, createEpicMiddleware, Epic } from 'redux-observable';
 import 'rxjs/add/operator/ignoreElements';
 import thunk from 'redux-thunk';
-import { routerMiddleware, routerReducer } from 'react-router-redux';
+import { routerMiddleware, connectRouter } from 'connected-react-router';
 import { applyMiddleware, combineReducers, createStore, Reducer, ReducersMapObject, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import * as sharedReducers from './reducers';
@@ -13,6 +13,8 @@ const epicMiddleware = createEpicMiddleware(combineEpics(action$ => action$.igno
 const middleware = applyMiddleware(thunk, router, epicMiddleware);
 
 const asyncEpics = [] as Epic<AppDispatch, AppState>[];
+
+const routerReducer = connectRouter(history);
 
 export function injectEpic(epic: Epic<AppDispatch, AppState>) {
   asyncEpics.push(epic);

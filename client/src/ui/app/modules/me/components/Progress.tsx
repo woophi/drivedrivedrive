@@ -7,9 +7,11 @@ type Props = {
   uploadProgress: number
 };
 
-const ProgressComponent: React.SFC<Props> = ({uploadProgress}) => {
-
-  return uploadProgress ? <LinearProgress mode="determinate" value={uploadProgress} /> : null
+class ProgressComponent extends React.PureComponent<Props> {
+  render() {
+    const { uploadProgress } = this.props;
+    return uploadProgress ? <LinearProgress mode="determinate" value={uploadProgress} /> : null
+  }
 }
 
 export const Progress = ReduxConnect((state: AppState) => ({

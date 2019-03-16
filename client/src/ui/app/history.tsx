@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 // import UserConfirmationModal from 'ui/application/components/UserConfirmationModal';
 
-export const history = createHistory({
+export const history = createBrowserHistory({
   basename: '/',
   getUserConfirmation(message, callback) {
     ReactDOM.render(

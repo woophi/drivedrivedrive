@@ -1,30 +1,31 @@
 import * as React from 'react';
 import { CellContainer } from './CellContainer';
 import { NamedTableHeader } from './NamedTableHeader';
-import { SortAndFilterState, TableConfig, TableModel } from '../types';
+import { SortAndFilterState, TableConfig, TableModel, ColumnModel } from '../types';
 import { ResizeHandle } from './ResizeHandle';
 
-const renderLabel = (label: string, fallback?: string) =>
-  label === '' ? label : !label ? fallback : label;
-
-interface HeaderRowRendererProps {
-  model: TableModel;
-  config: TableConfig<any>;
-  tableState: SortAndFilterState;
-  lineRef: React.RefObject<HTMLDivElement>;
+function renderLabel<T>(label: string, fallback?: Extract<keyof T, string>) {
+  return (label === '' ? label :
+    !label ? fallback :
+      // label.indexOf('::') !== -1 ? i18n.t(label) : label
+      label.indexOf('::') !== -1 ? label : label
+  );
 }
 
-export class HeaderRowContentRenderer extends React.PureComponent<
-  HeaderRowRendererProps
-> {
-  cellsRefs = this.props.config.model.map(() =>
-    React.createRef<HTMLDivElement>()
-  );
+type Props<T = {}, TP = {}, RP = {}> = {
+  lineRef: React.RefObject<HTMLDivElement>;
+} & FlexGridTableParentProps<T, TP, RP>;
 
-  sortDir = (columnDataKey: string) =>
-    this.props.tableState.sortBy === columnDataKey
-      ? this.props.tableState.sortDirection
-      : null;
+export type FlexGridTableParentProps<T = {}, TP = {}, RP = {}> = {
+  tableProps: TP;
+  model: ColumnModel<T, TP, RP>[];
+  tableState: SortAndFilterState;
+  config: TableConfig<T, TP, RP>;
+};
+export class HeaderRowContentRenderer<T, TP, RP> extends React.PureComponent<Props<T, TP, RP>> {
+  sortDir = (columnDataKey: keyof T) => this.props.tableState.sortBy === columnDataKey ? this.props.tableState.sortDirection : null;
+
+  cellsRefs = this.props.model.map(() => React.createRef<HTMLDivElement>());
 
   render() {
     const { model, config, tableState } = this.props;

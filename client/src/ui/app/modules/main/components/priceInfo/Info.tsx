@@ -55,6 +55,6 @@ const mapStylesToProps = {
   mainTitle
 };
 
-export default compose(
+export default compose<React.ComponentClass>(
   FelaConnect(mapStylesToProps)
 )(Info);

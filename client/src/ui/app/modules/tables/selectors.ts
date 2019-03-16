@@ -13,12 +13,13 @@ import * as descend from 'ramda/src/descend';
 import * as sortWith from 'ramda/src/sortWith';
 import * as compose from 'ramda/src/compose';
 import * as toLower from 'ramda/src/toLower';
+import { Morphism, Ordered } from 'ramda';
 
 export const getTableByName = (tableName: keyof TablesState) => (
   state: AppState
 ) => state.ui.tables[tableName];
 
-export const createTableSelectors = <T extends any[] | object>(
+export const createTableSelectors = <T>(
   tableName: keyof TablesState,
   getData: Selector<AppState, T[]>,
   searchFields?: (keyof T)[]
@@ -40,12 +41,8 @@ export const createTableSelectors = <T extends any[] | object>(
   const getFilteredList = createSelector(
     getData,
     getFilters,
-    (list, filters) =>
-      list
-        ? isEmpty(filters)
-          ? list
-          : list.filter(row => filtersObjectParser(row, filters))
-        : ([] as typeof list)
+    (list, filters) => list ?
+      ((isEmpty(filters) ? list : list.filter(row => filtersObjectParser(row, filters)))) : [] as T[]
   );
 
   const getSearchedList = createSelector(
@@ -70,18 +67,18 @@ export const createTableSelectors = <T extends any[] | object>(
 
       if (list.length) {
         const normalized = propIs(String, sortBy, list[0])
-          ? compose(
-              (a: any) => (a ? toLower(a) : ''),
-              prop(sortBy)
-            )
-          : prop(sortBy);
+          ? compose((a: any) => a
+            ? toLower(a)
+            : '', prop(sortBy))
+          : prop(sortBy) as Morphism<{}, Ordered>;
+
         const sortAsc = sortWith([
           ascend(normalized),
-          ascend(prop('userId'))
+          // ascend(prop('userId'))
         ]);
         const sortDesc = sortWith([
           descend(normalized),
-          ascend(prop('userId'))
+          // ascend(prop('userId'))
         ]);
         return sortDirection === SortDirection.ASC
           ? (sortAsc(list) as T[])

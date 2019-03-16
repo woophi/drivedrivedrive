@@ -1,5 +1,5 @@
 import { PureComponent } from 'react';
-import { Grid, GridProps, SortDirectionType } from 'react-virtualized';
+import { Grid, GridProps, SortDirectionType, TableCellProps } from 'react-virtualized';
 import { AppState } from 'core/models/app';
 
 export type EnumFilter = (string | number | boolean)[];
@@ -110,8 +110,8 @@ export type FilterModel =
   | 'os'
   | EnumFilterOption;
 
-export type ColumnModel<T = { [key: string]: any }> = {
-  dataKey: keyof T | string;
+export type ColumnModel<T = {}, TP = {}, RP = {}> = {
+  dataKey: Extract<keyof T, string>;
   label?: string;
   title?: boolean | ((cellData: any) => string);
   minWidth?: number;
@@ -120,13 +120,22 @@ export type ColumnModel<T = { [key: string]: any }> = {
   flexGrow?: number;
   flexShrink?: number;
   disableSort?: boolean;
-  filterType?: FilterModel;
+  filterType?: FilterModel | ((props: TP) => FilterModel);
   filterNullable?: boolean;
   filterObjectProp?: string | number;
-  cellRenderer?: any;
+  cellRenderer?: CellRenderer<T, TP, RP>;
 };
 
-export type TableModel<T = {}> = ColumnModel<T>[];
+interface ExtendedTableCellProps<T> extends TableCellProps {
+  cellData: T[keyof T];
+}
+
+export type CellRenderer<T = {}, TP = {}, RP = {}> = (props: CellRendererProps<T, TP, RP>) => React.ReactNode;
+
+export type CellRendererProps<T = {}, TP = {}, RP = {}> = {
+  dataKey: Extract<keyof T, string>;
+  rowData: T;
+} & ExtendedTableCellProps<T> & TP & RP;
 
 export type OnRowClick<T> = (
   props: {
@@ -136,8 +145,9 @@ export type OnRowClick<T> = (
   }
 ) => void;
 
-export interface TableConfig<T> {
-  model: TableModel<T>;
+export type TableModel<T = {}, P = {}, RP = {}> = ColumnModel<T, P, RP>[];
+export interface TableConfig<T = {}, TP = {}, RP = {}> {
+  model: TableModel<T, TP, RP> | ((tableProps: TP) => TableModel<T, TP, RP>);
 
   showRowArrows?: boolean;
   showRowDividers?: boolean;
@@ -187,8 +197,6 @@ export interface TableProps<T> {
 
 export interface ComposedTableProps<T> extends SortAndFilterState {
   list: T[];
-  data?: T[];
-  dispatch?: any;
 }
 
 export class ParentGrid extends PureComponent<GridProps & TableProps<any>> {}

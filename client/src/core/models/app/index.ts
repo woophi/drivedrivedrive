@@ -1,5 +1,5 @@
 import { AppState } from 'core/models/app';
-import { LocationChangeAction, RouterState } from 'react-router-redux';
+import { LocationChangeAction, RouterState } from 'connected-react-router';
 import { FormAction } from 'redux-form';
 import { UIDispatch, UIState } from 'ui/types';
 import { ScreenDispatch, ScreenState } from 'ui/app/modules/screenMeasurer/types';

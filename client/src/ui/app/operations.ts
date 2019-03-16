@@ -1,5 +1,5 @@
 import { store } from 'core/shared/store';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { reset } from 'redux-form';
 
 export const changeUrl = (url: string) => {

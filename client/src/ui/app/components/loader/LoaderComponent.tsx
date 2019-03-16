@@ -8,8 +8,6 @@ import { Empty } from './Empty';
 import { Alert } from '../Alert';
 import * as equals from 'ramda/src/equals';
 
-/* tslint:disable max-classes-per-file */
-
 type LoaderParams<T, P> = {
   loadData: () => Promise<T>;
   dataSelector: (state: AppState) => api.DataStateItem<T>;
@@ -23,26 +21,23 @@ type LoaderParams<T, P> = {
   showUpdating?: boolean;
 };
 
+type Props<T, P = {}> = Readonly<{
+  change: any;
+  children?: React.ReactNode;
+  data: api.DataStateItem<T>;
+}> & P;
+
 export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
-  return ReduxConnect((state: AppState, ownProps: P) => {
+  return ReduxConnect((state: AppState, _: P) => {
     const change = params.changeSelector && params.changeSelector(state);
-    let data;
     try {
-      data = params.dataSelector(state) || defaultStateItem(null);
-      return { data, change, ...(ownProps as {}) } as {
-        data: typeof data;
-        change: any;
-      } & P;
+      const data = params.dataSelector(state) || defaultStateItem(null);
+      return { data, change };
     } catch (e) {
-      return { data: defaultStateItem(null), change, ...(ownProps as {}) } as {
-        data: typeof data;
-        change: any;
-      } & P;
+      return { data: defaultStateItem(null), change };
     }
   })(
-    class extends React.Component<
-      { data: api.DataStateItem<T>; change: any } & P
-    > {
+    class extends React.Component<Props<T, P>> {
       static displayName: 'Loader';
       interval: number = null;
 
@@ -96,10 +91,9 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
       };
 
       render() {
+        const Component = params.component;
         const { status, errorInfo, result } = this.props.data;
-        const { data, children, ...props } = this.props as {
-          [key: string]: object;
-        };
+        const { data, children, ...props } = this.props;
 
         switch (status) {
           case api.DataStatus.INITIAL || api.DataStatus.QUIET_FETCHING:
@@ -109,17 +103,15 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
             return <Preloader isShow />;
 
           case api.DataStatus.UPDATING: {
-            const Component = params.component;
             if (params.showUpdating) {
               return <Preloader isShow />;
             }
-            return <Component data={result} isUpdating {...props} />;
+            return <Component data={result} isUpdating {...props as P} />;
           }
 
           case api.DataStatus.EMPTY: {
             if (!!params.doNotUseEmptyComponent) {
-              const Component = params.component;
-              return <Component data={result} {...props} />;
+              return <Component data={result} {...props as P} />;
             }
             return <Empty />;
           }
@@ -132,15 +124,14 @@ export default function Loader<T, P = {}>(params: LoaderParams<T, P>) {
             );
 
           case api.DataStatus.SUCCESS: {
-            const Component = params.component;
-            return <Component data={result} {...props} />;
+            return <Component data={result} {...props as P} />;
           }
 
           default:
             return null;
         }
       }
-    }
+    } as any
   );
 }
 

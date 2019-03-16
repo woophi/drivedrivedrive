@@ -5,36 +5,40 @@ import { DataState } from 'core/models/api';
 import { bindActionCreators } from 'redux';
 import { createTableActions } from '../actions';
 import { createTableSelectors } from '../selectors';
-import { ComposedTableProps, TablesState } from '../types';
+import { TablesState } from '../types';
+
+type DataSelector<T> = (state: AppState) => T[];
 
 interface TableConnectProps<T> {
-  dataSelector?: (state: AppState) => T[] | string[];
+  dataSelector?: DataSelector<T>;
   dataName?: keyof DataState;
   tableName: keyof TablesState;
-  searchFields?: (keyof T)[] | string[];
-  filteredOnServer?: boolean;
+  searchFields?: (keyof T)[];
   selectedRowIdSelector?: (state: AppState) => any;
 }
 
-export function tableConnect<T>({ tableName, dataName, dataSelector, searchFields, filteredOnServer, selectedRowIdSelector }: TableConnectProps<T>) {
-  return (component: React.ComponentClass<ComposedTableProps<T>> | React.StatelessComponent<ComposedTableProps<T>>) => {
-    const tableDataSelector = dataSelector || ((state: AppState) => state.ui.api && state.ui.api[dataName].result);
-    const tableActions = createTableActions(tableName);
+export function tableConnect<T>(props: TableConnectProps<T>) {
+  const {
+    tableName, dataName, dataSelector, searchFields, selectedRowIdSelector
+  } = props;
 
-    const tableSelectors = createTableSelectors(tableName, tableDataSelector as () => any[], searchFields);
+  return (component: React.ComponentType) => {
+    const defaultDataSelector: DataSelector<T> = state => state.ui.api[dataName].result as T[];
+    const tableDataSelector = dataSelector || defaultDataSelector;
+    const tableActions = createTableActions(tableName);
+    const tableSelectors = createTableSelectors<T>(tableName, tableDataSelector, searchFields);
 
     const mapStateToProps = (state: AppState) => {
-
-      return ({
+      return {
+        sortBy: tableSelectors.getSortBy(state),
         filters: tableSelectors.getFilters(state),
         searchQuery: tableSelectors.getSearchQuery(state),
-        sortBy: tableSelectors.getSortBy(state),
-        sortDirection: tableSelectors.getSortDirection(state),
-        list: filteredOnServer ? tableDataSelector(state) : tableSelectors.getSortedList(state) as T[],
+        list: tableSelectors.getSortedList(state),
         columnWidths: tableSelectors.getColumnWidths(state),
-        selectedRowId: selectedRowIdSelector ? selectedRowIdSelector(state) : null
-      });
-    }
+        sortDirection: tableSelectors.getSortDirection(state),
+        selectedRowId: selectedRowIdSelector ? selectedRowIdSelector(state) : null,
+      };
+    };
 
     const mapDispatchToProps = (dispatch: any) => bindActionCreators(tableActions, dispatch) as any;
 

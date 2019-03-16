@@ -23,10 +23,10 @@ const dateFilterFunc = (value: string, filter: DateFilter) => {
   return max && min
     ? d.isBefore(max) && d.isAfter(min)
     : max
-      ? d.isBefore(max)
-      : min
-        ? d.isAfter(min)
-        : true;
+    ? d.isBefore(max)
+    : min
+    ? d.isAfter(min)
+    : true;
 };
 
 type TimeSpanFilter = {
@@ -48,10 +48,10 @@ const timeSpanFilterFunc = (value: string, filter: TimeSpanFilter) => {
   return min && max
     ? duration(min) < d && d < duration(max)
     : min
-      ? duration(min) < d
-      : max
-        ? d < duration(max)
-        : true;
+    ? duration(min) < d
+    : max
+    ? d < duration(max)
+    : true;
 };
 
 export const isNumber = (value: number) =>
@@ -65,10 +65,10 @@ const numberFilterFunc = (value: number, filter: NumberFilter) => {
   return isNumber(min) && isNumber(max)
     ? value >= min && value <= max
     : isNumber(min)
-      ? value >= min
-      : isNumber(max)
-        ? value <= max
-        : true;
+    ? value >= min
+    : isNumber(max)
+    ? value <= max
+    : true;
 };
 
 const enumFilterFunc = (
@@ -137,8 +137,8 @@ const applyFilter = (
   return (filterFunctions as any)[s[0]](value, filter[s[0]]);
 };
 
-export function filtersObjectParser(
-  value: object,
+export function filtersObjectParser<T>(
+  value: T,
   filters: FiltersState,
   filterObjectProp?: string | number
 ): boolean {

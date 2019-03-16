@@ -41,6 +41,6 @@ const mapStylesToProps = {
   subTitle
 };
 
-export default compose(
+export default compose<React.ComponentClass<{}>>(
   FelaConnect(mapStylesToProps)
 )(CompanyTitle);

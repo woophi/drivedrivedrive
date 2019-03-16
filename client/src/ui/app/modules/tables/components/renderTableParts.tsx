@@ -38,7 +38,9 @@ export const renderHeaderCellsAsRow: GridCellRenderer = ({
         config={parent.props.config}
         tableState={parent.props.tableState}
         lineRef={parent.props.lineRef}
+        tableProps={parent.props.tableProps}
       />
+
       {renderArrowPlaceholder(parent)}
     </DefaultTableRow>
   );
