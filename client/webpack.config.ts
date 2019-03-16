@@ -17,22 +17,13 @@ const devServer: wdsConfiguration = {
   contentBase: path.resolve(__dirname, '../server/public')
 };
 
-const tsLoaders = [
-  {
-    loader: 'ts-loader',
-    options: {
-      happyPackMode: true
-    }
-  }
-];
-
 const config = {
   devServer,
   entry: {
     'lib.es6': './src/es6.js',
     'lib.otherbrowser': './src/otherbrowser.js',
     'lib.glyphs': './glyphs/glyphs.js',
-    'app.drive': ['./src/ui/app/app.tsx']
+    'app.drive': './src/ui/app/app.tsx'
   },
   output: {
     libraryTarget: 'this',
@@ -58,17 +49,16 @@ const config = {
         loader: 'happypack/loader?id=js-svg'
       },
       {
-        test: require.resolve('webpack-require-weak'),
-        loader: 'happypack/loader?id=ts'
-      },
-      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'happypack/loader?id=ts',
       },
       {
         test: /\.css$/,
-        use: [ MiniCssExtractPlugin.loader, "happypack/loader?id=css" ]
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
       },
       {
         test: /\.(png|gif|jpg|jpeg)$/,
@@ -85,6 +75,12 @@ const config = {
       {
         test: /\.(mov|mp4)$/,
         loader: 'file-loader?name=videos/[name].[ext]?[md5:hash:base62]',
+      },
+      {
+        test: /\.json$/,
+        loader: 'happypack/loader?id=json',
+        exclude: /node_modules/,
+        type: 'javascript/auto'
       },
     ]
   },
@@ -104,18 +100,26 @@ const config = {
       filename: "css/[name].css",
       chunkFilename: "css/[id].css"
     }),
+    new webpack.IgnorePlugin(/\blocale.*/, /\bmoment\b/),
 
     new TsCheckerPlugin({
       checkSyntacticErrors: true,
       async: false,
       silent: false,
       memoryLimit: 2048,
-      watch: ['./src'] // optional but improves performance (less stat calls)
+      watch: ['./src']
     }),
     new HappyPack({
       id: 'ts',
       threadPool,
-      loaders: tsLoaders
+      loaders: [
+        {
+          loader: 'ts-loader',
+          options: {
+            happyPackMode: true
+          }
+        }
+      ]
     }),
     new HappyPack({
       id: 'js-svg',
@@ -139,8 +143,13 @@ const config = {
       id: 'css',
       loaders: ['css-loader?sourceMap&minimize&-autoprefixer&safe'],
       threadPool
+    }),
+    new HappyPack({
+      id: 'json',
+      loaders: ['json-loader'],
+      threadPool
     })
-  ]
+  ].filter(Boolean)
 };
 
 export default config;

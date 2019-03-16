@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noEmitOnError": true,
-    "removeComments": false,
+    "removeComments": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -26,5 +26,10 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "src/base.js",
+    "src/otherbrowser.js",
+    "src/es6.js"
   ]
 }
