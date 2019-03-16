@@ -88,13 +88,14 @@ class ResetPasswordComponent extends React.Component<
     );
 
     return (
-      <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         {header}
         {getError}
         <Field
           name="password"
           component={CustomInputField}
           type="password"
+          autoComplete={'new-password'}
           {...{
             floatingLabelText: 'Новый пароль',
             fullWidth: true
@@ -104,6 +105,7 @@ class ResetPasswordComponent extends React.Component<
           name="password_confirm"
           component={CustomInputField}
           type="password"
+          autoComplete={'new-password'}
           {...{
             floatingLabelText: 'Подтвердить пароль',
             fullWidth: true

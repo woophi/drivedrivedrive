@@ -10,7 +10,7 @@ import {
   reduxForm,
   WrappedFieldProps
 } from 'redux-form';
-import { UserProfile } from 'core/models/api';
+import { UserProfile, DataStatus } from 'core/models/api';
 import { validateProfile, submitProfile } from '../form';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -18,9 +18,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { Alert } from 'ui/app/components/Alert';
 import { Preloader } from 'ui/app/components/preloader';
 import Uploader from 'ui/app/components/Uploader';
-import { DataStatus } from 'core/models/api';
 import { Progress } from './Progress';
 import { TextFieldProps } from 'ui/formTypes';
+import { withTranslation } from 'react-i18next';
+import { InjectTranslateProp } from 'core/models';
 
 const mapStateToProps = (state: AppState) => ({
   fetchProfile: state.ui.api.userProfile.status === DataStatus.QUIET_FETCHING,
@@ -31,7 +32,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const StateProps = returntypeof(mapStateToProps);
-type Props = typeof StateProps;
+type Props = typeof StateProps & InjectTranslateProp;
 type FelaProps = FelaStyles<typeof mapStylesToProps>;
 
 class ProfileComponent extends React.Component<
@@ -50,11 +51,13 @@ class ProfileComponent extends React.Component<
       submitting,
       fetchProfile,
       handleSubmitting,
-      getProfileErr
+      getProfileErr,
+      t
     } = this.props;
     return (
       <Paper className={styles.container} zDepth={2}>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
+          {t('app::hello')}
           {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
           <Field
             name="firstName"
@@ -160,6 +163,7 @@ const mapStylesToProps = {
 };
 
 export const Profile = compose(
+  withTranslation(),
   ReduxConnect(mapStateToProps),
   FelaConnect(mapStylesToProps),
   reduxForm<UserProfile, Props>({

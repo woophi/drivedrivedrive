@@ -13,7 +13,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { AppRoot } from './components/AppRoot';
 import { init } from 'core/app/init';
 import { uiReducers } from 'core/app/reducer';
-import 'moment/locale/ru';
+import * as common from 'core/shared/common';
+import * as moment from 'moment';
+import('core/shared/i18n');
 
 const renderApp = (fela: {
   renderer: FelaRenderer;
@@ -45,6 +47,10 @@ export const entryApplication = async (args: AppEntrySettings) => {
     isMobile: args.isMobile,
     lang: args.language
   });
+
+  await common.setLocale(args.language);
+
+  moment.locale(store.getState().localAppState.lang);
 
   const fela = configureFela('stylesheet');
   renderApp(fela);
