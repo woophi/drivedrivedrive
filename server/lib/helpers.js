@@ -2,6 +2,7 @@ require('moment/locale/ru');
 const keystone = require('keystone');
 const moment = require('moment');
 const { mailFrom, unsubLink } = require('./staticVars');
+const { t } = require('../resources');
 
 const emailError = (err) => {
 	if (err) {
@@ -16,9 +17,10 @@ exports.sendEmail = (emailKeys, params) => {
 	}).send({
 		to: emailKeys.to,
 		from: mailFrom,
-		subject: emailKeys.subject,
+		subject: emailKeys.subject + ' | Vettura',
 		moment,
 		host: keystone.get('locals').host,
+		t,
 		...params,
 		unsubLink: unsubLink(params.driver, params.uniqHash)
 	}, emailError);

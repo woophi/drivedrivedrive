@@ -2,10 +2,10 @@ extends layouts/base
 block content
 	-const date = moment(guestData.guest.date).locale('ru').format('LL')
 	-const link = host + '/adm/requests/edit/request/' + guestData._id
-	p Здравствуйте %recipient.firstName%,
-	p На сайте появилась новая заявка
-	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
+	p #{t('mails.hi')} %recipient.firstName%,
+	p #{t('mails.newReq.appear')}
+	p #{t('mails.newReq.info', guestData.guest.from, guestData.guest.to, date, guestData.guest.time, guestData.guest.count)}
 	if guestData.guest.comment
-		p Комментарий: #{guestData.guest.comment}
+		p #{t('mails.request.comment')} #{guestData.guest.comment}
 	p.
-		Пожалуйста, для валидации, пройдите по #[a(href=link) ссылке]
+		#{t('mails.newReq.validate')} #[a(href=link) #{t('mails.newReq.link')}]
