@@ -216,4 +216,4 @@ type DataLoader = DLF<
   DLF<'adminRequest', apiData.DataState['adminRequest']['result']> &
   DLF<'subscribeState', apiData.DataState['subscribeState']['result']>;
 
-export const loadData: DataLoader = loadDataImpl as any;
+export const loadData: DataLoader = loadDataImpl;

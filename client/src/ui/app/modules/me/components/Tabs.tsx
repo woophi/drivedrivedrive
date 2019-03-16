@@ -58,11 +58,11 @@ class TabsComp extends React.PureComponent<FelaProps & Props> {
         <Tab label={driverLabel}>
           <Profile />
         </Tab>
-        <Tab label={notifyLabel}>
-          <Notifications />
-        </Tab>
         <Tab label={carLabel}>
           <Car />
+        </Tab>
+        <Tab label={notifyLabel}>
+          <Notifications />
         </Tab>
         <Tab label={resetPasswordLabel}>
           <ResetPassword />

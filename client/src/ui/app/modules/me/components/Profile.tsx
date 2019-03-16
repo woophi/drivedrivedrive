@@ -94,7 +94,7 @@ class ProfileComponent extends React.Component<
           />
           <Field
             name="driverPhoto"
-            component={this.customImgFieldDriver as any}
+            component={this.customImgFieldDriver}
             type="text"
           />
           <Progress />

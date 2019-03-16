@@ -81,17 +81,17 @@ class CarComponent extends React.Component<
           {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
           <Field
             name="photoFront"
-            component={this.customImgFieldCarFront as any}
+            component={this.customImgFieldCarFront}
             type="text"
           />
           <Field
             name="photoSide"
-            component={this.customImgFieldCarSide as any}
+            component={this.customImgFieldCarSide}
             type="text"
           />
           <Field
             name="photoInside"
-            component={this.customImgFieldCarInside as any}
+            component={this.customImgFieldCarInside}
             type="text"
           />
           <Field
