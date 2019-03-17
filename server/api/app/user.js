@@ -442,3 +442,24 @@ exports.updateProfile = (req, res) => {
   });
 
 };
+
+exports.updatePreferedLanguage = (req, res) => {
+	if (!req.user) {
+		return apiError(res, {message: 'Невозможно обновить данные' }, 403);
+	}
+
+	const updatedData = {
+		'language': req.body.language
+	};
+
+  req.user.getUpdateHandler(req).process(updatedData, {
+    fields: 'language',
+    flashErrors: true
+  }, (err) => {
+		if (err) {
+			return apiError(res, {message: 'Не удалось обновить профиль' }, 500);
+		}
+    return res.apiResponse();
+  });
+
+}

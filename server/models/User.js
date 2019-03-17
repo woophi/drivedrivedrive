@@ -20,7 +20,7 @@ User.add({
 	resetPasswordKey: { type: String, hidden: true },
 	token: { type: String, hidden: true },
 	confirmedGDPR: { type: Types.Relationship, ref: 'Gdpr', index: true, noedit: true, label: 'GDPR'},
-	language: { type: String, noedit: true, default: 'ru', label: 'Изпользуемый язык' }
+	language: { type: Types.Select, options: 'ru, en', default: 'ru', label: 'Изпользуемый язык' }
 }, 'Водитель и машина', {
 	photoFront: { type: Types.CloudinaryImage, label: 'Фото спереди' },
 	photoSide: { type: Types.CloudinaryImage, label: 'Фото сбоку' },
