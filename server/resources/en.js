@@ -255,7 +255,8 @@ module.exports = {
 				'nominalValue': 'Visible rating',
 				'realValue': 'Real rating',
 				'assignedRatings': 'Ratings'
-			}
+			},
+			'lang': 'Language'
 		}
 	}
 }

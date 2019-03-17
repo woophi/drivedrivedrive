@@ -22,6 +22,11 @@ export const localAppState = (state = defaultState.localAppState, dispatch: Shar
         loginProcessStep: dispatch.step,
         loginFailMsg: dispatch.failMsg || null
       };
+    case 'setResourcesLanguage':
+      return {
+        ...state,
+        lang: dispatch.payload
+      };
     default:
       return state;
   }

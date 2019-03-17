@@ -9,6 +9,7 @@ import { compose } from 'redux';
 import { connect as ReduxConnect } from 'react-redux';
 import { DroppingMenu } from './DroppingMenu';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { LanguagesMenu } from '../../languages';
 
 const MOBILE_SCREEN_WIDTH = 450;
 const mapStateToProps = (state: AppState) => ({
@@ -68,7 +69,7 @@ class Index extends React.Component<Props> {
         style={{minHeight: 60}}
         titleStyle={{maxWidth: isMobile ? 200 : 'unset'}}
         title={t(this.titleChange)}
-        iconElementLeft={<IconButton><NavigationLogo /></IconButton>}
+        iconElementLeft={<LanguagesMenu />}
         iconElementRight={<DroppingMenu />}
       />
     )

@@ -256,7 +256,8 @@ module.exports = {
 				'nominalValue': 'Видимый рейтинг',
 				'realValue': 'Настощий рейтинг',
 				'assignedRatings': 'Все рейтинги'
-			}
+			},
+			'lang': 'Изпользуемый язык'
 		}
 	}
 }

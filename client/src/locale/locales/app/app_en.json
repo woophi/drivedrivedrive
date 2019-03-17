@@ -146,6 +146,8 @@
     "transfer": "Transfer",
     "requests": "List of requests",
     "unsub": "Unsubscribe from mailing",
-    "guest": "Your transfer"
+    "guest": "Your transfer",
+    "english": "English",
+    "russian": "Russian"
   }
  }

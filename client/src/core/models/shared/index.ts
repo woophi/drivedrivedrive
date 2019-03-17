@@ -11,4 +11,5 @@ export type SharedDispatch =
   | { type: 'setLoginProcessStep', step: number, failMsg?: string }
   | { type: 'setAuthInfo', payload: models.AuthInfo }
   | { type: 'removeAuthInfo' }
+  | { type: 'setResourcesLanguage', payload: string }
 ;

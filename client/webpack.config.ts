@@ -45,10 +45,6 @@ const config = {
   module: {
     rules: [
       {
-        test: /src[\\/]ui[\\/].*\.svg$/,
-        loader: 'happypack/loader?id=js-svg'
-      },
-      {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'happypack/loader?id=ts',
@@ -117,24 +113,6 @@ const config = {
           loader: 'ts-loader',
           options: {
             happyPackMode: true
-          }
-        }
-      ]
-    }),
-    new HappyPack({
-      id: 'js-svg',
-      threadPool,
-      loaders: [
-        {
-          loader: 'babel-loader',
-          options: {
-            presets: ['es2015', 'react']
-          }
-        },
-        {
-          loader: 'react-svg-loader',
-          query: {
-            jsx: true
           }
         }
       ]

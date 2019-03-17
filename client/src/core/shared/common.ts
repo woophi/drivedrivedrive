@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import i18n from 'i18next';
+import { store } from './store';
 
 export type HTTPMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -91,11 +92,10 @@ export async function getLocaleBundle(localeId: string) {
 }
 
 export async function setLocale(localeId: string) {
-  // store.dispatch({ type: 'setLocaleId', payload: localeId });
 
   await getLocaleBundle(localeId);
 
-  // store.dispatch({ type: 'setResourcesLanguage', payload: localeId });
+  store.dispatch({ type: 'setResourcesLanguage', payload: localeId });
 
   if (!i18n.isInitialized) {
     i18n.on('initialized', () => i18n.changeLanguage(localeId));
