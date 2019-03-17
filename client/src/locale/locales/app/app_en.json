@@ -91,7 +91,8 @@
     "suddenlyRemember": "Suddenly remembered",
     "newPassword": "New password",
     "againPassword": "Confirm password",
-    "actuallyRemember": "This time I remembered exactly"
+    "actuallyRemember": "This time I remembered exactly",
+    "newDriver": "New driver?"
   },
   "profile": {
     "front": "Front photo",

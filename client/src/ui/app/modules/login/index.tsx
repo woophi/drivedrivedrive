@@ -68,9 +68,9 @@ class Index extends React.Component<
           />
           <div className={styles.subContainer}>
             <span>
-              Новый водитель? <Link to={'/join'}>Зарегистрироваться</Link>
+              {t('login:newDriver')} <Link to={'/join'}>{t('common:button:register')}</Link>
             </span>
-            <Link to={'/forgot-password'}>Забыли пароль?</Link>
+            <Link to={'/forgot-password'}>{t('login:forgetPassword')}</Link>
           </div>
         </form>
       </Paper>

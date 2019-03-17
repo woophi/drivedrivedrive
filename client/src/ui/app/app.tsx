@@ -45,8 +45,7 @@ export const entryApplication = async (args: AppEntrySettings) => {
 
   store.dispatch({
     type: 'appInit',
-    isMobile: args.isMobile,
-    lang: args.language
+    isMobile: args.isMobile
   });
 
 

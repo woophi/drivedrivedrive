@@ -7,7 +7,7 @@ export type SharedState = {
 
 
 export type SharedDispatch =
-  | { type: 'appInit', isMobile: boolean, lang: string }
+  | { type: 'appInit', isMobile: boolean }
   | { type: 'setLoginProcessStep', step: number, failMsg?: string }
   | { type: 'setAuthInfo', payload: models.AuthInfo }
   | { type: 'removeAuthInfo' }

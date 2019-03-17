@@ -91,7 +91,8 @@
     "suddenlyRemember": "Неожиданно вспомнил",
     "newPassword": "Новый пароль",
     "againPassword": "Подтвердить пароль",
-    "actuallyRemember": "В этот раз точно вспомнил"
+    "actuallyRemember": "В этот раз точно вспомнил",
+    "newDriver": "Новый водитель?"
   },
   "profile": {
     "front": "Фото спереди",

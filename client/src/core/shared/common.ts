@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import i18n from 'i18next';
 import { store } from './store';
+import { setCookie, getCookie } from 'core/cookieManager';
 
 export type HTTPMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -92,14 +93,18 @@ export async function getLocaleBundle(localeId: string) {
 }
 
 export async function setLocale(localeId: string) {
+  const getSavedLang = getCookie('prefLang');
+  if (!getSavedLang) {
+    setCookie('prefLang', localeId, 128);
+  }
+  const setLangId = getSavedLang ? getSavedLang : localeId;
+  await getLocaleBundle(setLangId);
 
-  await getLocaleBundle(localeId);
-
-  store.dispatch({ type: 'setResourcesLanguage', payload: localeId });
+  store.dispatch({ type: 'setResourcesLanguage', payload: setLangId });
 
   if (!i18n.isInitialized) {
-    i18n.on('initialized', () => i18n.changeLanguage(localeId));
+    i18n.on('initialized', () => i18n.changeLanguage(setLangId));
   } else {
-    i18n.changeLanguage(localeId);
+    i18n.changeLanguage(setLangId);
   }
 }
