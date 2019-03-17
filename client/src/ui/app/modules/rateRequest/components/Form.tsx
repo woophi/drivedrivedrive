@@ -97,7 +97,9 @@ class Index extends React.Component<
           type="textarea"
           {...{
             floatingLabelText: t('common:comment'),
-            fullWidth: false
+            fullWidth: false,
+            multiLine: true,
+            rows: 4
           }}
         />
         <FormButtonsRow

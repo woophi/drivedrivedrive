@@ -68,6 +68,15 @@ class EditRequestComponent extends React.Component<
           }}
         />
         <Field
+          name="guest.phone"
+          component={CustomInputField}
+          type="tel"
+          {...{
+            floatingLabelText: t('common:phone'),
+            fullWidth: true
+          }}
+        />
+        <Field
           name="guest.count"
           component={CustomInputField}
           type="number"
@@ -120,16 +129,9 @@ class EditRequestComponent extends React.Component<
           type="text"
           {...{
             floatingLabelText: t('common:comment'),
-            fullWidth: true
-          }}
-        />
-        <Field
-          name="guest.phone"
-          component={CustomInputField}
-          type="tel"
-          {...{
-            floatingLabelText: t('common:phone'),
-            fullWidth: true
+            fullWidth: true,
+            multiLine: true,
+            rows: 4
           }}
         />
         <Field

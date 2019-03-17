@@ -7,4 +7,6 @@ export type TextFieldProps = {
   className?: string;
   disabled?: boolean;
   id?: string;
+  multiLine?: boolean;
+  rows?: number;
 };

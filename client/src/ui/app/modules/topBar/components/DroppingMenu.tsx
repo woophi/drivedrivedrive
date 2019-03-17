@@ -58,7 +58,7 @@ class DroppingMenuComponent extends React.Component<Props> {
               <FontIcon className="fas fa-sign-in-alt" />,
               'signin'
             )}
-            primaryText={this.props.t('common:button:in')}
+            primaryText={this.props.t('common:button:enter')}
           />
         </Link>
       );

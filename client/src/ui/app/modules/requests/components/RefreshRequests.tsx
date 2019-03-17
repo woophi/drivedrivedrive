@@ -99,7 +99,7 @@ class OpenRequestsNumberComponent extends React.Component<Props, LocalState> {
     const getView = !!diffOpenRequests && (
       <Container>
         <i
-          data-rh={t('refresh')}
+          data-rh={t('common:button:refresh')}
           data-rh-at="bottom"
           className={`fas fa-sync ${spin}`}
           onClick={click}

@@ -123,7 +123,9 @@ class FormComponent extends React.Component<
             {...{
               floatingLabelText: t('common:comment'),
               fullWidth: true,
-              hintText: t('common:commentHint')
+              hintText: t('common:commentHint'),
+              multiLine: true,
+              rows: 4
             }}
           />
 

@@ -1,153 +1,151 @@
 {
   "admin": {
     "requests": {
-      "title": "Заявки",
-      "sucApproved": "Успешно одобрено"
+      "title": "Requests",
+      "sucApproved": "Successfully approved"
     }
   },
   "common": {
-    "name": "Имя",
-    "surname": "Фамилия",
-    "password": "Пароль",
+    "name": "Name",
+    "surname": "Surname",
+    "password": "Password",
     "email": "E-mail",
-    "count": "Количество человек",
-    "from": "Пункт отправления",
-    "to": "Пункт назначения",
-    "date": "Дата",
-    "time": "Время",
-    "comment": "Комментарий",
-    "phone": "Номер телефона",
-    "notify": "Подписка на рассылку сообщений",
-    "commentHint": "ваши пожелания или номер рейса",
+    "count": "Number of passengers",
+    "from": "Point of departure",
+    "to": "Destination",
+    "date": "Date",
+    "time": "Time",
+    "comment": "Comment",
+    "phone": "Phone number",
+    "notify": "Subscribe on notifications",
+    "commentHint": "Additional information (e.g. flight number)",
     "button": {
-      "resetChanges": "Сбросить изменения",
-      "update": "Обновить",
-      "approve": "Одобрить",
-      "reset": "Сбросить",
-      "save": "Сохранить",
-      "home": "На главную",
-      "unsub": "Отписаться",
-      "close": "Закрыть",
-      "cancel": "Отмена",
-      "register": "Зарегистрироваться",
-      "enter": "Войти",
-      "resetPassword": "Сбросить пароль",
-      "change": "Изменить",
-      "changePassword": "Обновить пароль",
-      "send": "Отправить",
-      "answer": "Откликнуться",
-      "out": "Выйти",
-      "in": "Войти",
-      "registerSyn": "Регистрация",
-      "profile": "Профиль",
-      "manage": "Управление"
+      "resetChanges": "Reset changes",
+      "update": "Refresh",
+      "approve": "Approve",
+      "reset": "Reset",
+      "save": "Save",
+      "home": "Home",
+      "unsub": "Unsubscribe",
+      "close": "Close",
+      "cancel": "Cancel",
+      "register": "Sign up",
+      "enter": "Sign in",
+      "resetPassword": "Reset the password",
+      "change": "Change",
+      "changePassword": "Change password",
+      "send": "Send",
+      "answer": "Answer",
+      "out": "Sign out",
+      "registerSyn": "Sign up",
+      "profile": "Profile",
+      "manage": "Manage"
     },
-    "check": "Проверка",
-    "price": "Цена в €(евро)"
+    "check": "Check",
+    "price": "Price in €(EUR)"
   },
-  "noData": "Нет данных",
+  "noData": "No data",
   "datePicker": {
-    "placeholder": "дд/мм/гггг"
+    "placeholder": "dd/mm/year"
   },
   "dropzone": {
-    "maxFile": "Максимальный размер файла 2 Мб, допускаются форматы .png,.jpg,.jpeg"
+    "maxFile": "The maximum file size is 2 Mb, allowed formats are png,.jpg,.jpeg"
   },
   "acceptReq": {
-    "thx": "Спасибо!",
-    "respToDriver": "Ваш отклик отправлен водителю.",
-    "detailsWillCome": "В ближайшее время Вам на почту придет подтверждение трансфера с деталями."
+    "thx": "Thank you!",
+    "respToDriver": "Your response has been sent to the driver.",
+    "detailsWillCome": "You will receive a transfer confirmation with details in the mail."
   },
   "errors": {
-    "invalidLink": "Ошибка: недействительная ссылка",
-    "accessDenied": "Доступ запрещен"
+    "invalidLink": "Error: invalid link",
+    "accessDenied": "Access denied"
   },
   "confirmReq": {
-    "confirmed": "Заявка подтверждена!",
-    "dataSent": "Данные о заявке были отправлены клиенту на почту"
+    "confirmed": "Request is confirmed",
+    "dataSent": "Information about request was sent to the client via mail"
   },
   "subState": {
     "driver": {
-      "dear": "Уважаемый {{userName}}!",
-      "uSure": "Вы уверены, что хотите отписаться от почтовой рассылки?",
-      "noService": "Отключая рассылку уведомлений, Вы отказываетесь от использования сервиса."
+      "dear": "Dear {{userName}}!",
+      "uSure": "Are you sure you want to unsubscribe from the mailing list?",
+      "noService": "Disabling notifications, you refuse to use the service."
     },
-    "unsubSuc": "Вы отписались от почтовой рассылки уведомлений."
+    "unsubSuc": "You have unsubscribed from the mailing list."
   },
   "validation": {
-    "required": "Пожалуйста, заполните это поле",
-    "invalidEmail": "Недействительный e-mail",
-    "noGDPR": "Согласие обязательно",
-    "invalidPassword": "Пароль должен быть не менее 8 символов и не более 16",
-    "rateIt": "Пожалуйста, поставьте оценку",
-    "commentRating": "Пожалуйста, напишите, что Вам не понравилось"
+    "required": "Please fill this field",
+    "invalidEmail": "Invalid email",
+    "noGDPR": "Consent to personal data is required",
+    "invalidPassword": "Password must be at least 8 characters and not more than 16 characters long",
+    "rateIt": "Please set your rate",
+    "commentRating": "Please leave us your feedback"
   },
   "register": {
-    "gdpr": "Согласие на обработку персональных данных",
-    "title": "Регистрация нового водителя"
+    "gdpr": "Consent to the processing of personal data",
+    "title": "New driver registration"
   },
-  "gdpr": "Пользовательское соглашение",
+  "gdpr": "Terms of use",
   "login": {
-    "title": "Вход в личный кабинет водителя",
-    "forgetPassword": "Забыли пароль?",
-    "suddenlyRemember": "Неожиданно вспомнил",
-    "newPassword": "Новый пароль",
-    "againPassword": "Подтвердить пароль",
-    "actuallyRemember": "В этот раз точно вспомнил"
+    "title": "Sign in to the driver’s personal account",
+    "forgetPassword": "Forgot your password?",
+    "suddenlyRemember": "Suddenly remembered",
+    "newPassword": "New password",
+    "againPassword": "Confirm password",
+    "actuallyRemember": "This time I remembered exactly"
   },
   "profile": {
-    "front": "Фото спереди",
-    "side": "Фото сбоку",
-    "inside": "Фото внутри",
-    "driver": "Фото водителя",
-    "kind": "Марка",
-    "year": "Год",
-    "model": "Модель",
-    "adminCab": "Админ кабинет",
-    "notActive": "Ваш профиль до сих пор не активен. Необходимо заполнить все поля и фото, получить разрешение от администратора, выбрать способ рассылки уведомлений.",
-    "rating": "Ваш рейтинг",
-    "username": "Привет {{name}}, это ваш профиль!",
-    "noNotifications": "Отключая рассылку уведомлений, Вы отказываетесь от использования сервиса",
-    "emailNotify": "E-mail уведомления",
+    "front": "Front photo",
+    "side": "Photo side",
+    "inside": "Photo inside",
+    "driver": "Driver photo",
+    "kind": "Car brand",
+    "year": "Year",
+    "model": "Car model",
+    "adminCab": "Admin panel",
+    "notActive": "Your profile is still not active. You must fill in all fields and photos, get permission from the administrator, choose the method of sending notifications.",
+    "rating": "Your rating",
+    "username": "Hello {{name}}, this is your profile!",
+    "noNotifications": "Disabling notifications, you refuse to use the service",
+    "emailNotify": "Email notifications",
     "tab": {
-      "driver": "Данные водителя",
-      "notifications": "Рассылка уведомлений",
-      "car": "Машина",
-      "password": "Изменить пароль"
+      "driver": "Driver information",
+      "notifications": "Notifications",
+      "car": "Car",
+      "password": "Change password"
     }
   },
   "rateReq": {
-    "title": "Оцените Вашу поездку!",
-    "trip": "Как Вам поездка?",
-    "car": "Как Вам машина?",
-    "driver": "Как Вам водитель?",
-    "thx": "Спасибо за Вашу оценку"
+    "title": "Rate your journey",
+    "trip": "How was your journey?",
+    "car": "How do you like the car?",
+    "driver": "How do you like the driver?",
+    "thx": "Thanks for your feedback"
   },
   "answerReq": {
-    "offerPrice": "Предложить цену",
-    "offerSent": "Ценовое предложение отправлено",
-    "offerSuc": "В случае заинтересованности клиента Вам на почту придет отклик"
+    "offerPrice": "Price offer",
+    "offerSent": "Price offer sent",
+    "offerSuc": "In the case of interest of the client, you will receive a response via email."
   },
-  "newRequest": "Новая заявка",
-  "newRequests": "Новые заявки",
-  "requestClosed": "Заявка была закрыта",
-  "refresh": "Обновить",
+  "newRequest": "New request",
+  "newRequests": "New requests",
+  "requestClosed": "The request has been closed",
   "requests": {
     "tab": {
-      "open": "Открытые",
-      "progress": "В обработке",
-      "active": "Предстоящие",
-      "history": "История"
+      "open": "Open",
+      "progress": "In processing",
+      "active": "Active",
+      "history": "History"
     }
   },
-  "moreInfoHere": "Подробнее здесь",
-  "cookie": "При предоставлении услуг на сайте нам помогают файлы cookies, продолжая пользоваться сайтом вы принимаете политику cookies.",
-  "cookieTitle": "Информация об использовании Cookies",
+  "moreInfoHere": "Read more",
+  "cookie": "Cookies help us in providing our services on the site, while continuing to use this site you accept cookies policy.",
+  "cookieTitle": "Cookies usage information",
   "topBar": {
-    "signin": "Вход в профиль",
-    "passwordRecovery": "Восстановление пароля",
-    "transfer": "Трансфер",
-    "requests": "Списки заявок",
-    "unsub": "Отписка от почтовой рассылки",
-    "guest": "Ваш трансфер"
+    "signin": "Sign in to profile",
+    "passwordRecovery": "Password recovery",
+    "transfer": "Transfer",
+    "requests": "List of requests",
+    "unsub": "Unsubscribe from mailing",
+    "guest": "Your transfer"
   }
-}
+ }
