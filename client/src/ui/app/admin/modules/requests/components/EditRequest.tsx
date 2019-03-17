@@ -40,14 +40,13 @@ class EditRequestComponent extends React.Component<
     const { match } = this.props;
     approveRequest(match.params.id);
   }
-  get fields() {
+  fields = () => {
     const {
       pristine,
       submitting,
-      initialValues,
       t
     } = this.props;
-    return (initialValues &&
+    return (
       <>
         <Field
           name="guest.name"
@@ -154,7 +153,7 @@ class EditRequestComponent extends React.Component<
     )
   }
 
-  get approveBtn() {
+  approveBtn = () => {
     const { initialValues, t } = this.props;
     return (initialValues && !initialValues.approved &&
       <RaisedButton
@@ -165,7 +164,7 @@ class EditRequestComponent extends React.Component<
       </RaisedButton>
     )
   }
-  get approved() {
+  approved = () => {
     const { initialValues, t } = this.props;
     return (initialValues && initialValues.approved &&
       <ApprovedContainer>
@@ -188,9 +187,9 @@ class EditRequestComponent extends React.Component<
         <Paper zDepth={2}>
           <Form onSubmit={handleSubmit} autoComplete={''}>
             {(error || getRequestErr) && <Alert mssg={error || getRequestErr} type={'error'} />}
-            {this.approved}
-            {this.approveBtn}
-            {this.fields}
+            {this.approved()}
+            {this.approveBtn()}
+            {this.fields()}
           </Form>
           <Preloader isShow={fetchingRequest || !initialValues} />
 
