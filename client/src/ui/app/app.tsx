@@ -27,9 +27,7 @@ const renderApp = (fela: {
         <ThemeProvider theme={driveTheme}>
           <MuiThemeProvider>
             <ConnectedRouter history={history}>
-              {/* <I18nextProvider i18n={i18n.}> */}
-                <AppRoot />
-              {/* </I18nextProvider> */}
+              <AppRoot />
             </ConnectedRouter>
           </MuiThemeProvider>
         </ThemeProvider>
