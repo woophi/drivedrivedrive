@@ -67,6 +67,10 @@ exports.parseDateForWix = (date) => {
 	}
 	return date;
 }
+exports.parseTimeWithMoment = (time) => {
+	const onlyTime = moment.utc(time, 'HH:mm');
+	return onlyTime.format('HH:mm');
+}
 const trimSpaces = (str) => {
 	if (str) {
 		return str.replace(/\s/g, '');

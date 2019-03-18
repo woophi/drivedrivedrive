@@ -6,7 +6,8 @@ const {
 	sendEmail,
 	parseDateForWix,
 	trimSpaces,
-	apiError
+	apiError,
+	parseTimeWithMoment
 } = require('../../lib/helpers');
 const { getGeoData } = require('../../lib/tracking');
 const crypto = require('crypto');
@@ -31,7 +32,7 @@ exports.sendRequest = (req, res) => {
       from: req.body.from,
       to: req.body.to,
       date: parseDateForWix(req.body.date),
-      time: req.body.time,
+      time: parseTimeWithMoment(req.body.time),
 			comment: req.body.comment,
 			uniqHash: buf,
 			phone: req.body.phone
