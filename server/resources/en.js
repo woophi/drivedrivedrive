@@ -46,9 +46,9 @@ module.exports = {
 			'newTitle': 'New transfer',
 			'linkToNew': 'Link to new transfer',
 			'thx': 'Thank you for giving us the opportunity to serve you!',
-			'uReq': 'Your transfer',
-			'edit': 'You can edit and follow your transfer status by using the following link.',
-			'linkToU': 'Link to transfer'
+			'uReq': 'We got Your transfer request, soon you will start receiving offers from our drivers.',
+			'edit': 'If you want to change anything in your transfer, You could easily do it via following link.',
+			'linkToU': 'Link to transfer request'
 		},
 		'confirmReq': {
 			'confirmed': 'Transfer has been confirmed',
