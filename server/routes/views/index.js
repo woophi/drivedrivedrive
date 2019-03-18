@@ -36,7 +36,7 @@ exports = module.exports = (req, res) => {
 
 				return view.render('default');
 			});
-		} else {
+		} else if (!req.user) {
 			view.render('default');
 		}
 	} catch (error) {

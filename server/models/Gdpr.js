@@ -11,10 +11,18 @@ var Gdpr = new keystone.List('Gdpr', {
 	map: {name: 'title'}
 });
 
+const deps = {
+	en: { 'language': 'en' },
+	ru: { 'language': 'ru' }
+};
+
 Gdpr.add({
-	title: { type: String, index: true, label: 'Заголовок' },
-	text: { type: Types.Markdown, index: true, label: 'Содержание' },
-	keyName: { type: String, label: 'Ключ', noedit: true },
+	title: { type: Types.Text, index: true, label: 'Заголовок' },
+	text: { type: Types.Markdown, hidden: true },
+	textRU: { type: Types.Markdown, label: 'Содержание', dependsOn: deps.ru },
+	textEN: { type: Types.Markdown, label: 'Содержание', dependsOn: deps.en },
+	keyName: { type: Types.Key, label: 'Ключ', noedit: true },
+	language: { type: Types.Select, options: 'ru, en', default: 'ru' }
 });
 
 Gdpr.schema.pre('save', function(next) {

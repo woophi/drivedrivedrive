@@ -2,10 +2,14 @@ import { store } from 'core/shared/store';
 import { GuestDispatch, HandlePoints } from './types';
 import { api, loadData } from 'core/app/api';
 import { LocalStorageManager } from 'core/localStorageManager';
+import { getCookie } from 'core/cookieManager';
+import { KeyName } from 'core/models/api';
 
 export const getGdprGuest = async () => {
   try {
-    await loadData('guestGdpr', () => api.gdrp.getGuestGdpr());
+    await loadData('guestGdpr', () =>
+      api.gdrp.getGdprData(getCookie('prefLang') || 'ru', KeyName.GUEST)
+    );
   } catch (error) {
     throw error;
   }

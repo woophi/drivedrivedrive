@@ -38,9 +38,8 @@ export const api = {
       c<apiData.StateRequest>('request/get/accept/state', data)
   },
   gdrp: {
-    getGuestGdpr: () => c<apiData.Gdpr>('gdpr/guest'),
-    getUserGdpr: () => c<apiData.Gdpr>('gdpr/user'),
-    getCookieGdpr: () => c<apiData.Gdpr>('gdpr/cookie')
+    getGdprData: (lang: string, keyName: apiData.KeyName) =>
+      c<apiData.Gdpr>('gdpr', { lang, keyName }),
   },
   guest: {
     unsubFromMails: (data: { hash: string }) =>

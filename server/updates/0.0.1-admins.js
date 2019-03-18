@@ -12,4 +12,3 @@ exports.create = {
 		{ 'name.first': 'Admin', 'name.last': 'User', 'email': process.env.SUPER_MAIL, 'password': process.env.SUPER_PASS, 'isAdmin': true, phone: '21' },
 	],
 };
-

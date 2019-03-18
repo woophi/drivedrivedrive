@@ -97,9 +97,7 @@ exports = module.exports = (app) => {
 
   app.post('/api/sendRequest', routes.api.app.form.sendRequest);
   app.post('/api/checkEmail', routes.api.app.form.checkEmailAddress);
-  app.post('/api/gdpr/guest', routes.api.app.gdpr.getGuestGdpr);
-	app.post('/api/gdpr/user', routes.api.app.gdpr.getUserGdpr);
-  app.post('/api/gdpr/cookie', routes.api.app.gdpr.getCookieGdpr);
+  app.post('/api/gdpr', routes.api.app.gdpr.getGdprData);
 
 	app.post('/api/user/unsub', validateToken, routes.api.app.emails.unsubDriver);
 	app.post('/api/user/subState', routes.api.app.emails.subStateDriver);
