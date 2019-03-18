@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import 'core/shared/i18n';
 import { Provider as Redux } from 'react-redux';
 import { Provider as Fela, ThemeProvider } from 'react-fela';
 import { IRenderer as FelaRenderer } from 'fela';
@@ -15,7 +16,6 @@ import { init } from 'core/app/init';
 import { uiReducers } from 'core/app/reducer';
 import * as common from 'core/shared/common';
 import * as moment from 'moment';
-import('core/shared/i18n');
 
 const renderApp = (fela: {
   renderer: FelaRenderer;

@@ -14,7 +14,8 @@ const i18n = i18next
       escapeValue: false,
     },
     react: {
-      wait: false,
+      wait: true,
+      useSuspense: false,
       nsMode: 'default'
     },
   });
