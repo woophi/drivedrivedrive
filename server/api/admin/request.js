@@ -2,15 +2,16 @@ const keystone = require('keystone');
 const { apiError, sendEmail } = require('../../lib/helpers');
 const async = require('async');
 const { isEmpty } = require('lodash');
+const { t } = require('../../resources');
 
 exports.getRequest = (req, res) => {
 	keystone.list('Request').model
 		.findById(req.body.requestId)
 		.exec((err, request) => {
 			if (err)
-				return apiError(res, {message: 'Невозможно получить данные' }, 500);
+				return apiError(res, {message: t('errors.unableToGet', {}, req.user.language) }, 500);
 			if (!request)
-				return apiError(res, {message: 'Заявка не найдена' }, 404);
+				return apiError(res, {message: t('errors.request.notFound', {}, req.user.language) }, 404);
 
 			return res.apiResponse(request);
 		});
@@ -24,15 +25,15 @@ exports.updateRequest = (req, res) => {
 		.findById(requestId)
 		.exec((err, request) => {
 			if (err)
-				return apiError(res, {message: 'Невозможно получить данные' }, 500);
+				return apiError(res, {message: t('errors.unableToGet', {}, req.user.language) }, 500);
 			if (!request)
-				return apiError(res, {message: 'Заявка не найдена' }, 404);
+				return apiError(res, {message: t('errors.request.notFound', {}, req.user.language) }, 404);
 
 			request
 				.set(payload)
 				.save((err) => {
 					if (err)
-						return apiError(res, { message: 'Не удалось обновить данные' }, 400);
+						return apiError(res, { message: t('errors.unableToUpdate', {}, req.user.language) }, 400);
 
 					return res.apiResponse();
 				});
@@ -52,11 +53,11 @@ exports.approveRequest = (req, res) => {
 				.findById(requestId)
 				.exec((err, request) => {
 					if (err)
-						return apiError(res, {message: 'Невозможно получить данные' }, 500);
+						return apiError(res, {message: t('errors.unableToGet', {}, user.language) }, 500);
 					if (!request)
-						return apiError(res, {message: 'Заявка не найдена' }, 404);
+						return apiError(res, {message: t('errors.request.notFound', {}, user.language) }, 404);
 					if (request.approved)
-						return apiError(res, {message: 'Заявка уже одобрена' }, 200);
+						return apiError(res, {message: t('errors.request.alreadyApproved', {}, user.language) }, 200);
 
 					curRequest = request;
 					return cb();
@@ -71,7 +72,7 @@ exports.approveRequest = (req, res) => {
 			});
 			newApproval.save((err, result) => {
         if (err) {
-					return apiError(res, {message: 'Проблема создать нового одобряющего' }, 500);
+					return apiError(res, {message: t('errors.request.newApproval', {}, user.language) }, 500);
 				}
 				savedAprovalId = result._id;
         return cb();
@@ -85,7 +86,7 @@ exports.approveRequest = (req, res) => {
 				})
 				.save((err) => {
 					if (err) {
-						return apiError(res, {message: 'Проблема добавить одобряющего к заявке' }, 500);
+						return apiError(res, {message: t('errors.request.addApproval', {}, user.language) }, 500);
 					}
 					return cb();
 				});
@@ -98,24 +99,28 @@ exports.approveRequest = (req, res) => {
 				.where('isActive', true)
 				.exec((err, drivers) => {
 					if (err) {
-						return apiError(res, {message: 'Системная ошибка' }, 500);
+						return apiError(res, {message:  t('errors.system', {}, user.language)}, 500);
 					}
 					if (isEmpty(drivers)) {
-						return apiError(res, {message: 'Не удалось найти водителей.' }, 404);
+						return apiError(res, {message: t('errors.user.driver.notFound', {}, user.language) }, 404);
 					}
 
-					const emailKeys = {
-						templateName: 'driver-notify',
-						to: drivers,
-						subject: `Новая заявка на трансфер из ${curRequest.guest.from} в ${curRequest.guest.to}`
-					};
+					drivers.forEach(driver => {
+						const emailKeys = {
+							templateName: 'driver-notify',
+							to: driver,
+							subject: t('mails.subject.driverNewReq', {from: curRequest.guest.from, to:curRequest.guest.to}, driver.language)
+						};
 
-					const params = {
-						guestData: curRequest,
-						driver: true
-					};
+						const params = {
+							guestData: curRequest,
+							language: driver.language,
+							driver: true
+						};
 
-					sendEmail(emailKeys, params);
+						sendEmail(emailKeys, params);
+					});
+
 					return cb();
 				});
 		}
@@ -123,7 +128,7 @@ exports.approveRequest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return apiError(res, {message: 'Что-то пошло не так... попробуйте еще раз' }, 500);
+			return apiError(res, {message: t('errors.unknown', {}, user.language) }, 500);
     }
 
     return res.apiResponse();
