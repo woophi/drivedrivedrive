@@ -17,7 +17,8 @@ export const api = {
     updateProfile: (data: apiData.UserProfile) =>
       a<null>('user/profile/update', data),
     unsubFromMails: () => a<apiData.StateUnsub>('user/unsub'),
-    subscribeState: () => c<apiData.StateUnsub>('user/subState')
+    subscribeState: () => c<apiData.StateUnsub>('user/subState'),
+    updateLanguage: (language: string) => a('user/language/update', {language}),
   },
   request: {
     getRequestState: (data: apiData.GetRequest) =>

@@ -39,7 +39,6 @@ class LangComponent extends React.Component<Props> {
   }
 
   handleEnChange = () => {
-    console.warn('i click');
     changeLanguage('en');
   };
   handleRuChange = () => {
