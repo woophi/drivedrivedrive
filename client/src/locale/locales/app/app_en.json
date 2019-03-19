@@ -2,7 +2,8 @@
   "admin": {
     "requests": {
       "title": "Requests",
-      "sucApproved": "Successfully approved"
+      "sucApproved": "Successfully approved",
+      "approvedTitle": "Approved"
     }
   },
   "common": {

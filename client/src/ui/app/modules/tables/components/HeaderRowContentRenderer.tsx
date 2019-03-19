@@ -4,17 +4,18 @@ import { NamedTableHeader } from './NamedTableHeader';
 import { SortAndFilterState, TableConfig, ColumnModel } from '../types';
 import { ResizeHandle } from './ResizeHandle';
 import i18n from 'i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-function renderLabel<T>(label: string, fallback?: Extract<keyof T, string>) {
+function renderLabel<T>(label: string,  t: i18n.TFunction, fallback?: Extract<keyof T, string>) {
   return (label === '' ? label :
     !label ? fallback :
-      label.indexOf('::') !== -1 ? i18n.t(label) : label
+      label.indexOf('::') !== -1 ? t(label) : label
   );
 }
 
 type Props<T = {}, TP = {}, RP = {}> = {
   lineRef: React.RefObject<HTMLDivElement>;
-} & FlexGridTableParentProps<T, TP, RP>;
+} & FlexGridTableParentProps<T, TP, RP> & WithTranslation;
 
 export type FlexGridTableParentProps<T = {}, TP = {}, RP = {}> = {
   tableProps: TP;
@@ -22,16 +23,16 @@ export type FlexGridTableParentProps<T = {}, TP = {}, RP = {}> = {
   tableState: SortAndFilterState;
   config: TableConfig<T, TP, RP>;
 };
-export class HeaderRowContentRenderer<T, TP, RP> extends React.PureComponent<Props<T, TP, RP>> {
+class HeaderRowContentRendererComponent<T, TP, RP> extends React.PureComponent<Props<T, TP, RP>> {
   sortDir = (columnDataKey: keyof T) => this.props.tableState.sortBy === columnDataKey ? this.props.tableState.sortDirection : null;
 
   cellsRefs = this.props.model.map(() => React.createRef<HTMLDivElement>());
 
   render() {
-    const { model, config, tableState } = this.props;
+    const { model, config, tableState, t } = this.props;
 
     const cells = model.map((columnModel, index) => {
-      const label = renderLabel(columnModel.label, columnModel.dataKey);
+      const label = renderLabel(columnModel.label, t,  columnModel.dataKey);
       const width =
         tableState.columnWidths[columnModel.dataKey] || columnModel.width;
 
@@ -77,3 +78,5 @@ export class HeaderRowContentRenderer<T, TP, RP> extends React.PureComponent<Pro
     return <React.Fragment>{cells}</React.Fragment>;
   }
 }
+
+export const HeaderRowContentRenderer = withTranslation()(HeaderRowContentRendererComponent);

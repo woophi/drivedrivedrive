@@ -5,7 +5,7 @@ import { getRequests } from '../operations';
 import { getRequestsData } from '../selectors';
 import { TableRequest } from 'core/models/api';
 import { changeUrl } from 'ui/app/operations';
-import { Paper } from 'material-ui';
+import { Paper, Checkbox } from 'material-ui';
 
 const TC = composeTable<TableRequest>({
   model: [{
@@ -20,6 +20,16 @@ const TC = composeTable<TableRequest>({
   }, {
     label: 'app::common:time',
     dataKey: 'time'
+  }, {
+    label: 'app::admin:requests:approvedTitle',
+    dataKey: 'approved',
+    cellRenderer: ({ rowData }) => {
+      return (
+        <Checkbox
+          checked={rowData.approved}
+        />
+      )
+    }
   }],
   showRowDividers: true,
   showRowArrows: true,

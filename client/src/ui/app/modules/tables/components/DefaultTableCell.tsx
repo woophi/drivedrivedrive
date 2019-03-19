@@ -13,8 +13,13 @@ const Container = createComponent(
 export const DefaultTableCell: React.SFC<{ title: string }> = ({
   children,
   title
-}) => (
-  <Container className="text-truncate" title={title}>
-    {children}
-  </Container>
-);
+}) => {
+  if (typeof title !== 'string') {
+    title = '';
+  }
+  return (
+    <Container className="text-truncate" title={title}>
+      {children}
+    </Container>
+  );
+}

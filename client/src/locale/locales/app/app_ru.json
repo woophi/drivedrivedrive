@@ -2,7 +2,8 @@
   "admin": {
     "requests": {
       "title": "Заявки",
-      "sucApproved": "Успешно одобрено"
+      "sucApproved": "Успешно одобрено",
+      "approvedTitle": "Одобрено"
     }
   },
   "common": {

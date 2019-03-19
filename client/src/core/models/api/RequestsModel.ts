@@ -4,4 +4,5 @@ export interface TableRequest {
   date: string;
   time: string;
   id: string;
+  approved?: boolean;
 }
