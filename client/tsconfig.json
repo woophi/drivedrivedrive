@@ -29,7 +29,6 @@
   ],
   "exclude": [
     "src/base.js",
-    "src/otherbrowser.js",
     "src/es6.js"
   ]
 }

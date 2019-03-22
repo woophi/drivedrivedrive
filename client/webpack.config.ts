@@ -21,7 +21,6 @@ const config = {
   devServer,
   entry: {
     'lib.es6': './src/es6.js',
-    'lib.otherbrowser': './src/otherbrowser.js',
     'lib.glyphs': './glyphs/glyphs.js',
     'app.drive': './src/ui/app/app.tsx'
   },
