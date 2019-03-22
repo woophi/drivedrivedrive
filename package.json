@@ -1,6 +1,6 @@
 {
   "name": "vettura-app",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "heroku-prebuild": "yarn build:client && yarn build:server",
@@ -15,7 +15,7 @@
   },
   "cacheDirectories": ["client/node_modules", "server/node_modules"],
   "engines": {
-    "node": "8.11.1",
-    "yarn": "1.9.4"
+    "node": "10.15.3",
+    "yarn": "1.15.2"
   }
 }
