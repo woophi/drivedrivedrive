@@ -9,7 +9,7 @@ import { connect as ReduxConnect } from 'react-redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Ru } from './Ru';
 import { En } from './En';
-import { changeLanguage } from '../operations';
+import { changeLanguage } from 'core/app/language';
 
 const mapStateToProps = (state: AppState) => ({
   activeLang: state.localAppState.lang

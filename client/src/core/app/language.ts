@@ -13,8 +13,9 @@ export const changeLanguage = (lang: 'en' | 'ru') => {
     setLocale(lang);
   })
   .then(() => {
-    const user = store.getState().authInfo.userName;
-    if (user) {
+    const authInfo = store.getState().authInfo;
+    const hasLang = authInfo.language;
+    if (!!authInfo && hasLang !== lang) {
       api.user.updateLanguage(lang)
     }
   });

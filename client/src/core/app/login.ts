@@ -2,6 +2,7 @@ import * as common from 'core/shared/common';
 import { store } from 'core/shared/store';
 import * as models from 'core/models';
 import { changeUrl } from 'ui/app/operations';
+import { changeLanguage } from './language';
 
 export interface LoginParams {
   secret: string;
@@ -25,6 +26,8 @@ export async function login(token: string) {
     });
 
   store.dispatch({ type: 'setAuthInfo', payload: authResult });
+
+  changeLanguage(authResult.language);
 
   store.dispatch({ type: 'setLoginProcessStep', step: 0 });
 }

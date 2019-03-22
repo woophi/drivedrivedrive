@@ -7,6 +7,7 @@ export interface UserAuthInfo extends AuthInfo {
   fullName: FullName;
   userName: string;
   roles: string[];
+  language: 'en' | 'ru';
   prevUrl?: string;
 }
 
