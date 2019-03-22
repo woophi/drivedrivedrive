@@ -34,6 +34,7 @@ exports.getUserIp = (req) => {
 	return ip;
 };
 
+//TODO: remove
 exports.apiError = (res, err = { message: 'forgot to set mssg' }, code) => {
 	const details = {
 		err: err.message,

@@ -1,7 +1,8 @@
 const async = require('async');
 const keystone = require('keystone');
-const { apiError } = require('../../lib/helpers');
+const { apiError } = require('../../lib/errorHandle');
 const { SubStatus } = require('../../lib/staticVars');
+const { t } = require('../../resources');
 
 exports.subStateDriver = (req, res) => {
 
@@ -15,12 +16,12 @@ exports.subStateDriver = (req, res) => {
 	UserModel.findById(req.user._id).exec((err, user) => {
 
 		if (err || !user) {
-			return apiError(res, {message: 'Ошибка сервера' }, 500);
+			return apiError(res, 500, err);
 		}
 
 		if (!user.notifications.email) {
 			return res.apiResponse({
-				message: 'Водитель уже отписался от почтовой рассылки',
+				message: t('errors.user.driver.notSub', {}, req.user.language),
 				SubStatus: SubStatus.INVALID
 			});
 		}
@@ -47,12 +48,12 @@ exports.unsubDriver = (req, res) => {
 			UserModel.findById(req.user._id).exec((err, user) => {
 
 				if (err || !user) {
-					return apiError(res, {message: 'Ошибка сервера' }, 500);
+					return apiError(res, 400, err);
 				}
 
 				if (!user.notifications.email) {
 					return res.apiResponse({
-						message: 'Водитель уже отписался от почтовой рассылки',
+						message: t('errors.user.driver.notSub', {}, req.user.language),
 						SubStatus: SubStatus.INVALID
 					});
 				}
@@ -69,7 +70,7 @@ exports.unsubDriver = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return apiError(res, {message: 'Не удалось обновить статус почтовой рассылки' }, 500);
+			return apiError(res, 500, err);
 		}
 
 		return res.apiResponse({
@@ -90,10 +91,11 @@ exports.subStateGuest = (req, res) => {
 	RequestModel
 		.findOne()
 		.where('guest.uniqHash', req.body.hash)
+		.populate('audit')
 		.exec((err, result) => {
 
 			if (err) {
-				return apiError(res, {message: 'Ошибка сервера' }, 500);
+				return apiError(res, 500, err);
 			}
 
 			if (!result) {
@@ -104,7 +106,7 @@ exports.subStateGuest = (req, res) => {
 
 			if (!result.guest.notify) {
 				return res.apiResponse({
-					message: 'Пользователь уже отписался от почтовой рассылки',
+					message: t('errors.user.guest.notSub', {}, result.audit.language),
 					SubStatus: SubStatus.INVALID
 				});
 			}
@@ -123,6 +125,7 @@ exports.unsubGuest = (req, res) => {
     });
 	}
 
+	let language;
 	async.series([
 
 		(cb) => {
@@ -131,10 +134,10 @@ exports.unsubGuest = (req, res) => {
 			RequestModel
 				.findOne()
 				.where('guest.uniqHash', req.body.hash)
+				.populate('audit')
 				.exec((err, result) => {
-
 					if (err) {
-						return apiError(res, {message: 'Ошибка сервера' }, 500);
+						return apiError(res, 500, err);
 					}
 
 					if (!result) {
@@ -145,7 +148,7 @@ exports.unsubGuest = (req, res) => {
 
 					if (!result.guest.notify) {
 						return res.apiResponse({
-							message: 'Пользователь уже отписался от почтовой рассылки',
+							message: t('errors.user.guest.notSub', {}, result.audit.language),
 							SubStatus: SubStatus.INVALID
 						});
 					}
@@ -162,7 +165,7 @@ exports.unsubGuest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return apiError(res, {message: 'Не удалось обновить статус почтовой рассылки' }, 500);
+			return apiError(res, 500, err);
 		}
 
 		return res.apiResponse({

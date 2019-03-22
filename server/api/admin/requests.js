@@ -1,14 +1,13 @@
 const keystone = require('keystone');
-const { apiError } = require('../../lib/helpers');
 const moment = require('moment');
-const { t } = require('../../resources');
+const { apiError } = require('../../lib/errorHandle');
 
 exports.getAll = (req, res) => {
 	keystone.list('Request').model
 		.find()
 		.exec((err, results) => {
 			if (err)
-				return apiError(res, {message: t('errors.unableToGet', {}, req.user.language) }, 500);
+				return apiError(res, 500, err);
 
 			const requests = results.map(r => ({
 					from: r.guest.from,

@@ -1,9 +1,10 @@
 const keystone = require('keystone');
 const {
-	apiError,
 	compareGuestTimeWithToday,
 	sendEmail
 } = require('../../lib/helpers');
+const { apiError } = require('../../lib/errorHandle');
+const { t } = require('../../resources');
 
 exports.getGuestRequest = (req, res) => {
 	const RequestModel = keystone.list('Request').model;
@@ -13,7 +14,7 @@ exports.getGuestRequest = (req, res) => {
 		.where('guest.uniqHash', req.body.hash)
 		.exec((err, result) => {
 			if (err || !result)
-				return apiError(res, { message: 'Невозможно получить данные заявки' }, 400);
+				return apiError(res, 400, err);
 
 
 
@@ -44,7 +45,7 @@ exports.updateGuestRequest = (req, res) => {
 		.populate('submitedOn')
 		.exec((err, result) => {
 			if (err || !result)
-				return apiError(res, { message: 'Ошибка сервера' }, 500);
+				return apiError(res, 400, err);
 
 			if (compareGuestTimeWithToday(result.guest.date, result.guest.time, 'less')) {
 				return res.apiResponse(null);
@@ -68,7 +69,7 @@ exports.updateGuestRequest = (req, res) => {
 				.set(guestData)
 				.save((err, updatedResult) => {
 					if (err)
-						return apiError(res, { message: 'Не удалось обновить данные' }, 400);
+						return apiError(res, 400, err);
 
 					UserModel
 						.find()
@@ -79,14 +80,18 @@ exports.updateGuestRequest = (req, res) => {
 							let notifiers = result.submitedOn
 								? [...users, result.submitedOn]
 								: users;
-							sendEmail({
-								templateName: 'driver-update-request-notify',
-								to: notifiers,
-								subject: `Трансфер ${updatedResult.guest.from} - ${updatedResult.guest.to}`
-							},
-							{
-								guestData: updatedResult,
-								driver: true
+							notifiers.forEach(notifier => {
+
+								sendEmail({
+									templateName: 'driver-update-request-notify',
+									to: notifier,
+									subject: t('mails.subject.guestUpdateReq', {from:updatedResult.guest.from,to:updatedResult.guest.to}, notifier.language)
+								},
+								{
+									guestData: updatedResult,
+									driver: true,
+									language: notifier.language
+								});
 							});
 							return res.apiResponse();
 						})

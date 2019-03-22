@@ -1,9 +1,9 @@
 extends layouts/base
 block content
-	-const date = moment(guestData.guest.date).locale('ru').format('LL')
-	p Здравствуйте %recipient.firstName%,
-	p Новая заявка
-	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
+	-const date = moment(guestData.guest.date).locale(language).format('LL')
+	p #{t('mails.hi', {}, language)} %recipient.firstName%,
+	p #{t('mails.newReq.newTitle', {}, language)}
+	p #{t('mails.newReq.info', { from: guestData.guest.from, to: guestData.guest.to, date, time: guestData.guest.time, count: guestData.guest.count}, language)}
 	if guestData.guest.comment
-		p Комментарий: #{guestData.guest.comment}
-	p: a(href=host + '/request/' + guestData._id) Ссылка на новую заявку
+		p #{t('mails.request.comment', {}, language)} #{guestData.guest.comment}
+	p: a(href=host + '/request/' + guestData._id) #{t('mails.newReq.linkToNew', {}, language)}

@@ -25,13 +25,13 @@ module.exports = {
 			'choosenDriver': 'Choosen driver',
 			'car': 'Car:',
 			'client': 'Client -',
-			'goFromTo': 'will go from {{from}} to {{to}}',
+			'goFromTo': 'going to from {{from}} to {{to}}',
 		},
 		'accptReq': {
-			'adminHi': 'Hi, {{recipient}}, client chose a driver.',
+			'adminHi': 'Hi, client chose a driver.',
 			'confirm': 'confirm',
 			'clientWantsYou': 'Client wants to go with you',
-			'driverHi': 'Hi, {{recipient}}, You price offer has been choosen by client',
+			'driverHi': 'Hi, You price offer has been choosen by client',
 			'driverWarn': 'In the near future we will contact you to confirm the trip.'
 		},
 		'newDriver': {
@@ -57,7 +57,8 @@ module.exports = {
 		},
 		'updateReq': {
 			'title': 'Client changed request information.',
-			'hi': 'Hi, {{recipient}}, client has recently updated request data'
+			'hi': 'Hi, client has recently updated request data',
+			'newData': 'New information'
 		},
 		'password': {
 			'title': 'You have recently requested password restore from web-site {{host}}.',
@@ -78,6 +79,7 @@ module.exports = {
 			'clickHere': 'Press to choose this offer'
 		},
 		'rated': {
+			'hi': 'Hi, client left feedback.',
 			'transfer': 'Request - {{from}} - {{to}}.',
 			'clientRate': 'Client {{name}} rated driver {{namefirst}} {{namelast}}',
 			'driverGet': 'Driver has been rated:',
@@ -94,11 +96,6 @@ module.exports = {
 		}
 	},
 	'errors': {
-		'unableToGet': 'Unable to get data',
-		'unableToUpdate': 'Unable to update data',
-		'system': 'System error',
-		'server': 'Server error',
-		'unknown': 'Something went wrong... try again',
 		'request': {
 			'notFound': 'Request wasn\'t found',
 			'alreadyApproved': 'Request was approved',
@@ -115,13 +112,13 @@ module.exports = {
 		'user': {
 			'driver': {
 				'notFound': 'Cannot find drivers',
-				'notSub': 'Driver has already unsubscribed',
+				'notSub': 'Driver has already unsubscribed', //HERE
 				'unableToChoose': 'Cannot choose driver',
 				'notFoundOne': 'Cannot find driver',
 				'rate': 'Cannot rate driver'
 			},
 			'guest': {
-				'notSub': 'User has already unsubscribed'
+				'notSub': 'User has already unsubscribed'//HERE
 			},
 			'admin': {
 				'notFound': 'Cannot find admin users'

@@ -1,6 +1,6 @@
 extends layouts/base
 
 block content
-	p #{t('mails.hi')} %recipient.firstName%
-	p #{t('mails.newDriver.dataUpdate')}
-	p: a(href=host + '/admin/users/' + user._id) #{t('mails.newDriver.link')}
+	p #{t('mails.hi', {}, language)} %recipient.firstName%
+	p #{t('mails.newDriver.dataUpdate', {}, language)}
+	p: a(href=host + '/admin/users/' + user._id) #{t('mails.newDriver.link', {}, language)}

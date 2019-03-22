@@ -1,17 +1,19 @@
 const keystone = require('keystone');
-const { apiError, sendEmail } = require('../../lib/helpers');
+const { sendEmail } = require('../../lib/helpers');
 const async = require('async');
 const { isEmpty } = require('lodash');
 const { t } = require('../../resources');
+const { apiError } = require('../../lib/errorHandle');
 
 exports.getRequest = (req, res) => {
 	keystone.list('Request').model
 		.findById(req.body.requestId)
 		.exec((err, request) => {
 			if (err)
-				return apiError(res, {message: t('errors.unableToGet', {}, req.user.language) }, 500);
+				return apiError(res, 500, err);
+
 			if (!request)
-				return apiError(res, {message: t('errors.request.notFound', {}, req.user.language) }, 404);
+				return apiError(res, 404);
 
 			return res.apiResponse(request);
 		});
@@ -25,15 +27,15 @@ exports.updateRequest = (req, res) => {
 		.findById(requestId)
 		.exec((err, request) => {
 			if (err)
-				return apiError(res, {message: t('errors.unableToGet', {}, req.user.language) }, 500);
+				return apiError(res, 500, err);
 			if (!request)
-				return apiError(res, {message: t('errors.request.notFound', {}, req.user.language) }, 404);
+				return apiError(res, 404);
 
 			request
 				.set(payload)
 				.save((err) => {
 					if (err)
-						return apiError(res, { message: t('errors.unableToUpdate', {}, req.user.language) }, 400);
+						return apiError(res, 400, err);
 
 					return res.apiResponse();
 				});
@@ -53,11 +55,11 @@ exports.approveRequest = (req, res) => {
 				.findById(requestId)
 				.exec((err, request) => {
 					if (err)
-						return apiError(res, {message: t('errors.unableToGet', {}, user.language) }, 500);
+						return apiError(res, 500, err);
 					if (!request)
-						return apiError(res, {message: t('errors.request.notFound', {}, user.language) }, 404);
+						return apiError(res, 404);
 					if (request.approved)
-						return apiError(res, {message: t('errors.request.alreadyApproved', {}, user.language) }, 200);
+						return apiError(res, 200);
 
 					curRequest = request;
 					return cb();
@@ -72,7 +74,7 @@ exports.approveRequest = (req, res) => {
 			});
 			newApproval.save((err, result) => {
         if (err) {
-					return apiError(res, {message: t('errors.request.newApproval', {}, user.language) }, 500);
+					return apiError(res, 500, err);
 				}
 				savedAprovalId = result._id;
         return cb();
@@ -86,7 +88,7 @@ exports.approveRequest = (req, res) => {
 				})
 				.save((err) => {
 					if (err) {
-						return apiError(res, {message: t('errors.request.addApproval', {}, user.language) }, 500);
+						return apiError(res, 500, err);
 					}
 					return cb();
 				});
@@ -99,10 +101,10 @@ exports.approveRequest = (req, res) => {
 				.where('isActive', true)
 				.exec((err, drivers) => {
 					if (err) {
-						return apiError(res, {message:  t('errors.system', {}, user.language)}, 500);
+						return apiError(res, 500, err);
 					}
 					if (isEmpty(drivers)) {
-						return apiError(res, {message: t('errors.user.driver.notFound', {}, user.language) }, 404);
+						return apiError(res, 404);
 					}
 
 					drivers.forEach(driver => {
@@ -128,7 +130,7 @@ exports.approveRequest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return apiError(res, {message: t('errors.unknown', {}, user.language) }, 500);
+			return apiError(res, 500, err);
     }
 
     return res.apiResponse();

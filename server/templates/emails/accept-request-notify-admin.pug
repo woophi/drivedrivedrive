@@ -2,23 +2,23 @@ extends layouts/basecard
 block content
 	div.padding1rem
 		-const date = moment(data.guest.date).format('L')
-		p#cardP Добрый день, %recipient.firstName%, клиент выбрал водителя.
+		p#cardP #{t('mails.accptReq.adminHi', {}, language)}
 		div#bodyCard.padding1rem
-			h2 Данные заявки
-			p#cardP Клиент - #{data.guest.name}
-			p#cardP поедет из #{data.guest.from} в #{data.guest.to}
-			p#cardP количество пассажиров #{data.guest.count}
-			p#cardP цена #{price}
-			p#cardP дата #{date}, время #{data.guest.time}
+			h2 #{t('mails.request.data', {}, language)}
+			p#cardP #{t('mails.request.client', {}, language)} #{data.guest.name}
+			p#cardP #{t('mails.request.goFromTo', {from: data.guest.from, to: data.guest.to}, language)}
+			p#cardP #{t('mails.request.count', {}, language)} #{data.guest.count}
+			p#cardP #{t('mails.request.price', {price}, language)}
+			p#cardP #{t('mails.request.dateTime', {date, time: data.guest.time}, language)}
 			if data.guest.comment
-				p#cardP Комментарий: #{data.guest.comment}
+				p#cardP #{t('mails.request.comment', {}, language)} #{data.guest.comment}
 			if data.guest.phone
-				p#cardP Номер телефона: #{data.guest.phone}
+				p#cardP #{t('mails.request.phone', {}, language)} #{data.guest.phone}
 		div#bodyCard.padding1rem
-			h2 Выбранный водитель
+			h2 #{t('mails.request.choosenDriver', {}, language)}
 			p#cardP #{data.submitedOn.name.first} #{data.submitedOn.name.last}
-			p#cardP Номер телефона: #{data.submitedOn.phone}
-			p#cardP Машина: #{data.submitedOn.car.kind} #{data.submitedOn.car.model} #{data.submitedOn.car.year}
+			p#cardP #{t('mails.request.phone', {}, language)} #{data.submitedOn.phone}
+			p#cardP #{t('mails.request.car', {}, language)} #{data.submitedOn.car.kind} #{data.submitedOn.car.model} #{data.submitedOn.car.year}
 		div.linkContainer
 			a(href=host + '/request/' + data._id + '/confirm').marginAuto
-				button.bttn подтвердить
+				button.bttn #{t('mails.accptReq.confirm', {}, language)}

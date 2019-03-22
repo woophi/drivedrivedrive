@@ -9,7 +9,7 @@ exports = module.exports = (req, res) => {
 	try {
 		if (req.user) {
 			locals.language = req.user.language;
-			view.render('default');
+			renderPage(locals.language, view);
 		}
 		if (!req.user && req.params && req.params.id) {
 			async.series([
@@ -34,13 +34,21 @@ exports = module.exports = (req, res) => {
 					console.error('Error dunno', err);
 				}
 
-				return view.render('default');
+				return renderPage(locals.language, view);
 			});
 		} else if (!req.user) {
-			view.render('default');
+			renderPage(locals.language, view);
 		}
 	} catch (error) {
 		console.error('unknown error', error);
-		view.render('default');
+		renderPage(locals.language, view);
 	}
 };
+
+const renderPage = (lang, view) => {
+	if (lang === 'ru') {
+		return view.render('default');
+	} else {
+		return view.render('defaultEN');
+	}
+}

@@ -2,17 +2,17 @@ extends layouts/basecard
 block content
 	div.padding1rem
 		-const date = moment(guestData.guest.date).format('L')
-		h1 Клиент хочет поехать с Вами
-		p#cardP Добрый день, %recipient.firstName%, Ваше ценовое предложение к трансферу было принято
-		p#cardP В ближайшее время мы свяжемся с Вами для подтверждения поездки
+		h1 #{t('mails.accptReq.clientWantsYou', {}, language)}
+		p#cardP #{t('mails.accptReq.driverHi', {}, language)}
+		p#cardP #{t('mails.accptReq.driverWarn', {}, language)}
 		div#bodyCard.padding1rem
-			h2 Данные заявки
-			p#cardP Клиент - #{guestData.guest.name}
-			p#cardP поедет из #{guestData.guest.from} в #{guestData.guest.to}
-			p#cardP количество пассажиров #{guestData.guest.count}
-			p#cardP цена #{price} €(евро)
-			p#cardP дата #{date}, время #{guestData.guest.time}
+			h2 #{t('mails.request.data', {}, language)}
+			p#cardP #{t('mails.request.client', {}, language)} #{guestData.guest.name}
+			p#cardP #{t('mails.request.goFromTo', {from: guestData.guest.from, to:guestData.guest.to}, language)}
+			p#cardP #{t('mails.request.count', {}, language)} #{guestData.guest.count}
+			p#cardP #{t('mails.request.price', {price}, language)}
+			p#cardP #{t('mails.request.dateTime', {date, time: guestData.guest.time}, language)}
 			if guestData.guest.comment
-				p#cardP Комментарий: #{guestData.guest.comment}
+				p#cardP #{t('mails.request.comment', {}, language)} #{guestData.guest.comment}
 			if guestData.guest.phone
-				p#cardP Номер телефона: #{guestData.guest.phone}
+				p#cardP #{t('mails.request.phone', {}, language)} #{guestData.guest.phone}

@@ -2,16 +2,16 @@ extends layouts/basecard
 block content
 	div.padding1rem
 		-const date = moment(request.guest.date).format('L')
-		h1 Напоминание о предстоящей поездки
-		p#cardP Здравствуйте, #{request.submitedOn.name.first}
-		p#cardP Напоминаем Вам, что завтра состоится поездка
+		h1 #{t('mails.futureReq.title', {}, language)}
+		p#cardP #{t('mails.hi', {recipient: request.submitedOn.name.first}, language)},
+		p#cardP #{t('mails.futureReq.reminder', {}, language)}
 		div#bodyCard.padding1rem
-			h2 Данные трансфера
-			p#cardP Клиент - #{request.guest.name}
-			p#cardP поедет из #{request.guest.from} в #{request.guest.to}
-			p#cardP количество пассажиров #{request.guest.count}
-			p#cardP цена #{request.submitedPrice.value} €(евро)
-			p#cardP дата #{date}, время #{request.guest.time}
+			h2 #{t('mails.futureReq.data', {}, language)}
+			p#cardP #{t('mails.request.client', {}, language)} #{request.guest.name}
+			p#cardP #{t('mails.request.goFromTo', {from: request.guest.from, to:request.guest.to}, language)}
+			p#cardP #{t('mails.request.count', {}, language)} #{request.guest.count}
+			p#cardP  #{t('mails.request.price', {price: request.submitedPrice.value}, language)}
+			p#cardP #{t('mails.request.dateTime', {date, time: request.guest.time}, language)}
 			if request.guest.comment
-				p#cardP Комментарий: #{request.guest.comment}
-			p#cardP Номер телефона: #{request.guest.phone}
+				p#cardP #{t('mails.request.comment', {}, language)} #{request.guest.comment}
+			p#cardP #{t('mails.request.phone', {}, language)} #{request.guest.phone}

@@ -1,11 +1,11 @@
 extends layouts/base
 block content
-	-const date = moment(guestData.guest.date).locale('ru').format('LL')
-	p Здравствуйте #{guestData.guest.name}!
-	p Спасибо, что выбрали нас!
-	p Ваша заявка
-	p Из #{guestData.guest.from}, в #{guestData.guest.to}, дата #{date}, время #{guestData.guest.time}, количество человек #{guestData.guest.count}
+	-const date = moment(guestData.guest.date).locale(language).format('LL')
+	p #{t('mails.hi', {recipient: guestData.guest.name}, language)}!
+	p #{t('mails.newReq.thx', {}, language)}
+	p #{t('mails.newReq.uReq', {}, language)}
+	p #{t('mails.newReq.info', { from: guestData.guest.from, to: guestData.guest.to, date, time: guestData.guest.time, count: guestData.guest.count}, language)}
 	if guestData.guest.comment
-		p Комментарий: #{guestData.guest.comment}
-	p Вы можете редактировать заявку и отслеживать ее статус перейдя по ссылке ниже.
-	p: a(href=host + '/guest/' + guestData._id + '/' + guestData.guest.uniqHash) Ссылка на заявку
+		p #{t('mails.request.comment', {}, language)} #{guestData.guest.comment}
+	p #{t('mails.newReq.edit', {}, language)}
+	p: a(href=host + '/guest/' + guestData._id + '/' + guestData.guest.uniqHash) #{t('mails.newReq.linkToU', {}, language)}

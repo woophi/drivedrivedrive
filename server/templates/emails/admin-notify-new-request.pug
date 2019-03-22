@@ -1,11 +1,11 @@
 extends layouts/base
 block content
-	-const date = moment(guestData.guest.date).locale('ru').format('LL')
+	-const date = moment(guestData.guest.date).locale(language).format('LL')
 	-const link = host + '/adm/requests/edit/request/' + guestData._id
-	p #{t('mails.hi')} %recipient.firstName%,
-	p #{t('mails.newReq.appear')}
-	p #{t('mails.newReq.info', guestData.guest.from, guestData.guest.to, date, guestData.guest.time, guestData.guest.count)}
+	p #{t('mails.hi', {}, language)} %recipient.firstName%,
+	p #{t('mails.newReq.appear', {}, language)}
+	p #{t('mails.newReq.info', { from: guestData.guest.from, to: guestData.guest.to, date, time: guestData.guest.time, count: guestData.guest.count}, language)}
 	if guestData.guest.comment
-		p #{t('mails.request.comment')} #{guestData.guest.comment}
+		p #{t('mails.request.comment', {}, language)} #{guestData.guest.comment}
 	p.
-		#{t('mails.newReq.validate')} #[a(href=link) #{t('mails.newReq.link')}]
+		#{t('mails.newReq.validate', {}, language)} #[a(href=link) #{t('mails.newReq.link', {}, language)}]

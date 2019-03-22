@@ -6,16 +6,16 @@ const {
 	sendEmail,
 	parseDateForWix,
 	trimSpaces,
-	apiError,
 	parseTimeWithMoment
 } = require('../../lib/helpers');
 const { getGeoData } = require('../../lib/tracking');
 const crypto = require('crypto');
-const { checkMails } = require('../../lib/checkMail');
+const { apiError } = require('../../lib/errorHandle');
+const { t } = require('../../resources');
 
 exports.sendRequest = (req, res) => {
 	if (!req.body.gdpr) {
-		return apiError(res, {message: 'Без gdpr нельзя' }, 400);
+		return apiError(res, 400);
 	}
 
 	let	requestData;
@@ -52,10 +52,10 @@ exports.sendRequest = (req, res) => {
 				.where('keyName', 'gdpr_1')
 				.exec((err, result) => {
 					if (err) {
-						return apiError(res, {message: 'Системная ошибка' }, 500);
+						return apiError(res, 500, err);
 					}
 					if (!result) {
-						return apiError(res, {message: 'Извините, согласие не найдено' }, 404);
+						return apiError(res, 404);
 					}
 					confirmedGDPR = result._id;
 					return cb();
@@ -70,10 +70,10 @@ exports.sendRequest = (req, res) => {
 				.$where('this.isAdmin')
 				.exec((err, users) => {
         if (err) {
-					return apiError(res, {message: 'Системная ошибка' }, 500);
+					return apiError(res, 500, err);
         }
         if (isEmpty(users)) {
-					return apiError(res, {message: 'Не удалось найти админов' }, 404);
+					return apiError(res, 404);
 				}
 
 				admins = users;
@@ -91,7 +91,7 @@ exports.sendRequest = (req, res) => {
 			});
       requestData.save((err) => {
         if (err) {
-					return apiError(res, {message: 'Проблема создать новую заявку' }, 500);
+					return apiError(res, 500, err);
         }
         return cb();
       });
@@ -108,7 +108,7 @@ exports.sendRequest = (req, res) => {
 			});
       newAudit.save((err, audit) => {
         if (err) {
-					return apiError(res, {message: 'Проблема создать аудит.' }, 500);
+					return apiError(res, 500, err);
 				}
 				auditId = audit._id;
         return cb();
@@ -123,39 +123,43 @@ exports.sendRequest = (req, res) => {
 				})
 				.save((err) => {
 					if (err) {
-						return apiError(res, {message: 'Проблема добавить аудит к заявке' }, 500);
+						return apiError(res, 500, err);
 					}
 					return cb();
 				});
 		},
 
 		(cb) => {
-			const emailKeys = {
-				templateName: 'admin-notify-new-request',
-				to: admins,
-				subject: `Новая заявка на сайте из ${requestData.guest.from} в ${requestData.guest.to}`
-			};
+			admins.forEach(admin => {
+				const emailKeys = {
+					templateName: 'admin-notify-new-request',
+					to: admin,
+					subject: t('mails.subject.adminNewReq', {from:requestData.guest.from,to:requestData.guest.to}, admin.language)
+				};
 
-			const params = {
-				guestData: requestData,
-				driver: true
-			};
+				const params = {
+					guestData: requestData,
+					driver: true,
+					language: admin.language
+				};
 
-			sendEmail(emailKeys, params);
+				sendEmail(emailKeys, params);
+			});
 			return cb();
 		},
 
 		(cb) => {
-			// TODO: enum of template names, ease of use of subjects
+			// TODO: enum of template names
 			const emailKeys = {
 				templateName: 'guest-notify-new-request',
 				to: trimSpaces(req.body.email.toLowerCase()),
-				subject: `Ваше путешествие из ${requestData.guest.from} в ${requestData.guest.to}`
+				subject: t('mails.subject.guestNewReq', {from:requestData.guest.from,to:requestData.guest.to}, req.body.lang)
 			};
 
 			const params = {
 				guestData: requestData,
-				uniqHash: requestData.guest.uniqHash
+				uniqHash: requestData.guest.uniqHash,
+				language: req.body.lang
 			};
 
 			sendEmail(emailKeys, params);
@@ -165,16 +169,10 @@ exports.sendRequest = (req, res) => {
   ], (err) => {
 
     if (err) {
-			return apiError(res, {message: 'Что-то пошло не так... попробуйте еще раз' }, 500);
+			return apiError(res, 500, err);
     }
 
     return res.apiResponse();
 
   });
 };
-
-exports.checkEmailAddress = (req, res) => {
-	if (!req.body.email)
-		return res.apiResponse();
-	return checkMails(req.body.email, res)
-}

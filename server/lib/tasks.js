@@ -2,6 +2,7 @@ const keystone = require('keystone');
 const moment = require('moment');
 const async = require('async');
 const { sendEmail } = require('./helpers');
+const { t } = require('../resources');
 
 const getConfirmedRequests = () => {
 	const RequestModel = keystone.list('Request').model;
@@ -11,6 +12,7 @@ const getConfirmedRequests = () => {
 		.where('wasConfirmed', true)
 		.populate('submitedOn')
 		.populate('submitedPrice')
+		.populate('audit')
 		.exec((err, results) => {
 			if (err) {
 				return err;
@@ -81,6 +83,7 @@ exports.sendEmailToPastRequests = async () => {
 								(cb) => {
 									RequestModel
 										.findById(request._id)
+										.populate('audit')
 										.exec((err, result) => {
 											if (err) {
 												return cb(err);
@@ -92,12 +95,13 @@ exports.sendEmailToPastRequests = async () => {
 											sendEmail({
 												templateName: 'rating-request-notify-guest',
 												to: result.guest.email,
-												subject: `Оцените Вашу поездку`
+												subject: t('mails.subject.rateReq', {}, result.audit.language)
 											},
 											{
 												result,
 												host,
-												uniqHash: result.guest.uniqHash
+												uniqHash: result.guest.uniqHash,
+												language: result.audit.language
 											});
 											return cb();
 										});
@@ -155,11 +159,12 @@ exports.notifyBeforeTransfer = async () => {
 									sendEmail({
 										templateName: 'future-request-notify-guest',
 										to: request.guest.email,
-										subject: `Важное`
+										subject: t('mails.subject.important', {}, request.audit.language)
 									},
 									{
 										request,
-										uniqHash: request.guest.uniqHash
+										uniqHash: request.guest.uniqHash,
+										language: request.audit.language
 									});
 									return cb();
 								},
@@ -168,11 +173,12 @@ exports.notifyBeforeTransfer = async () => {
 									sendEmail({
 										templateName: 'future-request-notify-driver',
 										to: request.submitedOn.email,
-										subject: `Важное`
+										subject: t('mails.subject.important', {}, request.submitedOn.language)
 									},
 									{
 										request,
-										driver: true
+										driver: true,
+										language: request.submitedOn.language
 									});
 									return cb();
 								},

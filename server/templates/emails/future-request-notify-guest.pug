@@ -2,18 +2,18 @@ extends layouts/basecard
 block content
 	div.padding1rem
 		-const date = moment(request.guest.date).format('L')
-		h1 Напоминание о предстоящей поездки
-		p#cardP Здравствуйте, #{request.guest.name}
-		p#cardP Напоминаем Вам, что завтра состоится поездка
+		h1 #{t('mails.futureReq.title', {}, language)}
+		p#cardP #{t('mails.hi', {recipient: request.guest.name}, language)},
+		p#cardP #{t('mails.futureReq.reminder', {}, language)}
 		div#bodyCard.padding1rem
-			h2 Данные трансфера
-			p#cardP отправление из #{request.guest.from}
-			p#cardP прибытие в #{request.guest.to}
-			p#cardP количество пассажиров #{request.guest.count}
-			p#cardP цена #{request.submitedPrice.value} €(евро)
-			p#cardP дата #{date}, время #{request.guest.time}
+			h2 #{t('mails.futureReq.data', {}, language)}
+			p#cardP #{t('mails.futureReq.from', {}, language)} #{request.guest.from}
+			p#cardP #{t('mails.futureReq.to', {}, language)} #{request.guest.to}
+			p#cardP #{t('mails.request.count', {}, language)} #{request.guest.count}
+			p#cardP #{t('mails.request.price', {price: request.submitedPrice.value}, language)}
+			p#cardP #{t('mails.request.dateTime', {date, time: request.guest.time}, language)}
 		div#bodyCard.padding1rem
-			h2 Выбранный водитель
+			h2 #{t('mails.request.choosenDriver', {}, language)}
 			p#cardP #{request.submitedOn.name.first} #{request.submitedOn.name.last}
-			p#cardP Номер телефона: #{request.submitedOn.phone}
-			p#cardP Машина: #{request.submitedOn.car.kind} #{request.submitedOn.car.model}
+			p#cardP #{t('mails.request.phone', {}, language)} #{request.submitedOn.phone}
+			p#cardP #{t('mails.request.car', {}, language)} #{request.submitedOn.car.kind} #{request.submitedOn.car.model}

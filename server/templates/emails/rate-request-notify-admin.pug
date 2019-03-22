@@ -1,15 +1,15 @@
 extends layouts/basecard
 block content
 	div.padding1rem
-		p#cardP Добрый день, %recipient.firstName%, клиент оценил водителя.
+		p#cardP #{t('mails.rated.hi', {}, language)}
 		div#bodyCard.padding1rem
-			h2 Трансфер - #{data.guest.from} - #{data.guest.to}.
-			p#cardP Клиент #{data.guest.name} оценил водителя #{data.submitedOn.name.first} #{data.submitedOn.name.last}
-			p#cardP Водитель получил оценки:
-			p#cardP поездка - #{data.assignedRating.values.trip};
-			p#cardP машина - #{data.assignedRating.values.car};
-			p#cardP водитель - #{data.assignedRating.values.driver};
+			h2 #{t('mails.rated.transfer', {from: data.guest.from, to: data.guest.to}, language)}
+			p#cardP #{t('mails.rated.clientRate', {name: data.guest.name, namefirst: data.submitedOn.name.first, namelast: data.submitedOn.name.last}, language)}
+			p#cardP #{t('mails.rated.driverGet', {}, language)}
+			p#cardP #{t('mails.rated.trip', {trip:data.assignedRating.values.trip}, language)}
+			p#cardP #{t('mails.rated.car', {car:data.assignedRating.values.car}, language)}
+			p#cardP #{t('mails.rated.driver', {trip:data.assignedRating.values.driver}, language)}
 			if data.assignedRating.comment
-				h3 Комментарий:
+				h3 #{t('mails.request.comment')}
 				p#cardP #{data.assignedRating.comment}
-		a(href=host + '/admin/requests/' + data._id) Более подробная информация
+		a(href=host + '/admin/requests/' + data._id) #{t('mails.rated.moreInfo', {}, language)}

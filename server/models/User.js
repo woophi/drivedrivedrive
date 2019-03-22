@@ -1,6 +1,7 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 const { sendEmail } = require('../lib/helpers');
+const { t } = require('../resources');
 
 /**
  * User Model
@@ -72,12 +73,13 @@ User.schema.methods.resetPassword = function(req, res, next) {
 		sendEmail({
 			templateName: 'forgotten-password',
 			to: user.email,
-			subject: 'Сброс пароля'
+			subject: t('mails.subject.passwordReset', {}, user.language)
 		},
 		{
 			user,
 			link: '/reset-password/' + user.resetPasswordKey,
-			driver: true
+			driver: true,
+			language: user.language
 		});
 		next();
 	});

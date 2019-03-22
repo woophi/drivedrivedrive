@@ -1,7 +1,7 @@
 extends layouts/basecard
 block content
 	-const imgStar = 'https://res.cloudinary.com/vettura/image/upload/v1526219288/email-star.gif'
-	div#section: h1 Новое ценовое предложение
+	div#section: h1 #{t('mails.card.title', {}, language)}
 	div#section
 		p#cardPCar #{driverData.car.kind} #{driverData.car.model}, #{driverData.car.year}
 		img(src=driverData.specialPhoto)#imgCar
@@ -11,9 +11,9 @@ block content
 			img(src=imgStar, width=35, height=35, alt='rating').ratingImg
 			span.ratingSpan #{driverData.nominalValue}
 		p#cardP #{driverData.name.first}
-		p#cardP Добрый день, готов предложить Вам услуги трансфера из #{driverData.from} в #{driverData.to}
-		p#cardP Стоимость составит #{price} €(евро) за авто
+		p#cardP #{t('mails.card.ready', {from: driverData.from,to:driverData.to}, language)}
+		p#cardP #{t('mails.card.price', {price}, language)}
 	a(href=host + '/request/' + requestId + '/accept/' + driverData.id)
 		button#submitCardBtn
-			p#cardPBtn Поехали!
-			p#cardPBtn Нажмите для выбора данного ценового предложения
+			p#cardPBtn #{t('mails.card.go', {}, language)}
+			p#cardPBtn #{t('mails.card.clickHere', {}, language)}
