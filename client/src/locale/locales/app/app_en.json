@@ -15,6 +15,7 @@
     "from": "Point of departure",
     "to": "Destination",
     "date": "Date",
+    "createdDate": "Date of creation",
     "time": "Time",
     "comment": "Comment",
     "phone": "Phone number",
@@ -50,7 +51,9 @@
     "placeholder": "dd/mm/year"
   },
   "dropzone": {
-    "maxFile": "The maximum file size is 2 Mb, allowed formats are png,.jpg,.jpeg"
+    "maxFile": "The maximum file size is 2 Mb, allowed formats are png,.jpg,.jpeg",
+    "example": "Photo example",
+    "upload": "Upload file"
   },
   "acceptReq": {
     "thx": "Thank you!",

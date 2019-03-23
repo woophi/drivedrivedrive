@@ -30,6 +30,10 @@ const TC = composeTable<TableRequest>({
         />
       )
     }
+  },
+  {
+    label: 'app::common:createdDate',
+    dataKey: 'created'
   }],
   showRowDividers: true,
   showRowArrows: true,

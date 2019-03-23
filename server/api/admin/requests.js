@@ -15,7 +15,8 @@ exports.getAll = (req, res) => {
 					date: moment(r.guest.date).format('YYYY-MM-DD'),
 					time: r.guest.time,
 					id: r._id,
-					approved: !!r.approved
+					approved: !!r.approved,
+					created: moment(r.created).format('YYYY-MM-DD')
 				}));
 			return res.apiResponse(requests);
 		});

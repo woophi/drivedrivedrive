@@ -5,4 +5,5 @@ export interface TableRequest {
   time: string;
   id: string;
   approved?: boolean;
+  created?: string;
 }
