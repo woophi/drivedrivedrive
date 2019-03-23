@@ -223,47 +223,24 @@ exports.driverOnRequest = (req, res) => {
 
 };
 
-const sentMailsAfterAccept = (price, requestId, res) => {
+const sentMailsAfterAccept = (price, res) => {
   User.model.find().where('isAdmin', true).exec((err, resultAdmins) => {
     if (err) {
 			return apiError(res, 500, err);
-    }
-    Request.model.findById(requestId)
-      .populate('submitedOn')
-      .exec((err, resultRequest) => {
-        if (err) {
-          return apiError(res, 500, err);
-        }
-
-				const addresses = [resultRequest.submitedOn];
-
-				sendEmail({
-					templateName: 'accept-request-notify',
-					to: addresses,
-					subject: t('mails.subject.transfer', {from: resultRequest.guest.from, to: resultRequest.guest.to}, resultRequest.submitedOn.language)
-				},
-				{
-					guestData: resultRequest,
-					price,
-					driver: true,
-					language: resultRequest.submitedOn.language
-				});
-
-				resultAdmins.forEach(admin => {
-					sendEmail({
-						templateName: 'accept-request-notify-admin',
-						to: admin,
-						subject: t('mails.subject.transfer', {from: resultRequest.guest.from, to: resultRequest.guest.to}, admin.language)
-					},
-					{
-						data: resultRequest,
-						price,
-						driver: true,
-						language: admin.language
-					});
-				});
-
-      });
+		}
+		resultAdmins.forEach(admin => {
+			sendEmail({
+				templateName: 'accept-request-notify-admin',
+				to: admin,
+				subject: t('mails.subject.transfer', {from: resultRequest.guest.from, to: resultRequest.guest.to}, admin.language)
+			},
+			{
+				data: resultRequest,
+				price,
+				driver: true,
+				language: admin.language
+			});
+		});
   });
 };
 
@@ -303,7 +280,7 @@ exports.acceptRequest = (req, res) => {
               if (err) {
 								return apiError(res, 500, err);
               }
-              sentMailsAfterAccept(resultPrice.value, req.body.requestId, res);
+              sentMailsAfterAccept(resultPrice.value, res);
               return res.apiResponse(true);
             });
 
@@ -350,7 +327,7 @@ exports.confirmRequest = (req, res) => {
             }
 
 						sendEmail({
-							templateName: 'confirm-request-notify',
+							templateName: 'confirm-request-notify-guest',
 							to: result.guest,
 							subject: t('mails.subject.transferConfirmed', {from: result.guest.from, to:result.guest.to }, result.audit.language)
 						},
@@ -359,6 +336,18 @@ exports.confirmRequest = (req, res) => {
 							price: result.submitedPrice.value,
 							uniqHash: result.guest.uniqHash,
 							language: result.audit.language
+						});
+
+						sendEmail({
+							templateName: 'confirm-request-notify-driver',
+							to: [result.submitedOn],
+							subject: t('mails.subject.transfer', {from: result.guest.from, to: result.guest.to}, result.submitedOn.language)
+						},
+						{
+							guestData: result,
+							price: result.submitedPrice.value,
+							driver: true,
+							language: result.submitedOn.language
 						});
 
             return res.apiResponse({

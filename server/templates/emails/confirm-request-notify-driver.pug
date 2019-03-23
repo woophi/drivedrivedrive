@@ -4,7 +4,6 @@ block content
 		-const date = moment(guestData.guest.date).format('L')
 		h1 #{t('mails.accptReq.clientWantsYou', {}, language)}
 		p#cardP #{t('mails.accptReq.driverHi', {}, language)}
-		p#cardP #{t('mails.accptReq.driverWarn', {}, language)}
 		div#bodyCard.padding1rem
 			h2 #{t('mails.request.data', {}, language)}
 			p#cardP #{t('mails.request.client', {}, language)} #{guestData.guest.name}

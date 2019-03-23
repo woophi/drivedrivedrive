@@ -52,7 +52,7 @@ module.exports = {
 		},
 		'confirmReq': {
 			'confirmed': 'Заявка подтверждена',
-			'guestHi': 'Добрый день, {{name}}, Ваша заявка была подтверждена',
+			'guestHi': 'Добрый день {{name}}, Ваша заявка была подтверждена',
 			'tripFromTo': 'поездка из {{from}} в {{to}}'
 		},
 		'updateReq': {

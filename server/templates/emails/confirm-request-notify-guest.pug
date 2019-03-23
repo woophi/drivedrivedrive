@@ -9,7 +9,7 @@ block content
 			p#cardP #{t('mails.confirmReq.tripFromTo', {from: data.guest.from,to:data.guest.to}, language)}
 			p#cardP #{t('mails.request.count', {}, language)} #{data.guest.count}
 			p#cardP #{t('mails.request.price', {price}, language)}
-			p#cardP #{t('mails.request.date', {date, time: data.guest.time}, language)}
+			p#cardP #{t('mails.request.dateTime', {date, time: data.guest.time}, language)}
 			if data.guest.comment
 				p#cardP #{t('mails.request.comment', {}, language)} #{data.guest.comment}
 			p#cardP #{t('mails.request.phone', {}, language)} #{data.guest.phone}
