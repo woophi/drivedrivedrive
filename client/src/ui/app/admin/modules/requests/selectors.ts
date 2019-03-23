@@ -7,3 +7,7 @@ export const getRequestsData = createSelector(
   getDataApi,
   data => data.allRequests
 );
+export const getRequestToApprove = createSelector(
+  getDataApi,
+  data => data.adminRequest.result || {}
+);

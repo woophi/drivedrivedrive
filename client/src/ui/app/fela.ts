@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react';
 import { createRenderer } from 'fela';
 import * as embedded from 'fela-plugin-embedded';
 import webPreset from 'fela-preset-web';
@@ -85,6 +84,9 @@ export function configureFela(mountNodeId: string) {
   renderer.renderStatic({
     display: 'flex'
   }, '.d-flex');
+  renderer.renderStatic({
+    margin: '1rem'
+  }, '.m-1');
 
   return { renderer, mountNode };
 }

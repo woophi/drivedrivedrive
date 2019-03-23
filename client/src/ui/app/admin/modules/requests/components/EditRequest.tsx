@@ -4,11 +4,7 @@ import { getRequest, approveRequest } from '../operations';
 import { compose } from 'redux';
 import { Request } from 'core/models/admin';
 import { AppState } from 'core/models/app';
-import {
-  Field,
-  InjectedFormProps,
-  reduxForm
-} from 'redux-form';
+import { Field, InjectedFormProps, reduxForm } from 'redux-form';
 import { connect as redux } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -18,34 +14,48 @@ import { DataStatus } from 'core/models/api';
 import { createComponent, IStyle } from 'react-fela';
 import { updateRequest } from '../form';
 import { parseToInt } from 'ui/shared/transforms';
-import { CustomInputField, CustomCheckBoxField, CustomDateField } from 'ui/atoms/fields';
+import {
+  CustomInputField,
+  CustomCheckBoxField,
+  CustomDateField
+} from 'ui/atoms/fields';
 import { FormButtonsRow } from 'ui/atoms/buttons';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import { getRequestToApprove } from '../selectors';
 
 type Props = {
   fetchingRequest: boolean;
   initialValues: Request;
   getRequestErr: any;
-} & SectionChildProps & WithTranslation;
+  approved: boolean;
+} & SectionChildProps &
+  WithTranslation;
+
+type LocalState = {
+  approving: boolean;
+};
 
 class EditRequestComponent extends React.Component<
-  Props & InjectedFormProps<Request, Props>
+  Props & InjectedFormProps<Request, Props>,
+  LocalState
 > {
+  state: LocalState = {
+    approving: false
+  };
   async componentDidMount() {
     const { match } = this.props;
     await getRequest(match.params.id);
   }
 
   handleApproveRequest = () => {
+    this.setState({ approving: true });
     const { match } = this.props;
-    approveRequest(match.params.id);
-  }
+    approveRequest(match.params.id).finally(() =>
+      this.setState({ approving: false })
+    );
+  };
   fields = () => {
-    const {
-      pristine,
-      submitting,
-      t
-    } = this.props;
+    const { pristine, submitting, t } = this.props;
     return (
       <>
         <Field
@@ -150,29 +160,38 @@ class EditRequestComponent extends React.Component<
           submitting={submitting}
         />
       </>
-    )
-  }
+    );
+  };
 
   approveBtn = () => {
-    const { initialValues, t } = this.props;
-    return (initialValues && !initialValues.approved &&
-      <RaisedButton
-        onClick={this.handleApproveRequest}
-        disabled={!!initialValues.approved}
-      >
-        {t('common:button:approve')}
-      </RaisedButton>
-    )
-  }
+    const { approved, t, fetchingRequest } = this.props;
+    const { approving } = this.state;
+    return (
+      !approved && (
+        <RaisedButton
+          onClick={this.handleApproveRequest}
+          disabled={approved || fetchingRequest}
+        >
+          <span className={'m-1'}>
+            {approving &&
+              <i className="fas fa-circle-notch fa-spin mr-1" />}
+            {t('common:button:approve')}
+          </span>
+        </RaisedButton>
+      )
+    );
+  };
   approved = () => {
-    const { initialValues, t } = this.props;
-    return (initialValues && initialValues.approved &&
-      <ApprovedContainer>
-        <i className="far fa-check-circle" />
-        {t('admin:requests:sucApproved')}
-      </ApprovedContainer>
-    )
-  }
+    const { approved, t } = this.props;
+    return (
+      approved && (
+        <ApprovedContainer>
+          <i className="far fa-check-circle" />
+          {t('admin:requests:sucApproved')}
+        </ApprovedContainer>
+      )
+    );
+  };
 
   render() {
     const {
@@ -186,53 +205,69 @@ class EditRequestComponent extends React.Component<
       <Container>
         <Paper zDepth={2}>
           <Form onSubmit={handleSubmit} autoComplete={''}>
-            {(error || getRequestErr) && <Alert mssg={error || getRequestErr} type={'error'} />}
+            {(error || getRequestErr) && (
+              <Alert mssg={error || getRequestErr} type={'error'} />
+            )}
             {this.approved()}
             {this.approveBtn()}
             {this.fields()}
           </Form>
           <Preloader isShow={fetchingRequest || !initialValues} />
-
         </Paper>
       </Container>
     );
   }
 }
 
+const Container = createComponent(
+  () =>
+    ({
+      '>div': {
+        margin: '0 1rem 1rem',
+        width: 'auto',
+        height: '100%'
+      }
+    } as IStyle),
+  'div'
+);
 
-const Container = createComponent(() => ({
-  '>div': {
-    margin: '0 1rem 1rem',
-    width: 'auto',
-    height: '100%'
-  }
-}) as IStyle, 'div');
+const Form = createComponent(
+  () => ({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    margin: '0 auto',
+    padding: '1rem',
+    height: '100%',
+    maxWidth: 700
+  }),
+  'form',
+  ['onSubmit', 'autoComplete']
+);
 
-const Form = createComponent(() => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  margin: '0 auto',
-  padding: '1rem',
-  height: '100%',
-  maxWidth: 700
-}), 'form', ['onSubmit','autoComplete']);
-
-const ApprovedContainer = createComponent(() => ({
-  '>i': {
-    color: '#43A047',
-    marginRight: '1rem',
-    fontWeight: 600
-  },
-  fontSize: 18
-}) as IStyle, 'p');
+const ApprovedContainer = createComponent(
+  () =>
+    ({
+      '>i': {
+        color: '#43A047',
+        marginRight: '1rem',
+        fontWeight: 600
+      },
+      fontSize: 18
+    } as IStyle),
+  'p'
+);
 
 export const EditRequest = compose(
   withTranslation('app'),
   redux((state: AppState) => ({
-    fetchingRequest: state.ui.api.adminRequest.status === DataStatus.QUIET_FETCHING,
-    initialValues: state.ui.api.adminRequest.result,
-    getRequestErr: state.ui.api.adminRequest.errorInfo &&
+    fetchingRequest:
+      state.ui.api.adminRequest.status === DataStatus.QUIET_FETCHING ||
+      state.ui.api.adminRequest.status === DataStatus.UPDATING,
+    initialValues: getRequestToApprove(state),
+    approved: getRequestToApprove(state).approved,
+    getRequestErr:
+      state.ui.api.adminRequest.errorInfo &&
       JSON.stringify(state.ui.api.adminRequest.errorInfo)
   })),
   reduxForm<Request, Props>({

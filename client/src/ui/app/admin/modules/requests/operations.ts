@@ -6,11 +6,6 @@ export const getRequests = () =>
 export const getRequest = (requestId: string) =>
   loadData('adminRequest', () => api.admin.request.get(requestId));
 
-export const approveRequest = (requestId: string) => {
-  try {
-    api.admin.request.approve(requestId)
-      .then(() => getRequest(requestId));
-  } catch (error) {
-    console.error(error);
-  }
-}
+export const approveRequest = (requestId: string) =>
+  api.admin.request.approve(requestId)
+    .then(() => getRequest(requestId));
