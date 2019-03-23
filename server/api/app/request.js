@@ -189,7 +189,8 @@ exports.driverOnRequest = (req, res) => {
           id: req.user._id,
           from: result.guest.from,
           to: result.guest.to,
-          nominalValue: req.user.rating.nominalValue
+					nominalValue: req.user.rating.nominalValue,
+					guestName: result.guest.name
 				};
 				const emailKeys = {
 					templateName: 'guest-notify',

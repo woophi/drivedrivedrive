@@ -11,7 +11,7 @@ block content
 			img(src=imgStar, width=35, height=35, alt='rating').ratingImg
 			span.ratingSpan #{driverData.nominalValue}
 		p#cardP #{driverData.name.first}
-		p#cardP #{t('mails.card.ready', {from: driverData.from,to:driverData.to}, language)}
+		p#cardP #{t('mails.card.ready', {from: driverData.from,to:driverData.to, clientName: driverData.guestName}, language)}
 		p#cardP #{t('mails.card.price', {price}, language)}
 	a(href=host + '/request/' + requestId + '/accept/' + driverData.id)
 		button#submitCardBtn
