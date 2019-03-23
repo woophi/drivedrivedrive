@@ -16,7 +16,7 @@ export type AppState = {
 
 export type AppEntrySettings = {
   isMobile: boolean,
-  language: string
+  language: models.LanguageId
 };
 
 export type AppDispatch =

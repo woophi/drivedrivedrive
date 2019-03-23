@@ -23,7 +23,7 @@ import { handleTriggerGDPRDialog, getGdprUser } from './operations';
 import { DataStatus } from 'core/models/api';
 import { getGdprUserData, getGdprUserResult } from './selectors';
 import { TextFieldProps } from 'ui/formTypes';
-import { CustomInputField } from 'ui/atoms/fields';
+import { CustomInputField, CustomSelectField } from 'ui/atoms/fields';
 import { FormButtonsRow } from 'ui/atoms/buttons';
 import { withTranslation, WithTranslation } from 'react-i18next';
 
@@ -145,6 +145,19 @@ class Index extends React.Component<
               {...{
                 floatingLabelText: t('common:phone'),
                 fullWidth: true
+              }}
+            />
+            <Field
+              name="language"
+              component={CustomSelectField}
+              type="select"
+              {...{
+                floatingLabelText: t('common:language'),
+                fullWidth: true,
+                options: [
+                  {value: 'en', primaryText: t('topBar:english')},
+                  {value: 'ru', primaryText: t('topBar:russian')}
+                ]
               }}
             />
             <Field

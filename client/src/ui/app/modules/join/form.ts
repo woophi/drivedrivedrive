@@ -33,6 +33,9 @@ export const validateNewUser = (values: Partial<data.NewUser>): FormErrors<data.
   if (!values.gdpr) {
     errors.gdpr = i18n.required;
   }
+  if (!values.language) {
+    errors.language = i18n.required;
+  }
 
   return errors;
 };

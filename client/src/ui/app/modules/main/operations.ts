@@ -4,11 +4,15 @@ import { api, loadData } from 'core/app/api';
 import { LocalStorageManager } from 'core/localStorageManager';
 import { getCookie } from 'core/cookieManager';
 import { KeyName } from 'core/models/api';
+import { LanguageId } from 'core/models';
 
 export const getGdprGuest = async () => {
   try {
     await loadData('guestGdpr', () =>
-      api.gdrp.getGdprData(getCookie('prefLang') || 'ru', KeyName.GUEST)
+      api.gdrp.getGdprData(
+        (getCookie('prefLang') as LanguageId) || 'ru',
+        KeyName.GUEST
+      )
     );
   } catch (error) {
     throw error;

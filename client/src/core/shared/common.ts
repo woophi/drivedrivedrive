@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import i18n from 'i18next';
 import { store } from './store';
 import { setCookie, getCookie } from 'core/cookieManager';
+import { LanguageId } from 'core/models';
 
 export type HTTPMethod = 'get' | 'post' | 'put' | 'delete';
 
@@ -38,7 +39,7 @@ export function callApi<T>(method: HTTPMethod = 'post', url: string, data: any, 
 interface LocaleBundleExports {
   localeData: any[];
   momentLang?: string;
-  resLang?: string;
+  resLang?: LanguageId;
   i18n: any;
   default: any;
 }

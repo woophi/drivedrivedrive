@@ -123,7 +123,8 @@ exports.register = (req, res) => {
 				!email ||
 				!req.body.password ||
 				!req.body.phone ||
-				!req.body.gdpr
+				!req.body.gdpr ||
+				!req.body.language
 			) {
 				return apiError(res, 400);
       }
@@ -173,7 +174,8 @@ exports.register = (req, res) => {
         email,
         password: req.body.password,
 				phone: req.body.phone,
-				confirmedGDPR
+				confirmedGDPR,
+				language: req.body.language
       };
 			const User = keystone.list('User').model;
       const newUser = new User(userData);
@@ -346,7 +348,8 @@ exports.getProfile = (req, res) => {
       driverPhoto: user.driverPhoto ? user.driverPhoto.secure_url : null,
       car: user.car ? user.car : null,
       notifications: user.notifications,
-      rating: user.rating && user.isActive ? user.rating.realValue : null
+			rating: user.rating && user.isActive ? user.rating.realValue : null,
+			language: user.language
     });
   });
 
@@ -377,7 +380,8 @@ exports.updateProfile = (req, res) => {
     'car.kind': carObj.kind,
     'car.model': carObj.model,
 		'car.year': carObj.year,
-		'notifications.email': req.body.notifications.email
+		'notifications.email': req.body.notifications.email,
+		'language': req.body.language
 	};
 
   updatedData = checkPhoto(req.body.driverPhoto) ? { ...updatedData, 'driverPhoto': req.body.driverPhoto } : updatedData;
@@ -386,7 +390,7 @@ exports.updateProfile = (req, res) => {
   updatedData = checkPhoto(req.body.photoFront) ? { ...updatedData, 'photoFront': req.body.photoFront } : updatedData;
 
   req.user.getUpdateHandler(req).process(updatedData, {
-    fields: 'name, email, phone,' +
+    fields: 'name, email, phone, language, ' +
     'car.kind, driverPhoto, photoInside, photoSide, photoFront,' +
     'car.model, car.year, notifications.email',
     flashErrors: true
@@ -433,24 +437,3 @@ exports.updateProfile = (req, res) => {
   });
 
 };
-
-exports.updatePreferedLanguage = (req, res) => {
-	if (!req.user) {
-		return apiError(res, 403);
-	}
-
-	const updatedData = {
-		'language': req.body.language
-	};
-
-  req.user.getUpdateHandler(req).process(updatedData, {
-    fields: 'language',
-    flashErrors: true
-  }, (err) => {
-		if (err) {
-			return apiError(res, 500, err);
-		}
-    return res.apiResponse();
-  });
-
-}

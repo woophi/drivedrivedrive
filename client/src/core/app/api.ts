@@ -12,13 +12,12 @@ const c = <T>(action: string, model?: object, method: HTTPMethod = 'post') =>
 
 export const api = {
   user: {
-    getProfile: (data: Partial<models.UserAuthInfo>) =>
+    getProfile: (data: Partial<apiData.UserProfile>) =>
       a<apiData.UserProfile>('user/profile', data),
     updateProfile: (data: apiData.UserProfile) =>
       a<null>('user/profile/update', data),
     unsubFromMails: () => a<apiData.StateUnsub>('user/unsub'),
-    subscribeState: () => c<apiData.StateUnsub>('user/subState'),
-    updateLanguage: (language: string) => a('user/language/update', {language}),
+    subscribeState: () => c<apiData.StateUnsub>('user/subState')
   },
   request: {
     getRequestState: (data: apiData.GetRequest) =>
@@ -39,7 +38,7 @@ export const api = {
       c<apiData.StateRequest>('request/get/accept/state', data)
   },
   gdrp: {
-    getGdprData: (lang: string, keyName: apiData.KeyName) =>
+    getGdprData: (lang: models.LanguageId, keyName: apiData.KeyName) =>
       c<apiData.Gdpr>('gdpr', { lang, keyName }),
   },
   guest: {

@@ -3,6 +3,7 @@ import { FormErrors, FormSubmitHandler, SubmissionError } from 'redux-form';
 import * as operations from './operations';
 import { store } from 'core/shared/store';
 import { i18n } from 'ui/app/components/i18n-proxy';
+import { changeLanguage } from 'core/app/language';
 
 const state = () => store.getState();
 
@@ -24,6 +25,10 @@ export const validateProfile = (values: Partial<data.UserProfile>): FormErrors<d
 
   if (!values.phone) {
     errors.phone = i18n.required;
+  }
+
+  if (!values.language) {
+    errors.language = i18n.required;
   }
 
   return errors;
@@ -81,6 +86,10 @@ async function promiseFiles(files: any[]) {
 export const submitProfile: FormSubmitHandler<data.UserProfile> = async (values: data.UserProfile, dispatch) => {
   try {
     operations.handleSubmitting(true);
+    const activeLanguage = store.getState().localAppState.lang;
+    if (activeLanguage !== values.language) {
+      changeLanguage(values.language);
+    }
     let files: any[] = []
     files = checkFile(values.driverPhoto) ? [ values.driverPhoto ] : [];
     files = checkFile(values.photoFront) ? [ ...files, values.photoFront ] : files;

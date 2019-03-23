@@ -6,6 +6,10 @@ exports = module.exports = (req, res) => {
 	const view = new keystone.View(req, res);
 	const locals = res.locals;
 	locals.language = 'ru';
+	const redirectedLanguage = req.query['language'];
+	if (redirectedLanguage) {
+		locals.language = redirectedLanguage;
+	}
 	try {
 		if (req.user) {
 			locals.language = req.user.language;

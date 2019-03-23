@@ -1,3 +1,5 @@
+import { LanguageId } from '../UserAuthInfo';
+
 export interface UserProfile {
   firstName: string;
   lastName: string;
@@ -10,6 +12,7 @@ export interface UserProfile {
   car: Car | null;
   notifications: Notifications | null;
   rating: number | null;
+  language: LanguageId
 }
 
 export interface Car {

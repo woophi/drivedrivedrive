@@ -7,7 +7,7 @@ export interface UserAuthInfo extends AuthInfo {
   fullName: FullName;
   userName: string;
   roles: string[];
-  language: 'en' | 'ru';
+  language: LanguageId
   prevUrl?: string;
 }
 
@@ -28,6 +28,7 @@ export interface NewUser {
   password: string;
   phone: string;
   gdpr: boolean;
+  language: LanguageId
 }
 
 export interface PasswordForgot {
@@ -43,3 +44,5 @@ export interface PasswordReset {
 export interface PasswordKey {
   key: string;
 }
+
+export type LanguageId = 'en' | 'ru';

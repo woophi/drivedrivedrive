@@ -84,7 +84,6 @@ exports = module.exports = (app) => {
   app.post('/api/user/password/key', routes.api.app.user.getPasswordKey);
   app.post('/api/user/profile', validateToken, routes.api.app.user.getProfile);
   app.post('/api/user/profile/update', validateToken, routes.api.app.user.updateProfile);
-  app.post('/api/user/language/update', validateToken, routes.api.app.user.updatePreferedLanguage);
 
   app.post('/api/request/get/state', routes.api.app.request.getRequestState);
   app.post('/api/request/get', validateToken, routes.api.app.request.getRequest);

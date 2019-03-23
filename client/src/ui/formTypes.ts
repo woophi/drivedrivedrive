@@ -9,4 +9,14 @@ export type TextFieldProps = {
   id?: string;
   multiLine?: boolean;
   rows?: number;
-};
+} & SelectFieldProps;
+
+export type SelectFieldProps = {
+  autoWidth?: boolean;
+  options?: Option[]
+}
+
+type Option = {
+  value: string | number;
+  primaryText: string
+}

@@ -3,11 +3,15 @@ import { CookieDispatch } from './types';
 import { api, loadData } from 'core/app/api';
 import { setCookie, getCookie } from 'core/cookieManager';
 import { KeyName } from 'core/models/api';
+import { LanguageId } from 'core/models';
 
 export const getGdprCookie = async () => {
   try {
     await loadData('cookieGdpr', () =>
-      api.gdrp.getGdprData(getCookie('prefLang') || 'ru', KeyName.VISITOR)
+      api.gdrp.getGdprData(
+        (getCookie('prefLang') as LanguageId) || 'ru',
+        KeyName.VISITOR
+      )
     );
   } catch (error) {
     throw error;

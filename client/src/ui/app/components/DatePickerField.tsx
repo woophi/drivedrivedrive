@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { connect as redux } from 'react-redux';
 import { AppState } from 'core/models/app';
+import { LanguageId } from 'core/models';
 
 type OwnProps = {
   uniqId: string;
@@ -17,7 +18,7 @@ type LocalState = {
 };
 
 type Props = {
-  lang: string;
+  lang: LanguageId;
 } & OwnProps & WithTranslation;
 
 class DatePickerComponent extends React.PureComponent<

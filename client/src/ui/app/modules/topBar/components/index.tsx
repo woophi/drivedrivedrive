@@ -1,7 +1,5 @@
 import * as React from 'react';
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import NavigationLogo from 'material-ui/svg-icons/notification/drive-eta';
 import { changeUrl } from 'ui/app/operations';
 import { AppState } from 'core/models/app';
 import { returntypeof } from 'react-redux-typescript';

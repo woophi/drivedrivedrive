@@ -19,7 +19,7 @@ import { FileUploader } from 'ui/app/components/Uploader';
 import { Progress } from './Progress';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { FormButtonsRow } from 'ui/atoms/buttons';
-import { CustomInputField } from 'ui/atoms/fields';
+import { CustomInputField, CustomSelectField } from 'ui/atoms/fields';
 
 const mapStateToProps = (state: AppState) => ({
   fetchProfile: state.ui.api.userProfile.status === DataStatus.QUIET_FETCHING,
@@ -56,6 +56,19 @@ class ProfileComponent extends React.Component<
       <Paper className={styles.container} zDepth={2}>
         <form className={styles.form} onSubmit={handleSubmit} autoComplete={''}>
           {(error || getProfileErr) && <Alert mssg={error || getProfileErr} type={'error'} />}
+          <Field
+            name="language"
+            component={CustomSelectField}
+            type="select"
+            {...{
+              floatingLabelText: t('common:language'),
+              fullWidth: true,
+              options: [
+                {value: 'en', primaryText: t('topBar:english')},
+                {value: 'ru', primaryText: t('topBar:russian')}
+              ]
+            }}
+          />
           <Field
             name="firstName"
             component={CustomInputField}
