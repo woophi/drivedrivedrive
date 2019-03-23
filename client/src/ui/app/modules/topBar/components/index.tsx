@@ -8,11 +8,14 @@ import { connect as ReduxConnect } from 'react-redux';
 import { DroppingMenu } from './DroppingMenu';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { LanguagesMenu } from '../../languages';
+import IconButton from 'material-ui/IconButton';
+import NavigationLogo from 'material-ui/svg-icons/notification/drive-eta';
 
 const MOBILE_SCREEN_WIDTH = 450;
 const mapStateToProps = (state: AppState) => ({
   path: state.router.location.pathname,
-  isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH
+  isMobile: state.screen.width <= MOBILE_SCREEN_WIDTH,
+  user: !!state.authInfo
 });
 const StateProps = returntypeof(mapStateToProps);
 type Props = typeof StateProps & WithTranslation;
@@ -59,6 +62,15 @@ class Index extends React.Component<Props> {
         return '';
     }
   }
+  get leftElement() {
+    const { user } = this.props;
+    return (user
+      ? <IconButton>
+          <NavigationLogo />
+        </IconButton>
+      : <LanguagesMenu />
+    )
+  }
 
   render() {
     const { isMobile, t } = this.props;
@@ -67,7 +79,7 @@ class Index extends React.Component<Props> {
         style={{minHeight: 60}}
         titleStyle={{maxWidth: isMobile ? 200 : 'unset'}}
         title={t(this.titleChange)}
-        iconElementLeft={<LanguagesMenu />}
+        iconElementLeft={this.leftElement}
         iconElementRight={<DroppingMenu />}
       />
     )
