@@ -223,24 +223,31 @@ exports.driverOnRequest = (req, res) => {
 
 };
 
-const sentMailsAfterAccept = (price, res) => {
+const sentMailsAfterAccept = (price, res, requestId) => {
   User.model.find().where('isAdmin', true).exec((err, resultAdmins) => {
     if (err) {
 			return apiError(res, 500, err);
 		}
-		resultAdmins.forEach(admin => {
-			sendEmail({
-				templateName: 'accept-request-notify-admin',
-				to: admin,
-				subject: t('mails.subject.transfer', {from: resultRequest.guest.from, to: resultRequest.guest.to}, admin.language)
-			},
-			{
-				data: resultRequest,
-				price,
-				driver: true,
-				language: admin.language
+		Request.model.findById(requestId)
+      .populate('submitedOn')
+      .exec((err, resultRequest) => {
+        if (err) {
+          return apiError(res, 500, err);
+				}
+				resultAdmins.forEach(admin => {
+					sendEmail({
+						templateName: 'accept-request-notify-admin',
+						to: admin,
+						subject: t('mails.subject.transfer', {from: resultRequest.guest.from, to: resultRequest.guest.to}, admin.language)
+					},
+					{
+						data: resultRequest,
+						price,
+						driver: true,
+						language: admin.language
+					});
+				});
 			});
-		});
   });
 };
 
@@ -279,8 +286,8 @@ exports.acceptRequest = (req, res) => {
             }, (err) => {
               if (err) {
 								return apiError(res, 500, err);
-              }
-              sentMailsAfterAccept(resultPrice.value, res);
+							}
+              sentMailsAfterAccept(resultPrice.value, res, req.body.requestId);
               return res.apiResponse(true);
             });
 
