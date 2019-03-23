@@ -55,6 +55,6 @@ export const submitRR: FormSubmitHandler<RateRequest> = async (
     );
     dispatch(reset('assignRequest'));
   } catch (e) {
-    throw new SubmissionError({ _error: e.error.message });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };

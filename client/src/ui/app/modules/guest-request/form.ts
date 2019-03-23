@@ -60,6 +60,6 @@ export const submitEditRequest: FormSubmitHandler<data.RequestInfo> = async (
     await updateGuestRequest(payload);
     await getGuestRequest(props.hashId);
   } catch (e) {
-    throw new SubmissionError({ _error: e.error.message });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };

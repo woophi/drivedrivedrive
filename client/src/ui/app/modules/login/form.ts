@@ -37,6 +37,6 @@ export const submitLogin: FormSubmitHandler<data.LoginInfo> = async (values: dat
       changeUrl(`/me`);
     }
   } catch (e) {
-    throw new SubmissionError({  _error: e.error.message });
+    throw new SubmissionError({  _error: JSON.stringify(e) });
   }
 };

@@ -39,6 +39,6 @@ export const submitPrice: FormSubmitHandler<{ requestPrice: number }> = async (
       .then(() => getRequestState(props.requestId));
     dispatch(reset('assignRequest'));
   } catch (e) {
-    throw new SubmissionError({ _error: e.error.message });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };

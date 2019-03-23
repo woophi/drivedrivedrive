@@ -58,6 +58,6 @@ export const submitPR: FormSubmitHandler<data.PasswordReset> = async (
     }
     await dispatch(reset('resetPassword'));
   } catch (e) {
-    throw new SubmissionError({ _error: e.message || e.error.message });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };

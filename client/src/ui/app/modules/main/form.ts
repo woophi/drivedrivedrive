@@ -58,6 +58,6 @@ export const submitRequest: FormSubmitHandler<data.RequestInfo> = async (
     triggerForm(true);
     await dispatch(reset('newRequest'));
   } catch (e) {
-    throw new SubmissionError({ _error: e.error.message });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };

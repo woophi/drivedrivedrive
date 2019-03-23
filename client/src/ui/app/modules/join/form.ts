@@ -47,7 +47,6 @@ export const submitNewUser: FormSubmitHandler<data.NewUser> = async (values: dat
     await dispatch(reset('newUser'));
 
   } catch (e) {
-    const error = e.error.message ? e.error.message : JSON.stringify(e);
-    throw new SubmissionError({ _error: error });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };

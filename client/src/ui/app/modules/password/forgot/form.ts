@@ -29,6 +29,6 @@ export const submitFP: FormSubmitHandler<data.PasswordForgot> = async (
     await dispatch(reset('forgotPassword'));
     changeUrl(`/signin`);
   } catch (e) {
-    throw new SubmissionError({ _error: e.error.message });
+    throw new SubmissionError({ _error: JSON.stringify(e) });
   }
 };
