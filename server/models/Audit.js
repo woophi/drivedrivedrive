@@ -14,7 +14,7 @@ Audit.add({
 	ip: { type: String, noedit: true, label: 'IP адрес' },
 	country: { type: String, noedit: true, label: 'Страна' },
 	city: { type: String, noedit: true, label: 'Город' },
-	language: { type: String, noedit: true, label: 'Язык' },
+	language: { type: Types.Select, options: 'ru, en', label: 'Язык' },
 	auditRequest: { type: Types.Relationship, ref: 'Request', index: true, label: 'Привязанная заявка' }
 });
 

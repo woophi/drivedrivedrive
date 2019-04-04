@@ -154,6 +154,14 @@ const AppRoutes: React.SFC<RouteComponentProps<any>> = ({ location }) => (
           loader={async () => require.ensure([], (require: any) => require('ui/app/modules/requests'), 'app.requests')}
         />}
     </Route>
+    <Route exact strict path="/fuckU" location={location}>
+      {({ match }) =>
+        <LoadableComponent
+          visibility={!!match}
+          props={{ match }}
+          loader={async () => require.ensure([], (require: any) => require('ui/app/modules/wp-kek'), 'app.wp')}
+        />}
+    </Route>
 
     <Route path="/adm" location={location}>
       {({ match }) =>

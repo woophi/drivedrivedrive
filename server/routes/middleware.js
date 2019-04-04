@@ -27,6 +27,16 @@ exports.initLocals = (req, res, next) => {
 	next();
 };
 
+exports.iWannaAskU = (req, res, next) => {
+	if (!!req.url && (req.url.indexOf('.php') !== -1 ||
+		req.url.indexOf('wp-') !== -1
+	)) {
+		res.redirect('/fuckU');
+	} else {
+		next()
+	}
+}
+
 exports.enforceHttps = (req, res, next) => {
   if (!req.secure &&
     req.get('x-forwarded-proto') !== 'https' &&
@@ -51,8 +61,14 @@ const requestFromGuestLimit = () => new RateLimit({
 	max: 1,
 	message: 'Вы привысили лимит запросов на сервер'
 });
+const requestFromDownerLimit = () => new RateLimit({
+	windowMs: 60*60*1000,
+	max: 1,
+	message: 'Вы привысили лимит запросов на сервер'
+});
 exports.apiLimits = {
 	get: getApiLimiter(),
 	post: postApiLimiter(),
-	request: requestFromGuestLimit()
+	request: requestFromGuestLimit(),
+	downer: requestFromDownerLimit()
 };

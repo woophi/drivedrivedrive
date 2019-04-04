@@ -50,6 +50,8 @@ export const api = {
       c<null>('guest/update/request', data),
     getRequest: (data: { hash: string }) =>
       c<models.RequestInfo>('guest/get/request', data),
+    sendMeMessage: (message: string) =>
+      c('sendMeMessage', { message }),
   },
   requests: {
     open: (userId: string) =>

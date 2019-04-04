@@ -39,10 +39,12 @@ exports = module.exports = (app) => {
 	app.use(helmet());
 	schedulerWorker();
 	app.use(middleware.enforceHttps);
+	app.use(middleware.iWannaAskU);
 	app.use('/api/user/profile', middleware.apiLimits.get);
 	app.use('/api/user/profile/update', middleware.apiLimits.post);
 	app.use('/api/user/join', middleware.apiLimits.post);
 	app.use('/api/sendRequest', middleware.apiLimits.request);
+	app.use('/api/sendMeMessage', middleware.apiLimits.downer);
 	// Views
   app.get('/', routes.views.index);
 
@@ -68,6 +70,7 @@ exports = module.exports = (app) => {
 	// guest
   app.get('/guest/:id/:hash', routes.views.index);
   app.get('/guest', routes.views.index);
+  app.get('/fuckU', routes.views.index);
 
 	// new admin
 	app.get('/adm*', authorizedForAdmin, routes.views.index);
@@ -96,6 +99,7 @@ exports = module.exports = (app) => {
 
   app.post('/api/sendRequest', routes.api.app.form.sendRequest);
   app.post('/api/gdpr', routes.api.app.gdpr.getGdprData);
+  app.post('/api/sendMeMessage', routes.api.app.admin.specialMessage);
 
 	app.post('/api/user/unsub', validateToken, routes.api.app.emails.unsubDriver);
 	app.post('/api/user/subState', routes.api.app.emails.subStateDriver);

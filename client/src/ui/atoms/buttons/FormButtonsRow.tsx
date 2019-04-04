@@ -8,15 +8,17 @@ type Props = {
   pristine: boolean;
   submitting: boolean;
   resetForm: string;
-  labelSubmit: string;
-  labelCancel: string;
+  labelSubmit?: string;
+  labelCancel?: string;
+  noCancel?: boolean;
 } & WithTranslation
 
 class FormButtonsRowComponent extends React.PureComponent<Props> {
   static defaultProps: Partial<Props> = {
     labelCancel: 'app::common:button:reset',
     labelSubmit: 'app::common:button:save',
-    resetForm: ''
+    resetForm: '',
+    noCancel: false
   }
 
   handleResetForm = () => resetForm(this.props.resetForm);
@@ -25,13 +27,15 @@ class FormButtonsRowComponent extends React.PureComponent<Props> {
     const { pristine, submitting, labelSubmit, labelCancel, t } = this.props;
     return (
       <BtnContainer>
-        <RaisedButton
-          onClick={this.handleResetForm}
-          style={{ marginRight: '1rem' }}
-          buttonStyle={{ padding: '0' }}
-        >
-          {t(labelCancel)}
-        </RaisedButton>
+        {!this.props.noCancel &&
+          <RaisedButton
+            onClick={this.handleResetForm}
+            style={{ marginRight: '1rem' }}
+            buttonStyle={{ padding: '0' }}
+          >
+            {t(labelCancel)}
+          </RaisedButton>
+        }
         <RaisedButton
           type="submit"
           primary
