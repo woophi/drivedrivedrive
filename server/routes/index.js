@@ -23,7 +23,8 @@ const middleware = require('./middleware');
 const importRoutes = keystone.importer(__dirname);
 const { schedulerWorker } = require('../lib/scheduler');
 const helmet = require('helmet');
-const { identity: { validateToken, authorizedForAdmin } } = require('../identity');
+const { identity: { validateToken, authorizedForAdmin, corsOptions } } = require('../identity');
+const cors = require('cors');
 
 // Common Middleware
 keystone.pre('routes', middleware.initLocals);
@@ -77,10 +78,7 @@ exports = module.exports = (app) => {
 
   // API
 	app.all('/api*', keystone.middleware.api);
-	app.all('/api*', keystone.middleware.cors);
-	app.options('/api*', function(req, res) {
-    res.send(200);
-	});
+	app.all('/api*', cors(corsOptions));
   app.post('/api/user/signin', routes.api.app.user.signin);
   app.post('/api/user/auth', routes.api.app.user.auth);
   app.post('/api/user/check', routes.api.app.user.checkAuth);
