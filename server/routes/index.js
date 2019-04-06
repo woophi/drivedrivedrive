@@ -76,7 +76,11 @@ exports = module.exports = (app) => {
 	app.get('/adm*', authorizedForAdmin, routes.views.index);
 
   // API
-  app.all('/api*', keystone.middleware.api);
+	app.all('/api*', keystone.middleware.api);
+	app.all('/api*', keystone.middleware.cors);
+	app.options('/api*', function(req, res) {
+    res.send(200);
+	});
   app.post('/api/user/signin', routes.api.app.user.signin);
   app.post('/api/user/auth', routes.api.app.user.auth);
   app.post('/api/user/check', routes.api.app.user.checkAuth);
