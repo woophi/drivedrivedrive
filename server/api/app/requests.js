@@ -9,11 +9,13 @@ exports.getOpenRequests = (req, res) => {
 		.find()
 		.where('wasConfirmed', false)
 		.where('guest.notify', true)
+		.populate('approved')
 		.exec((err, results) => {
 			if (err)
 				return apiError(res, 500, err);
 
 			const filterResults = results
+				.filter(r => r.approved)
 				.filter(r => !r.assignedBy
 					.find(i => i.toString() === req.body.userId)
 				)
