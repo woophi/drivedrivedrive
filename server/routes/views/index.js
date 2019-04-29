@@ -18,18 +18,22 @@ exports = module.exports = (req, res) => {
 		if (!req.user && req.params && req.params.id) {
 			async.series([
 				(cb) => {
-					Request.model
-						.findById(req.params.id)
-						.populate('audit')
-						.exec((err, result) => {
-							if (err) {
-								return cb(err);
-							}
-							if (result.audit) {
-								locals.language = result.audit.language;
-							}
-							return cb();
-						});
+					try {
+						Request.model
+							.findById(req.params.id)
+							.populate('audit')
+							.exec((err, result) => {
+								if (err) {
+									return cb(err);
+								}
+								if (result.audit) {
+									locals.language = result.audit.language;
+								}
+								return cb();
+							});
+					} catch (error) {
+						return cb(error);
+					}
 				},
 
 			], (err) => {
