@@ -482,7 +482,7 @@ const sentMailAfterRate = (result) => {
 			admins.forEach(admin => {
 				sendEmail({
 					templateName: 'rate-request-notify-admin',
-					to: resultAdmin,
+					to: admin,
 					subject: t('mails.subject.ratedReq', {from:result.guest.from, to: result.guest.to }, admin.language)
 				},
 				{
