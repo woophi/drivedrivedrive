@@ -125,7 +125,8 @@
     "trip": "How was your journey?",
     "car": "How do you like the car?",
     "driver": "How do you like the driver?",
-    "thx": "Thanks for your feedback"
+    "thx": "Thanks for your feedback",
+    "rated": "Your journey has been rated"
   },
   "answerReq": {
     "offerPrice": "Price offer",

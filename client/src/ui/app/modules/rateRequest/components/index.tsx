@@ -47,7 +47,7 @@ class Index extends React.Component<Props & FelaProps> {
           )}
           {ratedRequest && (
             <div className={styles.headBox}>
-              <h1 className={styles.texts}>{t('rateReq:title')}</h1>
+              <h1 className={styles.texts}>{t('rateReq:rated')}</h1>
             </div>
           )}
           {invalidRequest && (
