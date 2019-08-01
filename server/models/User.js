@@ -10,7 +10,7 @@ const { t } = require('../resources');
 var User = new keystone.List('User');
 
 const deps = {
-	driver: { 'isActive': true },
+	driver: { 'isActive': true }
 };
 
 User.add({
@@ -40,7 +40,7 @@ User.add({
 	}
 }, 'Роль пользователя', {
 	isAdmin: { type: Boolean, label: 'Администратор', index: true },
-	isSuperAdmin: { type: Boolean, default: false, label: 'Супер админ' },
+	isSuperAdmin: { type: Boolean, default: false, label: 'Супер админ', noedit: true, hidden: true },
 	isActive: { type: Boolean, default: false, label: 'Активный водитель' },
 }, 'Рейтинг', {
 	rating: {
