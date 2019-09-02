@@ -31,7 +31,8 @@ exports.getUserIp = (req) => {
 		req.connection.remoteAddress ||
 		req.socket.remoteAddress ||
 		(req.connection.socket ? req.connection.socket.remoteAddress : null);
-	return ip;
+	const splitIp = typeof ip === 'string' ? ip.split(',') : ip;
+	return splitIp && splitIp.length ? splitIp[0] : splitIp;
 };
 
 //TODO: remove
