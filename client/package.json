@@ -58,7 +58,7 @@
     "@types/react-redux": "^7.0.3",
     "@types/react-virtualized": "^9.7.6",
     "@types/redux-form": "^8.1.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "connected-react-router": "^6.3.2",
     "core-js": "^2.5.7",
